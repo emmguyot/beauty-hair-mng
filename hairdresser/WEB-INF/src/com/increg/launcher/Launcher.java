@@ -61,7 +61,7 @@ public class Launcher extends JFrame implements Runnable, WindowListener, Action
     public Launcher() {
         super();
         // Création de la fenêtre
-        setTitle("Centre de contrôle InCrEG");
+        setTitle("Centre de contrôle InCrEG LibertyLook");
         getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
         resconfig = ResourceBundle.getBundle(getClass().getPackage().getName() + ".launcher");

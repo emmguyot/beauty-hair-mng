@@ -27,7 +27,7 @@ public class TagMadeBy extends TagSupport {
         JspWriter out = pageContext.getOut();
 
         try {
-            out.println("<p style=\"{font-size:7pt; color: #888888}\">Etat réalisé par le logiciel de gestion InCrEG.</p>");
+            out.println("<p style=\"{font-size:7pt; color: #888888}\">Etat réalisé par InCrEG LibertyLook.</p>");
         } catch (IOException e) {
             System.out.println("doStartTag : " + e.toString());
         }
