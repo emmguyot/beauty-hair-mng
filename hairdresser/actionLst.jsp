@@ -1,3 +1,4 @@
+<%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
 <html>
 <head>
 <title>Untitled Document</title>
@@ -43,13 +44,13 @@ function Imprimer() {
 
 <body bgcolor="#FFFFFF" text="#000000" class="action">
 <span id="NOUVEAU" style="position:absolute; width:130px; height:31px; z-index:1; left: 15px; top: 11px; visibility: visible">
-	<a class="nohover" href="javascript:parent.mainFrame.Nouveau()" onMouseOver="document.nouveau_gif.src='images/nouveau2.gif'" onMouseOut="document.nouveau_gif.src='images/nouveau.gif'"><img name="nouveau_gif" src="images/nouveau.gif" alt="Nouveau" border=0></a>
+	<salon:bouton url="javascript:parent.mainFrame.Nouveau()" imgOn="images/nouveau2.gif" img="images/nouveau.gif" alt="Nouveau" />
 </span>&nbsp;&nbsp; 
 <span id="AIDE" style="position:absolute; width:130px; height:31px; z-index:1; top: 11px; left: 260px; visibility: visible">
-	<a class="nohover" href="javascript:parent.mainFrame.Aide()" onMouseOver="document.aide_gif.src='images/aide2.gif'" onMouseOut="document.aide_gif.src='images/aide.gif'"><img name="aide_gif" src="images/aide.gif" alt="Aide" border=0></a>
+	<salon:bouton url="javascript:parent.mainFrame.Aide()" imgOn="images/aide2.gif" img="images/aide.gif" alt="Aide" />
 </span> 
 <span id="IMPRIMER" style="position:absolute; left:145px; top:11px; width:146px; height:31px; z-index:1; visibility: visible" > 
-   <a class="nohover" href="javascript:Imprimer()" onMouseOver="document.imprimer_gif.src='images/imprimer2.gif'" onMouseOut="document.imprimer_gif.src='images/imprimer.gif'"><img name="imprimer_gif" src="images/imprimer.gif" border=0 alt="Imprimer"></a>
+   <salon:bouton url="javascript:Imprimer()" imgOn="images/imprimer2.gif" img="images/imprimer.gif" alt="Imprimer" />
 </span>
 <div id="coinHD" style="position:absolute; height=20px; z-index:1; visibility:hidden"><img src="images/perso/coin_hd.gif"></div>
 <div id="coinBD" style="position:absolute; height=20px; z-index:1; visibility:hidden"><img src="images/perso/coin_bd.gif"></div>

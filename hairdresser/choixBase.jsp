@@ -47,7 +47,7 @@
                                                     %%
                                                     </select>
                                                 </salon:selection>		 
-                                            <a class="nohover" href="javascript:document.base.submit()" onMouseOver="document.valider_gif.src='images/valider2.gif'" onMouseOut="document.valider_gif.src='images/valider.gif'"><img name="valider_gif" src="images/valider.gif" border=0 alt="Valider" align="middle"></a>
+                                            <salon:bouton url="javascript:document.base.submit()" imgOn="images/valider2.gif" img="images/valider.gif" alt="Valider" />
                                             </p>
                                         </form>
                                         <div align="center"><font size="-1"><a href="histo.html"><%@ include file="include/version.inc" %></a> &copy; 

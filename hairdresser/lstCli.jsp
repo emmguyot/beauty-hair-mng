@@ -63,7 +63,7 @@
         }
     }
     %>
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="rechCli.srv?type=advanced"><img style="{ vertical-align: middle; }" src="images/rechAvancee.gif"" alt="Recherche avancée..."></a>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<salon:bouton url="rechCli.srv?type=advanced" img="images/rechAvancee.gif" alt="Recherche avancée..."/>
 	<input type="hidden" name="type" value="simple">
 	</p>
 </form>

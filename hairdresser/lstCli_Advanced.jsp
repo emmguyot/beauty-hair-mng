@@ -62,7 +62,7 @@
     <input type="checkbox" name="INDIC_VALID"
 	    <% if ((INDIC_VALID != null) && (INDIC_VALID.equals("on"))) { %> checked <% } %>
     >
-	&nbsp;&nbsp; <a href="javascript:document.fiche.submit()"><img style="{ vertical-align: middle; }" src="images/actualiserRech.gif" alt="Actualiser la liste..."></a>
+	&nbsp;&nbsp;<salon:bouton url="javascript:document.fiche.submit()" img="images/actualiserRech.gif" alt="Actualiser la liste" imgOn="images/actualiserRech2.gif"/>
     <%
     if (listeLignes.size() > 20) { 
     %>
@@ -82,7 +82,7 @@
         }
     }
     %>
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="rechCli.srv"><img style="{ vertical-align: middle; }" src="images/rechSimplifiee.gif" alt="Recherche simplifiée..."></a>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<salon:bouton url="rechCli.srv" img="images/rechSimplifiee.gif" alt="Recherche simplifiée..."/>
 	<input type="hidden" name="type" value="advanced">
 	</p>
 </form>

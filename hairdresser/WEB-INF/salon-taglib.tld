@@ -283,5 +283,35 @@
         <required>false</required>
     </attribute>
   </tag>       
+  <tag>
+    <name>bouton</name>
+    <tagclass>com.increg.salon.tag.TagBouton</tagclass>
+    <info> Affiche un bouton sous forme d'image </info>
+    <attribute>
+       <name>img</name>
+       <required>true</required>
+       <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>imgOn</name>
+       <required>false</required>
+       <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>alt</name>
+       <required>true</required>
+       <rtexprvalue>false</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>url</name>
+       <required>true</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>target</name>
+       <required>false</required>
+       <rtexprvalue>false</rtexprvalue>
+    </attribute>
+  </tag>       
 
 </taglib>

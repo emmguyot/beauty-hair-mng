@@ -1,3 +1,4 @@
+<%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
 <html>
 <head>
 <title>Untitled Document</title>
@@ -43,27 +44,27 @@ function Imprimer() {
 
 <body class="action">
 <span id="ENREGISTRER" style="position:absolute; width:146px; height:31px; z-index:1; left: 15px; top: 11px; visibility: hidden">
-   <a class="nohover" href="javascript:parent.mainFrame.Enregistrer()" onMouseOver="document.enregistrer_gif.src='images/enregistrer2.gif'" onMouseOut="document.enregistrer_gif.src='images/enregistrer.gif'"><img name="enregistrer_gif" src="images/enregistrer.gif" border=0 alt="Enregistrer"></a>
+   <salon:bouton url="javascript:parent.mainFrame.Enregistrer()" imgOn="images/enregistrer2.gif" img="images/enregistrer.gif" alt="Enregistrer"/>
 </span>
 <span id="VALIDER" style="position:absolute; width:146px; height:31px; z-index:1; left: 15px; top: 11px; visibility: hidden">
-   <a class="nohover" href="javascript:parent.mainFrame.Valider()" onMouseOver="document.valider_gif.src='images/valider2.gif'" onMouseOut="document.valider_gif.src='images/valider.gif'"><img name="valider_gif" src="images/valider.gif" border=0 alt="Valider"></a></span>
+   <salon:bouton url="javascript:parent.mainFrame.Valider()" imgOn="images/valider2.gif" img="images/valider.gif" alt="Valider" /></span>
 <span id="DUPLIQUER" style="position:absolute; width:146px; height:31px; z-index:1; top: 11px; left: 145px; visibility: hidden">
-   <a class="nohover" href="javascript:parent.mainFrame.Dupliquer()" onMouseOver="document.dupliquer_gif.src='images/dupliquer2.gif'" onMouseOut="document.dupliquer_gif.src='images/dupliquer.gif'"><img name="dupliquer_gif" src="images/dupliquer.gif" border=0 alt="Dupliquer"></a>
+   <salon:bouton url="javascript:parent.mainFrame.Dupliquer()" imgOn="images/dupliquer2.gif" img="images/dupliquer.gif" alt="Dupliquer" />
 </span> 
 <span id="NOUVEAU" style="position:absolute; width:146px; height:31px; z-index:1; top: 11px; left: 145px; visibility: hidden">
-   <a class="nohover" href="javascript:parent.mainFrame.Nouveau()" onMouseOver="document.nouveau_gif.src='images/nouveau2.gif'" onMouseOut="document.nouveau_gif.src='images/nouveau.gif'"><img name="nouveau_gif" src="images/nouveau.gif" border=0 alt="Nouveau"></a>
+   <salon:bouton url="javascript:parent.mainFrame.Nouveau()" imgOn="images/nouveau2.gif" img="images/nouveau.gif" alt="Nouveau"/>
 </span> 
 <span id="IMPRIMER" style="position:absolute; left:275px; top:11px; width:146px; height:31px; z-index:1; visibility: visible" > 
-   <a class="nohover" href="javascript:Imprimer()" onMouseOver="document.imprimer_gif.src='images/imprimer2.gif'" onMouseOut="document.imprimer_gif.src='images/imprimer.gif'"><img name="imprimer_gif" src="images/imprimer.gif" border=0 alt="Imprimer"></a>
+   <salon:bouton url="javascript:Imprimer()" imgOn="images/imprimer2.gif" img="images/imprimer.gif" alt="Imprimer"/>
 </span>
 <span id="SUPPRIMER" style="position:absolute; left:405px; top:11px; width:146px; height:31px; z-index:1; visibility: hidden" > 
-   <a class="nohover" href="javascript:parent.mainFrame.Supprimer()" onMouseOver="document.supprimer_gif.src='images/supprimer2.gif'" onMouseOut="document.supprimer_gif.src='images/supprimer.gif'"><img name="supprimer_gif" src="images/supprimer.gif" border=0 alt="Supprimer"></a>
+   <salon:bouton url="javascript:parent.mainFrame.Supprimer()" imgOn="images/supprimer2.gif" img="images/supprimer.gif" alt="Supprimer"/>
 </span>
 <span id="RETOUR_LISTE" style="position:absolute; left:535px; top:11px; width:146px; height:31px; z-index:1; visibility: hidden" > 
-   <a class="nohover" href="javascript:parent.mainFrame.RetourListe()" onMouseOver="document.liste_gif.src='images/liste2.gif'" onMouseOut="document.liste_gif.src='images/liste.gif'"><img name="liste_gif" src="images/liste.gif" border=0 alt="Liste"></a>
+   <salon:bouton url="javascript:parent.mainFrame.RetourListe()" imgOn="images/liste2.gif" img="images/liste.gif" alt="Liste"/>
 </span>
 <span id="AIDE" style="position:absolute; width:146px; height:31px; z-index:1; top: 11px; left: 665px; visibility: visible">
-   <a class="nohover" href="javascript:parent.mainFrame.Aide()" onMouseOver="document.aide_gif.src='images/aide2.gif'" onMouseOut="document.aide_gif.src='images/aide.gif'"><img name="aide_gif" src="images/aide.gif" border=0 alt="Aide"></a>
+   <salon:bouton url="javascript:parent.mainFrame.Aide()" imgOn="images/aide2.gif" img="images/aide.gif" alt="Aide"/>
 </span> 
 <div id="coinHD" style="position:absolute; height=20px; z-index:1; visibility:hidden"><img src="images/perso/coin_hd.gif"></div>
 <div id="coinBD" style="position:absolute; height=20px; z-index:1; visibility:hidden"><img src="images/perso/coin_bd.gif"></div>

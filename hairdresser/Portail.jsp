@@ -5,6 +5,7 @@
         getServletConfig().getServletContext().getRequestDispatcher("/reconnect.html").forward(request, response);
     }
 %>
+<%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
 <html>
 <head>
 <title><%=mySalon.getMySociete().getRAIS_SOC()%></title>
@@ -59,7 +60,7 @@ function checkAndSubmit()
                                             <p class="obligatoire" align="center">Mot de 
                                                 passe : 
                                                 <input type="password" name="MOT_PASSE" maxlength="20">
-                                            <a class="nohover" href="javascript:checkAndSubmit()" onMouseOver="document.valider_gif.src='images/valider2.gif'" onMouseOut="document.valider_gif.src='images/valider.gif'"><img name="valider_gif" src="images/valider.gif" border=0 alt="Valider" align="middle"></a>
+                                            <salon:bouton url="javascript:checkAndSubmit()" imgOn="images/valider2.gif" img="images/valider.gif" alt="Valider" />
                                                 <% if ((mySalon.getMessage("Erreur") != null) 
             && (mySalon.getMessage("Erreur").length() > 0)) { %>
                                             </p>

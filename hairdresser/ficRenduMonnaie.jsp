@@ -27,7 +27,7 @@
 %>
 
 <h1><img src="images/titres/ficRenduMonnaie.gif"></h1>
-<a class="nohover" href="javascript:window.close()" onMouseOver="document.quit_gif.src='images/quit2.gif'" onMouseOut="document.quit_gif.src='images/quit.gif'"><img name="quit_gif" src="images/quit.gif" border=0 alt="Fermer la fenêtre" align="right"></a>
+<div style="{text-align: right;}"><salon:bouton url="javascript:window.close()" imgOn="images/quit2.gif" img="images/quit.gif" alt="Fermer la fenêtre" /></div>
 <salon:message salonSession="<%= mySalon %>" />
 <br>
 <form method="post" action="ficRenduMonnaie.srv" name="fiche"> 
