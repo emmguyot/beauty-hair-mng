@@ -108,7 +108,12 @@ MM_reloadPage(true);
         <a href="_FichePurge.jsp" target="ClientFrame">Epuration des données</a>
     </salon:autorisation>
     <salon:autorisation entite="Parametrage"></p><p>
+    	<% if (mySalon.getMySociete().isSalon()) { %>
         <a href="ListeDonneeRef.jsp?nomTable=TYP_CHEV&chaineTable=Types%20de%20cheveux" target="ClientFrame">Types de cheveux</a><br>
+    	<% }
+    	   if (mySalon.getMySociete().isInstitut()) { %>
+        <a href="ListeDonneeRef.jsp?nomTable=TYP_PEAU&chaineTable=Types%20de%20peau" target="ClientFrame">Types de peau</a><br>
+    	<% } %>
         <a href="ListeDonneeRef.jsp?nomTable=CATEG_CLI&chaineTable=Cat%e9gories%20de%20clients" target="ClientFrame">Cat&eacute;g. de clients</a><br>
         <a href="ListeTrAge.jsp" target="ClientFrame">Tranches d'âge</a><br>
         <a href="ListeDonneeRef.jsp?nomTable=ORIG&chaineTable=Origines%20de%20clients" target="ClientFrame">Origines de clients</a><br>

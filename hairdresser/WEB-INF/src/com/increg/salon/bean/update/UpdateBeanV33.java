@@ -64,7 +64,17 @@ public class UpdateBeanV33 extends UpdateBeanV31 {
                 + "nextval('seq_stat'), 'Clients par origine', "
                 + "'select LIB_ORIG, count(DISTINCT CLI.CD_CLI) from CLI, ORIG "
                 + "where CLI.CD_ORIG = ORIG.CD_ORIG and CLI.DT_CREAT between ''$DateDebut$'' and ''$DateFin$'' group by LIB_ORIG',"
-                + "'Origine', 'Nombre', now(), now())"
+                + "'Origine', 'Nombre', now(), now())",
+                "alter table SOC add FLG_INSTITUT char(1)",
+                "alter table SOC add FLG_SALON char(1))",
+                "create table TYP_PEAU ("
+                + "      CD_TYP_PEAU     numeric(2)     not null,"
+                + "      LIB_TYP_PEAU    varchar(80)    not null,"
+                + "         constraint PK_TYP_PEAU primary key (CD_TYP_PEAU) "
+                + ")",
+                "create sequence SEQ_TYP_PEAU",
+                "alter table TYP_PEAU alter CD_TYP_PEAU set default nextval('SEQ_TYP_PEAU')",
+                "insert into TYP_PEAU (LIB_TYP_PEAU) select LIB_TYP_CHEV from TYP_CHEV"
                 };
             String[] sqlAvecRes = {
                 };
@@ -87,6 +97,27 @@ public class UpdateBeanV33 extends UpdateBeanV31 {
                 rs.close();
             }
 
+            // Mise à jour des flag société
+            if (dbConnect.getBaseName().indexOf("institut") != -1) {
+                String[] aSql = new String[1];
+                aSql[0] = "update SOC set FLG_INSTITUT='O'";
+                dbConnect.doExecuteSQL(aSql);
+            }
+            else {
+                String[] aSql = new String[1];
+                aSql[0] = "update SOC set FLG_INSTITUT='N'";
+                dbConnect.doExecuteSQL(aSql);
+            }
+            if (dbConnect.getBaseName().indexOf("salon") != -1) {
+                String[] aSql = new String[1];
+                aSql[0] = "update SOC set FLG_SALON='O'";
+                dbConnect.doExecuteSQL(aSql);
+            }
+            else {
+                String[] aSql = new String[1];
+                aSql[0] = "update SOC set FLG_SALON='N'";
+                dbConnect.doExecuteSQL(aSql);
+            }
             // On vient de passer en 3.3
             version = "3.3";
         }

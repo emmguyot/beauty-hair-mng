@@ -133,6 +133,19 @@ function Init() {
                   } %>
 		  </tr>
 	        <% } 
+		if (listeParam.contains("CD_TYP_PEAU")) { %>
+		  <tr><td><span class="obligatoire">Type&nbsp;de&nbsp;peau&nbsp;: </span></td>
+                  <%
+                  for (int i = 0; i < nbItem; i++ ) { %>
+		  <salon:DBselection valeur='<%= (String) request.getAttribute("CD_TYP_PEAU$" + i) %>' sql="select CD_TYP_PEAU, LIB_TYP_PEAU from TYP_PEAU order by LIB_TYP_PEAU">
+		     <td><select name="CD_TYP_PEAU$<%= i %>">
+			%%
+		     </select></td>
+		  </salon:DBselection>
+                  <% 
+                  } %>
+		  </tr>
+	        <% } 
 		if (listeParam.contains("CD_CATEG_CLI")) { %>
 		  <tr><td><span class="obligatoire">Catégorie&nbsp;de&nbsp;clients&nbsp;: </span></td>
                   <%

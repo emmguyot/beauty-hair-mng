@@ -108,6 +108,20 @@ function Init() {
                 <input type="text" name="CD_APE" value="%%" maxlength="4" size="5">
             </salon:valeur>
         </p>
+        <p>
+            <span class="obligatoire">Données Salon de Coiffure :</span> 
+			<salon:selection valeur="<%= aSoc.getFLG_SALON() %>" valeurs='<%= "O|N" %>' libelle='<%= "Oui|Non" %>' >
+			  <select name="FLG_SALON">
+			     %%
+			  </select>
+			</salon:selection>
+            <span class="obligatoire">Données Institut de Beauté :</span> 
+			<salon:selection valeur="<%= aSoc.getFLG_INSTITUT() %>" valeurs='<%= "O|N" %>' libelle='<%= "Oui|Non" %>' >
+			  <select name="FLG_INSTITUT">
+			     %%
+			  </select>
+			</salon:selection>
+        </p>
 </form>
 
 <script language="JavaScript">
