@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Vector;
@@ -93,6 +94,11 @@ public abstract class SalonSession extends BasicSession {
      * Indicateur si la connection est automatique
      */
     protected boolean autoConnect;
+    
+    /**
+     * Langue de l'utilisateur
+     */
+    protected Locale langue;
 
     /**
      * SalonSession constructor comment.
@@ -679,4 +685,18 @@ public abstract class SalonSession extends BasicSession {
     public void setAutoConnect(boolean newAutoConnect) {
         autoConnect = newAutoConnect;
     }
+    /**
+     * @return Langue de l'utilisateur
+     */
+    public Locale getLangue() {
+        return langue;
+    }
+
+    /**
+     * @param locale Langue de l'utilisateur
+     */
+    public void setLangue(Locale locale) {
+        langue = locale;
+    }
+
 }
