@@ -2,9 +2,9 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "InCrEG LibertyLook"
-!define PRODUCT_VERSION "2.2"
+!define PRODUCT_VERSION "2.3"
 !define PRODUCT_VERSION_FULL "${PRODUCT_VERSION}.0.0"
-!define PRODUCT_COPYRIGHT "2002-2004 Valérie, Alexandre et Emmanuel Guyot"
+!define PRODUCT_COPYRIGHT "2002-2005 Valérie, Alexandre et Emmanuel Guyot"
 !define PRODUCT_PUBLISHER "SourceForge"
 !define PRODUCT_WEB_SITE "http://beauty-hair-mng.sourceforge.net/"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
@@ -60,7 +60,7 @@ var ICONS_GROUP
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "c:/build/InCrEG_LibertyLook_institut_${PRODUCT_VERSION}.exe"
+OutFile "c:/build/dist/InCrEG_LibertyLook_institut_${PRODUCT_VERSION}.exe"
 InstallDir "c:\InCrEG\"
 ShowInstDetails nevershow
 ShowUnInstDetails nevershow
