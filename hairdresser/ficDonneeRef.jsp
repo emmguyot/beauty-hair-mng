@@ -1,4 +1,4 @@
-<%@ page import="com.increg.salon.bean.SalonSession,
+<%@ page import="java.net.URLEncoder, com.increg.salon.bean.SalonSession,
 	       com.increg.salon.bean.DonneeRefBean" %>
 <%
     SalonSession mySalon = (SalonSession) session.getAttribute("SalonSession");
@@ -43,6 +43,7 @@ function Init() {
       MM_showHideLayers('DUPLIQUER?bottomFrame','','show');
    <%
    } %>
+   MM_showHideLayers('RETOUR_LISTE?bottomFrame','','show');
 }
 //-->
 </script>
@@ -98,6 +99,11 @@ function Dupliquer()
 function Aide()
 {
     window.open("aideFiche.html");
+}
+
+function RetourListe()
+{
+   parent.location.href = "ListeDonneeRef.jsp?nomTable=<%= nomTable %>&chaineTable=<%= URLEncoder.encode(chaineTable) %>";
 }
 
 </script>

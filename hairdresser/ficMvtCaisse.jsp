@@ -44,6 +44,7 @@ function Init() {
       MM_showHideLayers('ENREGISTRER?bottomFrame','','show');
    <%
    } %>
+   MM_showHideLayers('RETOUR_LISTE?bottomFrame','','show');
 }
 //-->
 </script>
@@ -148,6 +149,11 @@ function Enregistrer()
 function Aide()
 {
     window.open("aideFiche.html");
+}
+
+function RetourListe()
+{
+    parent.location.href = "ListeMvtCaisse.jsp";
 }
 
 </script>

@@ -40,6 +40,7 @@ function Init() {
    <%
    } %>
    MM_showHideLayers('DUPLIQUER?bottomFrame','','show');
+   MM_showHideLayers('RETOUR_LISTE?bottomFrame','','show');
 }
 //-->
 </script>
@@ -113,6 +114,12 @@ function Aide()
 {
     window.open("aideFicheTypVent.html");
 }
+
+function RetourListe()
+{
+    parent.location.href = "ListeTypVent.jsp";
+}
+
 
 </script>
 </body>

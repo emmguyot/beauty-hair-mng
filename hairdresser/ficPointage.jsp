@@ -47,6 +47,7 @@ function Init() {
    <%
    } %>
    MM_showHideLayers('NOUVEAU?bottomFrame','','show');
+   MM_showHideLayers('RETOUR_LISTE?bottomFrame','','show');
 }
 //-->
 </script>
@@ -144,6 +145,12 @@ function Aide()
 {
     window.open("aideFiche.html");
 }
+
+function RetourListe()
+{
+    parent.location.href = "ListePointage.jsp";
+}
+
 
 </script>
 </body>

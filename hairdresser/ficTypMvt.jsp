@@ -41,6 +41,7 @@ function Init() {
       MM_showHideLayers('DUPLIQUER?bottomFrame','','show');
    <%
    } %>
+   MM_showHideLayers('RETOUR_LISTE?bottomFrame','','show');
 }
 //-->
 </script>
@@ -110,6 +111,11 @@ function Dupliquer()
 function Aide()
 {
     window.open("aideFiche.html");
+}
+
+function RetourListe()
+{
+    parent.location.href = "ListeTypMvt.jsp";
 }
 
 </script>

@@ -26,6 +26,7 @@
 
 function Init() {
    MM_showHideLayers('ENREGISTRER?bottomFrame','','show');
+   MM_showHideLayers('RETOUR_LISTE?bottomFrame','','show');
 }
 //-->
 </script>
@@ -75,6 +76,12 @@ function Aide()
 {
     window.open("aideFicheParam.html");
 }
+
+function RetourListe()
+{
+    parent.location.href = "ListeParam.jsp";
+}
+
 
 </script>
 </body>

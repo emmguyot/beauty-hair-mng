@@ -108,30 +108,32 @@ MM_reloadPage(true);
         <a href="_FichePurge.jsp" target="ClientFrame">Epuration des données</a>
     </salon:autorisation>
     <salon:autorisation entite="Parametrage"></p><p>
+        <a href="ListeDonneeRef.jsp?nomTable=CATEG_ART&chaineTable=Cat%e9gories%20d'articles" target="ClientFrame">Cat&eacute;g. d'articles</a><br/>
+        <a href="ListeDonneeRef.jsp?nomTable=CATEG_CLI&chaineTable=Cat%e9gories%20de%20clients" target="ClientFrame">Cat&eacute;g. de clients</a><br/>
+        <a href="ListeDonneeRef.jsp?nomTable=CATEG_PREST&chaineTable=Cat%e9gories%20des%20prestations" target="ClientFrame">Cat&eacute;g. de prestations</a><br/>
+        <a href="ListeDevise.jsp" target="ClientFrame">Devises</a><br/>
+        <a href="ListeFete.jsp" target="ClientFrame">F&ecirc;tes</a><br/>
+        <a href="ListeDonneeRef.jsp?nomTable=FCT&chaineTable=Fonctions" target="ClientFrame">Fonctions</a><br/>
+        <a href="ListeDonneeRef.jsp?nomTable=MARQUE&chaineTable=Marques" target="ClientFrame">Marques</a><br/>
+        <a href="ListeModRegl.jsp" target="ClientFrame">Modes de r&egrave;glements</a><br/>
+        <a href="ListeDonneeRef.jsp?nomTable=ORIG&chaineTable=Origines%20de%20clients" target="ClientFrame">Origines de clients</a><br/>
+        <a href="ListeDonneeRef.jsp?nomTable=PROFIL&chaineTable=Profils%20utilisateurs" target="ClientFrame">Profils utilisateurs</a><br/>
+        <a href="ListeTxTVA.jsp" target="ClientFrame">Taux de TVA</a><br/>
+        <a href="ListeTrAge.jsp" target="ClientFrame">Tranches d'âge</a><br/>
+        <a href="ListeDonneeRef.jsp?nomTable=TYP_ART&chaineTable=Types%20d'articles" target="ClientFrame">Types d'articles</a><br/>
     	<% if (mySalon.getMySociete().isSalon()) { %>
-        <a href="ListeDonneeRef.jsp?nomTable=TYP_CHEV&chaineTable=Types%20de%20cheveux" target="ClientFrame">Types de cheveux</a><br>
-    	<% }
-    	   if (mySalon.getMySociete().isInstitut()) { %>
-        <a href="ListeDonneeRef.jsp?nomTable=TYP_PEAU&chaineTable=Types%20de%20peau" target="ClientFrame">Types de peau</a><br>
+        <a href="ListeDonneeRef.jsp?nomTable=TYP_CHEV&chaineTable=Types%20de%20cheveux" target="ClientFrame">Types de cheveux</a><br/>
     	<% } %>
-        <a href="ListeDonneeRef.jsp?nomTable=CATEG_CLI&chaineTable=Cat%e9gories%20de%20clients" target="ClientFrame">Cat&eacute;g. de clients</a><br>
-        <a href="ListeTrAge.jsp" target="ClientFrame">Tranches d'âge</a><br>
-        <a href="ListeDonneeRef.jsp?nomTable=ORIG&chaineTable=Origines%20de%20clients" target="ClientFrame">Origines de clients</a><br>
-        <a href="ListeModRegl.jsp" target="ClientFrame">Modes de r&egrave;glements</a><br>
-        <a href="ListeDevise.jsp" target="ClientFrame">Devises</a><br>
-        <a href="ListeTypVent.jsp" target="ClientFrame">Types de prestations</a><br>
-        <a href="ListeDonneeRef.jsp?nomTable=CATEG_PREST&chaineTable=Cat%e9gories%20des%20prestations" target="ClientFrame">Cat&eacute;g. des prestations</a><br>
-        <a href="ListeDonneeRef.jsp?nomTable=TYP_ART&chaineTable=Types%20d'articles" target="ClientFrame">Types des articles</a><br>
-        <a href="ListeDonneeRef.jsp?nomTable=CATEG_ART&chaineTable=Cat%e9gories%20d'articles" target="ClientFrame">Cat&eacute;g. des articles</a><br>
-        <a href="ListeDonneeRef.jsp?nomTable=MARQUE&chaineTable=Marques" target="ClientFrame">Marques</a><br>
+        <a href="ListeDonneeRef.jsp?nomTable=TYP_CONTR&chaineTable=Types%20de%20contrats" target="ClientFrame">Types de contrats</a><br/>
+        <a href="ListeTypMca.jsp" target="ClientFrame" title="Types de mouvements caisse">Types de mvt caisse</a><br/>
+        <a href="ListeTypMvt.jsp" target="ClientFrame" title="Types de mouvements stock">Types de mvt stock</a><br/>
+    	<% if (mySalon.getMySociete().isInstitut()) { %>
+        <a href="ListeDonneeRef.jsp?nomTable=TYP_PEAU&chaineTable=Types%20de%20peau" target="ClientFrame">Types de peau</a><br/>
+    	<% } %>
+        <a href="ListeDonneeRef.jsp?nomTable=TYP_POINTAGE&chaineTable=Types%20de%20pointages" target="ClientFrame">Types de pointages</a><br/>
+        <a href="ListeTypVent.jsp" target="ClientFrame">Types de prestations</a><br/>
+        </p><p>
     <!--      <a href="ListeDonneeRef.jsp?nomTable=UNIT_MES&chaineTable=Unit%e9s%20de%20mesures" target="ClientFrame">Unit&eacute;s de mesures</a><br> -->
-        <a href="ListeTypMvt.jsp" target="ClientFrame" title="Types de mouvements stock">Types de mvt stock</a><br>
-        <a href="ListeTypMca.jsp" target="ClientFrame" title="Types de mouvements caisse">Types de mvt caisse</a><br>
-        <a href="ListeDonneeRef.jsp?nomTable=FCT&chaineTable=Fonctions" target="ClientFrame">Fonctions</a><br>
-        <a href="ListeDonneeRef.jsp?nomTable=TYP_CONTR&chaineTable=Types%20de%20contrats" target="ClientFrame">Types de contrats</a><br>
-        <a href="ListeDonneeRef.jsp?nomTable=TYP_POINTAGE&chaineTable=Types%20de%20pointages" target="ClientFrame">Types de pointages</a><br>
-        <a href="ListeDonneeRef.jsp?nomTable=PROFIL&chaineTable=Profils%20utilisateurs" target="ClientFrame">Profils utilisateurs</a><br>
-        <a href="ListeFete.jsp" target="ClientFrame">F&ecirc;tes</a></p><p>
         <a href="_FicheSoc.jsp" target="ClientFrame">Infos Société</a><br>
         <a href="ListeParam.jsp" target="ClientFrame">Param&eacute;trage</a><br>
         <a href="ListeIdent.jsp" target="ClientFrame">Identifications</a>
@@ -233,6 +235,5 @@ function subMenu(url) {
 }
 // -->
 </script>
-</body>
 </body>
 </html>

@@ -41,6 +41,7 @@ function Init() {
    <%
    } %>
    MM_showHideLayers('DUPLIQUER?bottomFrame','','show');
+   MM_showHideLayers('RETOUR_LISTE?bottomFrame','','show');
 }
 //-->
 </script>
@@ -104,6 +105,16 @@ function Supprimer()
 function Aide()
 {
     window.open("aideFiche.html");
+}
+
+function RetourListe()
+{
+   if (document.fiche.PRENOM.value != "") {
+      parent.location.href = "ListeFete.jsp?premLettre=" + document.fiche.PRENOM.value.charAt(0).toUpperCase();
+   }
+   else {
+      parent.location.href = "ListeFete.jsp?premLettre=A";
+   }
 }
 
 </script>
