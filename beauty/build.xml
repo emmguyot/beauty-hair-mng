@@ -218,6 +218,9 @@
 
 				<include name="WEB-INF/src/com/increg/salon/test/AllTests.java"/>
 
+				<include name="WEB-INF/src/com/increg/serveur/DelSauvegarde.java"/>
+				<include name="WEB-INF/src/com/increg/serveur/PutSauvegarde.java"/>
+
 				<include name="WEB-INF/src/com/increg/util/Montant.java"/>
 				<include name="WEB-INF/src/com/increg/util/ServletUtil.java"/>
 				<include name="WEB-INF/src/com/increg/util/SimpleDateFormatEG.java"/>
@@ -486,6 +489,7 @@
 				<include name="*.class" />
 				<include name="WEB-INF/web.xml" />
 
+				<exclude name="WEB-INF/classes/com/increg/serveur/**" />
 				<exclude name="**/light/**" />
 				<exclude name="light/**" />
 				<exclude name="WEB-INF/src/**" />

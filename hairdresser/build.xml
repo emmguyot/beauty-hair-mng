@@ -107,6 +107,7 @@
 				<include name="*.class" />
 				<include name="WEB-INF/web.xml" />
 
+				<exclude name="WEB-INF/classes/com/increg/serveur/**" />
 				<exclude name="**/light/**" />
 				<exclude name="light/**" />
 				<exclude name="WEB-INF/src/**" />
@@ -163,6 +164,10 @@
 		<!-- Création du War -->
 		<jar destfile="${dist}/${ant.project.name}.war" basedir="${tmpProdWar}">
 		</jar>
+	</target>
+	
+	<target description="Création du fichier des sources" name="zipSrc" >
+		
 	</target>
 </project>
 
