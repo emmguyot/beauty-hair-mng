@@ -39,7 +39,7 @@
 		<input type="text" name="PRENOM" value="%%" size="15">
     </salon:valeur>
     Civilit&eacute; :
-    <salon:selection valeur="<%= civilite %>" valeurs='<%= "|Mle|Mme|M. " %>'>
+    <salon:selection valeur="<%= civilite %>" libelle="( Toutes )|Mle|Mme|M." valeurs='<%= "|Mle|Mme|M. " %>'>
         <select name="CIVILITE">%%</select>
     </salon:selection>
     Sexe :
@@ -62,7 +62,7 @@
     <input type="checkbox" name="INDIC_VALID"
 	    <% if ((INDIC_VALID != null) && (INDIC_VALID.equals("on"))) { %> checked <% } %>
     >
-	&nbsp;&nbsp; <a href="javascript:document.fiche.submit()">Actualiser la liste...</a>
+	&nbsp;&nbsp; <a href="javascript:document.fiche.submit()"><img style="{ vertical-align: middle; }" src="images/actualiserRech.gif" alt="Actualiser la liste..."></a>
     <%
     if (listeLignes.size() > 20) { 
     %>
@@ -82,7 +82,7 @@
         }
     }
     %>
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="rechCli.srv">Recherche simplifiée...</a>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="rechCli.srv"><img style="{ vertical-align: middle; }" src="images/rechSimplifiee.gif" alt="Recherche simplifiée..."></a>
 	<input type="hidden" name="type" value="advanced">
 	</p>
 </form>

@@ -63,7 +63,7 @@
         }
     }
     %>
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="rechCli.srv?type=advanced">Recherche avancée...</a>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="rechCli.srv?type=advanced"><img style="{ vertical-align: middle; }" src="images/rechAvancee.gif"" alt="Recherche avancée..."></a>
 	<input type="hidden" name="type" value="simple">
 	</p>
 </form>
