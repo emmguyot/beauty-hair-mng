@@ -266,6 +266,7 @@
 				<include name="ListeRecap.jsp"/>
 				<include name="ListeStat.jsp"/>
 				<include name="ListeTVA.jsp"/>
+				<include name="ListeTxTVA.jsp"/>
 				<include name="ListeTrAge.jsp"/>
 				<include name="ListeTypMca.jsp"/>
 				<include name="ListeTypMvt.jsp"/>
