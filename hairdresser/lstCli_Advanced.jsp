@@ -43,7 +43,7 @@
         <select name="CIVILITE">%%</select>
     </salon:selection>
     Sexe :
-    <salon:selection valeur="<%= sexe %>" libelle="|Femme|Homme" valeurs='<%= "|F|H" %>'>
+    <salon:selection valeur="<%= sexe %>" libelle="( Tous )|Femme|Homme" valeurs='<%= "|F|H" %>'>
         <select name="sexe">%%</select>
     </salon:selection>
 	<br/>
@@ -54,7 +54,12 @@
 	Abonnement :
     <salon:DBselection valeur="<%= abonnement %>" sql="select CD_PREST, LIB_PREST from PREST where INDIC_ABONNEMENT='O' order by LIB_PREST">
 		<select name="CD_PREST">
-		    <option value=""></option>
+		    <option value="">( Non significatif )</option>
+		    <option value="*"
+				<% if ("*".equals(abonnement)) { %>
+			    	selected="selected"
+				<% } %>
+			>( Abonnement quelconque )</option>
 		    %%
 		</select>
     </salon:DBselection>

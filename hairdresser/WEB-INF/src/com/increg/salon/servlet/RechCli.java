@@ -188,7 +188,12 @@ public class RechCli extends ConnectedServlet {
             } else {
                 reqSQL.append(" and ");
             }
-            reqSQL.append("CD_CLI in (select CD_CLI from ABO_CLI where CPT > 0 and CD_PREST=").append(abonnement).append(')');
+            if (abonnement.equals("*")) {
+                reqSQL.append("CD_CLI in (select CD_CLI from ABO_CLI where CPT > 0)");
+            }
+            else {
+                reqSQL.append("CD_CLI in (select CD_CLI from ABO_CLI where CPT > 0 and CD_PREST=").append(abonnement).append(')');
+            }
         }
         if ((INDIC_VALID == null) || (!INDIC_VALID.equals("on"))) {
             if (!where) {
