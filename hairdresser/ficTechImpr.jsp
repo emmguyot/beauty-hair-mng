@@ -39,6 +39,7 @@
 		<td valign="top" colspan="2"> <salon:valeur valeur="<%= aCli.getDT_ANNIV() %>" valeurNulle="null"> 
 			<span class="readonly">%%</span> </salon:valeur> </td>
 	</tr>
+	<% if (mySalon.getMySociete().isSalon()) { %>
 	<tr> 
 		<td colspan="3" valign="top"><span class="facultatif">Type 
 			de cheveux</span> : </td>
@@ -51,6 +52,21 @@
 			<% } %>
 			&nbsp; </td>
 	</tr>
+	<% }
+	   if (mySalon.getMySociete().isInstitut()) { %>
+	<tr> 
+		<td colspan="3" valign="top"><span class="facultatif">Type 
+			de peau</span> : </td>
+		<td valign="top" colspan="3"> 
+			<%
+	       DonneeRefBean typPeau = DonneeRefBean.getDonneeRefBean(mySalon.getMyDBSession(), "TYP_PEAU", Integer.toString(aCli.getCD_TYP_PEAU()));
+	       if (typPeau != null) { %>
+			<salon:valeur valeur="<%= typPeau.toString() %>" valeurNulle="null"> 
+			<span class="readonly">%%</span> </salon:valeur> 
+			<% } %>
+			&nbsp; </td>
+	</tr>
+	<% } %>
 	<tr> 
 		<td height="0"></td>
 		<td width="22"></td>

@@ -367,6 +367,8 @@
 				<include name="ficSoc.jsp"/>
 				<include name="ficStat.jsp"/>
 				<include name="ficStatGraph.jsp"/>
+				<include name="ficTech.jsp"/>
+				<include name="ficTechImpr.jsp"/>
 				<include name="ficTrAge.jsp"/>
 				<include name="ficTypMca.jsp"/>
 				<include name="ficTypMvt.jsp"/>

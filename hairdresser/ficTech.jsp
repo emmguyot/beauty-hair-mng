@@ -50,6 +50,7 @@ function Init() {
 	<td class="label"><span class="obligatoire">Client</span> : </td>
 			<td> <span class="readonly"><a href="_FicheCli.jsp?Action=Modification&CD_CLI=<%= aCli.getCD_CLI() %>" target="ClientFrame"><%= aCli.toString() %></a></span> 
 			</td>
+	<% if (mySalon.getMySociete().isSalon()) { %>
 	<td class="label"><span class="facultatif">Type de cheveux</span> : </td>
 	<td>
 	    <%
@@ -61,6 +62,20 @@ function Init() {
 	    <% } %>
 	    &nbsp;
 	</td>
+	<% }
+	   if (mySalon.getMySociete().isInstitut()) { %>
+	<td class="label"><span class="facultatif">Type de peau</span> : </td>
+	<td>
+	    <%
+	       DonneeRefBean typPeau = DonneeRefBean.getDonneeRefBean(mySalon.getMyDBSession(), "TYP_PEAU", Integer.toString(aCli.getCD_TYP_PEAU()));
+	       if (typPeau != null) { %>
+		  <salon:valeur valeur="<%= typPeau.toString() %>" valeurNulle="null">
+		     <span class="readonly">%%</span>
+		  </salon:valeur>
+	    <% } %>
+	    &nbsp;
+	</td>
+	<% } %>
 	<td class="label"><span class="facultatif">Date d'anniversaire</span> : </td>
 	<td>
 		  <salon:valeur valeur="<%= aCli.getDT_ANNIV() %>" valeurNulle="null">

@@ -3,6 +3,8 @@ package com.increg.salon.servlet;
 import java.sql.ResultSet;
 import java.util.Vector;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.increg.commun.DBSession;
@@ -21,7 +23,7 @@ public class FicCli extends ConnectedServlet {
     /**
      * @see com.increg.salon.servlet.ConnectedServlet
      */
-    public void performTask(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) {
+    public void performTask(HttpServletRequest request, HttpServletResponse response) {
 
         // Récupération des paramètres
         String Action = request.getParameter("Action");
@@ -38,6 +40,7 @@ public class FicCli extends ConnectedServlet {
         String PORTABLE = request.getParameter("PORTABLE");
         String EMAIL = request.getParameter("EMAIL");
         String CD_TYP_CHEV = request.getParameter("CD_TYP_CHEV");
+        String CD_TYP_PEAU = request.getParameter("CD_TYP_PEAU");
         String CD_TR_AGE = request.getParameter("CD_TR_AGE");
         String CD_ORIG = request.getParameter("CD_ORIG");
         String CD_CATEG_CLI = request.getParameter("CD_CATEG_CLI");
@@ -64,8 +67,7 @@ public class FicCli extends ConnectedServlet {
                 // Un bean vide
                 ClientBean aCli = new ClientBean();
                 request.setAttribute("ClientBean", aCli);
-            }
-            else if (Action.equals("Creation")) {
+            } else if (Action.equals("Creation")) {
                 // Crée réellement le client
 
                 /**
@@ -83,6 +85,7 @@ public class FicCli extends ConnectedServlet {
                 aCli.setPORTABLE(PORTABLE);
                 aCli.setEMAIL(EMAIL);
                 aCli.setCD_TYP_CHEV(CD_TYP_CHEV);
+                aCli.setCD_TYP_PEAU(CD_TYP_PEAU);
                 aCli.setCD_TR_AGE(CD_TR_AGE);
                 aCli.setCD_ORIG(CD_ORIG);
                 aCli.setCD_CATEG_CLI(CD_CATEG_CLI);
@@ -94,23 +97,20 @@ public class FicCli extends ConnectedServlet {
                     aCli.create(myDBSession);
                     mySalon.setMessage("Info", "Création effectuée.");
                     request.setAttribute("Action", "Modification");
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     mySalon.setMessage("Erreur", e.toString());
                     request.setAttribute("Action", Action);
                 }
                 request.setAttribute("ClientBean", aCli);
 
-            }
-            else if ((Action.equals("Modification")) && (NOM == null)) {
+            } else if ((Action.equals("Modification")) && (NOM == null)) {
                 // Affichage de la fiche en modification
                 request.setAttribute("Action", "Modification");
 
                 ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI);
                 request.setAttribute("ClientBean", aCli);
 
-            }
-            else if (Action.equals("Modification")) {
+            } else if (Action.equals("Modification")) {
                 // Modification effective de la fiche
 
                 /**
@@ -129,6 +129,7 @@ public class FicCli extends ConnectedServlet {
                 aCli.setPORTABLE(PORTABLE);
                 aCli.setEMAIL(EMAIL);
                 aCli.setCD_TYP_CHEV(CD_TYP_CHEV);
+                aCli.setCD_TYP_PEAU(CD_TYP_PEAU);
                 aCli.setCD_TR_AGE(CD_TR_AGE);
                 aCli.setCD_ORIG(CD_ORIG);
                 aCli.setCD_CATEG_CLI(CD_CATEG_CLI);
@@ -140,14 +141,12 @@ public class FicCli extends ConnectedServlet {
                     aCli.maj(myDBSession);
                     mySalon.setMessage("Info", "Enregistrement effectué.");
                     request.setAttribute("Action", "Modification");
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     mySalon.setMessage("Erreur", e.toString());
                     request.setAttribute("Action", Action);
                 }
                 request.setAttribute("ClientBean", aCli);
-            }
-            else if (Action.equals("Suppression")) {
+            } else if (Action.equals("Suppression")) {
                 // Modification effective de la fiche
 
                 /**
@@ -161,22 +160,19 @@ public class FicCli extends ConnectedServlet {
                     // Un bean vide
                     aCli = new ClientBean();
                     request.setAttribute("Action", "Creation");
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     mySalon.setMessage("Erreur", e.toString());
                     request.setAttribute("Action", "Modification");
                 }
                 request.setAttribute("ClientBean", aCli);
-            }
-            else if (Action.equals("Complet")) {
+            } else if (Action.equals("Complet")) {
                 // Affichage de la fiche en modification
                 request.setAttribute("Action", "Modification");
 
                 ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI);
                 request.setAttribute("ClientBean", aCli);
                 NbPrest = Long.toString(Long.MAX_VALUE);
-            }
-            else if (Action.equals("Commentaire")) {
+            } else if (Action.equals("Commentaire")) {
                 // Modification d'un commentaire
                 String CD_FACT = request.getParameter("CD_FACT");
                 String NUM_LIG_FACT = request.getParameter("NUM_LIG_FACT");
@@ -191,8 +187,7 @@ public class FicCli extends ConnectedServlet {
                 try {
                     aHistoPrest.maj(myDBSession);
                     mySalon.setMessage("Info", "Enregistrement effectué.");
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     mySalon.setMessage("Erreur", e.toString());
                 }
 
@@ -200,12 +195,10 @@ public class FicCli extends ConnectedServlet {
 
                 ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI);
                 request.setAttribute("ClientBean", aCli);
-            }
-            else {
+            } else {
                 System.out.println("Action non codée : " + Action);
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             mySalon.setMessage("Erreur", e.toString());
             System.out.println("Note : " + e.toString());
         }
@@ -248,8 +241,7 @@ public class FicCli extends ConnectedServlet {
                             if (Integer.toString(aPrest.getCD_TYP_VENT()).equals(CD_TYP_VENT)) {
                                 ajout = true;
                             }
-                        }
-                        else {
+                        } else {
                             ajout = true;
                         }
 
@@ -260,13 +252,11 @@ public class FicCli extends ConnectedServlet {
                     }
                 }
                 aRS.close();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 System.out.println("Erreur dans requète sur clé : " + e.toString());
                 try {
                     response.sendError(500);
-                }
-                catch (Exception e2) {
+                } catch (Exception e2) {
                     System.out.println("Erreur sur sendError : " + e2.toString());
                 }
             }
@@ -279,8 +269,7 @@ public class FicCli extends ConnectedServlet {
             // Passe la main à la fiche de création
             getServletConfig().getServletContext().getRequestDispatcher("/ficCli.jsp").forward(request, response);
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("FicCli::performTask : Erreur à la redirection : " + e.toString());
         }
     }

@@ -74,9 +74,13 @@ public class UpdateBeanV33 extends UpdateBeanV31 {
                 + ")",
                 "create sequence SEQ_TYP_PEAU",
                 "alter table TYP_PEAU alter CD_TYP_PEAU set default nextval('SEQ_TYP_PEAU')",
-                "insert into TYP_PEAU (LIB_TYP_PEAU) select LIB_TYP_CHEV from TYP_CHEV"
+                "insert into TYP_PEAU (CD_TYP_PEAU, LIB_TYP_PEAU) select CD_TYP_CHEV, LIB_TYP_CHEV from TYP_CHEV",
+                "alter table CLI add CD_TYP_PEAU numeric(2)",
+                "alter table CLI add constraint FK_APOUR_PEAU foreign key (CD_TYP_PEAU) references TYP_PEAU (CD_TYP_PEAU)",
+                "update CLI set CD_TYP_PEAU = CD_TYP_CHEV"
                 };
             String[] sqlAvecRes = {
+                "select setval ('seq_typ_peau', max (CD_TYP_PEAU), true) from TYP_PEAU"
                 };
 
             for (int i = 0; i < reqStat.length; i++) {

@@ -124,16 +124,20 @@ function Init() {
             <table border="0" cellspacing="2">
                 <tr>
                     <td>
+					<% if (mySalon.getMySociete().isSalon()) { %>
                         <span class="facultatif">Type de cheveux :</span> <br>
+					<% } %>
                         <span class="facultatif">Tranche d'&acirc;ge :</span> 
                     </td>
                     <td>
+					<% if (mySalon.getMySociete().isSalon()) { %>
                         <salon:DBselection valeur="<%= aCli.getCD_TYP_CHEV() %>" sql="select CD_TYP_CHEV, LIB_TYP_CHEV from TYP_CHEV order by LIB_TYP_CHEV">
                         <select name="CD_TYP_CHEV">
                             <option value=""></option>
                             %%
                         </select><br>
                         </salon:DBselection>
+					<% } %>
                         <salon:DBselection valeur="<%= aCli.getCD_TR_AGE() %>" sql="select CD_TR_AGE, LIB_TR_AGE from TR_AGE order by AGE_MIN">
                         <select name="CD_TR_AGE">
                             <option value=""></option>
@@ -142,16 +146,20 @@ function Init() {
                         </salon:DBselection>
                     </td>
                     <td>
-                        <span class="facultatif">Cat&eacute;gorie client :</span> <br>
+			    	<% if (mySalon.getMySociete().isInstitut()) { %>
+                        <span class="facultatif">Type de peau :</span> <br>
+					<% } %>
                         <span class="facultatif">Origine :</span> 
                     </td>
                     <td>
-                        <salon:DBselection valeur="<%= aCli.getCD_CATEG_CLI() %>" sql="select CD_CATEG_CLI, LIB_CATEG_CLI from CATEG_CLI order by LIB_CATEG_CLI">
-                        <select name="CD_CATEG_CLI">
+			    	<% if (mySalon.getMySociete().isInstitut()) { %>
+                        <salon:DBselection valeur="<%= aCli.getCD_TYP_PEAU() %>" sql="select CD_TYP_PEAU, LIB_TYP_PEAU from TYP_PEAU order by LIB_TYP_PEAU">
+                        <select name="CD_TYP_PEAU">
                             <option value=""></option>
                             %%
                         </select><br>
-                        </salon:DBselection> 
+                        </salon:DBselection>
+					<% } %>
                         <salon:DBselection valeur="<%= aCli.getCD_ORIG() %>" sql="select CD_ORIG, LIB_ORIG from ORIG order by LIB_ORIG">
                         <select name="CD_ORIG">
                             <option value=""></option>
@@ -160,9 +168,16 @@ function Init() {
                         </salon:DBselection>
                     </td>
                     <td>
+                        <span class="facultatif">Cat&eacute;gorie client :</span> <br>
                         <span class="obligatoire">Client actuel :</span> 
                     </td>
                     <td>
+                        <salon:DBselection valeur="<%= aCli.getCD_CATEG_CLI() %>" sql="select CD_CATEG_CLI, LIB_CATEG_CLI from CATEG_CLI order by LIB_CATEG_CLI">
+                        <select name="CD_CATEG_CLI">
+                            <option value=""></option>
+                            %%
+                        </select><br>
+                        </salon:DBselection> 
                         <salon:selection valeur="<%= aCli.getINDIC_VALID() %>" valeurs='<%= "O|N" %>' libelle="Oui|Non">
                             <select name="INDIC_VALID">
                                 %%

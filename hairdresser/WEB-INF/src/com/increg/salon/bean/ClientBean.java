@@ -70,6 +70,10 @@ public class ClientBean extends TimeStampBean implements Comparable {
      */
     protected int CD_TYP_CHEV;
     /**
+     * Type de peau
+     */
+    protected int CD_TYP_PEAU;
+    /**
      * Catégorie de client
      */
     protected int CD_CATEG_CLI;
@@ -150,6 +154,14 @@ public class ClientBean extends TimeStampBean implements Comparable {
         }
         try {
             CD_TYP_CHEV = rs.getInt("CD_TYP_CHEV");
+        }
+        catch (SQLException e) {
+            if (e.getErrorCode() != 1) {
+                System.out.println("Erreur dans ClientBean (RS) : " + e.toString());
+            }
+        }
+        try {
+            CD_TYP_PEAU = rs.getInt("CD_TYP_PEAU");
         }
         catch (SQLException e) {
             if (e.getErrorCode() != 1) {
@@ -368,6 +380,12 @@ public class ClientBean extends TimeStampBean implements Comparable {
             valeur.append(",");
         }
 
+        if (CD_TYP_PEAU != 0) {
+            colonne.append("CD_TYP_PEAU,");
+            valeur.append(CD_TYP_PEAU);
+            valeur.append(",");
+        }
+
         if (CD_CATEG_CLI != 0) {
             colonne.append("CD_CATEG_CLI,");
             valeur.append(CD_CATEG_CLI);
@@ -529,6 +547,14 @@ public class ClientBean extends TimeStampBean implements Comparable {
      */
     public int getCD_TYP_CHEV() {
         return CD_TYP_CHEV;
+    }
+    /**
+     * Insert the method's description here.
+     * Creation date: (18/07/2001 22:51:23)
+     * @return int
+     */
+    public int getCD_TYP_PEAU() {
+        return CD_TYP_PEAU;
     }
     /**
      * Insert the method's description here.
@@ -805,6 +831,15 @@ public class ClientBean extends TimeStampBean implements Comparable {
         }
         colonne.append(",");
 
+        colonne.append("CD_TYP_PEAU=");
+        if (CD_TYP_PEAU != 0) {
+            colonne.append(CD_TYP_PEAU);
+        }
+        else {
+            colonne.append("NULL");
+        }
+        colonne.append(",");
+
         colonne.append("CD_CATEG_CLI=");
         if (CD_CATEG_CLI != 0) {
             colonne.append(CD_CATEG_CLI);
@@ -1070,6 +1105,14 @@ public class ClientBean extends TimeStampBean implements Comparable {
     /**
      * Insert the method's description here.
      * Creation date: (18/07/2001 22:51:23)
+     * @param newCD_TYP_PEAU int
+     */
+    public void setCD_TYP_PEAU(int newCD_TYP_PEAU) {
+        CD_TYP_PEAU = newCD_TYP_PEAU;
+    }
+    /**
+     * Insert the method's description here.
+     * Creation date: (18/07/2001 22:51:23)
      * @param newCD_TYP_CHEV int
      */
     public void setCD_TYP_CHEV(String newCD_TYP_CHEV) {
@@ -1079,6 +1122,20 @@ public class ClientBean extends TimeStampBean implements Comparable {
         }
         else {
             CD_TYP_CHEV = 0;
+        }
+    }
+    /**
+     * Insert the method's description here.
+     * Creation date: (18/07/2001 22:51:23)
+     * @param newCD_TYP_PEAU int
+     */
+    public void setCD_TYP_PEAU(String newCD_TYP_PEAU) {
+
+        if ((newCD_TYP_PEAU != null) && (newCD_TYP_PEAU.length() != 0)) {
+            CD_TYP_PEAU = Integer.parseInt(newCD_TYP_PEAU);
+        }
+        else {
+            CD_TYP_PEAU = 0;
         }
     }
     /**
