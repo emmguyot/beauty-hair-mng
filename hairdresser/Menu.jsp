@@ -185,7 +185,10 @@ function clock() {
 }
 </script>
 
-<p class="tabDonnees"><a href="contact.html" target="ClientFrame"><img src="images/logoInCrEG.gif" border="0" width="70" height="96"></a></p>
+<p class="tabDonnees">
+<font size=-1>
+<a href="histo.html"><%@ include file="include/version.inc" %></a><br/>
+<a href="contact.html" target="ClientFrame">&copy; 2002-2004</a></font></p>
 
 <SCRIPT FOR=window EVENT=onscroll LANGUAGE="JScript">
 PlaceCoins()
