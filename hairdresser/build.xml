@@ -50,6 +50,7 @@
 				<include name="**/*.css" />
 				<include name="**/*.inc" />
 				<include name="**/*.js" />
+				<include name="**/*.txt" />
 				<include name="**/*.html" />
 				<include name="*.class" />
 				<exclude name="WEB-INF/src/**" />
@@ -92,7 +93,6 @@
 				<include name="WEB-INF/**/*.class" />
 				<include name="WEB-INF/**/*.tld" />
 				<include name="WEB-INF/**/*.jar" />
-				<include name="**/*.dll" />
 				<include name="**/*.jsp" />
 				<include name="**/*.gif" />
 				<include name="**/*.jpg" />
@@ -102,6 +102,7 @@
 				<include name="**/*.css" />
 				<include name="**/*.inc" />
 				<include name="**/*.js" />
+				<include name="**/*.txt" />
 				<include name="**/*.html" />
 				<include name="*.class" />
 				<include name="WEB-INF/web.xml" />
@@ -150,226 +151,17 @@
 		<!-- Remplace le fichier web.xml par celui contenant les JSP -->
 		<move file="${tmpProdWar}/WEB-INF/webInc.xml" tofile="${tmpProdWar}/WEB-INF/web.xml" preservelastmodified="yes" verbose="yes" overwrite="true" />
 		<!-- Crée le jar des classes -->
-		<jar destfile="${tmpProdWar}/WEB-INF/lib/increg.jar" basedir="${tmpProdWar}/WEB-INF/classes" excludes="**/*.dll" />
+		<jar destfile="${tmpProdWar}/WEB-INF/lib/increg.jar" basedir="${tmpProdWar}/WEB-INF/classes" />
 		<!-- Suppression des JSP et du répertoire classes -->		
 		<delete>
 			<fileset dir="${tmpProdWar}">
 				<include name="*.jsp" />
 			</fileset>
 			<fileset dir="${tmpProdWar}/WEB-INF/classes">
-				<exclude name="**/*.dll" />
 			</fileset>
 		</delete>
 		<!-- Création du War -->
 		<jar destfile="${dist}/${ant.project.name}.war" basedir="${tmpProdWar}">
-		</jar>
-	</target>
-	
-	<!-- 
-		L     I  GGGG  H   H TTTTT
-		L     I  G     H   H   T
-		L     I  G  G  HHHHH   T
-		LLLL  I  GGGG  H   H   T
-	-->
-	<!-- Nécessite : rt.jar => Celui cible + Compilation 1.3 -->
-	<target description="Création du war (Version Light) pour distribution" name="WarFileLight">
-		<copy todir="${tmpProdLight}" preservelastmodified="yes" verbose="yes" overwrite="true" >
-			<fileset dir="${src}">
-				<include name="WEB-INF/**/*.class" />
-				<include name="WEB-INF/**/*.tld" />
-				<include name="WEB-INF/**/*.jar" />
-				<include name="**/*.dll" />
-				<include name="**/*.jsp" />
-				<include name="**/*.gif" />
-				<include name="**/*.jpg" />
-				<include name="**/*.png" />
-				<include name="**/*.ico" />
-				<include name="doc/*" />
-				<include name="**/*.css" />
-				<include name="**/*.inc" />
-				<include name="**/*.js" />
-				<include name="**/*.html" />
-				<include name="*.class" />
-				<include name="**/light/**" />
-
-				<exclude name="WEB-INF/web.xml" />
-				<exclude name="light/**" />
-				<exclude name="WEB-INF/src/**" />
-				<exclude name="**/test/**" />
-				<exclude name="**/launcher/**" />
-				<exclude name="old/**" />
-				<exclude name="sql/**" />
-				<exclude name="error/**" />
-				<exclude name="_notes/**" />
-				<exclude name="images/perso/**" />
-			</fileset>
-		</copy>
-		<!-- Déplacement des fichiers light dans l'arborescence principale -->
-		<copy todir="${tmpProdLight}" preservelastmodified="yes" verbose="yes" overwrite="true" >
-			<fileset dir="${src}/light">
-			</fileset>
-		</copy>
-		<!-- Suppression des fichiers en trop -->
-		<delete>
-			<fileset dir="${tmpProdLight}">
-				<include name="**/com/increg/salon/bean/LicenceBean.*" />
-				<include name="**/com/increg/salon/bean/SalonSessionImpl.*" />
-				<include name="**/com/increg/salon/servlet/InitPortail.*" />
-				<include name="*.dll" />
-				<include name="images/titres/ficAchat.gif" />
-				<include name="ficAchat.jsp" />
-				<include name="aideFicheAchat.html" />
-				<include name="**/com/increg/salon/servlet/FicAchat.*" />
-				<include name="images/titres/ficInventaire.gif" />
-				<include name="ficInventaire.jsp" />
-				<include name="aideFicheInventaire.html" />
-				<include name="**/com/increg/salon/servlet/FicInventaire.*" />
-				<include name="images/titres/ficReFact.gif" />
-				<include name="ficReFact.jsp" />
-				<include name="ficReFactListe.jsp" />
-				<include name="**/com/increg/salon/servlet/ReFact.*" />
-				<include name="images/titres/lstTVA.gif" />
-				<include name="lstTVA.jsp" />
-				<include name="aideListeTVA.html" />
-				<include name="**/com/increg/salon/servlet/RechTVA.*" />
-				<include name="**/com/increg/salon/request/TVA.*" />
-				<include name="images/titres/lstCA.gif" />
-				<include name="lstCA.jsp" />
-				<include name="images/titres/ficStat.gif" />
-				<include name="aideFicheStat.html" />
-				<include name="images/stat2.gif" />
-				<include name="ficStat.jsp" />
-				<include name="ficStatGraph.jsp" />
-				<include name="**/com/increg/salon/servlet/FicStat.*" />
-				<include name="**/com/increg/salon/servlet/ImageGraph.*" />
-				<include name="**/com/increg/salon/bean/graphique/**" />
-				<include name="images/titres/lstStat.gif" />
-				<include name="lstStat.jsp" />
-				<include name="**/com/increg/salon/servlet/RechStat.*" />
-				<include name="images/titres/ficSauv.gif" />
-				<include name="ficSauv.jsp" />
-				<include name="**/com/increg/salon/servlet/Sauvegarde.*" />
-				<include name="images/titres/ficRest.gif" />
-				<include name="ficRest.jsp" />
-				<include name="aideFicheRest.html" />
-				<include name="**/com/increg/salon/servlet/Restauration.*" />
-				<include name="images/titres/ficMaj.gif" />
-				<include name="ficMaj.jsp" />
-				<include name="**/com/increg/salon/servlet/MiseAJour.*" />
-				<include name="images/titres/ficGestSauv.gif" />
-				<include name="ficGestSauv.jsp" />
-				<include name="images/titres/lstIdent.gif" />
-				<include name="lstIdent.jsp" />
-				<include name="**/com/increg/salon/servlet/RechIdent.*" />
-				<include name="images/titres/ficIdent.gif" />
-				<include name="_FicheIdent.jsp" />
-				<include name="ficIdent.jsp" />
-				<include name="**/com/increg/salon/servlet/FicIdent.*" />
-				<include name="ficFactMEG.jsp" />
-				<include name="Portail.jsp" />
-				<include name="choixBase.jsp" />
-				<include name="**/com/increg/salon/bean/MultiConfigBean.*" />
-				<include name="lstPresence.jsp" />
-				<include name="**/com/increg/salon/servlet/RechPresence.*" />
-				<include name="lstRecap.jsp" />
-				<include name="**/com/increg/salon/servlet/RechRecap.*" />
-				<include name="images/titres/ficPub.gif" />
-				<include name="aideFicheCriterePub.html" />
-				<include name="images/pub2.gif" />
-				<include name="ficCriterePub.jsp" />
-				<include name="ficPub.jsp" />
-				<include name="ficPubCSV.jsp" />
-				<include name="**/com/increg/salon/servlet/FicCriterePub.*" />
-				<include name="images/titres/lstPub.gif" />
-				<include name="lstCriterePub.jsp" />
-				<include name="**/com/increg/salon/servlet/RechCriterePub.*" />
-				<include name="doc/*" />
-			</fileset>
-		</delete>
-		<!-- Recopie de la fiche light sur les différents autres fichiers -->
-		<copy file="${src}/light/ficLight.jsp" tofile="${tmpProdLight}/_FicheAchat.jsp" preservelastmodified="true" overwrite="true" />
-		<copy file="${src}/light/ficLight.jsp" tofile="${tmpProdLight}/_FicheInventaire.jsp" preservelastmodified="true" overwrite="true" />
-		<copy file="${src}/light/ficLight.jsp" tofile="${tmpProdLight}/_FicheReFact.jsp" preservelastmodified="true" overwrite="true" />
-		<copy file="${src}/light/ficLight.jsp" tofile="${tmpProdLight}/ListeTVA.jsp" preservelastmodified="true" overwrite="true" />
-		<copy file="${src}/light/ficLight.jsp" tofile="${tmpProdLight}/ListeCA.jsp" preservelastmodified="true" overwrite="true" />
-		<copy file="${src}/light/ficLight.jsp" tofile="${tmpProdLight}/ListeStat.jsp" preservelastmodified="true" overwrite="true" />
-		<copy file="${src}/light/ficLight.jsp" tofile="${tmpProdLight}/_FicheSauv.jsp" preservelastmodified="true" overwrite="true" />
-		<copy file="${src}/light/ficLight.jsp" tofile="${tmpProdLight}/_FicheGestSauv.jsp" preservelastmodified="true" overwrite="true" />
-		<copy file="${src}/light/ficLight.jsp" tofile="${tmpProdLight}/_FicheRest.jsp" preservelastmodified="true" overwrite="true" />
-		<copy file="${src}/light/ficLight.jsp" tofile="${tmpProdLight}/_FicheMaj.jsp" preservelastmodified="true" overwrite="true" />
-		<copy file="${src}/light/ficLight.jsp" tofile="${tmpProdLight}/ListeIdent.jsp" preservelastmodified="true" overwrite="true" />
-		<copy file="${src}/light/ficLight.jsp" tofile="${tmpProdLight}/ficFactMEG.jsp" preservelastmodified="true" overwrite="true" />
-		<copy file="${src}/light/ficLight.jsp" tofile="${tmpProdLight}/ListePresence.jsp" preservelastmodified="true" overwrite="true" />
-		<copy file="${src}/light/ficLight.jsp" tofile="${tmpProdLight}/ListeRecap.jsp" preservelastmodified="true" overwrite="true" />
-		<copy file="${src}/light/ficLight.jsp" tofile="${tmpProdLight}/ListeCriterePub.jsp" preservelastmodified="true" overwrite="true" />
-		<!-- Modification du fichier web.xml -->
-		<copy todir="${tmpProdLight}" preservelastmodified="yes" verbose="yes" overwrite="true">
-			<fileset dir="${src}">
-				<include name="WEB-INF/web.xml" />
-			</fileset>
-			<filterset begintoken="&gt;" endtoken="&lt;">
-				<filter token="com.increg.salon.servlet.InitPortail" value="&gt;com.increg.salon.servlet.light.InitPortail&lt;"/>
-			</filterset>
-		</copy>
-		<!-- Compilation des pages JSP -->
-		<mkdir dir="${tmpProdLight}/work" />
-		<jspc srcdir="${tmpProdLight}" 
-				destdir="${tmpProdLight}/WEB-INF/classes" 
-				webinc="${tmpProdLight}/WEB-INF/webInc.xml" 
-				verbose="9" >
-			<webapp basedir="${tmpProdLight}"/>
-			<classpath>
-				<pathelement location="${src}/../Toolbox/classes" />
-				<pathelement location="${tomcat}/lib/container/jasper.jar" />
-				<pathelement location="${java.home}/lib/rt.jar" />
-				<pathelement location="${java.class.path}" />
-			</classpath>
-		</jspc>
-		<javac srcdir="${tmpProdLight}/WEB-INF/classes" destdir="${tmpProdLight}/WEB-INF/classes" excludes="ficArt_Common.java" encoding="UTF-8">
-			<classpath>
-				<pathelement location="${tomcat}/lib/container/jasper.jar" />
-				<pathelement location="${tomcat}/lib/common/servlet.jar" />
-				<pathelement location="${tomcat}/lib/common/jasper-runtime.jar" />
-				<pathelement location="${java.home}/lib/rt.jar" />
-				<pathelement location="${tmpProdLight}/WEB-INF/classes" />
-				<pathelement location="${java.class.path}" />
-			</classpath>
-		</javac>
-		<delete>
-			<fileset dir="${tmpProdLight}/WEB-INF/classes">
-				<include name="*.java" />
-			</fileset>
-		</delete>
-		<!-- Remplace le fichier web.xml par celui contenant les JSP -->
-		<move file="${tmpProdLight}/WEB-INF/webInc.xml" tofile="${tmpProdLight}/WEB-INF/web.xml" preservelastmodified="yes" verbose="yes" overwrite="true" />
-		<!-- Crée le jar des classes -->
-		<jar destfile="${tmpProdLight}/WEB-INF/lib/increg.jar" basedir="${tmpProdLight}/WEB-INF/classes" />
-		<!-- Obfuscate l'ensemble : Work + classes -->
-		<java description="Obfuscate le tout" classname="RetroGuard" fork="true">
-			<classpath>
-				<pathelement location="${tmpProdLight}/WEB-INF/classes" />
-				<pathelement location="${tmpProdLight}/WEB-INF/lib/ibm.jar" />
-				<pathelement location="${tomcat}/lib/common/servlet.jar" />
-				<pathelement location="${tomcat}/lib/common/jasper-runtime.jar" />
-				<pathelement location="c:/java/retroguard.jar" />
-				<pathelement location="${java.home}/lib/rt.jar" />
-				<pathelement location="${java.class.path}" />
-			</classpath>
-			<arg path="${tmpProdLight}/WEB-INF/lib/increg.jar" />
-			<arg path="${tmpProdLight}/WEB-INF/lib/incregObf.jar" />
-			<arg path="${src}/config.rgs" />
-			<arg path="${src}/config.log" />
-		</java>
-		<move file="${tmpProdLight}/WEB-INF/lib/incregObf.jar" tofile="${tmpProdLight}/WEB-INF/lib/increg.jar" preservelastmodified="yes" verbose="yes" overwrite="true" />
-		<!-- Suppression des JSP et du répertoire classes -->		
-		<delete>
-			<fileset dir="${tmpProdLight}">
-				<include name="*.jsp" />
-			</fileset>
-		</delete>
-		<delete dir="${tmpProdLight}/WEB-INF/classes"/>
-		<!-- Création du War -->
-		<jar destfile="${dist}/${ant.project.name}.light.war" basedir="${tmpProdLight}">
 		</jar>
 	</target>
 </project>
