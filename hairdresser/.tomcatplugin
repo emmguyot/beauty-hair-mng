@@ -6,5 +6,6 @@
     <redirectLogger>true</redirectLogger>
     <updateXml>true</updateXml>
     <warLocation>c:\test4\salon.war</warLocation>
+    <extraInfo></extraInfo>
     <webPath>/salon</webPath>
 </tomcatProjectProperties>

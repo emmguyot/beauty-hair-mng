@@ -195,7 +195,7 @@ function clock() {
 <p class="tabDonnees">
 <font size=-1>
 <a href="histo.html" target="ClientFrame"><%@ include file="include/version.inc" %></a><br/>
-<a href="contact.html" target="ClientFrame">&copy; 2002-2004</a></font></p>
+<a href="contact.html" target="ClientFrame">&copy; 2002-2005</a></font></p>
 
 <SCRIPT FOR=window EVENT=onscroll LANGUAGE="JScript">
 PlaceCoins()

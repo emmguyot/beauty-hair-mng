@@ -355,6 +355,16 @@
        <description>Récap des ventes</description>
       <servlet-class>com.increg.salon.servlet.RechVente</servlet-class>
    </servlet>
+   <servlet>
+       <servlet-name>rechTxTVA</servlet-name>
+       <description>Liste des taux de TVA</description>
+      <servlet-class>com.increg.salon.servlet.RechTxTVA</servlet-class>
+   </servlet>
+   <servlet>
+      <servlet-name>ficTxTVA</servlet-name>
+      <description>Fiche de taux de TVA</description>
+      <servlet-class>com.increg.salon.servlet.FicTxTVA</servlet-class>
+   </servlet>
 
    <!-- ***** Include Here ******************************************************************************* -->
 
@@ -637,6 +647,14 @@
    <servlet-mapping>
        <servlet-name>rechVente</servlet-name>
        <url-pattern>/rechVente.srv</url-pattern>
+   </servlet-mapping>
+   <servlet-mapping>
+       <servlet-name>rechTxTVA</servlet-name>
+       <url-pattern>/rechTxTVA.srv</url-pattern>
+   </servlet-mapping>
+   <servlet-mapping>
+       <servlet-name>ficTxTVA</servlet-name>
+       <url-pattern>/ficTxTVA.srv</url-pattern>
    </servlet-mapping>
 
    <!-- ***** Include Here - Part 2 *************************************************************************** -->

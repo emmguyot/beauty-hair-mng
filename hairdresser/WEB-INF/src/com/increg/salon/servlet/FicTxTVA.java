@@ -6,37 +6,24 @@ import javax.servlet.http.HttpSession;
 
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.SalonSession;
-import com.increg.salon.bean.TypVentBean;
+import com.increg.salon.bean.TvaBean;
 
 /**
- * Gestion des type de ventes Creation date: 18 janv. 2003
+ * Gestion des taux de TVA Creation date: 18 janv. 2003
  * 
  * @author Emmanuel GUYOT <emmguyot@wanadoo.fr>
  */
-public class FicTypVent extends ConnectedServlet {
+public class FicTxTVA extends ConnectedServlet {
     /**
      * @see com.increg.salon.servlet.ConnectedServlet
      */
-    public void performTask(HttpServletRequest request,
-            HttpServletResponse response) {
+    public void performTask(HttpServletRequest request, HttpServletResponse response) {
 
         // Récupération des paramètres
         String Action = request.getParameter("Action");
-        String CD_TYP_VENT = request.getParameter("CD_TYP_VENT");
-        String LIB_TYP_VENT = request.getParameter("LIB_TYP_VENT");
-        String[] tCIVILITE = request.getParameterValues("CIVILITE");
-        String CIVILITE = new String();
-        if (tCIVILITE != null) {
-            for (int i = 0; i < tCIVILITE.length; i++) {
-                if (CIVILITE.length() > 0) {
-                    CIVILITE += "|";
-                }
-                CIVILITE += tCIVILITE[i];
-            }
-        }
-
-        String MARQUE = request.getParameter("MARQUE");
         String CD_TVA = request.getParameter("CD_TVA");
+        String LIB_TVA = request.getParameter("LIB_TVA");
+        String TX_TVA = request.getParameter("TX_TVA");
 
         // Récupère la connexion
         HttpSession mySession = request.getSession(false);
@@ -44,30 +31,28 @@ public class FicTypVent extends ConnectedServlet {
                 .getAttribute("SalonSession");
         DBSession myDBSession = mySalon.getMyDBSession();
 
-        TypVentBean aTypVent = null;
+        TvaBean aTva = null;
 
         try {
             if (Action == null) {
                 // Première phase de création
                 request.setAttribute("Action", "Creation");
                 // Un bean vide
-                aTypVent = new TypVentBean();
+                aTva = new TvaBean();
             } else if (Action.equals("Creation")) {
                 // Modification effective de la fiche
 
                 /**
                  * Création du bean et enregistrement
                  */
-                aTypVent = new TypVentBean();
+                aTva = new TvaBean();
 
                 try {
-                    aTypVent.setCD_TYP_VENT(CD_TYP_VENT);
-                    aTypVent.setLIB_TYP_VENT(LIB_TYP_VENT);
-                    aTypVent.setCIVILITE(CIVILITE);
-                    aTypVent.setMARQUE(MARQUE);
-                    aTypVent.setCD_TVA(CD_TVA);
+                    aTva.setCD_TVA(CD_TVA);
+                    aTva.setLIB_TVA(LIB_TVA);
+                    aTva.setTX_TVA(TX_TVA);
 
-                    aTypVent.create(myDBSession);
+                    aTva.create(myDBSession);
                     mySalon.setMessage("Info", "Création effectuée.");
                     request.setAttribute("Action", "Modification");
                 } catch (Exception e) {
@@ -75,27 +60,25 @@ public class FicTypVent extends ConnectedServlet {
                     request.setAttribute("Action", Action);
                 }
             } else if ((Action.equals("Modification"))
-                    && (LIB_TYP_VENT == null)) {
+                    && (LIB_TVA == null)) {
                 // Affichage de la fiche en modification
                 request.setAttribute("Action", "Modification");
 
-                aTypVent = TypVentBean.getTypVentBean(myDBSession, CD_TYP_VENT);
+                aTva = TvaBean.getTvaBean(myDBSession, CD_TVA);
             } else if (Action.equals("Modification")) {
                 // Modification effective de la fiche
 
                 /**
                  * Création du bean et enregistrement
                  */
-                aTypVent = TypVentBean.getTypVentBean(myDBSession, CD_TYP_VENT);
+                aTva = TvaBean.getTvaBean(myDBSession, CD_TVA);
 
-                aTypVent.setCD_TYP_VENT(CD_TYP_VENT);
-                aTypVent.setLIB_TYP_VENT(LIB_TYP_VENT);
-                aTypVent.setCIVILITE(CIVILITE);
-                aTypVent.setMARQUE(MARQUE);
+                aTva.setCD_TVA(CD_TVA);
+                aTva.setLIB_TVA(LIB_TVA);
+                aTva.setTX_TVA(TX_TVA);
 
                 try {
-                    aTypVent.setCD_TVA(CD_TVA);
-                    aTypVent.maj(myDBSession);
+                    aTva.maj(myDBSession);
                     mySalon.setMessage("Info", "Enregistrement effectué.");
                 } catch (Exception e) {
                     mySalon.setMessage("Erreur", e.toString());
@@ -108,13 +91,13 @@ public class FicTypVent extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                aTypVent = TypVentBean.getTypVentBean(myDBSession, CD_TYP_VENT);
+                aTva = TvaBean.getTvaBean(myDBSession, CD_TVA);
 
                 try {
-                    aTypVent.delete(myDBSession);
+                    aTva.delete(myDBSession);
                     mySalon.setMessage("Info", "Suppression effectuée.");
                     // Un bean vide
-                    aTypVent = new TypVentBean();
+                    aTva = new TvaBean();
                     request.setAttribute("Action", "Creation");
                 } catch (Exception e) {
                     mySalon.setMessage("Erreur", e.toString());
@@ -127,16 +110,16 @@ public class FicTypVent extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                aTypVent = new TypVentBean();
+                aTva = new TvaBean();
 
                 try {
-                    aTypVent.setLIB_TYP_VENT(LIB_TYP_VENT);
-                    aTypVent.setCIVILITE(CIVILITE);
-                    aTypVent.setMARQUE(MARQUE);
-                    aTypVent.setCD_TVA(CD_TVA);
+                    aTva.setLIB_TVA(LIB_TVA);
+                    aTva.setTX_TVA(TX_TVA);
 
-                    aTypVent.create(myDBSession);
-                    mySalon.setMessage("Info", "Duplication effectuée. Vous travaillez maintenant sur la copie.");
+                    aTva.create(myDBSession);
+                    mySalon
+                            .setMessage("Info",
+                                    "Duplication effectuée. Vous travaillez maintenant sur la copie.");
                     request.setAttribute("Action", "Modification");
                 } catch (Exception e) {
                     mySalon.setMessage("Erreur", e.toString());
@@ -156,15 +139,17 @@ public class FicTypVent extends ConnectedServlet {
          */
         myDBSession.cleanTransaction();
 
-        request.setAttribute("TypVentBean", aTypVent);
+        request.setAttribute("TvaBean", aTva);
 
         try {
             // Passe la main à la fiche de création
             getServletConfig().getServletContext().getRequestDispatcher(
-                    "/ficTypVent.jsp").forward(request, response);
+                    "/ficTxTVA.jsp").forward(request, response);
 
         } catch (Exception e) {
-            System.out.println("FicTypVent::performTask : Erreur à la redirection : " + e.toString());
+            System.out
+                    .println("FicTxTva::performTask : Erreur à la redirection : "
+                            + e.toString());
         }
     }
 }

@@ -1,5 +1,5 @@
 <%@ page import="com.increg.salon.bean.SalonSession,
-	       com.increg.salon.bean.TypVentBean" %>
+	       com.increg.salon.bean.TvaBean" %>
 <%
     SalonSession mySalon = (SalonSession) session.getAttribute("SalonSession");
     if (mySalon == null) {
@@ -12,13 +12,13 @@
 <%
    // Récupération des paramètres
    String Action = (String) request.getAttribute("Action");
-   TypVentBean aTypVent = (TypVentBean) request.getAttribute("TypVentBean");
+   TvaBean aTva = (TvaBean) request.getAttribute("TvaBean");
 %>
-<title>Fiche type de prestations</title>
+<title>Fiche taux de TVA</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
-<body class="donnees" onLoad="Init();document.fiche.LIB_TYP_VENT.focus()">
+<body class="donnees" onLoad="Init();document.fiche.LIB_TVA.focus()">
 <%@ include file="include/commun.js" %>
 <script language="JavaScript">
 <!--
@@ -44,42 +44,25 @@ function Init() {
 }
 //-->
 </script>
-<h1><img src="images/titres/ficParam.gif"><br><span class="ssTitre">Type de prestations</span></h1>
+<h1><img src="images/titres/ficParam.gif"><br><span class="ssTitre">Taux de TVA</span></h1>
 <salon:message salonSession="<%= mySalon %>" />
-<form method="post" action="ficTypVent.srv" name="fiche">
+<form method="post" action="ficTxTVA.srv" name="fiche">
 	<p> 
-		<salon:valeur valeurNulle="0" valeur="<%= aTypVent.getCD_TYP_VENT() %>" >
-		  <input type="hidden" name="CD_TYP_VENT" value="%%" >
+		<salon:valeur valeurNulle="0" valeur="<%= aTva.getCD_TVA() %>" >
+		  <input type="hidden" name="CD_TVA" value="%%" >
         </salon:valeur>
 		<input type="hidden" name="Action" value="<%=Action%>">
 		<span class="obligatoire">Libellé :</span> 
-		<salon:valeur valeurNulle="null" valeur="<%= aTypVent.getLIB_TYP_VENT() %>" >
-            <input type="text" name="LIB_TYP_VENT" value="%%" size=30>
+		<salon:valeur valeurNulle="null" valeur="<%= aTva.getLIB_TVA() %>" >
+          <input type="text" name="LIB_TVA" value="%%" size=30>
         </salon:valeur>
         </p>
 	<p>
-		<span class="obligatoire">Article associé :</span> 
-        <salon:selection valeur='<%= aTypVent.getMARQUE() %>' valeurs='<%= "N|O" %>' libelle="Non|Oui">
-            <select name="MARQUE">
-                %%
-            </select>
-        </salon:selection>
+		<span class="obligatoire">Taux de la TVA :</span> 
+        <salon:valeur valeur='<%= aTva.getTX_TVA() %>' valeurNulle="null" >
+          <input type="text" name="TX_TVA" value="%%" size=6>
+        </salon:valeur>
         </p>
-	<p>
-		<span class="obligatoire">Civilités associées :</span> 
-        <salon:checkbox valeurs="Mle|Mme|M. " libelle="Mle|Mme|M. "
-                        nom="CIVILITE" tabValeur='<%= aTypVent.getCIVILITE() %>'>
-            %%
-        </salon:checkbox>
-	</p>
-	<p>
-		<span class="obligatoire">TVA applicable :</span> 
-		<salon:DBselection valeur="<%= aTypVent.getCD_TVA() %>" sql="select CD_TVA, LIB_TVA from TVA order by LIB_TVA">
-		  <select name="CD_TVA">
-		     %%
-		  </select>
-		</salon:DBselection>
-	</p>
 </form>
 <script language="JavaScript">
 // Fonctions d'action
@@ -88,7 +71,7 @@ function Init() {
 function Enregistrer()
 {
    // Verification des données obligatoires
-   if (document.fiche.LIB_TYP_VENT.value == "") {
+   if (document.fiche.LIB_TVA.value == "") {
       alert ("Le libellé doit être saisi. L'enregistrement n'a pas pu avoir lieu.");
       return;
    }
@@ -98,7 +81,7 @@ function Enregistrer()
 // Duplication de la prestation
 function Dupliquer()
 {
-   if (document.fiche.LIB_TYP_VENT.value == "") {
+   if (document.fiche.LIB_TVA.value == "") {
       alert ("Le libellé doit être saisi. L'enregistrement n'a pas pu avoir lieu.");
       return;
    }
@@ -109,7 +92,7 @@ function Dupliquer()
 // Suppression de la fiche
 function Supprimer()
 {
-    if ((document.fiche.CD_TYP_VENT.value != "0") && (document.fiche.CD_TYP_VENT.value != "")) {
+    if ((document.fiche.CD_TVA.value != "0") && (document.fiche.CD_TVA.value != "")) {
         if (confirm ("Cette suppression est définitive. Confirmez-vous cette action ?")) {
             document.fiche.Action.value = "Suppression";
             document.fiche.submit();
@@ -120,14 +103,13 @@ function Supprimer()
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideFicheTypVent.html");
+    window.open("aideFicheParam.html");
 }
 
 function RetourListe()
 {
-    parent.location.href = "ListeTypVent.jsp";
+    parent.location.href = "ListeTxTVA.jsp";
 }
-
 
 </script>
 </body>

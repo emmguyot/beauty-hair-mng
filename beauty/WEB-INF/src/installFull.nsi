@@ -60,7 +60,7 @@ var ICONS_GROUP
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "c:/Test4/institut_InCrEG.exe"
+OutFile "c:/build/InCrEG_LibertyLook_institut_${PRODUCT_VERSION}.exe"
 InstallDir "c:\InCrEG\"
 ShowInstDetails nevershow
 ShowUnInstDetails nevershow

@@ -1,6 +1,5 @@
 package com.increg.salon.bean.test;
 
-import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.util.Calendar;
 
@@ -103,7 +102,7 @@ public class PaiementBeanTest extends TestCase {
             aHisto2.setQTE("1");
             aHisto2.create(aDBSession);
             
-            aFact.calculTotaux(aDBSession, new BigDecimal("19.6"));
+            aFact.calculTotaux(aDBSession);
             
             // Paiement
             aPaiement = new PaiementBean();
@@ -149,12 +148,10 @@ public class PaiementBeanTest extends TestCase {
             rs.close();
             
             Assert.assertEquals(lastDate, lastDateAvant);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("testDeletePur1 : " + e.toString());
             throw (e);
-        }
-        finally {
+        } finally {
             if (aHisto1 != null) { aHisto1.delete(aDBSession); }
             if (aHisto2 != null) { aHisto2.delete(aDBSession); }
             if (aFact != null) { aFact.delete(aDBSession); }

@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.increg.commun.DBSession;
+import com.increg.commun.exception.ReloadNeededException;
+import com.increg.salon.bean.ParamBean;
 
 /**
  * Passage à la version 3.3
@@ -66,7 +68,7 @@ public class UpdateBeanV33 extends UpdateBeanV31 {
                 + "where CLI.CD_ORIG = ORIG.CD_ORIG and CLI.DT_CREAT between ''$DateDebut$'' and ''$DateFin$'' group by LIB_ORIG',"
                 + "'Origine', 'Nombre', now(), now())",
                 "alter table SOC add FLG_INSTITUT char(1)",
-                "alter table SOC add FLG_SALON char(1))",
+                "alter table SOC add FLG_SALON char(1)",
                 "create table TYP_PEAU ("
                 + "      CD_TYP_PEAU     numeric(2)     not null,"
                 + "      LIB_TYP_PEAU    varchar(80)    not null,"
@@ -77,7 +79,30 @@ public class UpdateBeanV33 extends UpdateBeanV31 {
                 "insert into TYP_PEAU (CD_TYP_PEAU, LIB_TYP_PEAU) select CD_TYP_CHEV, LIB_TYP_CHEV from TYP_CHEV",
                 "alter table CLI add CD_TYP_PEAU numeric(2)",
                 "alter table CLI add constraint FK_APOUR_PEAU foreign key (CD_TYP_PEAU) references TYP_PEAU (CD_TYP_PEAU)",
-                "update CLI set CD_TYP_PEAU = CD_TYP_CHEV"
+                "update CLI set CD_TYP_PEAU = CD_TYP_CHEV",
+                "create table TVA ("
+                + "     CD_TVA numeric(2) not null,"
+                + "     LIB_TVA varchar(80) not null,"
+                + "     TX_TVA numeric(5,2) not null,"
+                + "     constraint PK_TVA primary key (CD_TVA)"
+                + ")",
+                "create sequence SEQ_TVA",
+                "alter table TVA alter CD_TVA set default nextval('SEQ_TVA')",
+                "insert into TVA (LIB_TVA, TX_TVA) select 'TVA Normale', to_number(VAL_PARAM, '99.99') from PARAM where CD_PARAM=" + ParamBean.CD_TVA,
+                "alter table TYP_VENT add CD_TVA numeric(2)",
+                "update TYP_VENT set CD_TVA = 1",
+                "alter table TYP_VENT add constraint FK_APOUR_TVA foreign key (CD_TVA) references TVA (CD_TVA)",
+                "delete from PARAM where CD_PARAM=" + ParamBean.CD_TVA,
+                "alter table DEVISE rename to DEVISE_OLD",
+                "drop index PK_DEVISE",
+                "create table DEVISE ("
+                + "CD_DEVISE numeric(2) not null default nextval('SEQ_DEVISE'),"
+                + "LIB_COURT_DEVISE varchar(10) not null,"
+                + "LIB_DEVISE varchar(30) not null,"
+                + "RATIO decimal(9,5),"
+                + "Constraint PK_DEVISE Primary Key (CD_DEVISE))",
+                "insert into DEVISE (CD_DEVISE, LIB_COURT_DEVISE, LIB_DEVISE, RATIO) select CD_DEVISE, LIB_COURT_DEVISE, LIB_DEVISE, RATIO from DEVISE_OLD",
+                "drop table DEVISE_OLD"
                 };
             String[] sqlAvecRes = {
                 "select setval ('seq_typ_peau', max (CD_TYP_PEAU), true) from TYP_PEAU"
@@ -106,8 +131,7 @@ public class UpdateBeanV33 extends UpdateBeanV31 {
                 String[] aSql = new String[1];
                 aSql[0] = "update SOC set FLG_INSTITUT='O'";
                 dbConnect.doExecuteSQL(aSql);
-            }
-            else {
+            } else {
                 String[] aSql = new String[1];
                 aSql[0] = "update SOC set FLG_INSTITUT='N'";
                 dbConnect.doExecuteSQL(aSql);
@@ -116,8 +140,7 @@ public class UpdateBeanV33 extends UpdateBeanV31 {
                 String[] aSql = new String[1];
                 aSql[0] = "update SOC set FLG_SALON='O'";
                 dbConnect.doExecuteSQL(aSql);
-            }
-            else {
+            } else {
                 String[] aSql = new String[1];
                 aSql[0] = "update SOC set FLG_SALON='N'";
                 dbConnect.doExecuteSQL(aSql);
@@ -125,5 +148,95 @@ public class UpdateBeanV33 extends UpdateBeanV31 {
             // On vient de passer en 3.3
             version = "3.3";
         }
+    }
+    /**
+     * @see com.increg.salon.bean.update.UpdateBean#checkDatabase(DBSession)
+     */
+    public boolean checkDatabase(DBSession dbConnect) throws ReloadNeededException {
+
+        // Liste des tables qui devraient être présentes, dans l'ordre alphabétique
+        String[] lstTables = {
+                            "ABO_CLI",
+                            "ART",
+                            "CAISSE",
+                            "CAT_FOURN",
+                            "CATEG_ART",
+                            "CATEG_CLI",
+                            "CATEG_PREST",
+                            "CLI",
+                            "COLLAB",
+                            "CRITERE_PUB",
+                            "DEVISE",
+                            "FACT",
+                            "FCT",
+                            "FETE",
+                            "FOURN",
+                            "HISTO_PREST",
+                            "IDENT",
+                            "MARQUE",
+                            "MOD_REGL",
+                            "MVT_CAISSE",
+                            "MVT_STK",
+                            "ORIG",
+                            "PAIEMENT",
+                            "PARAM",
+                            "POINTAGE",
+                            "PREST",
+                            "PROFIL",
+                            "RDV",
+                            "SOC",
+                            "STAT",
+                            "STAT_HISTO",
+                            "TR_AGE",
+                            "TVA",
+                            "TYP_ART",
+                            "TYP_CHEV",
+                            "TYP_CONTR",
+                            "TYP_MCA",
+                            "TYP_MVT",
+                            "TYP_PEAU",
+                            "TYP_POINTAGE",
+                            "TYP_VENT",
+                            "UNIT_MES",
+                            "VERSION"
+                            };
+
+        // liste des séquences qui devraient être présentes, dans l'ordre alphabétique
+        String[] lstSequences = {
+                            "SEQ_ART",
+                            "SEQ_CATEG_ART",
+                            "SEQ_CATEG_CLI",
+                            "SEQ_CATEG_PREST",
+                            "SEQ_CLI",
+                            "SEQ_COLLAB",
+                            "SEQ_CRITERE_PUB",
+                            "SEQ_DEVISE",
+                            "SEQ_FACT",
+                            "SEQ_FCT",
+                            "SEQ_FETE",
+                            "SEQ_FOURN",
+                            "SEQ_IDENT",
+                            "SEQ_MARQUE",
+                            "SEQ_MOD_REGL",
+                            "SEQ_ORIG",
+                            "SEQ_PAIEMENT",
+                            "SEQ_PARAM",
+                            "SEQ_PREST",
+                            "SEQ_PROFIL",
+                            "SEQ_STAT",
+                            "SEQ_TR_AGE",
+                            "SEQ_TVA",
+                            "SEQ_TYP_ART",
+                            "SEQ_TYP_CHEV",
+                            "SEQ_TYP_CONTR",
+                            "SEQ_TYP_MCA",
+                            "SEQ_TYP_MVT",
+                            "SEQ_TYP_PEAU",
+                            "SEQ_TYP_POINTAGE",
+                            "SEQ_TYP_VENT",
+                            "SEQ_UNIT_MES"
+                            };
+        
+        return checkDatabase(dbConnect, lstTables, lstSequences);
     }
 }

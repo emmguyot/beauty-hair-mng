@@ -60,7 +60,7 @@ var ICONS_GROUP
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "c:/test4/hairdresser.exe"
+OutFile "c:/build/InCrEG_LibertyLook_salon_${PRODUCT_VERSION}.exe"
 InstallDir "c:\InCrEG\"
 ShowInstDetails nevershow
 ShowUnInstDetails nevershow

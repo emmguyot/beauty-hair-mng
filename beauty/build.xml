@@ -91,6 +91,7 @@
 				<include name="WEB-INF/src/com/increg/salon/bean/TypMcaBean.java"/>
 				<include name="WEB-INF/src/com/increg/salon/bean/TypMvtBean.java"/>
 				<include name="WEB-INF/src/com/increg/salon/bean/TypVentBean.java"/>
+				<include name="WEB-INF/src/com/increg/salon/bean/TvaBean.java"/>
 				<include name="WEB-INF/src/com/increg/salon/bean/update/UpdateBean.java"/>
 				<include name="WEB-INF/src/com/increg/salon/bean/update/UpdateBeanV17.java"/>
 				<include name="WEB-INF/src/com/increg/salon/bean/update/UpdateBeanV20.java"/>
@@ -160,6 +161,7 @@
 				<include name="WEB-INF/src/com/increg/salon/servlet/FicSoc.java"/>
 				<include name="WEB-INF/src/com/increg/salon/servlet/FicTech.java"/>
 				<include name="WEB-INF/src/com/increg/salon/servlet/FicTrAge.java"/>
+				<include name="WEB-INF/src/com/increg/salon/servlet/FicTxTVA.java"/>
 				<include name="WEB-INF/src/com/increg/salon/servlet/FicTypMca.java"/>
 				<include name="WEB-INF/src/com/increg/salon/servlet/FicTypMvt.java"/>
 				<include name="WEB-INF/src/com/increg/salon/servlet/FicTypVent.java"/>
@@ -194,6 +196,7 @@
 				<include name="WEB-INF/src/com/increg/salon/servlet/RechStat.java"/>
 				<include name="WEB-INF/src/com/increg/salon/servlet/RechTVA.java"/>
 				<include name="WEB-INF/src/com/increg/salon/servlet/RechTrAge.java"/>
+				<include name="WEB-INF/src/com/increg/salon/servlet/RechTxTVA.java"/>
 				<include name="WEB-INF/src/com/increg/salon/servlet/RechTypMca.java"/>
 				<include name="WEB-INF/src/com/increg/salon/servlet/RechTypMvt.java"/>
 				<include name="WEB-INF/src/com/increg/salon/servlet/RechTypVent.java"/>
@@ -301,6 +304,7 @@
 				<include name="_FicheStat.jsp"/>
 				<include name="_FicheTech.jsp"/>
 				<include name="_FicheTrAge.jsp"/>
+				<include name="_FicheTxTVA.jsp"/>
 				<include name="_FicheTypMca.jsp"/>
 				<include name="_FicheTypMvt.jsp"/>
 				<include name="_FicheTypVent.jsp"/>
@@ -371,6 +375,7 @@
 				<include name="ficTech.jsp"/>
 				<include name="ficTechImpr.jsp"/>
 				<include name="ficTrAge.jsp"/>
+				<include name="ficTxTVA.jsp"/>
 				<include name="ficTypMca.jsp"/>
 				<include name="ficTypMvt.jsp"/>
 				<include name="ficTypVent.jsp"/>
@@ -405,6 +410,7 @@
 				<include name="lstStat.jsp"/>
 				<include name="lstTVA.jsp"/>
 				<include name="lstTrAge.jsp"/>
+				<include name="lstTxTVA.jsp"/>
 				<include name="lstTypMca.jsp"/>
 				<include name="lstTypMvt.jsp"/>
 				<include name="lstTypVent.jsp"/>

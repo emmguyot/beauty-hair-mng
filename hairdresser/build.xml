@@ -10,10 +10,11 @@
     <property name="tmpProdWar" value="${build}/war" />
     <property name="demo" value="${tomcat}/webapps/${ant.project.name}" />
     <property name="demoWork" value="${tomcat}/work/DEFAULT/${ant.project.name}" />
-    <property name="dist" value="C:/test4" />
+    <property name="dist" value="C:/build/dist" />
 
     <target name="init">
         <mkdir dir="${build}"/>
+        <mkdir dir="${dist}"/>
         <mkdir dir="${work}"/>
         <mkdir dir="${tmpProd}"/>
         <mkdir dir="${tmpProdLight}"/>

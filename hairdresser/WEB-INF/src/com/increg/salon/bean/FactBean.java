@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.Vector;
 
 import com.increg.commun.DBSession;
@@ -84,7 +85,11 @@ public class FactBean extends TimeStampBean {
      * Type de répartition de la remise
      */
     protected String repartRemise = null;
-    
+    /**
+     * Répartition de la TVA entre les différents taux
+     * Non stocké en base
+     */
+    protected HashMap repartTVA;
     
     /**
      * FactBean constructor comment.
@@ -101,6 +106,7 @@ public class FactBean extends TimeStampBean {
         DT_PREST.clear(Calendar.MILLISECOND);
 
         CD_PAIEMENT_INIT = CD_PAIEMENT;
+        repartTVA = new HashMap();
     }
     /**
      * FactBean constructor comment.
@@ -110,40 +116,35 @@ public class FactBean extends TimeStampBean {
         super(rs);
         try {
             CD_CLI = rs.getLong("CD_CLI");
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             if (e.getErrorCode() != 1) {
                 System.out.println("Erreur dans FactBean (RS) : " + e.toString());
             }
         }
         try {
             CD_COLLAB = rs.getInt("CD_COLLAB");
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             if (e.getErrorCode() != 1) {
                 System.out.println("Erreur dans FactBean (RS) : " + e.toString());
             }
         }
         try {
             CD_FACT = rs.getLong("CD_FACT");
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             if (e.getErrorCode() != 1) {
                 System.out.println("Erreur dans FactBean (RS) : " + e.toString());
             }
         }
         try {
             CD_PAIEMENT = rs.getLong("CD_PAIEMENT");
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             if (e.getErrorCode() != 1) {
                 System.out.println("Erreur dans FactBean (RS) : " + e.toString());
             }
         }
         try {
             CD_TYP_VENT = rs.getInt("CD_TYP_VENT");
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             if (e.getErrorCode() != 1) {
                 System.out.println("Erreur dans FactBean (RS) : " + e.toString());
             }
@@ -154,66 +155,59 @@ public class FactBean extends TimeStampBean {
             if (DtPrest != null) {
                 DT_PREST = Calendar.getInstance();
                 DT_PREST.setTime(DtPrest);
-            }
-            else {
+            } else {
                 DT_PREST = null;
             }
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             if (e.getErrorCode() != 1) {
                 System.out.println("Erreur dans FactBean (RS) : " + e.toString());
             }
         }
         try {
             FACT_HISTO = rs.getString("FACT_HISTO");
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             if (e.getErrorCode() != 1) {
                 System.out.println("Erreur dans FactBean (RS) : " + e.toString());
             }
         }
         try {
             PRX_TOT_HT = rs.getBigDecimal("PRX_TOT_HT", 2);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             if (e.getErrorCode() != 1) {
                 System.out.println("Erreur dans FactBean (RS) : " + e.toString());
             }
         }
         try {
             PRX_TOT_TTC = rs.getBigDecimal("PRX_TOT_TTC", 2);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             if (e.getErrorCode() != 1) {
                 System.out.println("Erreur dans ClientBean (RS) : " + e.toString());
             }
         }
         try {
             REMISE_FIXE = rs.getBigDecimal("REMISE_FIXE", 2);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             if (e.getErrorCode() != 1) {
                 System.out.println("Erreur dans FactBean (RS) : <REMISE_FIXE> " + e.toString());
             }
         }
         try {
             REMISE_PRC = rs.getBigDecimal("REMISE_PRC", 2);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             if (e.getErrorCode() != 1) {
                 System.out.println("Erreur dans FactBean (RS) : <REMISE_PRC> " + e.toString());
             }
         }
         try {
             TVA = rs.getBigDecimal("TVA", 2);
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             if (e.getErrorCode() != 1) {
                 System.out.println("Erreur dans FactBean (RS) : " + e.toString());
             }
         }
 
         CD_PAIEMENT_INIT = CD_PAIEMENT;
+        repartTVA = new HashMap();
 
     }
     /**
@@ -240,8 +234,7 @@ public class FactBean extends TimeStampBean {
                     CD_FACT = aRS.getLong(1);
                 }
                 aRS.close();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 System.out.println("Erreur dans reqSeq : " + e.toString());
             }
         }
@@ -402,8 +395,7 @@ public class FactBean extends TimeStampBean {
             if (nb[1] != 1) {
                 throw (new SQLException("Suppression non effectuée"));
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             // Fin de la transaction
             dbConnect.cleanTransaction();
             throw ((SQLException) e);
@@ -466,8 +458,7 @@ public class FactBean extends TimeStampBean {
         colonne.append("CD_CLI=");
         if (CD_CLI != 0) {
             colonne.append(CD_CLI);
-        }
-        else {
+        } else {
             colonne.append("NULL");
         }
         colonne.append(",");
@@ -475,8 +466,7 @@ public class FactBean extends TimeStampBean {
         colonne.append("CD_COLLAB=");
         if (CD_COLLAB != 0) {
             colonne.append(CD_COLLAB);
-        }
-        else {
+        } else {
             colonne.append("NULL");
         }
         colonne.append(",");
@@ -484,8 +474,7 @@ public class FactBean extends TimeStampBean {
         colonne.append("CD_TYP_VENT=");
         if (CD_TYP_VENT != 0) {
             colonne.append(CD_TYP_VENT);
-        }
-        else {
+        } else {
             colonne.append("NULL");
         }
         colonne.append(",");
@@ -493,8 +482,7 @@ public class FactBean extends TimeStampBean {
         colonne.append("CD_PAIEMENT=");
         if (CD_PAIEMENT != 0) {
             colonne.append(CD_PAIEMENT);
-        }
-        else {
+        } else {
             colonne.append("NULL");
         }
         colonne.append(",");
@@ -502,8 +490,7 @@ public class FactBean extends TimeStampBean {
         colonne.append("DT_PREST=");
         if (DT_PREST != null) {
             colonne.append(DBSession.quoteWith(formatDate.formatEG(DT_PREST.getTime()), '\''));
-        }
-        else {
+        } else {
             colonne.append("NULL");
         }
         colonne.append(",");
@@ -511,8 +498,7 @@ public class FactBean extends TimeStampBean {
         colonne.append("FACT_HISTO=");
         if ((FACT_HISTO != null) && (FACT_HISTO.length() != 0)) {
             colonne.append(DBSession.quoteWith(FACT_HISTO, '\''));
-        }
-        else {
+        } else {
             colonne.append("NULL");
         }
         colonne.append(",");
@@ -520,8 +506,7 @@ public class FactBean extends TimeStampBean {
         colonne.append("PRX_TOT_HT=");
         if (PRX_TOT_HT != null) {
             colonne.append(PRX_TOT_HT.toString());
-        }
-        else {
+        } else {
             colonne.append("NULL");
         }
         colonne.append(",");
@@ -529,8 +514,7 @@ public class FactBean extends TimeStampBean {
         colonne.append("PRX_TOT_TTC=");
         if (PRX_TOT_TTC != null) {
             colonne.append(PRX_TOT_TTC.toString());
-        }
-        else {
+        } else {
             colonne.append("NULL");
         }
         colonne.append(",");
@@ -538,8 +522,7 @@ public class FactBean extends TimeStampBean {
         colonne.append("REMISE_FIXE=");
         if (REMISE_FIXE != null) {
             colonne.append(REMISE_FIXE.toString());
-        }
-        else {
+        } else {
             colonne.append("NULL");
         }
         colonne.append(",");
@@ -547,8 +530,7 @@ public class FactBean extends TimeStampBean {
         colonne.append("REMISE_PRC=");
         if (REMISE_PRC != null) {
             colonne.append(REMISE_PRC.toString());
-        }
-        else {
+        } else {
             colonne.append("NULL");
         }
         colonne.append(",");
@@ -556,8 +538,7 @@ public class FactBean extends TimeStampBean {
         colonne.append("TVA=");
         if (TVA != null) {
             colonne.append(TVA.toString());
-        }
-        else {
+        } else {
             colonne.append("NULL");
         }
         colonne.append(",");
@@ -613,8 +594,7 @@ public class FactBean extends TimeStampBean {
             int[] res = dbConnect.doExecuteSQL(reqSQL);
 
             nbEnreg = res[0];
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Erreur dans Purge des factures : " + e.toString());
             dbConnect.cleanTransaction();
             throw new FctlException("Erreur à la purge des factures.");
@@ -672,6 +652,7 @@ public class FactBean extends TimeStampBean {
      * @param dbConnect Connexion à la base à utiliser
      * @param txTVA Taux de la TVA à utiliser pour le calcul
      * @exception Exception En cas d'erreur grave
+     * @deprecated Cette méthode ne doit plus être utilisée. Le taux de TVA doit être issu du type de vente
      */
     public void calculTotaux(DBSession dbConnect, BigDecimal txTVA) throws Exception {
 
@@ -691,8 +672,7 @@ public class FactBean extends TimeStampBean {
             remise = remise.setScale(2, BigDecimal.ROUND_HALF_UP);
             PRX_TOT_TTC = totPrest.subtract(remise);
             remiseTot = remiseTot.add(remise);
-        }
-        else {
+        } else {
             PRX_TOT_TTC = totPrest;
         }
         if (REMISE_FIXE != null) {
@@ -747,8 +727,7 @@ public class FactBean extends TimeStampBean {
                 if (totPrest.compareTo(new BigDecimal("0")) != 0) { 
                     TTC = TTC.subtract(remiseTot.multiply(TTC).divide(totPrest, BigDecimal.ROUND_HALF_UP));
                 }
-            }
-            else if (CD_TYP_VENT == aPrest.getCD_TYP_VENT()) {
+            } else if (CD_TYP_VENT == aPrest.getCD_TYP_VENT()) {
                 BigDecimal somme = (BigDecimal) sommeTypeVent.get(new Integer(aPrest.getCD_TYP_VENT()));
                 if (somme.compareTo(new BigDecimal("0")) != 0) { 
                     TTC = TTC.subtract(remiseTot.multiply(TTC).divide(somme, BigDecimal.ROUND_HALF_UP));
@@ -771,8 +750,124 @@ public class FactBean extends TimeStampBean {
                 PaiementBean myPaiement = PaiementBean.getPaiementBean(dbConnect, Long.toString(getCD_PAIEMENT()));
                 myPaiement.calculTotaux(dbConnect);
             }
+        } catch (Exception e) {
+            System.out.println("FactBean ==> Erreur dans maj & calculTotaux : " + e.toString());
+            throw (e);
         }
-        catch (Exception e) {
+    }
+    /**
+     * Calcul le pied de facture compte tenu des lignes de facture en base
+     * Creation date: (20/08/2001 21:25:47)
+     * @param dbConnect Connexion à la base à utiliser
+     * @exception Exception En cas d'erreur grave
+     */
+    public void calculTotaux(DBSession dbConnect) throws Exception {
+
+        totPrest = null;
+        getTotPrest(dbConnect);
+
+        if (totPrest == null) {
+            totPrest = new BigDecimal(0);
+            totPrest.setScale(2);
+        }
+
+        BigDecimal remiseTot = new BigDecimal(0);
+        // Applique les remises
+        if (REMISE_PRC != null) {
+            // TOT_TTC = tot*(1-%) <=> TOT_TTC = tot - tot*%
+            BigDecimal remise = totPrest.multiply(REMISE_PRC).divide(new BigDecimal(100), BigDecimal.ROUND_HALF_UP);
+            remise = remise.setScale(2, BigDecimal.ROUND_HALF_UP);
+            PRX_TOT_TTC = totPrest.subtract(remise);
+            remiseTot = remiseTot.add(remise);
+        } else {
+            PRX_TOT_TTC = totPrest;
+        }
+        if (REMISE_FIXE != null) {
+            PRX_TOT_TTC = PRX_TOT_TTC.subtract(REMISE_FIXE);
+            remiseTot = remiseTot.add(REMISE_FIXE);
+        }
+
+        // Calcul de la TVA
+
+        /**
+         * Calcul de la TVA par ligne
+         */
+        getLignes(dbConnect);
+        
+        // Calcul la somme par type de vente
+        HashMap sommeTypeVent = new HashMap();
+        Vector lstPrest = new Vector();
+        for (int i = 0; i < lignes.size(); i++) {
+            HistoPrestBean aLigne = (HistoPrestBean) lignes.get(i);
+            PrestBean aPrest = PrestBean.getPrestBean(dbConnect, Long.toString(aLigne.getCD_PREST()));
+            Integer cdTypVent = new Integer(aPrest.getCD_TYP_VENT());
+            
+            BigDecimal somme = (BigDecimal) sommeTypeVent.get(cdTypVent);
+            if (somme == null) {
+                somme = new BigDecimal("0").setScale(2); 
+            }
+            
+            somme = somme.add(aLigne.getQTE().multiply(aLigne.getPRX_UNIT_TTC()));
+            sommeTypeVent.put(cdTypVent, somme);
+            lstPrest.add(aPrest);
+        }
+        
+        TVA = new BigDecimal("0.00");
+        for (int i = 0; i < lignes.size(); i++) {
+            HistoPrestBean aLigne = (HistoPrestBean) lignes.get(i);
+            PrestBean aPrest = (PrestBean) lstPrest.get(i);
+            TypVentBean aTypVent = TypVentBean.getTypVentBean(dbConnect, Integer.toString(aPrest.getCD_TYP_VENT()));
+            TvaBean aTva = TvaBean.getTvaBean(dbConnect, Integer.toString(aTypVent.getCD_TVA()));
+            
+            BigDecimal coef = aTva.getTX_TVA().setScale(5, BigDecimal.ROUND_HALF_UP).divide(new BigDecimal(100).add(aTva.getTX_TVA()), BigDecimal.ROUND_HALF_UP);
+            
+            BigDecimal TTC = aLigne.getQTE().multiply(aLigne.getPRX_UNIT_TTC());
+            
+            aLigne.setTVA(new BigDecimal(0));
+            if (getRepartRemise(dbConnect).equals("P")) {
+                if (totPrest.compareTo(new BigDecimal("0")) != 0) { 
+                    TTC = TTC.subtract(remiseTot.multiply(TTC).divide(totPrest, BigDecimal.ROUND_HALF_UP));
+                }
+            } else if (CD_TYP_VENT == aPrest.getCD_TYP_VENT()) {
+                BigDecimal somme = (BigDecimal) sommeTypeVent.get(new Integer(aPrest.getCD_TYP_VENT()));
+                if (somme.compareTo(new BigDecimal("0")) != 0) { 
+                    TTC = TTC.subtract(remiseTot.multiply(TTC).divide(somme, BigDecimal.ROUND_HALF_UP));
+                }
+            }
+            aLigne.setTVA(TTC.multiply(coef).setScale(2, BigDecimal.ROUND_HALF_UP));
+            aLigne.setPRX_TOT_TTC(TTC.setScale(2, BigDecimal.ROUND_HALF_UP));
+            aLigne.setPRX_TOT_HT(TTC.subtract(aLigne.getTVA()));
+            
+            // Sauvegarde en base
+            aLigne.maj(dbConnect);
+            
+            // Ajoute la TVA à la facture
+            TVA = TVA.add(aLigne.getTVA());
+            BigDecimal TVApartielle = (BigDecimal) repartTVA.get(aTva);
+            if (TVApartielle == null) {
+                TVApartielle = aLigne.getTVA();
+            } else {
+                TVApartielle = TVApartielle.add(aLigne.getTVA());
+            }
+            repartTVA.put(aTva, TVApartielle);
+            
+        }
+        
+        TVA = TVA.setScale(2, BigDecimal.ROUND_HALF_UP);
+
+        // Calcul du HT
+        PRX_TOT_HT = PRX_TOT_TTC.subtract(TVA);
+
+        try {
+            // Sauvegarde en base
+            maj(dbConnect);
+
+            // Maj du paiement si besoin
+            if (getCD_PAIEMENT() != 0) {
+                PaiementBean myPaiement = PaiementBean.getPaiementBean(dbConnect, Long.toString(getCD_PAIEMENT()));
+                myPaiement.calculTotaux(dbConnect);
+            }
+        } catch (Exception e) {
             System.out.println("FactBean ==> Erreur dans maj & calculTotaux : " + e.toString());
             throw (e);
         }
@@ -782,10 +877,9 @@ public class FactBean extends TimeStampBean {
      * mais non payée, et les prix sont ceux du catalogue.
      * Creation date: (09/09/2001 21:36:27)
      * @param dbConnect Connexion à la base à utiliser
-     * @param txTVA Taux de la TVA à utiliser
      * @return com.increg.salon.bean.FactBean
      */
-    public Object clone(DBSession dbConnect, BigDecimal txTVA) {
+    public Object clone(DBSession dbConnect) {
 
         FactBean newFact = new FactBean();
 
@@ -819,8 +913,7 @@ public class FactBean extends TimeStampBean {
                         aHisto.setPRX_UNIT_TTC(aRS.getBigDecimal("PRX_UNIT_TTC", 2));
                     }
                     aRS.close();
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     System.out.println("Erreur à la recherche du prix catalogue : " + e.toString());
                 }
 
@@ -829,9 +922,8 @@ public class FactBean extends TimeStampBean {
             }
 
             // Calcul les totaux
-            newFact.calculTotaux(dbConnect, txTVA);
-        }
-        catch (Exception e) {
+            newFact.calculTotaux(dbConnect);
+        } catch (Exception e) {
             System.out.println("Erreur à la duplication de la facture : " + e.toString());
             newFact = null;
         }
@@ -866,8 +958,7 @@ public class FactBean extends TimeStampBean {
 
         if (FACT_HISTO == null) {
             return "";
-        }
-        else {
+        } else {
             return FACT_HISTO;
         }
     }
@@ -891,8 +982,7 @@ public class FactBean extends TimeStampBean {
                 res = new FactBean(aRS);
             }
             aRS.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Erreur dans constructeur sur clé : " + e.toString());
         }
         return res;
@@ -929,8 +1019,7 @@ public class FactBean extends TimeStampBean {
                     lignes.add(new HistoPrestBean(aRS));
                 }
                 aRS.close();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 System.out.println("Erreur dans getLignes : " + e.toString());
             }
         }
@@ -964,8 +1053,7 @@ public class FactBean extends TimeStampBean {
     public java.math.BigDecimal getPRX_TOT_TTC_Franc() {
         if (PRX_TOT_TTC != null) {
             return PRX_TOT_TTC.multiply(new BigDecimal(6.55957)).setScale(2, BigDecimal.ROUND_HALF_UP);
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -1013,8 +1101,7 @@ public class FactBean extends TimeStampBean {
                     }
                 }
                 aRS.close();
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 System.out.println("Erreur dans getTotPrest : " + e.toString());
             }
         }
@@ -1031,6 +1118,23 @@ public class FactBean extends TimeStampBean {
         return TVA;
     }
     
+    /**
+     * Obtention de la TVA de la facture pour un certain taux
+     * @param aTva Taux demandé
+     * @return java.math.BigDecimal
+     */
+    public java.math.BigDecimal getTVA(TvaBean aTva) {
+        return (BigDecimal) repartTVA.get(aTva);
+    }
+    
+    /**
+     * Obtention des taux de TVA utilisés par la facture
+     * @return Ensemble des taux de TVA utilisés par la facture
+     */
+    public Set getTxTVA() {
+        return repartTVA.keySet();
+    }
+
     /**
      * Fusion de deux factures
      * Creation date: (18/08/2001 17:05:45)
@@ -1102,8 +1206,7 @@ public class FactBean extends TimeStampBean {
 
             // Facture fictive : Supprime le N°
             this.CD_FACT = 0;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Erreur dans constructeur sur clé : " + e.toString());
         }
     }
@@ -1134,8 +1237,7 @@ public class FactBean extends TimeStampBean {
                 if (undo || (CD_PAIEMENT == 0)) {
                     // Parcours dans l'ordre inverse
                     aHisto = (HistoPrestBean) lignes.get(lignes.size() - i - 1);
-                }
-                else {
+                } else {
                     aHisto = (HistoPrestBean) lignes.get(i);
                 }
                 PrestBean aPrest = PrestBean.getPrestBean(dbConnect, Long.toString(aHisto.getCD_PREST()));
@@ -1153,8 +1255,7 @@ public class FactBean extends TimeStampBean {
                     if (undo || (CD_PAIEMENT == 0)) {
                         // Mouvement inverse
                         aMvt.setQTE(aHisto.getQTE().negate());
-                    }
-                    else {
+                    } else {
                         aMvt.setQTE(aHisto.getQTE());
                     }
                     aMvt.setSTK_AVANT(aArt.getQTE_STK());
@@ -1162,26 +1263,22 @@ public class FactBean extends TimeStampBean {
                     aMvt.setVAL_STK_AVANT(aArt.getVAL_STK_HT());
 
                     aMvt.create(dbConnect);
-                }
-                else if (aPrest.isConsommationAbonnement()) {
+                } else if (aPrest.isConsommationAbonnement()) {
                     // Consommation d'un abonnements du client
                     ClientBean aCli = ClientBean.getClientBean(dbConnect, Long.toString(CD_CLI));
                     if (!aCli.consommeAbonnement(aPrest.getCD_PREST(), aHisto.getQTE().intValue(), undo || (CD_PAIEMENT == 0))) {
                         // Le client n'a pas l'abonnement
                         throw new FctlException("Le client n'a pas d'abonnement correspondant");
-                    }
-                    else {
+                    } else {
                         aCli.maj(dbConnect);
                     }
-                }
-                else if (aPrest.isAbonnement()) {
+                } else if (aPrest.isAbonnement()) {
                     // Impacte le client avec l'achat de l'abonnement
                     ClientBean aCli = ClientBean.getClientBean(dbConnect, Long.toString(CD_CLI));
                     if (!aCli.consommeAbonnement(aPrest.getCD_PREST_ABONNEMENT(), aHisto.getQTE().multiply(new BigDecimal(aPrest.getCPT_ABONNEMENT())).negate().intValue(), undo || (CD_PAIEMENT == 0))) {
                         // Problème...
                         throw new FctlException("Impossible d'affecter l'abonnement au client");
-                    }
-                    else {
+                    } else {
                         aCli.maj(dbConnect);
                     }
                 }
@@ -1202,8 +1299,7 @@ public class FactBean extends TimeStampBean {
 
         if ((newCD_CLI != null) && (newCD_CLI.length() != 0)) {
             CD_CLI = Long.parseLong(newCD_CLI);
-        }
-        else {
+        } else {
             CD_CLI = 0;
         }
     }
@@ -1216,8 +1312,7 @@ public class FactBean extends TimeStampBean {
     public void setCD_COLLAB(String newCD_COLLAB) {
         if ((newCD_COLLAB != null) && (newCD_COLLAB.length() != 0)) {
             CD_COLLAB = Integer.parseInt(newCD_COLLAB);
-        }
-        else {
+        } else {
             CD_COLLAB = 0;
         }
     }
@@ -1231,8 +1326,7 @@ public class FactBean extends TimeStampBean {
 
         if ((newCD_FACT != null) && (newCD_FACT.length() != 0)) {
             CD_FACT = Long.parseLong(newCD_FACT);
-        }
-        else {
+        } else {
             CD_FACT = 0;
         }
     }
@@ -1258,12 +1352,10 @@ public class FactBean extends TimeStampBean {
             // Vérification que pas historique
             if ((FACT_HISTO == null) || (FACT_HISTO.equals("N"))) {
                 CD_PAIEMENT = Long.parseLong(newCD_PAIEMENT);
-            }
-            else {
+            } else {
                 throw new com.increg.commun.exception.FctlException("<br>Impossible d'affecter un paiement à une facture Historique");
             }
-        }
-        else {
+        } else {
             CD_PAIEMENT = 0;
         }
     }
@@ -1285,8 +1377,7 @@ public class FactBean extends TimeStampBean {
     public void setCD_TYP_VENT(String newCD_TYP_VENT) {
         if ((newCD_TYP_VENT != null) && (newCD_TYP_VENT.length() != 0)) {
             CD_TYP_VENT = Integer.parseInt(newCD_TYP_VENT);
-        }
-        else {
+        } else {
             CD_TYP_VENT = 0;
         }
     }
@@ -1305,14 +1396,12 @@ public class FactBean extends TimeStampBean {
             java.text.DateFormat formatDate = java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT);
             try {
                 DT_PREST.setTime(formatDate.parse(newDT_PREST));
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 System.out.println("Erreur de conversion : " + e.toString());
                 DT_PREST = null;
                 throw (new Exception("Erreur de conversion de la date de prestation"));
             }
-        }
-        else {
+        } else {
             DT_PREST = null;
         }
     }
@@ -1344,8 +1433,7 @@ public class FactBean extends TimeStampBean {
 
         if ((newPRX_TOT_HT != null) && (newPRX_TOT_HT.length() != 0)) {
             PRX_TOT_HT = new BigDecimal(newPRX_TOT_HT);
-        }
-        else {
+        } else {
             PRX_TOT_HT = null;
         }
     }
@@ -1368,8 +1456,7 @@ public class FactBean extends TimeStampBean {
 
         if ((newPRX_TOT_TTC != null) && (newPRX_TOT_TTC.length() != 0)) {
             PRX_TOT_TTC = new BigDecimal(newPRX_TOT_TTC);
-        }
-        else {
+        } else {
             PRX_TOT_TTC = null;
         }
     }
@@ -1392,8 +1479,7 @@ public class FactBean extends TimeStampBean {
 
         if ((newREMISE_FIXE != null) && (newREMISE_FIXE.length() != 0)) {
             REMISE_FIXE = new BigDecimal(newREMISE_FIXE);
-        }
-        else {
+        } else {
             REMISE_FIXE = null;
         }
     }
@@ -1416,8 +1502,7 @@ public class FactBean extends TimeStampBean {
 
         if ((newREMISE_PRC != null) && (newREMISE_PRC.length() != 0)) {
             REMISE_PRC = new BigDecimal(newREMISE_PRC);
-        }
-        else {
+        } else {
             REMISE_PRC = null;
         }
     }
@@ -1440,8 +1525,7 @@ public class FactBean extends TimeStampBean {
 
         if ((newTVA != null) && (newTVA.length() != 0)) {
             TVA = new BigDecimal(newTVA);
-        }
-        else {
+        } else {
             TVA = null;
         }
     }

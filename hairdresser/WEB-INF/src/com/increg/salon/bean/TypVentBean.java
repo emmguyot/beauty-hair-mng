@@ -1,9 +1,11 @@
 package com.increg.salon.bean;
 
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Vector;
 
-import com.increg.commun.*;
+import com.increg.commun.DBSession;
+import com.increg.commun.GenericBean;
 /**
  * Type de vente vente
  * Creation date: (21/08/2001 21:54:12)
@@ -18,7 +20,7 @@ public class TypVentBean extends GenericBean {
 
     /**
      * CIVILITE Liste des civilités associées à ce type de vente
-     * 	la liste est séparée par un | et peut être vide si pas de filtre
+     * la liste est séparée par un | et peut être vide si pas de filtre
      */
     protected java.lang.String CIVILITE;
 
@@ -31,6 +33,11 @@ public class TypVentBean extends GenericBean {
      * MARQUE Indicateur si le type de vente impose la présence de marque
      */
     protected java.lang.String MARQUE;
+
+    /**
+     * Code TVA associé au type de vente
+     */
+    protected int CD_TVA;
 
     /**
      * TypVentBean constructor comment.
@@ -70,6 +77,13 @@ public class TypVentBean extends GenericBean {
 
         try {
             MARQUE = rs.getString("MARQUE");
+        } catch (SQLException e) {
+            if (e.getErrorCode() != 1) {
+                System.out.println("Erreur dans PrestBean (RS) : " + e.toString());
+            }
+        }
+        try {
+            CD_TVA = rs.getInt("CD_TVA");
         } catch (SQLException e) {
             if (e.getErrorCode() != 1) {
                 System.out.println("Erreur dans PrestBean (RS) : " + e.toString());
@@ -122,6 +136,12 @@ public class TypVentBean extends GenericBean {
         if ((MARQUE != null) && (MARQUE.length() != 0)) {
             colonne.append("MARQUE,");
             valeur.append(DBSession.quoteWith(MARQUE, '\''));
+            valeur.append(",");
+        }
+
+        if (CD_TVA != 0) {
+            colonne.append("CD_TVA,");
+            valeur.append(CD_TVA);
             valeur.append(",");
         }
 
@@ -197,6 +217,14 @@ public class TypVentBean extends GenericBean {
         colonne.append("MARQUE=");
         if ((MARQUE != null) && (MARQUE.length() != 0)) {
             colonne.append(DBSession.quoteWith(MARQUE, '\''));
+        } else {
+            colonne.append("NULL");
+        }
+        colonne.append(",");
+
+        colonne.append("CD_TVA=");
+        if (CD_TVA != 0) {
+            colonne.append(CD_TVA);
         } else {
             colonne.append("NULL");
         }
@@ -360,4 +388,28 @@ public class TypVentBean extends GenericBean {
     public java.lang.String toString() {
         return getLIB_TYP_VENT();
     }
+    /**
+     * @return Returns the cD_TVA.
+     */
+    public int getCD_TVA() {
+        return CD_TVA;
+    }
+    /**
+     * @param cd_tva The cD_TVA to set.
+     */
+    public void setCD_TVA(int cd_tva) {
+        CD_TVA = cd_tva;
+    }
+
+    /**
+     * @param cd_tva The cD_TVA to set.
+     */
+    public void setCD_TVA(String cd_tva) {
+        if ((cd_tva != null) && (cd_tva.length() != 0)) {
+            CD_TVA = Integer.parseInt(cd_tva);
+        } else {
+            CD_TVA = 0;
+        }
+    }
+    
 }

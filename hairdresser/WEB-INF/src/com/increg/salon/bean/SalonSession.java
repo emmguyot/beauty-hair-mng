@@ -6,7 +6,6 @@
  */
 package com.increg.salon.bean;
 
-import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.util.Calendar;
 import java.util.Iterator;
@@ -44,11 +43,6 @@ public abstract class SalonSession extends BasicSession {
      * mySociete Information sur le salon de coiffure
      */
     protected SocieteBean mySociete;
-
-    /**
-     * txTVA Taux de TVA en vigueur
-     */
-    protected java.math.BigDecimal txTVA;
 
     /**
      * listeFact Liste des factures en cours
@@ -253,7 +247,7 @@ public abstract class SalonSession extends BasicSession {
                     FactBean oldFact = FactBean.getFactBean(myDBSession, Long.toString(aRS.getLong("CD_FACT")));
 
                     // Duplique la facture
-                    aFact = (FactBean) oldFact.clone(myDBSession, getTxTVA());
+                    aFact = (FactBean) oldFact.clone(myDBSession);
 
                     //Verifie que le collaborateur est présent
                     //sinon, set un collab present sur la facture
@@ -318,7 +312,7 @@ public abstract class SalonSession extends BasicSession {
                     FactBean oldFact = FactBean.getFactBean(myDBSession, Long.toString(aRS.getLong("CD_FACT")));
 
                     // Duplique la facture
-                    aFact = (FactBean) oldFact.clone(myDBSession, getTxTVA());
+                    aFact = (FactBean) oldFact.clone(myDBSession);
 
                     //Verifie que le collaborateur est présent
                     //sinon, set un collab present sur la facture
@@ -527,21 +521,6 @@ public abstract class SalonSession extends BasicSession {
      */
     public SocieteBean getMySociete() {
         return mySociete;
-    }
-
-    /**
-     * Insert the method's description here.
-     * Creation date: (20/08/2001 21:56:47)
-     * @return java.math.BigDecimal
-     */
-    public java.math.BigDecimal getTxTVA() {
-        if (txTVA == null) {
-            ParamBean valTVA = ParamBean.getParamBean(myDBSession, Integer.toString(ParamBean.CD_TVA));
-            if (valTVA != null) {
-                txTVA = new BigDecimal(valTVA.getVAL_PARAM());
-            }
-        }
-        return txTVA;
     }
 
     /**

@@ -1,9 +1,12 @@
 <%@ page import="java.util.Vector,
-	       java.math.BigDecimal" %>
+			java.util.Set,
+			java.util.Iterator,
+	       	java.math.BigDecimal" %>
 <%@ page import="com.increg.salon.bean.SalonSession,
-                com.increg.salon.bean.FactBean,
+            com.increg.salon.bean.FactBean,
 	        com.increg.salon.bean.PaiementBean,
 	        com.increg.salon.bean.HistoPrestBean,
+	        com.increg.salon.bean.TvaBean,
 	        com.increg.salon.bean.ClientBean,
 	        com.increg.salon.bean.PrestBean,
 	        com.increg.salon.bean.SocieteBean,
@@ -192,21 +195,31 @@
                     %>
 	 </td>
 	 </tr>
-	 <tr>
-	 <td><font size=-2>dont TVA <%= mySalon.getTxTVA() %>% : </font></td>
-	 <td class="Nombre">
+	 <%
+	 Set tauxTVA = aFact.getTxTVA();
+	 Iterator iterTVA = tauxTVA.iterator();
+	 while (iterTVA.hasNext()) {
+        TvaBean aTva = (TvaBean) iterTVA.next();
+        
+	 %>
+		 <tr>
+		 <td><font size=-2>dont TVA <%= aTva.getTX_TVA() %>% : </font></td>
+		 <td class="Nombre">
 	       <font size=-2>
-	       <salon:valeur valeurNulle="null" valeur="<%= aFact.getTVA() %>" > 
-		  %%
+	       <salon:valeur valeurNulle="null" valeur="<%= aFact.getTVA(aTva) %>" > 
+			  %%
 	       </salon:valeur>
 	       </font>
-	    </td>
-	    <td>
+	     </td>
+	     <td>
 	       <font size=-2>
 	       <%= mySalon.getDevise().toString() %>
 	       </font>
-	 </td>
-	 </tr>
+		 </td>
+		 </tr>
+	 <%
+	 }
+	 %>
 	 <tr>
 	 <td><font size=-2>Taxe et service 15% compris</font></td>
 	 </tr>

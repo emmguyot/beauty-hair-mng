@@ -1,5 +1,14 @@
-<%@ page import="java.util.Vector,com.increg.salon.bean.TypVentBean" %>
+<%@ page import="java.util.Vector,
+			com.increg.salon.bean.TypVentBean,
+			com.increg.salon.bean.TvaBean,
+			com.increg.salon.bean.SalonSession" %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%
+    SalonSession mySalon = (SalonSession) session.getAttribute("SalonSession");
+    if (mySalon == null) {
+        getServletConfig().getServletContext().getRequestDispatcher("/reconnect.html").forward(request, response);
+    }
+%>
 <html>
 <head>
 <title>Liste des types de prestations</title>
@@ -24,6 +33,7 @@ function Init() {
 		<th>Libellé</th>
 		<th>Article associé</th>
 		<th>Civilités associées</th>
+		<th>TVA applicable</th>
 	</tr>
 	<%
 	// Recupère la liste
@@ -34,14 +44,21 @@ function Init() {
 	%>
 	<tr>
 		<td><a href="_FicheTypVent.jsp?Action=Modification&CD_TYP_VENT=<%= aTypVent.getCD_TYP_VENT() %>" target="ClientFrame"><%= aTypVent.toString() %></a></td>
-                <td><salon:valeur valeur="<%= aTypVent.getMARQUE() %>" valeurNulle="null">%%</salon:valeur></td>
-                <%
-                String civilite = aTypVent.getCIVILITE();
-                if (civilite != null) {
-                    civilite = civilite.replace('|', ' ');
-                }
-                %>
-                <td><salon:valeur valeur="<%= civilite %>" valeurNulle="null">%%&nbsp;</salon:valeur></td>
+        <td><salon:valeur valeur="<%= aTypVent.getMARQUE() %>" valeurNulle="null">%%</salon:valeur></td>
+        <%
+        String civilite = aTypVent.getCIVILITE();
+        if (civilite != null) {
+            civilite = civilite.replace('|', ' ');
+        }
+        %>
+        <td><salon:valeur valeur="<%= civilite %>" valeurNulle="null">%%&nbsp;</salon:valeur></td>
+        <%
+        String tva = "";
+        if (aTypVent.getCD_TVA() != 0) {
+        	tva = TvaBean.getTvaBean(mySalon.getMyDBSession(), Integer.toString(aTypVent.getCD_TVA())).getLIB_TVA();
+        }
+        %>
+        <td><salon:valeur valeur="<%= tva %>" valeurNulle="null">%%</salon:valeur></td>
 	</tr>
 	<%
 	}

@@ -86,31 +86,20 @@ public class FicFact extends ConnectedServlet {
                     + Integer.toString(i));
         }
         // Ligne en cours de saisie
-        tab_NUM_LIG_FACT[nbPrest] = request.getParameter("NUM_LIG_FACT"
-                + Integer.toString(nbPrest));
-        tab_CD_TYP_VENT[nbPrest] = request.getParameter("CD_TYP_VENT"
-                + Integer.toString(nbPrest));
-        tab_CD_MARQUE[nbPrest] = request.getParameter("CD_MARQUE"
-                + Integer.toString(nbPrest));
-        tab_CD_CATEG_PREST[nbPrest] = request.getParameter("CD_CATEG_PREST"
-                + Integer.toString(nbPrest));
-        tab_CD_PREST[nbPrest] = request.getParameter("CD_PREST"
-                + Integer.toString(nbPrest));
-        tab_CD_COLLAB[nbPrest] = request.getParameter("CD_COLLAB"
-                + Integer.toString(nbPrest));
-        tab_QTE[nbPrest] = request.getParameter("QTE"
-                + Integer.toString(nbPrest));
-        tab_PRX_UNIT_TTC[nbPrest] = request.getParameter("PRX_UNIT_TTC"
-                + Integer.toString(nbPrest));
-        tab_COMM[nbPrest] = request.getParameter("COMM"
-                + Integer.toString(nbPrest));
-        tab_NIV_SATISF[nbPrest] = request.getParameter("NIV_SATISF"
-                + Integer.toString(nbPrest));
+        tab_NUM_LIG_FACT[nbPrest] = request.getParameter("NUM_LIG_FACT" + Integer.toString(nbPrest));
+        tab_CD_TYP_VENT[nbPrest] = request.getParameter("CD_TYP_VENT" + Integer.toString(nbPrest));
+        tab_CD_MARQUE[nbPrest] = request.getParameter("CD_MARQUE" + Integer.toString(nbPrest));
+        tab_CD_CATEG_PREST[nbPrest] = request.getParameter("CD_CATEG_PREST" + Integer.toString(nbPrest));
+        tab_CD_PREST[nbPrest] = request.getParameter("CD_PREST" + Integer.toString(nbPrest));
+        tab_CD_COLLAB[nbPrest] = request.getParameter("CD_COLLAB" + Integer.toString(nbPrest));
+        tab_QTE[nbPrest] = request.getParameter("QTE" + Integer.toString(nbPrest));
+        tab_PRX_UNIT_TTC[nbPrest] = request.getParameter("PRX_UNIT_TTC" + Integer.toString(nbPrest));
+        tab_COMM[nbPrest] = request.getParameter("COMM" + Integer.toString(nbPrest));
+        tab_NIV_SATISF[nbPrest] = request.getParameter("NIV_SATISF" + Integer.toString(nbPrest));
 
         // Récupère la connexion
         HttpSession mySession = request.getSession(false);
-        SalonSession mySalon = (SalonSession) mySession
-                .getAttribute("SalonSession");
+        SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
         DBSession myDBSession = mySalon.getMyDBSession();
 
         // Attributs à positionner en fin
@@ -374,7 +363,7 @@ public class FicFact extends ConnectedServlet {
 
                     // Calcul du pied de facture + **Maj** de la facture +
                     // **Maj** du paiement si besoin
-                    aFact.calculTotaux(myDBSession, mySalon.getTxTVA());
+                    aFact.calculTotaux(myDBSession);
 
                     aFact.setLignes(lignes);
 

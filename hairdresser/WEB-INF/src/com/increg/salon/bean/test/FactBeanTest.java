@@ -18,8 +18,8 @@ import com.increg.salon.bean.FactBean;
 import com.increg.salon.bean.HistoPrestBean;
 import com.increg.salon.bean.PaiementBean;
 import com.increg.salon.bean.PrestBean;
-import com.increg.salon.bean.SalonSession;
-import com.increg.salon.bean.SalonSessionImpl;
+import com.increg.salon.bean.TvaBean;
+import com.increg.salon.bean.TypVentBean;
 import com.increg.salon.request.TVA;
 
 import junit.framework.TestCase;
@@ -73,7 +73,6 @@ public class FactBeanTest extends TestCase {
      */
     public void testCalculTVARepartie1() throws Exception {
         
-        SalonSession mySalon = new SalonSessionImpl("config");
         FactBean aFact = new FactBean();
         PaiementBean aPaiement = new PaiementBean();
         try {
@@ -143,7 +142,7 @@ public class FactBeanTest extends TestCase {
             aPaiement.create(aDBSession);
             
             aFact.setCD_PAIEMENT(aPaiement.getCD_PAIEMENT());
-            aFact.calculTotaux(aDBSession, mySalon.getTxTVA());
+            aFact.calculTotaux(aDBSession);
 
             // Vérification par rapport au jour en cours
             /**
@@ -157,7 +156,7 @@ public class FactBeanTest extends TestCase {
     
             // Vérification des chiffres
         
-            String sql = "select TVA, prx_tot_ht, prx_tot_ttc from FACT where CD_FACT=" + aFact.getCD_FACT();;
+            String sql = "select TVA, prx_tot_ht, prx_tot_ttc from FACT where CD_FACT=" + aFact.getCD_FACT();
             ResultSet rs = aDBSession.doRequest(sql);
             assertTrue(rs.next());
             BigDecimal totTva = rs.getBigDecimal("TVA", 2);
@@ -175,16 +174,17 @@ public class FactBeanTest extends TestCase {
             assertTrue(almostEquals(new BigDecimal(0), totTtc));
             assertTrue(almostEquals(new BigDecimal(0), totHt));
         
+            TypVentBean aTypVent = TypVentBean.getTypVentBean(aDBSession, Integer.toString(aPrest.getCD_TYP_VENT()));
+            BigDecimal txTva = TvaBean.getTvaBean(aDBSession, Integer.toString(aTypVent.getCD_TVA())).getTX_TVA();
             for (Iterator tvaIter = listeTVA.iterator(); tvaIter.hasNext();) {
                 TVA aTVA = (TVA) tvaIter.next();
                 BigDecimal tva = aTVA.getTotal();
                 BigDecimal ht = aTVA.getTotalHT();
                 BigDecimal ttc = aTVA.getTotalTTC();
                 assertTrue(almostEquals(ht.add(tva), ttc));
-                assertTrue(almostEquals(ht.multiply(mySalon.getTxTVA().divide(new BigDecimal(100), 4, BigDecimal.ROUND_HALF_UP)), tva));
+                assertTrue(almostEquals(ht.multiply(txTva.divide(new BigDecimal(100), 4, BigDecimal.ROUND_HALF_UP)), tva));
             }
-        }
-        finally {
+        } finally {
             aFact.delete(aDBSession);
             aPaiement.delete(aDBSession);
         }
@@ -192,6 +192,7 @@ public class FactBeanTest extends TestCase {
 
     /**
      * Vérification de la répartition de la TVA (globale)
+     * TODO : Modification afin de tenir compte de la répartition si plusieurs taux sont utilisés
      * @throws Exception .
      */
     public void testCalculTVARepartie2() throws Exception {
@@ -203,8 +204,6 @@ public class FactBeanTest extends TestCase {
         assertTrue(listeTVA.size() > 0);
 
         // Vérification des chiffres
-        SalonSession mySalon = new SalonSessionImpl("config");
-    
         String sql = "select sum(TVA) as tva, sum(prx_tot_ht) as ht, sum(prx_tot_ttc) as ttc from FACT where CD_PAIEMENT is not null";
         ResultSet rs = aDBSession.doRequest(sql);
         assertTrue(rs.next());
@@ -222,13 +221,14 @@ public class FactBeanTest extends TestCase {
         assertTrue(almostEquals(new BigDecimal(0), totTtc));
         assertTrue(almostEquals(new BigDecimal(0), totHt));
     
+        BigDecimal txTva = TvaBean.getTvaBean(aDBSession, "1").getTX_TVA();
         for (Iterator tvaIter = listeTVA.iterator(); tvaIter.hasNext();) {
             TVA aTVA = (TVA) tvaIter.next();
             BigDecimal tva = aTVA.getTotal();
             BigDecimal ht = aTVA.getTotalHT();
             BigDecimal ttc = aTVA.getTotalTTC();
             assertTrue(almostEquals(ht.add(tva), ttc));
-            assertTrue(almostEquals(ht.multiply(mySalon.getTxTVA().divide(new BigDecimal(100), 4, BigDecimal.ROUND_HALF_UP)), tva));
+            assertTrue(almostEquals(ht.multiply(txTva.divide(new BigDecimal(100), 4, BigDecimal.ROUND_HALF_UP)), tva));
         }
     }
 
