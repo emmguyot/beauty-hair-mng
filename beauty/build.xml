@@ -231,6 +231,7 @@
 
 				<include name="Erreur.jsp"/>
 				<include name="InstallKo.jsp"/>
+				<include name="LicenceGPL.txt"/>
 				<include name="ListeArt.jsp"/>
 				<include name="ListeAbonnement.jsp"/>
 				<include name="ListeBrouillard.jsp"/>
