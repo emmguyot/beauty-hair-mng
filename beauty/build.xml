@@ -208,6 +208,7 @@
 				<include name="WEB-INF/src/com/increg/salon/servlet/light/InitPortail.java"/>
 
 				<include name="WEB-INF/src/com/increg/salon/tag/TagAutorisation.java"/>
+				<include name="WEB-INF/src/com/increg/salon/tag/TagBouton.java"/>
 				<include name="WEB-INF/src/com/increg/salon/tag/TagCheckBox.java"/>
 				<include name="WEB-INF/src/com/increg/salon/tag/TagDate.java"/>
 				<include name="WEB-INF/src/com/increg/salon/tag/TagDBCheckBox.java"/>
@@ -388,6 +389,8 @@
 				<include name="lstBrouillard.jsp"/>
 				<include name="lstCA.jsp"/>
 				<include name="lstCli.jsp"/>
+				<include name="lstCli_Advanced.jsp"/>
+				<include name="lstCli_Common.jsp"/>
 				<include name="lstCliRDV.jsp"/>
 				<include name="lstCollab.jsp"/>
 				<include name="lstCriterePub.jsp"/>
