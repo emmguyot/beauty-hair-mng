@@ -17,17 +17,18 @@ import com.increg.salon.bean.ParamBean;
 import com.increg.salon.bean.SalonSession;
 import com.increg.salon.request.EditionFacture;
 
-
 /**
- * Création/Modification/Suppression d'une Facture / Historique
- * Creation date: (17/08/2001 22:51:52)
+ * Création/Modification/Suppression d'une Facture / Historique Creation date:
+ * (17/08/2001 22:51:52)
+ * 
  * @author Emmanuel GUYOT <emmguyot@wanadoo.fr>
  */
 public class FicFact extends ConnectedServlet {
     /**
      * @see com.increg.salon.servlet.ConnectedServlet
      */
-    public void performTask(HttpServletRequest request, HttpServletResponse response) {
+    public void performTask(HttpServletRequest request,
+            HttpServletResponse response) {
 
         boolean allCorrect = true;
         boolean forcage = false;
@@ -73,38 +74,43 @@ public class FicFact extends ConnectedServlet {
 
         // Boucle de chargement
         for (int i = 0; i < nbPrest; i++) {
-            tab_NUM_LIG_FACT[i] =
-                request.getParameter("NUM_LIG_FACT" + Integer.toString(i));
-            tab_CD_COLLAB[i] = request.getParameter("CD_COLLAB" + Integer.toString(i));
+            tab_NUM_LIG_FACT[i] = request.getParameter("NUM_LIG_FACT"
+                    + Integer.toString(i));
+            tab_CD_COLLAB[i] = request.getParameter("CD_COLLAB"
+                    + Integer.toString(i));
             tab_QTE[i] = request.getParameter("QTE" + Integer.toString(i));
-            tab_PRX_UNIT_TTC[i] =
-                request.getParameter("PRX_UNIT_TTC" + Integer.toString(i));
+            tab_PRX_UNIT_TTC[i] = request.getParameter("PRX_UNIT_TTC"
+                    + Integer.toString(i));
             tab_COMM[i] = request.getParameter("COMM" + Integer.toString(i));
-            tab_NIV_SATISF[i] = request.getParameter("NIV_SATISF" + Integer.toString(i));
+            tab_NIV_SATISF[i] = request.getParameter("NIV_SATISF"
+                    + Integer.toString(i));
         }
         // Ligne en cours de saisie
-        tab_NUM_LIG_FACT[nbPrest] =
-            request.getParameter("NUM_LIG_FACT" + Integer.toString(nbPrest));
-        tab_CD_TYP_VENT[nbPrest] =
-            request.getParameter("CD_TYP_VENT" + Integer.toString(nbPrest));
-        tab_CD_MARQUE[nbPrest] =
-            request.getParameter("CD_MARQUE" + Integer.toString(nbPrest));
-        tab_CD_CATEG_PREST[nbPrest] =
-            request.getParameter("CD_CATEG_PREST" + Integer.toString(nbPrest));
-        tab_CD_PREST[nbPrest] =
-            request.getParameter("CD_PREST" + Integer.toString(nbPrest));
-        tab_CD_COLLAB[nbPrest] =
-            request.getParameter("CD_COLLAB" + Integer.toString(nbPrest));
-        tab_QTE[nbPrest] = request.getParameter("QTE" + Integer.toString(nbPrest));
-        tab_PRX_UNIT_TTC[nbPrest] =
-            request.getParameter("PRX_UNIT_TTC" + Integer.toString(nbPrest));
-        tab_COMM[nbPrest] = request.getParameter("COMM" + Integer.toString(nbPrest));
-        tab_NIV_SATISF[nbPrest] =
-            request.getParameter("NIV_SATISF" + Integer.toString(nbPrest));
+        tab_NUM_LIG_FACT[nbPrest] = request.getParameter("NUM_LIG_FACT"
+                + Integer.toString(nbPrest));
+        tab_CD_TYP_VENT[nbPrest] = request.getParameter("CD_TYP_VENT"
+                + Integer.toString(nbPrest));
+        tab_CD_MARQUE[nbPrest] = request.getParameter("CD_MARQUE"
+                + Integer.toString(nbPrest));
+        tab_CD_CATEG_PREST[nbPrest] = request.getParameter("CD_CATEG_PREST"
+                + Integer.toString(nbPrest));
+        tab_CD_PREST[nbPrest] = request.getParameter("CD_PREST"
+                + Integer.toString(nbPrest));
+        tab_CD_COLLAB[nbPrest] = request.getParameter("CD_COLLAB"
+                + Integer.toString(nbPrest));
+        tab_QTE[nbPrest] = request.getParameter("QTE"
+                + Integer.toString(nbPrest));
+        tab_PRX_UNIT_TTC[nbPrest] = request.getParameter("PRX_UNIT_TTC"
+                + Integer.toString(nbPrest));
+        tab_COMM[nbPrest] = request.getParameter("COMM"
+                + Integer.toString(nbPrest));
+        tab_NIV_SATISF[nbPrest] = request.getParameter("NIV_SATISF"
+                + Integer.toString(nbPrest));
 
         // Récupère la connexion
         HttpSession mySession = request.getSession(false);
-        SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
+        SalonSession mySalon = (SalonSession) mySession
+                .getAttribute("SalonSession");
         DBSession myDBSession = mySalon.getMyDBSession();
 
         // Attributs à positionner en fin
@@ -153,27 +159,28 @@ public class FicFact extends ConnectedServlet {
 
                     // Déjà le mode de paiement ==> Pas normal. On refuse
                     if ((CD_MOD_REGL != null) && (CD_MOD_REGL.length() > 0)) {
-                        mySalon.setMessage("Erreur", "Le paiement d'une facture vide est interdit");
+                        mySalon.setMessage("Erreur",
+                                "Le paiement d'une facture vide est interdit");
                     }
 
                     aFact.create(myDBSession);
 
-                    // Nouvelle facture : Ajout au encours si ce n'est pas un historique
-                    if ((FACT_HISTO != null) && (FACT_HISTO.equals("N")) && (aFact.getCD_PAIEMENT() == 0)) {
+                    // Nouvelle facture : Ajout au encours si ce n'est pas un
+                    // historique
+                    if ((FACT_HISTO != null) && (FACT_HISTO.equals("N"))
+                            && (aFact.getCD_PAIEMENT() == 0)) {
                         mySalon.addFact(Long.toString(aFact.getCD_FACT()));
                     }
 
                     mySalon.setMessage("Info", "Création effectuée.");
                     request.setAttribute("Action", "Modification");
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     mySalon.setMessage("Erreur", e.toString());
                     request.setAttribute("Action", Action);
                 }
             }
             // *****************************************************************************************
-            else if (
-                ((Action.equals("Modification")) && (CD_CLI == null))
+            else if (((Action.equals("Modification")) && (CD_CLI == null))
                     || (Action.equals("Rafraichissement"))) {
                 // Affichage de la fiche en modification
                 request.setAttribute("Action", "Modification");
@@ -187,30 +194,28 @@ public class FicFact extends ConnectedServlet {
                 }
 
                 if (aFact.getCD_PAIEMENT() > 0) {
-                    aPaiement =
-                        PaiementBean.getPaiementBean(
-                            myDBSession,
-                            Long.toString(aFact.getCD_PAIEMENT()));
-                }
-                else {
+                    aPaiement = PaiementBean.getPaiementBean(myDBSession, Long
+                            .toString(aFact.getCD_PAIEMENT()));
+                } else {
                     aPaiement = new PaiementBean();
                 }
 
             }
             // *****************************************************************************************
-            else if (
-                (Action.equals("Modification"))
+            else if ((Action.equals("Modification"))
                     || (Action.equals("Rechargement"))
                     || (Action.equals("Rechargement+"))
                     || (Action.equals("Rechargement++"))
                     || (Action.equals("Impression"))
                     || (Action.equals("AjoutLigne"))
                     || (Action.equals("SuppressionLigne"))) {
-                // Modification effective de la fiche avec rechargement des combo éventuels
+                // Modification effective de la fiche avec rechargement des
+                // combo éventuels
                 // N.B. : Mise en commun du code de modification
 
                 int paramSup = -1;
-                if ((Action.equals("AjoutLigne")) || (Action.equals("SuppressionLigne"))) {
+                if ((Action.equals("AjoutLigne"))
+                        || (Action.equals("SuppressionLigne"))) {
                     paramSup = Integer.parseInt(ParamSup);
                 }
                 boolean paiementASuppr = false;
@@ -218,11 +223,11 @@ public class FicFact extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                if ((CD_FACT == null) || (CD_FACT.length() == 0) || (CD_FACT.equals("0"))) {
+                if ((CD_FACT == null) || (CD_FACT.length() == 0)
+                        || (CD_FACT.equals("0"))) {
                     // On est en création : le Bean est créé de zero
                     aFact = new FactBean();
-                }
-                else {
+                } else {
                     // Recharge à partir de la base
                     aFact = FactBean.getFactBean(myDBSession, CD_FACT);
                 }
@@ -231,7 +236,7 @@ public class FicFact extends ConnectedServlet {
                 aPaiement = new PaiementBean();
                 try {
                     myDBSession.setDansTransactions(true);
-                    
+
                     aFact.setCD_CLI(CD_CLI);
                     aFact.setCD_COLLAB(CD_COLLAB);
                     aFact.setCD_TYP_VENT(CD_TYP_VENT);
@@ -243,15 +248,17 @@ public class FicFact extends ConnectedServlet {
                     aFact.setCD_PAIEMENT(CD_PAIEMENT);
 
                     /**
-                     * Mise à jour du paiement d'abord avant pour limiter le nbre de modif de facture
+                     * Mise à jour du paiement d'abord avant pour limiter le
+                     * nbre de modif de facture
                      */
 
                     if ((CD_MOD_REGL != null) && (CD_MOD_REGL.length() > 0)) {
 
-                        if ((CD_PAIEMENT != null) && (CD_PAIEMENT.length() > 0) && (!CD_PAIEMENT.equals("0"))) {
-                            aPaiement = PaiementBean.getPaiementBean(myDBSession, CD_PAIEMENT);
-                        }
-                        else {
+                        if ((CD_PAIEMENT != null) && (CD_PAIEMENT.length() > 0)
+                                && (!CD_PAIEMENT.equals("0"))) {
+                            aPaiement = PaiementBean.getPaiementBean(
+                                    myDBSession, CD_PAIEMENT);
+                        } else {
                             // Nouveau Paiement
                             aPaiement = new PaiementBean();
                         }
@@ -259,43 +266,52 @@ public class FicFact extends ConnectedServlet {
                         if ((nbPrest > 0) || (Action.equals("AjoutLigne"))) {
                             aPaiement.setCD_MOD_REGL(CD_MOD_REGL);
                             aPaiement.setDT_PAIEMENT(DT_PAIEMENT);
-    
-                            if ((CD_PAIEMENT != null) && (CD_PAIEMENT.length() > 0) && (!CD_PAIEMENT.equals("0"))) {
+
+                            if ((CD_PAIEMENT != null)
+                                    && (CD_PAIEMENT.length() > 0)
+                                    && (!CD_PAIEMENT.equals("0"))) {
                                 aPaiement.maj(myDBSession);
-                            }
-                            else {
+                            } else {
                                 aPaiement.create(myDBSession);
-                                aFact.setCD_PAIEMENT(aPaiement.getCD_PAIEMENT());
-                                // Paiement d'une facture : Suppression de la liste des encours
-                                mySalon.removeClient(Long.toString(aFact.getCD_FACT()));
+                                aFact
+                                        .setCD_PAIEMENT(aPaiement
+                                                .getCD_PAIEMENT());
+                                // Paiement d'une facture : Suppression de la
+                                // liste des encours
+                                mySalon.removeClient(Long.toString(aFact
+                                        .getCD_FACT()));
                             }
+                        } else {
+                            mySalon
+                                    .setMessage("Erreur",
+                                            "Le paiement d'une facture vide est interdit");
                         }
-                        else {
-                            mySalon.setMessage("Erreur", "Le paiement d'une facture vide est interdit");
-                        }
-                    }
-                    else if ((CD_PAIEMENT != null) && (CD_PAIEMENT.length() > 0) && (!CD_PAIEMENT.equals("0"))) {
+                    } else if ((CD_PAIEMENT != null)
+                            && (CD_PAIEMENT.length() > 0)
+                            && (!CD_PAIEMENT.equals("0"))) {
                         // Annulation du paiement
                         // AFAIRE : CTRL a INCLURE
                         aFact.setCD_PAIEMENT(0);
 
                         // Faut-il supprimer le paiement ?
-                        aPaiement = PaiementBean.getPaiementBean(myDBSession, CD_PAIEMENT);
+                        aPaiement = PaiementBean.getPaiementBean(myDBSession,
+                                CD_PAIEMENT);
                         Vector listeFact = aPaiement.getFact(myDBSession);
                         if (listeFact.size() == 1) {
                             paiementASuppr = true;
-                        }
-                        else {
-                            throw new FctlException("Suppression du paiement impossible : D'autres factures y sont attachées.");
+                        } else {
+                            throw new FctlException(
+                                    "Suppression du paiement impossible : D'autres factures y sont attachées.");
                         }
                     }
 
                     // Mise à jour de la facture avec le bon code paiement
-                    if ((CD_FACT == null) || (CD_FACT.length() == 0) || (CD_FACT.equals("0"))) {
+                    if ((CD_FACT == null) || (CD_FACT.length() == 0)
+                            || (CD_FACT.equals("0"))) {
                         aFact.create(myDBSession);
-                    }
-                    else {
-                        // Pas de mise à jour tout de suite : Attente du calcul du total
+                    } else {
+                        // Pas de mise à jour tout de suite : Attente du calcul
+                        // du total
                         // Sauf si le Paiement est à supprimer
                         if (paiementASuppr) {
                             aFact.maj(myDBSession);
@@ -307,10 +323,10 @@ public class FicFact extends ConnectedServlet {
                         aPaiement = new PaiementBean();
                     }
 
-                    // Nouvelle facture ? Ajout au encours si ce n'est pas un historique
-                    if ((FACT_HISTO != null)
-                        && (FACT_HISTO.equals("N"))
-                        && (aPaiement.getCD_PAIEMENT() == 0)) {
+                    // Nouvelle facture ? Ajout au encours si ce n'est pas un
+                    // historique
+                    if ((FACT_HISTO != null) && (FACT_HISTO.equals("N"))
+                            && (aPaiement.getCD_PAIEMENT() == 0)) {
                         mySalon.addFact(Long.toString(aFact.getCD_FACT()));
                     }
 
@@ -318,8 +334,9 @@ public class FicFact extends ConnectedServlet {
                     Vector lignes = new Vector();
                     for (int i = 0; i < nbPrest; i++) {
                         // Création de la ligne et sauvegarde
-                        HistoPrestBean aPrest =
-                            HistoPrestBean.getHistoPrestBean(myDBSession, CD_FACT, tab_NUM_LIG_FACT[i]);
+                        HistoPrestBean aPrest = HistoPrestBean
+                                .getHistoPrestBean(myDBSession, CD_FACT,
+                                        tab_NUM_LIG_FACT[i]);
 
                         aPrest.setCD_CLI(CD_CLI);
                         aPrest.setCOMM(tab_COMM[i]);
@@ -333,8 +350,7 @@ public class FicFact extends ConnectedServlet {
                         if (i != paramSup) {
                             aPrest.maj(myDBSession);
                             lignes.add(aPrest);
-                        }
-                        else if (Action.equals("SuppressionLigne")) {
+                        } else if (Action.equals("SuppressionLigne")) {
                             aPrest.delete(myDBSession);
                         }
                     }
@@ -356,68 +372,75 @@ public class FicFact extends ConnectedServlet {
                         lignes.add(aPrest);
                     }
 
-                    // Calcul du pied de facture + **Maj** de la facture + **Maj** du paiement si besoin
+                    // Calcul du pied de facture + **Maj** de la facture +
+                    // **Maj** du paiement si besoin
                     aFact.calculTotaux(myDBSession, mySalon.getTxTVA());
 
                     aFact.setLignes(lignes);
 
                     myDBSession.endTransaction();
-                    
+
                     // Informe de l'enregistrement
                     mySalon.setMessage("Info", "Enregistrement effectué.");
 
                     request.setAttribute("Action", "Modification");
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     mySalon.setMessage("Erreur", e.toString());
                     request.setAttribute("Action", Action);
-                    if ((CD_PAIEMENT == null) || (CD_PAIEMENT.length() == 0) || (CD_PAIEMENT.equals("0"))) {
-                        // Reset du paiement au cas ou la création du paiement a déjà été faite
+                    if ((CD_PAIEMENT == null) || (CD_PAIEMENT.length() == 0)
+                            || (CD_PAIEMENT.equals("0"))) {
+                        // Reset du paiement au cas ou la création du paiement a
+                        // déjà été faite
                         aFact.setCD_PAIEMENT(0);
                         aPaiement = new PaiementBean();
                     }
-                    if ((CD_FACT == null) || (CD_FACT.length() == 0) || (CD_FACT.equals("0"))) {
+                    if ((CD_FACT == null) || (CD_FACT.length() == 0)
+                            || (CD_FACT.equals("0"))) {
                         aFact.setCD_FACT(0);
                     }
                 }
 
                 // Applique la modif sur la ligne de saisie
                 // TOUJOURS LE CAS
-                request.setAttribute("CD_TYP_VENT_SELECT", tab_CD_TYP_VENT[nbPrest]);
+                request.setAttribute("CD_TYP_VENT_SELECT",
+                        tab_CD_TYP_VENT[nbPrest]);
                 if (Action.equals("Rechargement+")) {
-                    request.setAttribute("CD_MARQUE_SELECT", tab_CD_MARQUE[nbPrest]);
-                    request.setAttribute("CD_CATEG_PREST_SELECT", tab_CD_CATEG_PREST[nbPrest]);
-                    // Recherche la dernière prestation du client dans cette Marque / Catégorie
-                    HistoPrestBean lastPrest =
-                        HistoPrestBean.getLastHistoPrest(
-                            myDBSession,
-                            CD_CLI,
-                            tab_CD_MARQUE[nbPrest],
-                            tab_CD_CATEG_PREST[nbPrest],
-                            null);
+                    request.setAttribute("CD_MARQUE_SELECT",
+                            tab_CD_MARQUE[nbPrest]);
+                    request.setAttribute("CD_CATEG_PREST_SELECT",
+                            tab_CD_CATEG_PREST[nbPrest]);
+                    // Recherche la dernière prestation du client dans cette
+                    // Marque / Catégorie
+                    HistoPrestBean lastPrest = HistoPrestBean
+                            .getLastHistoPrest(myDBSession, CD_CLI,
+                                    tab_CD_MARQUE[nbPrest],
+                                    tab_CD_CATEG_PREST[nbPrest], null);
                     if (lastPrest != null) {
-                        request.setAttribute("CD_PREST_SELECT", Long.toString(lastPrest.getCD_PREST()));
-                        request.setAttribute("COMM_SELECT", lastPrest.getCOMM());
+                        request.setAttribute("CD_PREST_SELECT", Long
+                                .toString(lastPrest.getCD_PREST()));
+                        request
+                                .setAttribute("COMM_SELECT", lastPrest
+                                        .getCOMM());
                     }
 
-                }
-                else if (Action.equals("Rechargement++")) {
-                    request.setAttribute("CD_MARQUE_SELECT", tab_CD_MARQUE[nbPrest]);
-                    request.setAttribute("CD_CATEG_PREST_SELECT", tab_CD_CATEG_PREST[nbPrest]);
-                    request.setAttribute("CD_PREST_SELECT", tab_CD_PREST[nbPrest]);
-                    // Recherche la dernière prestation du client dans cette Marque / Catégorie
-                    HistoPrestBean lastPrest =
-                        HistoPrestBean.getLastHistoPrest(
-                            myDBSession,
-                            CD_CLI,
-                            null,
-                            null,
+                } else if (Action.equals("Rechargement++")) {
+                    request.setAttribute("CD_MARQUE_SELECT",
+                            tab_CD_MARQUE[nbPrest]);
+                    request.setAttribute("CD_CATEG_PREST_SELECT",
+                            tab_CD_CATEG_PREST[nbPrest]);
+                    request.setAttribute("CD_PREST_SELECT",
                             tab_CD_PREST[nbPrest]);
+                    // Recherche la dernière prestation du client dans cette
+                    // Marque / Catégorie
+                    HistoPrestBean lastPrest = HistoPrestBean
+                            .getLastHistoPrest(myDBSession, CD_CLI, null, null,
+                                    tab_CD_PREST[nbPrest]);
                     if (lastPrest != null) {
-                        request.setAttribute("COMM_SELECT", lastPrest.getCOMM());
+                        request
+                                .setAttribute("COMM_SELECT", lastPrest
+                                        .getCOMM());
                     }
-                }
-                else if (Action.equals("Impression")) {
+                } else if (Action.equals("Impression")) {
                     // Crée le Bean spécifique pour l'édition
                     EditionFacture aEditFact = new EditionFacture();
                     aEditFact.setMyPaiement(aPaiement);
@@ -434,15 +457,16 @@ public class FicFact extends ConnectedServlet {
 
                 if (Action.equals("Suppression+")) {
                     // Vérification du mot de passe
-                    ParamBean paramMDP = ParamBean.getParamBean(myDBSession, Integer.toString(ParamBean.CD_OP_EXCEPTIONNEL));
-                    
+                    ParamBean paramMDP = ParamBean.getParamBean(myDBSession,
+                            Integer.toString(ParamBean.CD_OP_EXCEPTIONNEL));
+
                     if (!paramMDP.getVAL_PARAM().equals(MOT_PASSE)) {
                         // Mot de passe incorrect
                         Action = "Suppression";
                         mySalon.setMessage("Erreur", "Mot de passe incorrect");
                     }
                 }
-                
+
                 /**
                  * Création du bean et enregistrement
                  */
@@ -455,64 +479,81 @@ public class FicFact extends ConnectedServlet {
                     // Vérification si paiement regroupé ou mouvements de stock
                     boolean supprimable = true;
                     Vector lstLignes = aFact.getLignes(myDBSession);
-                    
+
                     for (int i = 0; i < lstLignes.size(); i++) {
-                        HistoPrestBean aHistoPrest = (HistoPrestBean) lstLignes.get(i);
-                        
+                        HistoPrestBean aHistoPrest = (HistoPrestBean) lstLignes
+                                .get(i);
+
                         if (aHistoPrest.hasMvtStk(myDBSession)) {
-                            // Correspond à un mouvement : La facture n'est pas supprimable
+                            // Correspond à un mouvement : La facture n'est pas
+                            // supprimable
                             supprimable = false;
                         }
                     }
-                            
-                    if ((!Action.equals("Suppression+")) && (aFact.getCD_PAIEMENT() != 0)) {
-                        // Le Paiement a été fait : pas de droit de supprimer sauf si forçage
-                        // Le forçage n'est possible que si le paiement n'est pas regroupé
-                        aPaiement = PaiementBean.getPaiementBean(myDBSession, CD_PAIEMENT);
-                        if (supprimable && (aPaiement.getFact(myDBSession).size() == 1) 
-                                && (mySalon.getMyIdent().getDroit("Facture", "Forçage"))) {
+
+                    if ((!Action.equals("Suppression+"))
+                            && (aFact.getCD_PAIEMENT() != 0)) {
+                        // Le Paiement a été fait : pas de droit de supprimer
+                        // sauf si forçage
+                        // Le forçage n'est possible que si le paiement n'est
+                        // pas regroupé
+                        aPaiement = PaiementBean.getPaiementBean(myDBSession,
+                                CD_PAIEMENT);
+                        if (supprimable
+                                && (aPaiement.getFact(myDBSession).size() == 1)
+                                && (mySalon.getMyIdent().getDroit("Facture",
+                                        "Forçage"))) {
                             forcage = true;
+                        } else {
+                            throw new FctlException(
+                                    "Suppression de la facture impossible : La facture est réglée.");
                         }
-                        else {
-                            throw new FctlException("Suppression de la facture impossible : La facture est réglée.");
-                        }
-                    }
-                    else {
-    
+                    } else {
+
                         if (Action.equals("Suppression+")) {
 
-                            // La facture d'abord pour éviter la contrainte de clé étrangère
+                            myDBSession.setDansTransactions(true);
+
+                            // La facture d'abord pour éviter la contrainte de
+                            // clé étrangère
                             aFact.delete(myDBSession);
 
-                            aPaiement = PaiementBean.getPaiementBean(myDBSession, CD_PAIEMENT);
+                            aPaiement = PaiementBean.getPaiementBean(
+                                    myDBSession, CD_PAIEMENT);
                             aPaiement.deletePur(myDBSession);
-                            
-                        }
-                        else {
-                                
+
+                            myDBSession.endTransaction();
+                        } else {
+
                             // Suppression effective de la facture
                             aFact.delete(myDBSession);
-        
-                            // Suppression d'une facture : Suppression de la liste des encours
-                            mySalon.removeClient(Long.toString(aFact.getCD_FACT()));
+
+                            // Suppression d'une facture : Suppression de la
+                            // liste des encours
+                            mySalon.removeClient(Long.toString(aFact
+                                    .getCD_FACT()));
                         }
-    
+
                         mySalon.setMessage("Info", "Suppression effectuée.");
-    
+
                         // Un bean vide
                         aFact = new FactBean();
                         // Place le code client si connu
                         aFact.setCD_CLI(CD_CLI);
                         aFact.setFACT_HISTO("N");
-    
+
                         aPaiement = new PaiementBean();
-    
+
                         request.setAttribute("Action", "Creation");
                     }
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     mySalon.setMessage("Erreur", e.toString());
-                    request.setAttribute("Action", "Modification");
+                    if (Action.equals("Suppression+")) {
+                        request.setAttribute("Action", "Suppression");
+                        forcage = true;
+                    } else {
+                        request.setAttribute("Action", "Modification");
+                    }
                 }
             }
             // *****************************************************************************************
@@ -521,37 +562,40 @@ public class FicFact extends ConnectedServlet {
             }
 
             /**
-             * Reset de la transaction pour la recherche des informations complémentaires
+             * Reset de la transaction pour la recherche des informations
+             * complémentaires
              */
             myDBSession.cleanTransaction();
 
             // *****************************************************************************************
             //Récupère les collaborateurs pour mettre a jour la liste
-            boolean filtrePresent = ((Action != null)
-                && ((Action.equals("Modification"))
+            boolean filtrePresent = ((Action != null) && ((Action
+                    .equals("Modification"))
                     || (Action.equals("AjoutLigne"))
                     || (Action.equals("SuppressionLigne"))
                     || (Action.equals("Rechargement"))
-                    || (Action.equals("Rechargement+"))
-                    || (Action.equals("Rechargement++"))))
-                && ((aFact != null) && (aFact.getFACT_HISTO().equals("N")));
+                    || (Action.equals("Rechargement+")) || (Action
+                    .equals("Rechargement++"))))
+                    && ((aFact != null) && (aFact.getFACT_HISTO().equals("N")));
 
             collabs = CollabBean.getListeCollab(myDBSession, filtrePresent);
             //IL faut egalement ajouter le collaborateur de la facture
             //Seulement si la liste ne contient pas CD_COLLAB
-            CollabBean aCollab = CollabBean.getCollabBean(myDBSession, "" + aFact.getCD_COLLAB());
+            CollabBean aCollab = CollabBean.getCollabBean(myDBSession, ""
+                    + aFact.getCD_COLLAB());
             CollabBean.verifieEtAjoute(aCollab, collabs);
 
-            //Il faut faire de meme avec les collaborateurs des différentes factures
+            //Il faut faire de meme avec les collaborateurs des différentes
+            // factures
             Vector lignes = aFact.getLignes(myDBSession);
             int i = 1;
             for (i = 0; i < lignes.size(); i++) {
                 HistoPrestBean aPrest = (HistoPrestBean) lignes.elementAt(i);
-                CollabBean.verifieEtAjoute(aPrest.getCD_COLLAB(), collabs, myDBSession);
+                CollabBean.verifieEtAjoute(aPrest.getCD_COLLAB(), collabs,
+                        myDBSession);
             }
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             mySalon.setMessage("Erreur", e.toString());
             System.out.println("Note : " + e.toString());
         }
@@ -563,13 +607,12 @@ public class FicFact extends ConnectedServlet {
 
         if (aFact != null) {
             // Donne le total des prestations
-            request.setAttribute("totPrest", aFact.getTotPrest(myDBSession).toString());
+            request.setAttribute("totPrest", aFact.getTotPrest(myDBSession)
+                    .toString());
             // Donne le nombre de prestations
-            request.setAttribute(
-                "NbPrest",
-                Integer.toString(aFact.getLignes(myDBSession).size()));
-        }
-        else {
+            request.setAttribute("NbPrest", Integer.toString(aFact.getLignes(
+                    myDBSession).size()));
+        } else {
             // Donne le total des prestations
             request.setAttribute("totPrest", totPrest);
             // Donne le nombre de prestations
@@ -580,44 +623,35 @@ public class FicFact extends ConnectedServlet {
             if (allCorrect) {
                 if (forcage) {
                     // Passe la main à la fiche de mise en garde
-                    getServletConfig()
-                        .getServletContext()
-                        .getRequestDispatcher("/ficFactMEG.jsp")
-                        .forward(request, response);
-                }
-                else if ((Action != null) && (Action.equals("Suppression+"))) {
-                    // Passe la main à une fiche rechargeant la fiche facture complètement (pied compris)
-                    getServletConfig()
-                        .getServletContext()
-                        .getRequestDispatcher("/ficFactRedirect.jsp")
-                        .forward(request, response);
-                }
-                else if ((Action != null) && (Action.equals("Impression"))) {
+                    getServletConfig().getServletContext()
+                            .getRequestDispatcher("/ficFactMEG.jsp").forward(
+                                    request, response);
+                } else if ((Action != null) && (Action.equals("Suppression+"))) {
+                    // Passe la main à une fiche rechargeant la fiche facture
+                    // complètement (pied compris)
+                    getServletConfig().getServletContext()
+                            .getRequestDispatcher("/ficFactRedirect.jsp")
+                            .forward(request, response);
+                } else if ((Action != null) && (Action.equals("Impression"))) {
                     // Passe la main à la fiche d'impression
-                    getServletConfig()
-                        .getServletContext()
-                        .getRequestDispatcher("/ficFactImpr.jsp")
-                        .forward(request, response);
-                }
-                else {
+                    getServletConfig().getServletContext()
+                            .getRequestDispatcher("/ficFactImpr.jsp").forward(
+                                    request, response);
+                } else {
                     // Passe la main à la fiche de création
-                    getServletConfig()
-                        .getServletContext()
-                        .getRequestDispatcher("/ficFact.jsp")
-                        .forward(request, response);
+                    getServletConfig().getServletContext()
+                            .getRequestDispatcher("/ficFact.jsp").forward(
+                                    request, response);
                 }
-            }
-            else {
-                getServletConfig()
-                    .getServletContext()
-                    .getRequestDispatcher("/Erreur.jsp")
-                    .forward(request, response);
+            } else {
+                getServletConfig().getServletContext().getRequestDispatcher(
+                        "/Erreur.jsp").forward(request, response);
             }
 
-        }
-        catch (Exception e) {
-            System.out.println(
-                "FicFact::performTask : Erreur à la redirection : " + e.toString());
+        } catch (Exception e) {
+            System.out
+                    .println("FicFact::performTask : Erreur à la redirection : "
+                            + e.toString());
         }
     }
 
