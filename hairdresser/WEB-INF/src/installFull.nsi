@@ -2,10 +2,10 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "Gestion de salons de Coiffure"
-!define PRODUCT_VERSION "3.1"
+!define PRODUCT_VERSION "3.2"
 !define PRODUCT_VERSION_FULL "${PRODUCT_VERSION}.0.0"
-!define PRODUCT_COPYRIGHT "Sous licence GPL"
-!define PRODUCT_PUBLISHER ""
+!define PRODUCT_COPYRIGHT "2002-2004 Valérie, Alexandre et Emmanuel Guyot"
+!define PRODUCT_PUBLISHER "SourceForge"
 !define PRODUCT_WEB_SITE "http://beauty-hair-mng.sourceforge.net/"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
@@ -31,9 +31,6 @@ SetCompressor lzma
 
 ; License page
 !insertmacro MUI_PAGE_LICENSE "${LICENCE_TXT}"
-; Choix de ce qui est installé
-!define MUI_COMPONENTSPAGE_NODESC
-!insertmacro MUI_PAGE_COMPONENTS
 ; Start menu page
 var ICONS_GROUP
 !define MUI_STARTMENUPAGE_NODISABLE
@@ -63,7 +60,7 @@ var ICONS_GROUP
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "../../../salon_serveur/boutique/download/hairdresser.exe"
+OutFile "c:/test4/hairdresser.exe"
 InstallDir "c:\InCrEG\"
 ShowInstDetails nevershow
 ShowUnInstDetails nevershow
@@ -78,7 +75,7 @@ VIProductVersion "${PRODUCT_VERSION_FULL}"
 Section -AdditionalIcons
   WriteIniStr "$INSTDIR\${PRODUCT_PUBLISHER}.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
   CreateDirectory "$SMPROGRAMS\$ICONS_GROUP"
-  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Site Internet SourceForge.lnk" "$INSTDIR\${PRODUCT_PUBLISHER}.url"
+  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Site Internet.lnk" "$INSTDIR\${PRODUCT_PUBLISHER}.url"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Désinstaller.lnk" "$INSTDIR\uninst.exe"
 SectionEnd
 
@@ -130,12 +127,6 @@ Section "Fichiers principaux" SEC00
 
   WriteRegStr HKEY_CLASSES_ROOT "InternetShortcut\shell\open\command" "" "iexplore -k %l"
   
-SectionEnd
-
-Section "Utilitaires" SEC01
-  SetOutPath "$INSTDIR"
-  SetOverwrite ifnewer
-  File /r "${ORIG_DIR}\Utils"
 SectionEnd
 
 Section -Core
@@ -239,7 +230,6 @@ Section Uninstall
   RMDir /r "$INSTDIR\war"
   RMDir /r "$INSTDIR\Base"
   RMDir /r "$INSTDIR\Temp"
-  RMDir /r "$INSTDIR\Utils"
   RMDir /r "$INSTDIR\salon"
 
   DeleteRegKey HKEY_LOCAL_MACHINE "Software\Cygnus Solutions\Cygwin"
