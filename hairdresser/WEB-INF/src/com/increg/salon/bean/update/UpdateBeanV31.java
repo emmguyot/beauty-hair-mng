@@ -1,10 +1,11 @@
-package com.increg.salon.bean;
+package com.increg.salon.bean.update;
 
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.increg.commun.DBSession;
+import com.increg.salon.bean.FactBean;
 
 /**
  * Passage à la version 3.1

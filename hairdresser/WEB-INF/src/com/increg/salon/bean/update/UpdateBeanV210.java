@@ -1,24 +1,25 @@
-package com.increg.salon.bean;
+package com.increg.salon.bean.update;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.increg.commun.DBSession;
 import com.increg.commun.exception.ReloadNeededException;
+import com.increg.salon.bean.ParamBean;
 
 /**
- * Passage à la version 2.9 
- * Creation date : 15 févr. 03
+ * Passage à la version 2.10 
+ * Creation date : 27 sept. 2003
  * @author Emmanuel GUYOT <emmguyot@wanadoo.fr>
  */
-public class UpdateBeanV29 extends UpdateBeanV28 {
+public class UpdateBeanV210 extends UpdateBeanV29 {
 
     /**
      * Constructor for UpdateBeanVxx.
      * @param dbConnect .
      * @throws Exception .
      */
-    public UpdateBeanV29(DBSession dbConnect) throws Exception {
+    public UpdateBeanV210(DBSession dbConnect) throws Exception {
         super(dbConnect);
     }
 
@@ -28,12 +29,12 @@ public class UpdateBeanV29 extends UpdateBeanV28 {
     protected void deduitVersion(DBSession dbConnect) throws Exception {
 
         // Vérification de la taille de la colonne cd_ident
-        String sql = "select CD_PARAM from PARAM where CD_PARAM=6";
+        String sql = "select CD_PARAM from PARAM where CD_PARAM=" + ParamBean.CD_AUTOCONNECT;
         try {
             ResultSet rs = dbConnect.doRequest(sql);
             if (rs.next()) {
                 // Tout va bien : Le param est là
-                version = "2.9";
+                version = "2.10";
             } else {
                 super.deduitVersion(dbConnect);
             }
@@ -51,36 +52,13 @@ public class UpdateBeanV29 extends UpdateBeanV28 {
      */
     protected void majVersion(DBSession dbConnect) throws Exception {
         super.majVersion(dbConnect);
-        if (version.equals("2.8")) {
-            // Mise à jour de la base pour passer en 2.9
+        if (version.equals("2.9")) {
+            // Mise à jour de la base pour passer en 2.10
             // Requète Avant / Après
             String reqStat[][] = {
                 };
             String sql[] = {
-                "insert into PARAM (CD_PARAM, LIB_PARAM, VAL_PARAM) values (nextval('SEQ_PARAM'), 'Largeur d''impression des fiches (cm)', '8.5')",
-                "create table DEVISE ("
-                    + "CD_DEVISE numeric(2) not null,"
-                    + "LIB_COURT_DEVISE varchar(10) not null,"
-                    + "LIB_DEVISE varchar(30) not null,"
-                    + "RATIO decimal(7,5),"
-                    + "Constraint pk_devise Primary Key (CD_DEVISE))",
-                "create sequence SEQ_DEVISE",
-                "alter table DEVISE alter CD_DEVISE set default nextval('SEQ_DEVISE')",
-                "insert into DEVISE (LIB_COURT_DEVISE, LIB_DEVISE, RATIO) values ('&euro;', 'Euros', 1)",
-                "insert into DEVISE (LIB_COURT_DEVISE, LIB_DEVISE, RATIO) values ('F', 'Francs', 6.55957)",
-                "alter table POINTAGE add constraint FK_POINTAGE_CORRESP_A_COLLAB foreign key (CD_COLLAB) references COLLAB (CD_COLLAB)",
-                "create table STAT_HISTO ("
-                    + "CD_STAT numeric(3) not null,"                    + "NUM_GRAPH numeric(1) not null,"
-                    + "PARAM varchar(20) not null,"
-                    + "VALUE varchar(80) not null,"
-                    + "DT_CREAT timestamp with time zone NOT NULL,"
-                    + "DT_MODIF timestamp with time zone DEFAULT now() NOT NULL,"
-                    + "Constraint pk_stat_histo Primary Key (CD_STAT, NUM_GRAPH, PARAM))",
-                "alter table STAT_HISTO add constraint FK_HISTO_CONCERNE_STAT foreign key (CD_STAT) references STAT (CD_STAT)",
-                "alter table CLI add INDIC_VALID char(1) constraint CKC_INDIC_VALID check (INDIC_VALID is null or INDIC_VALID in ('O', 'N'))",
-                "update CLI set INDIC_VALID='O'",
-                "alter table COLLAB add INDIC_VALID char(1) constraint CKC_INDIC_VALID check (INDIC_VALID is null or INDIC_VALID in ('O', 'N'))",
-                "update COLLAB set INDIC_VALID='O'"
+                "insert into PARAM (CD_PARAM, LIB_PARAM, VAL_PARAM) values (nextval('SEQ_PARAM'), 'Connexion automatique', 'N')"
                 };
             String sqlAvecRes[] = {
                 };
@@ -102,13 +80,23 @@ public class UpdateBeanV29 extends UpdateBeanV28 {
                 ResultSet rs = dbConnect.doRequest(sqlAvecRes[i]);
                 rs.close();
             }
+
+            try {
+                // Spécial !!! Supression de l'induex UI_ART_LIB ==> Présent sur certaines bases
+                String aSql[] = new String[1];
+                aSql[0] = "drop index UI_ART_LIB";
+                dbConnect.doExecuteSQL(aSql);
+            }
+            catch (SQLException e) {
+                // Ignore l'erreur : C'est probablement que l'index n'existe déjà plus
+            }
             
-            // On vient de passer en 2.9
-            version = "2.9";
+            // On vient de passer en 2.10
+            version = "2.10";
         }
     }
     /**
-     * @see com.increg.salon.bean.UpdateBean#checkDatabase(DBSession)
+     * @see com.increg.salon.bean.update.UpdateBean#checkDatabase(DBSession)
      */
     public boolean checkDatabase(DBSession dbConnect) throws ReloadNeededException {
 

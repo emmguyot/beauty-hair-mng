@@ -1,4 +1,4 @@
-package com.increg.salon.bean;
+package com.increg.salon.bean.update;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.increg.commun.DBSession;
+import com.increg.salon.bean.ParamBean;
 
 /**
  * Passage à la version 2.5

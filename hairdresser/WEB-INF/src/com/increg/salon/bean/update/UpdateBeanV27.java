@@ -1,4 +1,4 @@
-package com.increg.salon.bean;
+package com.increg.salon.bean.update;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -164,7 +164,7 @@ public class UpdateBeanV27 extends UpdateBeanV26 {
         }
     }
     /**
-     * @see com.increg.salon.bean.UpdateBean#checkDatabase(DBSession)
+     * @see com.increg.salon.bean.update.UpdateBean#checkDatabase(DBSession)
      */
     public boolean checkDatabase(DBSession dbConnect) throws ReloadNeededException {
 
@@ -243,7 +243,7 @@ public class UpdateBeanV27 extends UpdateBeanV26 {
     }
 
     /**
-     * @see com.increg.salon.bean.UpdateBean#checkDatabase(DBSession, String[], String[])
+     * @see com.increg.salon.bean.update.UpdateBean#checkDatabase(DBSession, String[], String[])
      */
     public boolean checkDatabase(DBSession dbConnect, String[] lstTables, String[] lstSequences) throws ReloadNeededException {
 

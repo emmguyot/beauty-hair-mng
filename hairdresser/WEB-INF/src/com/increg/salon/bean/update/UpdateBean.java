@@ -1,4 +1,4 @@
-package com.increg.salon.bean;
+package com.increg.salon.bean.update;
 
 import java.sql.SQLException;
 

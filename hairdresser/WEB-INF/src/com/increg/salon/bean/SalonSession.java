@@ -18,6 +18,8 @@ import java.util.Vector;
 import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.exception.ReloadNeededException;
+import com.increg.salon.bean.update.UpdateBean;
+import com.increg.salon.bean.update.UpdateBeanV33;
 import com.increg.util.SimpleDateFormatEG;
 
 /**
@@ -122,8 +124,7 @@ public abstract class SalonSession extends BasicSession {
             if (resconfig == null) {
                 throw new MissingResourceException("Fichier de licence introuvable", "config.properties", "");
             }
-        }
-        catch (MissingResourceException e) {
+        } catch (MissingResourceException e) {
             // Fichier de configuration invalide ou introuvable
             throw e;
         }
@@ -135,9 +136,8 @@ public abstract class SalonSession extends BasicSession {
                  * Mise à jour éventuelle de l'appli
                  * <b>A mettre à jour à chaque changement de version</b>
                  */
-                majBase = new UpdateBeanV31(myDBSession);
-            }
-            catch (Exception e) {
+                majBase = new UpdateBeanV33(myDBSession);
+            } catch (Exception e) {
                 System.out.println("Mise à jour de la base en erreur :");
                 e.printStackTrace();
                 // Il faut proposer la restauration de la base
@@ -165,8 +165,7 @@ public abstract class SalonSession extends BasicSession {
                 try {
                     FactBean aFact = new FactBean(aRS);
                     listeFact.add(aFact);
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     System.out.println("Erreur à la lecture d'une facture pour l'en cours :");
                     e.printStackTrace();
                 }
@@ -183,8 +182,7 @@ public abstract class SalonSession extends BasicSession {
                 if ((resconfig.getString("remote") != null) && (resconfig.getString("remote").equals("1"))) {
                     remoteEnable = true;
                 }
-            }
-            catch (Exception ignored) {
+            } catch (Exception ignored) {
                 // ignore the exception
                 remoteEnable = false;
             }
@@ -204,12 +202,10 @@ public abstract class SalonSession extends BasicSession {
             if (autoConnBean != null) {
                 autoConnect = autoConnBean.getVAL_PARAM().equals("O");
             }
-        }
-        catch (ReloadNeededException e) {
+        } catch (ReloadNeededException e) {
             // Fait suivre l'exception
             throw (e);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Erreur dans constructeur SalonSession :");
             e.printStackTrace();
             myDBSession = null;
@@ -265,8 +261,7 @@ public abstract class SalonSession extends BasicSession {
 
                     // Stocke la facture dans la liste
                     listeFact.addElement(aFact);
-                }
-                else {
+                } else {
                     // Pas de facture, pas possible ici !!!
                     //On recherche une facture donnée !
                     //On met une facture vide pour avancer...
@@ -275,8 +270,7 @@ public abstract class SalonSession extends BasicSession {
 
                 aRS.close();
 
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 System.out.println("Erreur dans l'ajout d'un client avec une facture precise : " + e.toString());
             }
         }
@@ -332,16 +326,14 @@ public abstract class SalonSession extends BasicSession {
 
                     // Stocke la facture dans la liste
                     listeFact.addElement(aFact);
-                }
-                else {
+                } else {
                     // Pas d'ancienne facture : Facture vide
                     addEmptyFact(CD_CLI);
                 }
 
                 aRS.close();
 
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 System.out.println("Erreur dans constructeur sur clé : " + e.toString());
             }
         }
@@ -379,8 +371,7 @@ public abstract class SalonSession extends BasicSession {
 
                 // Il faut l'ajouter
                 listeFact.add(aFact);
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 System.out.println("Erreur dans constructeur sur clé : " + e.toString());
             }
         }
@@ -482,8 +473,7 @@ public abstract class SalonSession extends BasicSession {
             formatDate.setTimeZone(date.getTimeZone());
 
             return formatDate.formatEG(date.getTime());
-        }
-        else {
+        } else {
             return "";
         }
     }
