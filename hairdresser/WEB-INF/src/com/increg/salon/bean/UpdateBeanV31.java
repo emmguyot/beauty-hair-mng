@@ -85,7 +85,7 @@ public class UpdateBeanV31 extends UpdateBeanV30 {
                 "insert into PARAM (CD_PARAM, LIB_PARAM, VAL_PARAM) values (nextval('SEQ_PARAM'), 'URL de lecture des sauvegardes', 'http://www.increg.com/Sauvegardes/')",
                 "insert into PARAM (CD_PARAM, LIB_PARAM, VAL_PARAM) values (nextval('SEQ_PARAM'), 'URL de suppression des sauvegardes', 'http://www.increg.com/servlet/sauvegardeSup')",
                 "insert into PARAM (CD_PARAM, LIB_PARAM, VAL_PARAM) values (nextval('SEQ_PARAM'), 'URL de creation de sauvegardes', 'http://www.increg.com/servlet/sauvegarde')",
-                "insert into PARAM (CD_PARAM, LIB_PARAM, VAL_PARAM) values (nextval('SEQ_PARAM'), 'URL des messages d''info', 'http://www.increg.com/')",
+                "insert into PARAM (CD_PARAM, LIB_PARAM, VAL_PARAM) values (nextval('SEQ_PARAM'), 'URL des messages d''info', 'http://beauty-hair-mng.sourceforge.net/')",
                 "alter table HISTO_PREST add TVA numeric(8,2)",
                 "alter table HISTO_PREST add PRX_TOT_TTC numeric(8,2)",
                 "alter table HISTO_PREST add PRX_TOT_HT numeric(8,2)",
