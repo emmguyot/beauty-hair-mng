@@ -336,6 +336,7 @@
 				<include name="ficArt_Common.jsp"/>
 				<include name="ficArt_Mvt.jsp"/>
 				<include name="ficChqImpr.jsp"/>
+				<include name="ficCli.jsp"/>
 				<include name="ficCollab.jsp"/>
 				<include name="ficCriterePub.jsp"/>
 				<include name="ficDevise.jsp"/>
