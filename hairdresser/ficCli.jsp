@@ -208,22 +208,33 @@ function Init() {
                 </td>
    				<td align="right">
                     <span class="souslien">
-                    	<salon:bouton url="_FicheRDV.jsp?Action=Creation&CD_CLI=<%= aCli.getCD_CLI() %>" alt="Nouveau rendez-vous" target="ClientFrame" img="images/priseRDV.gif" />&nbsp;&nbsp;
-                    	<salon:bouton url="_FicheTech.jsp?CD_CLI=<%= aCli.getCD_CLI() %>" target="ClientFrame" alt="Fiches techniques" img="images/imprFicTech.gif" />&nbsp;&nbsp; 
-                        <salon:bouton url="ListeAbonnement.jsp?CD_CLI=<%= aCli.getCD_CLI() %>" target="ClientFrame" alt="Abonnements" img="images/Abonnement.gif" />&nbsp;&nbsp; 
+                    	<salon:bouton url="<%= \"_FicheRDV.jsp?Action=Creation&CD_CLI=\" + aCli.getCD_CLI() %>" alt="Nouveau rendez-vous" target="ClientFrame" img="images/priseRDV.gif" />&nbsp;&nbsp;
+                    	<salon:bouton url="<%= \"_FicheTech.jsp?CD_CLI=\" + aCli.getCD_CLI() %>" target="ClientFrame" alt="Fiches techniques" img="images/imprFicTech.gif" />&nbsp;&nbsp; 
+                        <salon:bouton url="<%= \"ListeAbonnement.jsp?CD_CLI=\" + aCli.getCD_CLI() %>" target="ClientFrame" alt="Abonnements" img="images/Abonnement.gif" />&nbsp;&nbsp; 
                         <%
                         if (peutCreerFacture) { %>
-                            <salon:bouton url="_FicheFact.jsp?FACT_HISTO=N&CD_CLI=<%= aCli.getCD_CLI() %>" target="ClientFrame" alt="Nouvelle facture" img="images/accueilClient.gif" imgOn="images/accueilClient2.gif"/>&nbsp;&nbsp;
+                            <salon:bouton url="<%= \"_FicheFact.jsp?FACT_HISTO=N&CD_CLI=\" + aCli.getCD_CLI() %>" target="ClientFrame" alt="Nouvelle facture" img="images/accueilClient.gif" imgOn="images/accueilClient2.gif"/>&nbsp;&nbsp;
                         <%
                         } %>
-                        <salon:bouton url="_FicheFact.jsp?FACT_HISTO=O&CD_CLI=<%= aCli.getCD_CLI() %>" target="ClientFrame" alt="Nouvel historique" img="images/nouvHisto.gif" />
+                        <salon:bouton url="<%= \"_FicheFact.jsp?FACT_HISTO=O&CD_CLI=\" + aCli.getCD_CLI() %>" target="ClientFrame" alt="Nouvel historique" img="images/nouvHisto.gif" />
                     </span>
                 </td>
             </tr>
         </table>
         <table border="0" width="100%">
             <tr>
-                <th><a href="addCli.srv?Vide=1&CD_CLI=<%=aCli.getCD_CLI()%>" title="Accueillir ce client" target=MenuFrame><img src=images/plus2.gif border="0" width="15" height="15"></a></th>
+                <th>
+<%		       
+                if (peutCreerFacture) { %>
+                    <a href="addCli.srv?Vide=1&CD_CLI=<%=aCli.getCD_CLI()%>" title="Accueillir ce client" target=MenuFrame><img src=images/plus2.gif border="0" width="15" height="15"></a>
+<%
+                }
+                else { %>
+                    <img src=images/plusNon.gif border="0" width="15" height="15" alt="Action impossible : Pas de collaborateur présent"/>
+<%
+                }
+%>
+                </th>
                 <th>Date</th>
                 <th>Prestation : 
                     <salon:DBselection valeur="<%= CD_TYP_VENT %>" sql="select CD_TYP_VENT, LIB_TYP_VENT from TYP_VENT order by LIB_TYP_VENT">

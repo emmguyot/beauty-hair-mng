@@ -88,7 +88,7 @@
 	</target>
 
 	<!-- Nécessite : rt.jar => Celui cible + Compilation 1.3 -->
-	<target description="Création du war pour distribution" name="WarFile">
+	<target description="Création du war pour distribution" name="WarFile" depends="init">
 		<copy todir="${tmpProdWar}" preservelastmodified="yes" verbose="yes" overwrite="true" >
 			<fileset dir="${src}">
 				<include name="WEB-INF/**/*.class" />
@@ -123,6 +123,7 @@
 		</copy>
 		<!-- Compilation des pages JSP -->
 		<mkdir dir="${tmpProdWar}/work" />
+		<mkdir dir="${tmpProdWar}/WEB-INF/classes" />
 		<jspc srcdir="${tmpProdWar}" 
 				destdir="${tmpProdWar}/WEB-INF/classes" 
 				webinc="${tmpProdWar}/WEB-INF/webInc.xml" 
@@ -135,7 +136,7 @@
 				<pathelement location="${java.class.path}" />
 			</classpath>
 		</jspc>
-		<javac srcdir="${tmpProdWar}/WEB-INF/classes" destdir="${tmpProdWar}/WEB-INF/classes" excludes="ficArt_Common.java" encoding="UTF-8">
+		<javac srcdir="${tmpProdWar}/WEB-INF/classes" destdir="${tmpProdWar}/WEB-INF/classes" excludes="ficArt_Common.java, lstCli_Common.java" encoding="UTF-8">
 			<classpath>
 				<pathelement location="${tomcat}/lib/container/jasper.jar" />
 				<pathelement location="${tomcat}/lib/common/servlet.jar" />
@@ -167,8 +168,42 @@
 		</jar>
 	</target>
 	
-	<target description="Création du fichier des sources" name="zipSrc" >
-		
+	<target description="Création du fichier des sources" name="zipSrc" depends="init">
+		<zip destfile="${dist}/${ant.project.name}.src.zip">
+			<fileset dir="${src}">
+				<include name="WEB-INF/**/*.java" />
+				<include name="WEB-INF/**/*.tld" />
+				<include name="WEB-INF/**/*.jar" />
+				<include name="**/*.jsp" />
+				<include name="**/*.psp" />
+				<include name="**/*.pspimage" />
+				<include name="**/*.nsi" />
+				<include name="**/*.gif" />
+				<include name="**/*.jpg" />
+				<include name="**/*.png" />
+				<include name="**/*.ico" />
+				<include name="doc/*" />
+				<include name="**/*.css" />
+				<include name="**/*.inc" />
+				<include name="**/*.js" />
+				<include name="**/*.txt" />
+				<include name="**/*.html" />
+				<include name="*.java" />
+				<include name="WEB-INF/web.xml" />
+
+				<exclude name="WEB-INF/src/com/increg/serveur/**" />
+				<exclude name="**/light/**" />
+				<exclude name="light/**" />
+				<exclude name="WEB-INF/classes/**" />
+				<exclude name="**/test/**" />
+				<exclude name="**/launcher/**" />
+				<exclude name="old/**" />
+				<exclude name="sql/**" />
+				<exclude name="error/**" />
+				<exclude name="_notes/**" />
+				<exclude name="images/perso/**" />
+			</fileset>
+		</zip>
 	</target>
 </project>
 
