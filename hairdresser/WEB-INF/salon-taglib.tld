@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE taglib
+        PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.1//EN"
+	"http://java.sun.com/j2ee/dtds/web-jsptaglibrary_1_1.dtd">
+
+<!-- a tag library descriptor -->
+
+<taglib>
+  <!-- after this the default space is
+	"http://java.sun.com/j2ee/dtds/jsptaglibrary_1_2.dtd"
+   -->
+
+  <tlibversion>1.0</tlibversion>
+  <jspversion>1.1</jspversion>
+  <shortname>salon</shortname>
+  <uri></uri>
+  <info>
+	Librairie de Tag pour l'application Salon de Coiffure
+  </info>
+
+  <tag>
+    <name>valeur</name>
+    <tagclass>com.increg.salon.tag.TagValeur</tagclass>
+    <info> Affiche le champs initialisé à partir de sa valeur </info>
+    <attribute>
+       <name>valeur</name>
+       <required>true</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>valeurNulle</name>
+       <required>true</required>
+    </attribute>
+    <attribute>
+       <name>expand</name>
+       <required>false</required>
+    </attribute>
+    <attribute>
+       <name>puces</name>
+       <required>false</required>
+    </attribute>
+    <attribute>
+       <name>format</name>
+       <required>false</required>
+    </attribute>
+    <attribute>
+       <name>timezone</name>
+       <required>false</required>
+    </attribute>
+    <attribute>
+       <name>heureDec</name>
+       <required>false</required>
+    </attribute>
+    <attribute>
+       <name>includeHTML</name>
+       <required>false</required>
+    </attribute>
+  </tag>       
+  <tag>
+    <name>selection</name>
+    <tagclass>com.increg.salon.tag.TagSelection</tagclass>
+    <info> Affiche le champs selection fixe </info>
+    <attribute>
+       <name>valeur</name>
+       <required>true</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>valeurs</name>
+       <required>true</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>libelle</name>
+       <required>false</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>       
+  <tag>
+    <name>DBselection</name>
+    <tagclass>com.increg.salon.tag.TagDBSelection</tagclass>
+    <info> Affiche le champs selection à partir de la base </info>
+    <attribute>
+       <name>valeur</name>
+       <required>false</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>listeValeur</name>
+       <required>false</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>sql</name>
+       <required>true</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>myDBSession</name>
+       <required>false</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>       
+  <tag>
+    <name>TimeStamp</name>
+    <tagclass>com.increg.salon.tag.TagTimeStamp</tagclass>
+    <info> Affiche les informations de date d'un Bean </info>
+    <attribute>
+       <name>bean</name>
+       <required>true</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>       
+  <tag>
+    <name>message</name>
+    <tagclass>com.increg.salon.tag.TagMessage</tagclass>
+    <info> Affiche les messages en provenance de la servlet </info>
+    <attribute>
+       <name>salonSession</name>
+       <required>true</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>       
+  <tag>
+    <name>inverse</name>
+    <tagclass>com.increg.salon.tag.TagInverse</tagclass>
+    <info> Affiche un montant à l'envers </info>
+    <attribute>
+       <name>montant</name>
+       <required>true</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>       
+
+  <tag>
+    <name>DBcheckbox</name>
+    <tagclass>com.increg.salon.tag.TagDBCheckBox</tagclass>
+    <info> affiche une liste de checkbox a partir de la requete </info>
+    <attribute>
+       <name>nom</name>
+       <required>true</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+       <name>sql</name>
+       <required>true</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+   <attribute>
+       <name>tabValeur</name>
+       <required>false</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>    
+    <attribute>
+       <name>action</name>
+       <required>false</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>          
+    <attribute>
+       <name>longueurMax</name>
+       <required>false</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>      
+    <attribute>
+       <name>cocheTout</name>
+       <required>false</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>      
+  </tag>       
+
+  <tag>
+     <name>autorisation</name>
+     <tagclass>com.increg.salon.tag.TagAutorisation</tagclass>
+     <info> Affiche en fonction de l'autorisation </info>
+     <attribute>
+       <name>entite</name>
+       <required>true</required>
+       <rtexprvalue>false</rtexprvalue>
+     </attribute>
+     <attribute>
+       <name>action</name>
+       <required>false</required>
+       <rtexprvalue>false</rtexprvalue>
+     </attribute>
+  </tag>       
+
+  <tag>
+     <name>madeBy</name>
+     <tagclass>com.increg.salon.tag.TagMadeBy</tagclass>
+     <info> Affiche l'origine du document </info>
+  </tag>       
+
+  <tag>
+    <name>include</name>
+    <tagclass>com.increg.salon.tag.TagInclude</tagclass>
+    <info> Affiche le fichier à partir d'InCrEG si connecté </info>
+    <attribute>
+       <name>file</name>
+       <required>true</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+  </tag>       
+
+  <tag>
+    <name>checkbox</name>
+    <tagclass>com.increg.salon.tag.TagCheckBox</tagclass>
+    <info> affiche une liste de checkbox a partir d'une liste de valeurs </info>
+    <attribute>
+       <name>nom</name>
+       <required>true</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>
+   <attribute>
+       <name>tabValeur</name>
+       <required>false</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>    
+   <attribute>
+       <name>valeurs</name>
+       <required>true</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>    
+   <attribute>
+       <name>libelle</name>
+       <required>true</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>    
+    <attribute>
+       <name>action</name>
+       <required>false</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>          
+    <attribute>
+       <name>longueurMax</name>
+       <required>false</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>      
+    <attribute>
+       <name>cocheTout</name>
+       <required>false</required>
+       <rtexprvalue>true</rtexprvalue>
+    </attribute>      
+  </tag>       
+  <tag>
+    <name>date</name>
+    <tagclass>com.increg.salon.tag.TagDate</tagclass>
+    <info> Affiche le champs date initialisé à partir de sa valeur </info>
+    <attribute>
+        <name>valeurDate</name>
+        <required>true</required>
+        <rtexprvalue>true</rtexprvalue>
+    </attribute>
+    <attribute>
+        <name>valeurNulle</name>
+        <required>true</required>
+    </attribute>
+    <attribute>
+        <name>calendrier</name>
+        <required>false</required>
+    </attribute>
+    <attribute>
+        <name>format</name>
+        <required>false</required>
+    </attribute>
+    <attribute>
+        <name>timezone</name>
+        <required>false</required>
+    </attribute>
+    <attribute>
+        <name>heureDec</name>
+        <required>false</required>
+    </attribute>
+    <attribute>
+        <name>name</name>
+        <required>false</required>
+    </attribute>
+    <attribute>
+        <name>type</name>
+        <required>false</required>
+    </attribute>
+    <attribute>
+        <name>onchange</name>
+        <required>false</required>
+    </attribute>
+  </tag>       
+
+</taglib>

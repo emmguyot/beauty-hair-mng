@@ -1,0 +1,341 @@
+package com.increg.salon.servlet;
+
+import java.sql.ResultSet;
+import java.util.Vector;
+
+import javax.servlet.http.HttpSession;
+
+import com.increg.commun.DBSession;
+import com.increg.salon.bean.ArtBean;
+import com.increg.salon.bean.MvtStkBean;
+import com.increg.salon.bean.SalonSession;
+/**
+ * Fiche article avec mouvements
+ * Creation date: (22/09/2001 19:15:33)
+ * @author Emmanuel GUYOT <emmguyot@wanadoo.fr>
+ */
+public class FicArt_Mvt extends ConnectedServlet {
+    /**
+     * @see com.increg.salon.servlet.ConnectedServlet
+     */
+    public void performTask(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) {
+
+        // Récupération des paramètres
+        String Action = request.getParameter("Action");
+        String CD_ART = request.getParameter("CD_ART");
+        String CD_CATEG_ART = request.getParameter("CD_CATEG_ART");
+        String CD_TYP_ART = request.getParameter("CD_TYP_ART");
+        String CD_UNIT_MES = request.getParameter("CD_UNIT_MES");
+        String COMM = request.getParameter("COMM");
+        String LIB_ART = request.getParameter("LIB_ART");
+        String QTE_STK = request.getParameter("QTE_STK");
+        String QTE_STK_MIN = request.getParameter("QTE_STK_MIN");
+        String REF_ART = request.getParameter("REF_ART");
+        String VAL_STK_HT = request.getParameter("VAL_STK_HT");
+        String INDIC_PERIM = request.getParameter("INDIC_PERIM");
+
+        String zNbMvt = request.getParameter("NbMvt");
+        String zDebMvt = request.getParameter("DebMvt");
+        String ParamSup = request.getParameter("ParamSup");
+
+        int nbMvt = 10;
+        if (zNbMvt != null) {
+            nbMvt = Integer.parseInt(zNbMvt);
+        }
+
+        int debMvt = 0;
+        if (zDebMvt != null) {
+            debMvt = Integer.parseInt(zDebMvt);
+        }
+
+        // Données de ligne
+        // Ligne en cours de saisie
+        String tab_DT_MVT = request.getParameter("DT_MVT");
+        String tab_CD_TYP_MVT = request.getParameter("CD_TYP_MVT");
+        String tab_QTE = request.getParameter("QTE");
+        String tab_VAL_MVT_HT = request.getParameter("VAL_MVT_HT");
+        String tab_DT_MVT_LAST = request.getParameter("DT_MVT_LAST");
+        String tab_CD_FACT_LAST = request.getParameter("CD_FACT_LAST");
+
+        // Récupère la connexion
+        HttpSession mySession = request.getSession(false);
+        SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
+        DBSession myDBSession = mySalon.getMyDBSession();
+
+        ArtBean aArt = null;
+
+        try {
+            if (Action == null) {
+                // Première phase de création
+                request.setAttribute("Action", "Creation");
+                // Un bean vide
+                aArt = new ArtBean();
+            }
+            else if (Action.equals("Creation")) {
+                // Crée réellement l'article
+
+                /**
+                 * Création du bean et enregistrement
+                 */
+                aArt = new ArtBean();
+                aArt.setCD_ART(CD_ART);
+                aArt.setCD_CATEG_ART(CD_CATEG_ART);
+                aArt.setCD_TYP_ART(CD_TYP_ART);
+                aArt.setCD_UNIT_MES(CD_UNIT_MES);
+                aArt.setCOMM(COMM);
+                aArt.setLIB_ART(LIB_ART);
+                aArt.setQTE_STK(QTE_STK);
+                aArt.setQTE_STK_MIN(QTE_STK_MIN);
+                aArt.setREF_ART(REF_ART);
+                aArt.setVAL_STK_HT(VAL_STK_HT);
+                aArt.setINDIC_PERIM(INDIC_PERIM);
+
+                try {
+                    aArt.create(myDBSession);
+
+                    mySalon.setMessage("Info", "Création effectuée.");
+                    if (CD_TYP_ART.equals("1")) {
+                        // Création automatique de la prestation
+                        aArt.creationPrestation(myDBSession);
+                        mySalon.setMessage("Info", "Création effectuée. La prestation associée a également été créée.");
+                    }
+                    request.setAttribute("Action", "Modification");
+                }
+                catch (Exception e) {
+                    mySalon.setMessage("Erreur", e.toString());
+                    request.setAttribute("Action", Action);
+                }
+            }
+            if ((Action != null) && (Action.equals("Modification")) && (LIB_ART == null)) {
+                // Affichage de la fiche en modification
+                request.setAttribute("Action", "Modification");
+
+                aArt = ArtBean.getArtBean(myDBSession, CD_ART);
+            }
+            else if (
+                (Action != null)
+                    && ((Action.equals("Modification")) || (Action.equals("AjoutLigne")) || (Action.equals("Suivant")) || (Action.equals("Precedent")) || (Action.equals("SuppressionLigne")))) {
+                // Modification effective de la fiche
+
+                int paramSup = -1;
+                if (Action.equals("AjoutLigne")) {
+                    paramSup = Integer.parseInt(ParamSup);
+                }
+                if (Action.equals("Suivant")) {
+                    debMvt += 10;
+                }
+                if (Action.equals("Precedent")) {
+                    debMvt -= 10;
+                    if (debMvt < 0) {
+                        debMvt = 0;
+                    }
+                }
+
+                /**
+                 * Création du bean et enregistrement
+                 */
+                if ((CD_ART == null) || (CD_ART.length() == 0) || (CD_ART.equals("0"))) {
+                    // On est en création : le Bean est créé de zero
+                    aArt = new ArtBean();
+                }
+                else {
+                    // Recharge à partir de la base
+                    aArt = ArtBean.getArtBean(myDBSession, CD_ART);
+                }
+
+                aArt.setCD_ART(CD_ART);
+                aArt.setCD_CATEG_ART(CD_CATEG_ART);
+                aArt.setCD_TYP_ART(CD_TYP_ART);
+                aArt.setCD_UNIT_MES(CD_UNIT_MES);
+                aArt.setCOMM(COMM);
+                aArt.setLIB_ART(LIB_ART);
+                aArt.setQTE_STK(QTE_STK);
+                aArt.setQTE_STK_MIN(QTE_STK_MIN);
+                aArt.setREF_ART(REF_ART);
+                aArt.setVAL_STK_HT(VAL_STK_HT);
+                aArt.setINDIC_PERIM(INDIC_PERIM);
+
+                try {
+                    if ((CD_ART == null) || (CD_ART.length() == 0) || (CD_ART.equals("0"))) {
+                        aArt.create(myDBSession);
+                        if (CD_TYP_ART.equals(Integer.toString(ArtBean.TYP_ART_VENT_DETAIL))) {
+                            // Création automatique de la prestation
+                            aArt.creationPrestation(myDBSession);
+                            mySalon.setMessage("Info", "Création effectuée. La prestation associée a également été créée.");
+                        }
+                    }
+                    else {
+                        aArt.maj(myDBSession);
+                        if (CD_TYP_ART.equals(Integer.toString(ArtBean.TYP_ART_VENT_DETAIL))) {
+                            // Mise à jour de la prestation correspondante si besoin
+                            aArt.syncWithPrest(myDBSession);
+                        }
+                    }
+
+                    // Cas particulier de l'ajout d'une ligne
+                    if (Action.equals("AjoutLigne")) {
+                        // C'est une nouvelle ligne
+                        MvtStkBean aMvt = new MvtStkBean();
+                        aMvt.setCD_ART(aArt.getCD_ART());
+                        aMvt.setDT_MVT(tab_DT_MVT);
+                        aMvt.setCD_TYP_MVT(tab_CD_TYP_MVT);
+                        aMvt.setQTE(tab_QTE);
+                        aMvt.setVAL_MVT_HT(tab_VAL_MVT_HT);
+                        aMvt.setSTK_AVANT(aArt.getQTE_STK());
+                        aMvt.setVAL_STK_AVANT(aArt.getVAL_STK_HT());
+                        aMvt.create(myDBSession);
+                        // Recharge l'article pour être à jour
+                        aArt = ArtBean.getArtBean(myDBSession, Long.toString(aArt.getCD_ART()));
+                    }
+                    else if (Action.equals("SuppressionLigne")) {
+                        MvtStkBean aMvt = MvtStkBean.getMvtStkBean(myDBSession, Long.toString(aArt.getCD_ART()), tab_DT_MVT_LAST, tab_CD_FACT_LAST);
+
+                        if (aMvt != null) {
+                            aMvt.delete(myDBSession);
+                            // Recharge l'article pour être à jour
+                            aArt = ArtBean.getArtBean(myDBSession, Long.toString(aArt.getCD_ART()));
+                        }
+                    }
+
+                    mySalon.setMessage("Info", "Enregistrement effectué.");
+                    request.setAttribute("Action", "Modification");
+                }
+                catch (Exception e) {
+                    mySalon.setMessage("Erreur", e.toString());
+                    request.setAttribute("Action", Action);
+                }
+            }
+            else if (Action.equals("Duplication")) {
+                // Duplication de la fiche
+
+                /**
+                 * Création du bean et enregistrement
+                 */
+                aArt = new ArtBean();
+
+                aArt.setLIB_ART(LIB_ART);
+                aArt.setCD_CATEG_ART(CD_CATEG_ART);
+                aArt.setCD_TYP_ART(CD_TYP_ART);
+                aArt.setCD_UNIT_MES(CD_UNIT_MES);
+                aArt.setCOMM(COMM);
+                aArt.setLIB_ART(LIB_ART);
+                aArt.setQTE_STK("0");
+                aArt.setQTE_STK_MIN(QTE_STK_MIN);
+                aArt.setREF_ART(REF_ART);
+                aArt.setVAL_STK_HT("0");
+
+                try {
+                    aArt.create(myDBSession);
+
+                    if (CD_TYP_ART.equals("1")) {
+                        // Création automatique de la prestation
+                        aArt.creationPrestation(myDBSession);
+                    }
+
+                    mySalon.setMessage("Info", "Duplication effectuée. Vous travaillez maintenant sur la copie.");
+                    request.setAttribute("Action", "Modification");
+                }
+                catch (Exception e) {
+                    mySalon.setMessage("Erreur", e.toString());
+                    request.setAttribute("Action", Action);
+                }
+            }
+            else if (Action.equals("Suppression")) {
+                // Modification effective de la fiche
+
+                /**
+                 * Création du bean et enregistrement
+                 */
+                aArt = ArtBean.getArtBean(myDBSession, CD_ART);
+
+                try {
+                    // Suppression des lignes Fournisseurs en même temps
+                    aArt.delete(myDBSession);
+                    mySalon.setMessage("Info", "Suppression effectuée.");
+                    // Un bean vide
+                    aArt = new ArtBean();
+                    request.setAttribute("Action", "Creation");
+                }
+                catch (Exception e) {
+                    mySalon.setMessage("Erreur", e.toString());
+                    request.setAttribute("Action", "Modification");
+                }
+            }
+            else {
+                System.out.println("Action non codée : " + Action);
+            }
+        }
+        catch (Exception e) {
+            mySalon.setMessage("Erreur", e.toString());
+            System.out.println("Note : " + e.toString());
+        }
+
+        /**
+         * Reset de la transaction pour la recherche des informations complémentaires
+         */
+        myDBSession.cleanTransaction();
+
+        /**
+         * Recherche les fournisseurs de cet article
+         */
+        Vector listeMvt = new Vector();
+        if ((CD_ART != null) && (CD_ART.length() > 0)) {
+            boolean vide = true;
+
+            while (vide) {
+                String reqSQL = "select * from MVT_STK where CD_ART=" + aArt.getCD_ART() + " order by DT_MVT desc limit " + nbMvt + " offset " + debMvt;
+
+                // Interroge la Base
+                try {
+                    ResultSet aRS = myDBSession.doRequest(reqSQL);
+
+                    while (aRS.next()) {
+                        /**
+                         * Création du bean de consultation
+                         */
+                        MvtStkBean aMvt = new MvtStkBean(aRS);
+                        listeMvt.add(aMvt);
+                        vide = false;
+                    }
+                    aRS.close();
+
+                    if ((vide) && (debMvt > 0)) {
+                        // On est allé trop loin
+                        debMvt -= 10;
+                        if (debMvt < 0) {
+                            debMvt = 0;
+                        }
+                    }
+                    else {
+                        // On s'arrete : Il n'y a rien a afficher
+                        vide = false;
+                    }
+
+                }
+                catch (Exception e) {
+                    vide = false; // Stop la boucle
+                    System.out.println("Erreur dans requète sur clé : " + e.toString());
+                    try {
+                        response.sendError(500);
+                    }
+                    catch (Exception e2) {
+                        System.out.println("Erreur sur sendError : " + e2.toString());
+                    }
+                }
+            }
+        }
+        request.setAttribute("DebMvt", new Integer(debMvt));
+        request.setAttribute("NbMvt", new Integer(nbMvt));
+        request.setAttribute("listeMvt", listeMvt);
+        request.setAttribute("ArtBean", aArt);
+
+        try {
+            // Passe la main à la fiche de création
+            getServletConfig().getServletContext().getRequestDispatcher("/ficArt_Mvt.jsp").forward(request, response);
+
+        }
+        catch (Exception e) {
+            System.out.println("FicArt_Mvt::performTask : Erreur à la redirection : " + e.toString());
+        }
+    }
+}
