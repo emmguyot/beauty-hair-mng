@@ -3,20 +3,25 @@
 		  com.increg.salon.bean.CollabBean,
 		  com.increg.salon.bean.FeteBean,
 		  com.increg.salon.bean.PointageBean" %>
-<jsp:useBean id="SalonSession" scope="session" class="com.increg.salon.bean.SalonSession" />
+<%
+    SalonSession mySalon = (SalonSession) session.getAttribute("SalonSession");
+    if (mySalon == null) {
+        getServletConfig().getServletContext().getRequestDispatcher("/reconnect.html").forward(request, response);
+    }
+%>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
 <html>
 <head>
-<title><%=SalonSession.getMySociete().getRAIS_SOC()%></title>
+<title><%=mySalon.getMySociete().getRAIS_SOC()%></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
 <%@ include file="include/commun.js" %>
 <body class="donnees">
 <div id="coinHD" style="position:absolute; height=52px; z-index:1; visibility:hidden"><a class="nohover" href="javascript:top.close()" onMouseOver="document.quit_gif.src='images/quit2.gif'" onMouseOut="document.quit_gif.src='images/quit.gif'"><img name="quit_gif" src="images/quit.gif" border=0 alt="Fermer la fenêtre"></a></div>
-<h1 align="center"><%=SalonSession.getMySociete().getRAIS_SOC()%></h1>
+<h1 align="center"><%=mySalon.getMySociete().getRAIS_SOC()%></h1>
 <p align="center"><img src="images/perso/Institut.jpg"></p>
-<salon:message salonSession="<%= SalonSession %>" />
+<salon:message salonSession="<%= mySalon %>" />
 <form method="post" action="accueilPointage.srv" name="fiche">
 <p align="center"><span class="Obligatoire">Collaborateurs pr&eacute;sents :</span>
    <input type="hidden" name="Action" value="Modification">

@@ -268,6 +268,7 @@
 				<include name="ListeTypVent.jsp"/>
 				<include name="ListeVente.jsp"/>
 				<include name="Main.jsp"/>
+				<include name="Menu.jsp"/>
 				<include name="Portail.jsp"/>
 				<include name="Reload.jsp"/>
 				<include name="_FicheAchat.jsp"/>
@@ -354,6 +355,7 @@
 				<include name="ficParam.jsp"/>
 				<include name="ficPointage.jsp"/>
 				<include name="ficPrest.jsp"/>
+				<include name="ficPub.jsp"/>
 				<include name="ficPubCSV.jsp"/>
 				<include name="ficPurge.jsp"/>
 				<include name="ficRDV.jsp"/>
@@ -364,6 +366,7 @@
 				<include name="ficSauv.jsp"/>
 				<include name="ficSoc.jsp"/>
 				<include name="ficStat.jsp"/>
+				<include name="ficStatGraph.jsp"/>
 				<include name="ficTrAge.jsp"/>
 				<include name="ficTypMca.jsp"/>
 				<include name="ficTypMvt.jsp"/>
