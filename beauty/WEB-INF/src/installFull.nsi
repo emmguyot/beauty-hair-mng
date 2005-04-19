@@ -2,9 +2,9 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "InCrEG LibertyLook"
-!define PRODUCT_VERSION "2.2"
+!define PRODUCT_VERSION "2.3"
 !define PRODUCT_VERSION_FULL "${PRODUCT_VERSION}.0.0"
-!define PRODUCT_COPYRIGHT "2002-2004 Valérie, Alexandre et Emmanuel Guyot"
+!define PRODUCT_COPYRIGHT "2002-2005 Valérie, Alexandre et Emmanuel Guyot"
 !define PRODUCT_PUBLISHER "SourceForge"
 !define PRODUCT_WEB_SITE "http://beauty-hair-mng.sourceforge.net/"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
@@ -60,7 +60,7 @@ var ICONS_GROUP
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "c:/build/InCrEG_LibertyLook_institut_${PRODUCT_VERSION}.exe"
+OutFile "c:/build/dist/InCrEG_LibertyLook_institut_${PRODUCT_VERSION}.exe"
 InstallDir "c:\InCrEG\"
 ShowInstDetails nevershow
 ShowUnInstDetails nevershow
@@ -92,10 +92,28 @@ Section "Fichiers principaux" SEC00
   File /r "${ORIG_DIR}\tomcat"
   File /r "${ORIG_DIR}\war"
   
+  CreateDirectory "$INSTDIR\Apache\logs"
+  CreateDirectory "$INSTDIR\Apache\proxy"
   CreateDirectory "$INSTDIR\Base"
+  CreateDirectory "$INSTDIR\cygwin\home\InCrEG"
+  CreateDirectory "$INSTDIR\cygwin\usr\local\etc"
+  CreateDirectory "$INSTDIR\cygwin\usr\man\cat1"
+  CreateDirectory "$INSTDIR\cygwin\usr\man\catl"
+  CreateDirectory "$INSTDIR\cygwin\usr\src"
+  CreateDirectory "$INSTDIR\cygwin\usr\ssl\certs"
+  CreateDirectory "$INSTDIR\cygwin\usr\ssl\private"
+  CreateDirectory "$INSTDIR\cygwin\usr\tmp"
+  CreateDirectory "$INSTDIR\cygwin\var\tmp"
+  CreateDirectory "$INSTDIR\jdk\jre\lib\applet"
+  CreateDirectory "$INSTDIR\jdk\jre\lib\ext"
   CreateDirectory "$INSTDIR\Sauvegardes"
   CreateDirectory "$INSTDIR\Temp"
-  
+  CreateDirectory "$INSTDIR\tomcat\conf\auto"
+  CreateDirectory "$INSTDIR\tomcat\logs"
+  CreateDirectory "$INSTDIR\tomcat\modules"
+  CreateDirectory "$INSTDIR\tomcat\webapps"
+  CreateDirectory "$INSTDIR\tomcat\work"
+
   WriteRegStr HKEY_LOCAL_MACHINE "Software\Cygnus Solutions\Cygwin\mounts v2\/" "native" "$INSTDIR/cygwin"
   WriteRegDWORD HKEY_LOCAL_MACHINE "Software\Cygnus Solutions\Cygwin\mounts v2\/" "flags" "0x0a"
   WriteRegStr HKEY_LOCAL_MACHINE "Software\Cygnus Solutions\Cygwin\mounts v2\/usr/bin" "native" "$INSTDIR/cygwin/bin"
