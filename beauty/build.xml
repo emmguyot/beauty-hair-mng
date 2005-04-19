@@ -88,10 +88,10 @@
 				<include name="WEB-INF/src/com/increg/salon/bean/StatBean.java"/>
 				<include name="WEB-INF/src/com/increg/salon/bean/StatHistoBean.java"/>
 				<include name="WEB-INF/src/com/increg/salon/bean/TrAgeBean.java"/>
+				<include name="WEB-INF/src/com/increg/salon/bean/TvaBean.java"/>
 				<include name="WEB-INF/src/com/increg/salon/bean/TypMcaBean.java"/>
 				<include name="WEB-INF/src/com/increg/salon/bean/TypMvtBean.java"/>
 				<include name="WEB-INF/src/com/increg/salon/bean/TypVentBean.java"/>
-				<include name="WEB-INF/src/com/increg/salon/bean/TvaBean.java"/>
 				<include name="WEB-INF/src/com/increg/salon/bean/update/UpdateBean.java"/>
 				<include name="WEB-INF/src/com/increg/salon/bean/update/UpdateBeanV17.java"/>
 				<include name="WEB-INF/src/com/increg/salon/bean/update/UpdateBeanV20.java"/>
@@ -112,8 +112,6 @@
 				<include name="WEB-INF/src/com/increg/salon/bean/graphique/AbstractGraph.java"/>
 				<include name="WEB-INF/src/com/increg/salon/bean/graphique/GraphErreur.java"/>
 				<include name="WEB-INF/src/com/increg/salon/bean/graphique/GraphHisto.java"/>
-
-				<include name="WEB-INF/src/com/increg/salon/bean/light/SalonSessionImpl.java"/>
 
 				<include name="WEB-INF/src/com/increg/salon/bean/test/FactBeanTest.java"/>
 				<include name="WEB-INF/src/com/increg/salon/bean/test/MvtCaisseBeanTest.java"/>
@@ -204,8 +202,6 @@
 				<include name="WEB-INF/src/com/increg/salon/servlet/Restauration.java"/>
 				<include name="WEB-INF/src/com/increg/salon/servlet/RestaurationAuto.java"/>
 				<include name="WEB-INF/src/com/increg/salon/servlet/Sauvegarde.java"/>
-
-				<include name="WEB-INF/src/com/increg/salon/servlet/light/InitPortail.java"/>
 
 				<include name="WEB-INF/src/com/increg/salon/tag/TagAutorisation.java"/>
 				<include name="WEB-INF/src/com/increg/salon/tag/TagBouton.java"/>
@@ -312,31 +308,7 @@
 				<include name="_FicheTypVent.jsp"/>
 				<include name="actionFic.jsp"/>
 				<include name="actionLst.jsp"/>
-				<include name="afaire.html"/>
-				<include name="aideFiche.html"/>
-				<include name="aideFicheAchat.html"/>
-				<include name="aideFicheArt.html"/>
-				<include name="aideFicheCli.html"/>
-				<include name="aideFicheCriterePub.html"/>
-				<include name="aideFicheFact.html"/>
-				<include name="aideFicheInventaire.html"/>
-				<include name="aideFichePaiement.html"/>
-				<include name="aideFicheParam.html"/>
-				<include name="aideFichePurge.html"/>
-				<include name="aideFicheRest.html"/>
-				<include name="aideFicheStat.html"/>
-				<include name="aideFicheTech.html"/>
-				<include name="aideFicheTypVent.html"/>
-				<include name="aideListe.html"/>
-				<include name="aideListeArt.html"/>
-				<include name="aideListeBrouillard.html"/>
-				<include name="aideListeCli.html"/>
-				<include name="aideListeFinJournee.html"/>
-				<include name="aideListeParam.html"/>
-				<include name="aideListeTVA.html"/>
-				<include name="aideTrucEtAstuce.html"/>
 				<include name="choixBase.jsp"/>
-				<include name="contact.html"/>
 				<include name="ficAchat.jsp"/>
 				<include name="ficArt.jsp"/>
 				<include name="ficArt_Common.jsp"/>
@@ -422,12 +394,37 @@
 				<include name="reconnect.html"/>
 
 				<include name="include/*.js"/>
+				<include name="WEB-INF/lib/*.jar"/>
 
 				<include name="config.rgs"/>
 
 				<include name="doc/*"/>
-				<include name="light/ficLight.jsp"/>
 
+				<!-- Par langue -->
+				<include name="afaire.html"/>
+				<include name="aideFiche.html"/>
+				<include name="aideFicheAchat.html"/>
+				<include name="aideFicheArt.html"/>
+				<include name="aideFicheCli.html"/>
+				<include name="aideFicheCriterePub.html"/>
+				<include name="aideFicheFact.html"/>
+				<include name="aideFicheInventaire.html"/>
+				<include name="aideFichePaiement.html"/>
+				<include name="aideFicheParam.html"/>
+				<include name="aideFichePurge.html"/>
+				<include name="aideFicheRest.html"/>
+				<include name="aideFicheStat.html"/>
+				<include name="aideFicheTech.html"/>
+				<include name="aideFicheTypVent.html"/>
+				<include name="aideListe.html"/>
+				<include name="aideListeArt.html"/>
+				<include name="aideListeBrouillard.html"/>
+				<include name="aideListeCli.html"/>
+				<include name="aideListeFinJournee.html"/>
+				<include name="aideListeParam.html"/>
+				<include name="aideListeTVA.html"/>
+				<include name="aideTrucEtAstuce.html"/>
+				<include name="contact.html"/>
 			</fileset>
 		</copy>
 		<chmod perm="-w"><fileset refid="Common Files" /></chmod>
