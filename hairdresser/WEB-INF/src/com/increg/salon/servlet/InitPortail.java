@@ -161,6 +161,7 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
             }
             else {
         		mySession.setAttribute("SalonSession", mySalon);
+				mySalon.setLangue(request.getLocale());
                 
                 IdentBean aIdent = null;
                 if (user != null) {

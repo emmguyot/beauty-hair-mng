@@ -405,7 +405,7 @@
 				<include name="aideFiche.html"/>
 				<include name="aideFicheAchat.html"/>
 				<include name="aideFicheArt.html"/>
-				<include name="aideFicheCli.html"/>
+				<include name="fr/aideFicheCli.html"/>
 				<include name="aideFicheCriterePub.html"/>
 				<include name="aideFicheFact.html"/>
 				<include name="aideFicheInventaire.html"/>

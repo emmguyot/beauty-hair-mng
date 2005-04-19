@@ -52,7 +52,7 @@ function Init() {
 }
 //-->
 </script>
-<h1><img src="images/titres/ficCli.gif" alt=<salon:TimeStamp bean="<%= aCli %>" />></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/ficCli.gif" alt=<salon:TimeStamp bean="<%= aCli %>" />></h1>
 <salon:message salonSession="<%= mySalon %>" />
 <form method="post" action="ficCli.srv" name="fiche">
     <p> 
@@ -407,7 +407,7 @@ function RetourListe()
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideFicheCli.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideFicheCli.html");
 }
 
 </script>
