@@ -24,4 +24,5 @@
 # For example:
 #DEFAULT (echo ""; id; echo %s; date; cat) >> $CVSROOT/CVSROOT/commitlog
 # or
-DEFAULT (echo "----"; id; echo %{tsVv}; date; cat) >> $CVSROOT/CVSROOT/commitlog
+#DEFAULT (echo "----"; id; echo %{tsVv}; date; cat) >> $CVSROOT/CVSROOT/commitlog
+DEFAULT /cvsroot/sitedocs/CVSROOT/cvstools/syncmail %{tsVv} beauty-hair-mng-commit@lists.sourceforge.net
