@@ -1,8 +1,19 @@
 /*
- * Created on 17 sept. 2003
- *
- * To change the template for this generated file go to
- * Window>Preferences>Java>Code Generation>Code and Comments
+ * Bean Session incluant les données d'une session LibertyLook
+ * Copyright (C) 2003-2005 Emmanuel Guyot <See emmguyot on SourceForge>
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
  */
 package com.increg.salon.bean;
 
@@ -10,7 +21,6 @@ import java.sql.ResultSet;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Vector;
@@ -95,11 +105,7 @@ public abstract class SalonSession extends BasicSession {
      */
     protected boolean autoConnect;
     
-    /**
-     * Langue de l'utilisateur
-     */
-    protected Locale langue;
-
+	
     /**
      * SalonSession constructor comment.
      * Constructeur utilisé en cas de perte de session
@@ -117,10 +123,11 @@ public abstract class SalonSession extends BasicSession {
      */
     public SalonSession(String configName) throws Exception {
         super();
+        ResourceBundle resconfig = null;
         try {
             // Vérification du fichier de config
             config = configName;
-            ResourceBundle resconfig = ResourceBundle.getBundle(configName);
+            resconfig = ResourceBundle.getBundle(configName);
             if (resconfig == null) {
                 throw new MissingResourceException("Fichier de licence introuvable", "config.properties", "");
             }
@@ -171,11 +178,6 @@ public abstract class SalonSession extends BasicSession {
                 }
             }
             aRS.close();
-
-            // Récupération du chemin de sauvegarde     
-            java.util.ResourceBundle resconfig =
-                java.util.ResourceBundle.getBundle(configName);
-            //$NON-NLS-1$
 
             remoteEnable = false;
             try {
@@ -685,18 +687,4 @@ public abstract class SalonSession extends BasicSession {
     public void setAutoConnect(boolean newAutoConnect) {
         autoConnect = newAutoConnect;
     }
-    /**
-     * @return Langue de l'utilisateur
-     */
-    public Locale getLangue() {
-        return langue;
-    }
-
-    /**
-     * @param locale Langue de l'utilisateur
-     */
-    public void setLangue(Locale locale) {
-        langue = locale;
-    }
-
 }

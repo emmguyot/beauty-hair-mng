@@ -1,3 +1,21 @@
+/*
+ * Bean de gestion de client
+ * Copyright (C) 2001-2005 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
+
 package com.increg.salon.bean;
 
 import java.sql.ResultSet;
@@ -9,6 +27,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
+import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.TimeStampBean;
 import com.increg.commun.exception.FctlException;
@@ -464,7 +483,7 @@ public class ClientBean extends TimeStampBean implements Comparable {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Création non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.creationKo" + BasicSession.TAG_I18N));
         }
 
     }
@@ -491,7 +510,7 @@ public class ClientBean extends TimeStampBean implements Comparable {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Suppression non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.suppressionKo" + BasicSession.TAG_I18N));
         }
 
     }
@@ -914,7 +933,7 @@ public class ClientBean extends TimeStampBean implements Comparable {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Mise à jour non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.enregistrementKo" + BasicSession.TAG_I18N));
         }
 
     }
@@ -976,7 +995,7 @@ public class ClientBean extends TimeStampBean implements Comparable {
         catch (Exception e) {
             System.out.println("Erreur dans Purge des clients: " + e.toString());
             dbConnect.cleanTransaction();
-            throw new FctlException("Erreur à la purge des clients.");
+            throw new FctlException(BasicSession.TAG_I18N + "clientBean.purgeKo" + BasicSession.TAG_I18N);
         }
         
         // Fin de cette transaction
@@ -1186,8 +1205,7 @@ public class ClientBean extends TimeStampBean implements Comparable {
             catch (Exception e) {
                 System.out.println("Erreur de conversion : " + e.toString());
                 DT_ANNIV = null;
-                throw (
-                    new Exception("Erreur de conversion de la date d'anniversaire"));
+	            throw new Exception(BasicSession.TAG_I18N + "clientBean.formatDateAnniversaire" + BasicSession.TAG_I18N);
             }
         }
         else {
