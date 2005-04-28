@@ -5,11 +5,13 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.BodyContent;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
+import com.increg.commun.BasicSession;
 import com.increg.util.ServletUtil;
 import com.increg.util.SimpleDateFormatEG;
 
@@ -58,7 +60,16 @@ public class TagValeur extends BodyTagSupport {
      */
     protected boolean includeHTML = false;
 
-    /**
+    public TagValeur() {
+		super();
+		// Initialise les attributs par défaut
+		try {
+			doEndTag();
+		} catch (JspException ignored) {
+			// RAS
+		}
+	}
+	/**
      * Effet de bord : Positionne l'attribut Longueur à la longueure de la chaine affichée
      * Creation date: (24/07/2001 21:51:05)
      * @return int
@@ -424,10 +435,20 @@ public class TagValeur extends BodyTagSupport {
         valeurNulle = "";
         expand = false;
         puces = false;
-        format = "dd/MM/yyyy HH:mm:ss";
         timezone = false;
         valeurDate = null;
         heureDec = false;
+		// Par défaut
+		format = "dd/MM/yyyy HH:mm:ss";
+		if (pageContext != null) {
+			HttpSession mySession = pageContext.getSession();
+			if (mySession != null) {
+				BasicSession myBasicSession = (BasicSession) mySession.getAttribute("SalonSession");
+				if (myBasicSession != null) {
+					format = myBasicSession.getMessagesBundle().getString("format.dateDefaut");
+				}
+			}
+		}
         return super.doEndTag();
     }
 
