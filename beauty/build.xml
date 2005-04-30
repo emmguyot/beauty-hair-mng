@@ -394,6 +394,7 @@
 				<include name="reconnect.html"/>
 
 				<include name="include/*.js"/>
+				<include name="include/*.jsp"/>
 				<include name="WEB-INF/lib/*.jar"/>
 
 				<include name="config.rgs"/>

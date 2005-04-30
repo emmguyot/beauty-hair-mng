@@ -12,7 +12,7 @@
 <title><%=mySalon.getMySociete().getRAIS_SOC()%></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
-<script src="include/core.js" language="JavaScript"></script>
+<script src="include/core.jsp" language="JavaScript"></script>
 <script language="JavaScript">
 <!--
 function MM_reloadPage(init) {  //reloads the window if Nav4 resized

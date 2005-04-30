@@ -25,6 +25,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Set;
 
 import com.increg.commun.BasicSession;
@@ -1191,14 +1192,15 @@ public class ClientBean extends TimeStampBean implements Comparable {
      * Insert the method's description here.
      * Creation date: (18/07/2001 22:49:19)
      * @param newDT_ANNIV java.util.Calendar
+     * @param aLocale Configuration pour parser la date
      * @throws Exception En cas d'erreur de conversion
      */
-    public void setDT_ANNIV(String newDT_ANNIV) throws Exception {
+    public void setDT_ANNIV(String newDT_ANNIV, Locale aLocale) throws Exception {
         if (newDT_ANNIV.length() != 0) {
             DT_ANNIV = Calendar.getInstance();
 
             DateFormat formatDate =
-                DateFormat.getDateInstance(DateFormat.SHORT);
+                DateFormat.getDateInstance(DateFormat.SHORT, aLocale);
             try {
                 DT_ANNIV.setTime(formatDate.parse(newDT_ANNIV));
             }

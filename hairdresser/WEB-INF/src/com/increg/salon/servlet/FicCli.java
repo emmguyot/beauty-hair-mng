@@ -111,7 +111,7 @@ public class FicCli extends ConnectedServlet {
                 aCli.setINDIC_VALID(INDIC_VALID);
 
                 try {
-                    aCli.setDT_ANNIV(DT_ANNIV);
+                    aCli.setDT_ANNIV(DT_ANNIV, mySalon.getLangue());
                     aCli.create(myDBSession);
                     mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.creationOk" + BasicSession.TAG_I18N);
                     request.setAttribute("Action", "Modification");
@@ -155,7 +155,7 @@ public class FicCli extends ConnectedServlet {
                 aCli.setINDIC_VALID(INDIC_VALID);
 
                 try {
-                    aCli.setDT_ANNIV(DT_ANNIV);
+                    aCli.setDT_ANNIV(DT_ANNIV, mySalon.getLangue());
                     aCli.maj(myDBSession);
                     mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.enregistrementOk" + BasicSession.TAG_I18N);
                     request.setAttribute("Action", "Modification");
