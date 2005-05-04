@@ -229,7 +229,9 @@
 
 				<include name="WEB-INF/src/com/increg/util/test/MontantTest.java"/>
 				
-				<include name="WEB-INF/salon-taglib.tld"/>
+				<include name="WEB-INF/src/messages*.properties"/>
+
+					<include name="WEB-INF/salon-taglib.tld"/>
 				<include name="WEB-INF/web.xml"/>
 				<include name="WEB-INF/webServer.xml"/>
 
