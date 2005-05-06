@@ -1,4 +1,22 @@
+/*
+ * Bean assurant la gestion d'un collaborateur (Personne assurant les prestations)
+ * Copyright (C) 2001-2005 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.bean;
+
 
 import java.math.BigDecimal;
 import java.sql.ResultSet;
@@ -9,7 +27,9 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Locale;
 
+import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.TimeStampBean;
 import com.increg.commun.exception.FctlException;
@@ -446,7 +466,7 @@ public class CollabBean extends TimeStampBean {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Création non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.creationKo" + BasicSession.TAG_I18N));
         }
     }
 
@@ -468,7 +488,7 @@ public class CollabBean extends TimeStampBean {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Suppression non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.suppressionKo" + BasicSession.TAG_I18N));
         }
 
     }
@@ -822,7 +842,7 @@ public class CollabBean extends TimeStampBean {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Mise à jour non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.enregistrementKo" + BasicSession.TAG_I18N));
         }
 
     }
@@ -858,7 +878,7 @@ public class CollabBean extends TimeStampBean {
         catch (Exception e) {
             System.out.println("Erreur dans Purge des articles: " + e.toString());
             dbConnect.cleanTransaction();
-            throw new FctlException("Erreur à la purge des articles.");
+            throw new FctlException(BasicSession.TAG_I18N + "collabBean.purgeKo" + BasicSession.TAG_I18N);
         }
         
         // Fin de cette transaction
@@ -1171,20 +1191,21 @@ public class CollabBean extends TimeStampBean {
      * Insert the method's description here.
      * Creation date: (22/08/2001 13:23:17)
      * @param newDT_NAIS String
+     * @param aLocale Configuration pour parser la date
      * @throws Exception En cas d'erreur de conversion
      */
-    public void setDT_NAIS(String newDT_NAIS) throws Exception {
+    public void setDT_NAIS(String newDT_NAIS, Locale aLocale) throws Exception {
         if ((newDT_NAIS != null) && (newDT_NAIS.length() != 0)) {
             DT_NAIS = Calendar.getInstance();
 
-            DateFormat formatDate = DateFormat.getDateInstance(DateFormat.SHORT);
+            DateFormat formatDate = DateFormat.getDateInstance(DateFormat.SHORT, aLocale);
             try {
                 DT_NAIS.setTime(formatDate.parse(newDT_NAIS));
             }
             catch (Exception e) {
                 System.out.println("Erreur de conversion : " + e.toString());
                 DT_NAIS = null;
-                throw (new Exception("Erreur de conversion de la date d'anniversaire"));
+                throw (new Exception(BasicSession.TAG_I18N + "clientBean.formatDateAnniversaire" + BasicSession.TAG_I18N));
             }
         }
         else {

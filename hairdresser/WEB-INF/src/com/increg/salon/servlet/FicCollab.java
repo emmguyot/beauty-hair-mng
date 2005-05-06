@@ -74,7 +74,7 @@ public class FicCollab extends ConnectedServlet {
                     aCollab.setTEL(TEL);
                     aCollab.setPORTABLE(PORTABLE);
                     aCollab.setEMAIL(EMAIL);
-                    aCollab.setDT_NAIS(DT_NAIS);
+                    aCollab.setDT_NAIS(DT_NAIS, mySalon.getLangue());
                     aCollab.setNUM_SECU(NUM_SECU);
                     aCollab.setCD_FCT(CD_FCT);
                     aCollab.setCD_TYP_CONTR(CD_TYP_CONTR);
@@ -121,7 +121,7 @@ public class FicCollab extends ConnectedServlet {
                     aCollab.setTEL(TEL);
                     aCollab.setPORTABLE(PORTABLE);
                     aCollab.setEMAIL(EMAIL);
-                    aCollab.setDT_NAIS(DT_NAIS);
+                    aCollab.setDT_NAIS(DT_NAIS, mySalon.getLangue());
                     aCollab.setNUM_SECU(NUM_SECU);
                     aCollab.setCD_FCT(CD_FCT);
                     aCollab.setCD_TYP_CONTR(CD_TYP_CONTR);
