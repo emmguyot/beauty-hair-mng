@@ -1,3 +1,20 @@
+/*
+ * Bean gérant les factures des clients
+ * Copyright (C) 2001-2005 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.bean;
 
 import java.math.BigDecimal;
@@ -5,9 +22,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Set;
 import java.util.Vector;
 
+import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.TimeStampBean;
 import com.increg.commun.exception.FctlException;
@@ -343,7 +362,7 @@ public class FactBean extends TimeStampBean {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Création non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.creationKo" + BasicSession.TAG_I18N));
         }
 
         // Fin de la transaction
@@ -393,7 +412,7 @@ public class FactBean extends TimeStampBean {
             nb = dbConnect.doExecuteSQL(reqs);
 
             if (nb[1] != 1) {
-                throw (new SQLException("Suppression non effectuée"));
+                throw (new SQLException(BasicSession.TAG_I18N + "message.suppressionKo" + BasicSession.TAG_I18N));
             }
         } catch (Exception e) {
             // Fin de la transaction
@@ -564,7 +583,7 @@ public class FactBean extends TimeStampBean {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Mise à jour non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.enregistrementKo" + BasicSession.TAG_I18N));
         }
 
         // Fin de la transaction
@@ -597,7 +616,7 @@ public class FactBean extends TimeStampBean {
         } catch (Exception e) {
             System.out.println("Erreur dans Purge des factures : " + e.toString());
             dbConnect.cleanTransaction();
-            throw new FctlException("Erreur à la purge des factures.");
+            throw new FctlException(BasicSession.TAG_I18N + "factBean.purgeKo" + BasicSession.TAG_I18N);
         }
 
         // Fin de cette transaction
@@ -1268,7 +1287,7 @@ public class FactBean extends TimeStampBean {
                     ClientBean aCli = ClientBean.getClientBean(dbConnect, Long.toString(CD_CLI));
                     if (!aCli.consommeAbonnement(aPrest.getCD_PREST(), aHisto.getQTE().intValue(), undo || (CD_PAIEMENT == 0))) {
                         // Le client n'a pas l'abonnement
-                        throw new FctlException("Le client n'a pas d'abonnement correspondant");
+                        throw new FctlException(BasicSession.TAG_I18N + "factBean.abonnementManquant" + BasicSession.TAG_I18N);
                     } else {
                         aCli.maj(dbConnect);
                     }
@@ -1277,7 +1296,7 @@ public class FactBean extends TimeStampBean {
                     ClientBean aCli = ClientBean.getClientBean(dbConnect, Long.toString(CD_CLI));
                     if (!aCli.consommeAbonnement(aPrest.getCD_PREST_ABONNEMENT(), aHisto.getQTE().multiply(new BigDecimal(aPrest.getCPT_ABONNEMENT())).negate().intValue(), undo || (CD_PAIEMENT == 0))) {
                         // Problème...
-                        throw new FctlException("Impossible d'affecter l'abonnement au client");
+                        throw new FctlException(BasicSession.TAG_I18N + "factBean.abonnementErreur" + BasicSession.TAG_I18N);
                     } else {
                         aCli.maj(dbConnect);
                     }
@@ -1353,7 +1372,7 @@ public class FactBean extends TimeStampBean {
             if ((FACT_HISTO == null) || (FACT_HISTO.equals("N"))) {
                 CD_PAIEMENT = Long.parseLong(newCD_PAIEMENT);
             } else {
-                throw new com.increg.commun.exception.FctlException("<br>Impossible d'affecter un paiement à une facture Historique");
+                throw new FctlException(BasicSession.TAG_I18N + "factBean.paiementHistorique" + BasicSession.TAG_I18N);
             }
         } else {
             CD_PAIEMENT = 0;
@@ -1386,20 +1405,21 @@ public class FactBean extends TimeStampBean {
      * Insert the method's description here.
      * Creation date: (17/08/2001 21:21:11)
      * @param newDT_PREST String
+     * @param aLocale Configuration pour parser la date
      * @throws Exception En cas de format erroné
      */
-    public void setDT_PREST(String newDT_PREST) throws Exception {
+    public void setDT_PREST(String newDT_PREST, Locale aLocale) throws Exception {
 
         if ((newDT_PREST != null) && (newDT_PREST.length() != 0)) {
             DT_PREST = Calendar.getInstance();
 
-            java.text.DateFormat formatDate = java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT);
+            java.text.DateFormat formatDate = java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT, aLocale);
             try {
                 DT_PREST.setTime(formatDate.parse(newDT_PREST));
             } catch (Exception e) {
                 System.out.println("Erreur de conversion : " + e.toString());
                 DT_PREST = null;
-                throw (new Exception("Erreur de conversion de la date de prestation"));
+                throw (new Exception(BasicSession.TAG_I18N + "factBean.formatDatePrestation" + BasicSession.TAG_I18N));
             }
         } else {
             DT_PREST = null;

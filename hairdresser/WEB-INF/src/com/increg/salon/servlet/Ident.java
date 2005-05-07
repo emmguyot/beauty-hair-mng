@@ -98,7 +98,7 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
 	    if (aIdent.getETAT_CPT().equals(IdentBean.ETAT_ACTIF)) {
 			// Identification correcte : On sauvegarde et enchaine
 			mySalon.setMyIdent(aIdent);
-   			mySalon.setMessage ("Erreur", null);
+   			mySalon.setMessage ("Erreur", (String) null);
 	        getServletConfig().getServletContext().getRequestDispatcher("/main.srv").forward(request, response);
 	    }
 	    else {

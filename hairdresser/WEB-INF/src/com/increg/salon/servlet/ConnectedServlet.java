@@ -108,8 +108,8 @@ protected boolean verifCnx(javax.servlet.http.HttpServletRequest request, javax.
 	}
 	else {
 		// RAZ des messages
-		((SalonSession) mySession.getAttribute("SalonSession")).setMessage("Erreur", null);
-		((SalonSession) mySession.getAttribute("SalonSession")).setMessage("Info", null);
+		((SalonSession) mySession.getAttribute("SalonSession")).setMessage("Erreur", (String) null);
+		((SalonSession) mySession.getAttribute("SalonSession")).setMessage("Info", (String) null);
 	}
 	return true;
 }

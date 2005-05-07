@@ -232,10 +232,9 @@ public class CriterePubBean extends TimeStampBean {
 			aRS.close();
 		}
 		catch (Exception e) {
-			throw (new FctlException(e.toString() + " " + BasicSession.TAG_I18N + "criterePubBean.erreurSQL" + BasicSession.TAG_I18N
-					+ reqSubst));
+			throw (new FctlException(BasicSession.TAG_I18N + "criterePubBean.erreurSQL" + BasicSession.TAG_I18N,
+									new Object[] { e.toString(), reqSubst }));
 		}
-		
 		
 		return res;
 	}

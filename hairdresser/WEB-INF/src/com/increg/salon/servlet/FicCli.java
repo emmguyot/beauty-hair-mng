@@ -116,7 +116,7 @@ public class FicCli extends ConnectedServlet {
                     mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.creationOk" + BasicSession.TAG_I18N);
                     request.setAttribute("Action", "Modification");
                 } catch (Exception e) {
-                    mySalon.setMessage("Erreur", e.toString());
+                    mySalon.setMessage("Erreur", e);
                     request.setAttribute("Action", Action);
                 }
                 request.setAttribute("ClientBean", aCli);
@@ -160,7 +160,7 @@ public class FicCli extends ConnectedServlet {
                     mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.enregistrementOk" + BasicSession.TAG_I18N);
                     request.setAttribute("Action", "Modification");
                 } catch (Exception e) {
-                    mySalon.setMessage("Erreur", e.toString());
+                    mySalon.setMessage("Erreur", e);
                     request.setAttribute("Action", Action);
                 }
                 request.setAttribute("ClientBean", aCli);
@@ -179,7 +179,7 @@ public class FicCli extends ConnectedServlet {
                     aCli = new ClientBean();
                     request.setAttribute("Action", "Creation");
                 } catch (Exception e) {
-                    mySalon.setMessage("Erreur", e.toString());
+                    mySalon.setMessage("Erreur", e);
                     request.setAttribute("Action", "Modification");
                 }
                 request.setAttribute("ClientBean", aCli);
@@ -206,7 +206,7 @@ public class FicCli extends ConnectedServlet {
                     aHistoPrest.maj(myDBSession);
                     mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.enregistrementOk" + BasicSession.TAG_I18N);
                 } catch (Exception e) {
-                    mySalon.setMessage("Erreur", e.toString());
+                    mySalon.setMessage("Erreur", e);
                 }
 
                 request.setAttribute("Action", "Modification");
@@ -217,7 +217,7 @@ public class FicCli extends ConnectedServlet {
                 System.out.println("Action non codée : " + Action);
             }
         } catch (Exception e) {
-            mySalon.setMessage("Erreur", e.toString());
+            mySalon.setMessage("Erreur", e);
             System.out.println("Note : " + e.toString());
         }
 

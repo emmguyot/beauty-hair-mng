@@ -17,9 +17,12 @@
  */
 package com.increg.commun;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.ResourceBundle;
+
+import com.increg.commun.exception.FctlException;
 
 /**
  * Bean Session incluant la méchanique de base d'une session
@@ -92,6 +95,40 @@ public class BasicSession {
 			String fin = value.substring(posFin + TAG_I18N.length());
 			
 			value = debut + messagesBundle.getString(cle) + fin;
+		}
+        messages.put(key, value);
+    }
+    /**
+     * Insert the method's description here.
+     * Creation 7 mai 2005 10:45:52
+     * @param key java.lang.String
+     * @param except Exception qui doit être affichée comme message
+     */
+    public void setMessage(String key, Exception except) {
+		
+		String value = null;
+		
+		// La valeur est literale ou à internationnaliser ?
+		if (except != null) {
+			value = except.toString();
+		}
+		
+		if ((value != null) && (value.indexOf(TAG_I18N) >= 0)) {
+			// A internationaliser la clé est encadrée par 1 tag de chaque coté
+			int posDebut = value.indexOf(TAG_I18N);
+			String debut = value.substring(0, posDebut);
+			int posFin = value.indexOf(TAG_I18N, posDebut + 1);
+			String cle = value.substring(posDebut + TAG_I18N.length(), posFin);
+			String fin = value.substring(posFin + TAG_I18N.length());
+		
+			if (except instanceof FctlException) {
+				FctlException theFctlExcept = (FctlException) except;
+				// Ajoute les paramètres dynamiques
+				value = debut + MessageFormat.format(messagesBundle.getString(cle), theFctlExcept.getParamMessage()) + fin;
+			}
+			else {
+				value = debut + messagesBundle.getString(cle) + fin;
+			}
 		}
         messages.put(key, value);
     }

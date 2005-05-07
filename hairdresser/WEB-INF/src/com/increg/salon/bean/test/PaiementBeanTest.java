@@ -2,6 +2,7 @@ package com.increg.salon.bean.test;
 
 import java.sql.ResultSet;
 import java.util.Calendar;
+import java.util.Locale;
 
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.FactBean;
@@ -78,7 +79,7 @@ public class PaiementBeanTest extends TestCase {
             aFact.setCD_CLI(cdCli);
             aFact.setCD_COLLAB(1);
             aFact.setCD_TYP_VENT(1);
-            aFact.setDT_PREST("08/07/2002");
+            aFact.setDT_PREST("08/07/2002", Locale.FRENCH);
             aFact.setFACT_HISTO("N");
             aFact.create(aDBSession);
             

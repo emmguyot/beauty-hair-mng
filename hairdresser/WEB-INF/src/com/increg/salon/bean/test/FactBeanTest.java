@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.Vector;
 
 import com.increg.commun.DBSession;
@@ -86,7 +87,7 @@ public class FactBeanTest extends TestCase {
             aFact.setCD_CLI(CD_CLI);
             aFact.setCD_COLLAB(CD_COLLAB);
             aFact.setCD_TYP_VENT(1);
-            aFact.setDT_PREST(df.format(dateJUnit.getTime()));
+            aFact.setDT_PREST(df.format(dateJUnit.getTime()), Locale.getDefault());
             aFact.setFACT_HISTO("N");
             aFact.create(aDBSession);
 

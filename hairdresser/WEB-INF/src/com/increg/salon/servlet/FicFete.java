@@ -52,7 +52,7 @@ public void performTask(
 			try {
 	            aFete.setCD_FETE(CD_FETE);
 	            aFete.setPRENOM(PRENOM);
-	            aFete.setDT_FETE(DT_FETE);
+	            aFete.setDT_FETE(DT_FETE, mySalon.getLangue());
 
 	            aFete.create(myDBSession);
 	            mySalon.setMessage("Info", "Création effectuée.");
@@ -80,7 +80,7 @@ public void performTask(
 			try {
 	            aFete.setCD_FETE(CD_FETE);
 	            aFete.setPRENOM(PRENOM);
-	            aFete.setDT_FETE(DT_FETE);
+	            aFete.setDT_FETE(DT_FETE, mySalon.getLangue());
 
 	            aFete.maj(myDBSession);
 	            mySalon.setMessage("Info", "Enregistrement effectué.");
@@ -121,7 +121,7 @@ public void performTask(
 
             try {
                 aFete.setPRENOM(PRENOM);
-                aFete.setDT_FETE(DT_FETE);
+	            aFete.setDT_FETE(DT_FETE, mySalon.getLangue());
 
                 aFete.create(myDBSession);
                 mySalon.setMessage("Info", "Duplication effectuée. Vous travaillez maintenant sur la copie.");
