@@ -1,3 +1,20 @@
+/*
+ * Gestion de la licence de l'application (Classe historique du temps d'InCrEG)
+ * Copyright (C) 2001-2005 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.bean;
 
 import java.net.Authenticator;
@@ -5,6 +22,7 @@ import java.net.PasswordAuthentication;
 import java.util.MissingResourceException;
 
 import com.ibm.ejs.security.util.Base64Coder;
+import com.increg.commun.BasicSession;
 import com.increg.commun.exception.UnauthorisedUserException;
 /**
  * Gestion de la licence de l'application : Version sans DLL pour Linux
@@ -94,7 +112,7 @@ public class LicenceBean extends Authenticator {
 
         try {
             if ((RAIS_SOC == null) || (RAIS_SOC.length() == 0)) {
-                throw (new Exception("La société n'est pas initialisée"));
+                throw (new Exception(BasicSession.TAG_I18N + "licenceBean.societeKo" + BasicSession.TAG_I18N));
             }
 
             // Chargement du fichier de config
@@ -110,13 +128,13 @@ public class LicenceBean extends Authenticator {
             }
             catch (MissingResourceException e) {
                 // Pas de licence => Version Light ?
-                throw (new UnauthorisedUserException("Code licence introuvable"));
+                throw (new UnauthorisedUserException(BasicSession.TAG_I18N + "licenceBean.licenceKo" + BasicSession.TAG_I18N));
             }
 
         }
         catch (Exception e) {
             System.out.println("LicenceBean :" + e.toString());
-            throw (new UnauthorisedUserException("Vous n'avez pas la licence adéquate pour utiliser ce logiciel (" + e.toString() + ")"));
+            throw (new UnauthorisedUserException(BasicSession.TAG_I18N + "licenceBean.licenceIllegale" + BasicSession.TAG_I18N +  "(" + e.toString() + ")"));
         }
     }
     
