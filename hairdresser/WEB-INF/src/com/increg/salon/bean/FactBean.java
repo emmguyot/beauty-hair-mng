@@ -1645,7 +1645,7 @@ public class FactBean extends TimeStampBean {
             reqSQL = reqSQL + " and PAIEMENT.DT_PAIEMENT < '" + DT_FIN + "'::date + 1";
         }
                 
-        reqSQL = reqSQL + "group by PREST.CD_PREST";
+        reqSQL = reqSQL + " group by PREST.CD_PREST";
         
         // Interroge la Base
         ResultSet aRS = myDBSession.doRequest(reqSQL);

@@ -59,7 +59,7 @@ MM_reloadPage(true);
 	<a href="ListeJournal.jsp" target="ClientFrame">Journal</a><br>
 	<a href="ListeBrouillard.jsp" target="ClientFrame">Brouillard</a><br>
 	<a href="_FicheReFact.jsp" target="ClientFrame">R&eacute;&eacute;dition factures</a><br>
-	<a href="ListeVente.jsp" target="ClientFrame">R&eacutecap. des ventes</a><br>
+	<a href="ListeVente.jsp" target="ClientFrame">R&eacute;cap. des ventes</a><br>
 	<a href="ListeTVA.jsp" target="ClientFrame">TVA</a><br>
 	<a href="ListeCA.jsp" target="ClientFrame">Chiffre d'affaires</a><br>
 	<a href="ListeFinJournee.jsp" target="ClientFrame">Fin de journée</a><br>
