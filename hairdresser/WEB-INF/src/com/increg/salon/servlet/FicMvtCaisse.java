@@ -54,7 +54,7 @@ public void performTask(
 			try {
 	            aMvt.setCD_MOD_REGL(CD_MOD_REGL);
 	            aMvt.setCD_TYP_MCA(CD_TYP_MCA);
-	            aMvt.setDT_MVT(DT_MVT);
+	            aMvt.setDT_MVT(DT_MVT, mySalon.getLangue());
 	            aMvt.setCOMM(COMM);
 	            aMvt.setMONTANT(MONTANT);
 

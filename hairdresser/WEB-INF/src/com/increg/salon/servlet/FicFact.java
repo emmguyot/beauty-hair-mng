@@ -329,7 +329,7 @@ public class FicFact extends ConnectedServlet {
 
                         aPrest.setCD_CLI(CD_CLI);
                         aPrest.setCOMM(tab_COMM[i]);
-                        aPrest.setDT_PREST(DT_PREST);
+                        aPrest.setDT_PREST(DT_PREST, mySalon.getLangue());
                         aPrest.setNIV_SATISF(tab_NIV_SATISF[i]);
                         aPrest.setPRX_UNIT_TTC(tab_PRX_UNIT_TTC[i]);
                         aPrest.setQTE(tab_QTE[i]);
@@ -353,7 +353,7 @@ public class FicFact extends ConnectedServlet {
                         aPrest.setCD_PREST(tab_CD_PREST[paramSup]);
                         aPrest.setCD_CLI(CD_CLI);
                         aPrest.setCOMM(tab_COMM[paramSup]);
-                        aPrest.setDT_PREST(DT_PREST);
+                        aPrest.setDT_PREST(DT_PREST, mySalon.getLangue());
                         aPrest.setNIV_SATISF(tab_NIV_SATISF[paramSup]);
                         aPrest.setPRX_UNIT_TTC(tab_PRX_UNIT_TTC[paramSup]);
                         aPrest.setQTE(tab_QTE[paramSup]);
