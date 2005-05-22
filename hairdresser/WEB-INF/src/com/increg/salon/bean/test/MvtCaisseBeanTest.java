@@ -3,6 +3,7 @@ package com.increg.salon.bean.test;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Vector;
 
 import com.increg.commun.DBSession;
@@ -57,7 +58,7 @@ public class MvtCaisseBeanTest extends TestCase {
             aPaiement.setPRX_TOT_TTC("1001.02");
             aPaiement.create(aDBSession);
             
-            aMvt1.setDT_MVT("06/07/2002 12:12:12");
+            aMvt1.setDT_MVT("06/07/2002 12:12:12", Locale.getDefault());
             aMvt1.setCD_PAIEMENT(cdPaiement);
             aMvt1.setCD_MOD_REGL(ModReglBean.MOD_REGL_ESP);
             aMvt1.setCD_TYP_MCA(1); // Encaissement
@@ -66,7 +67,7 @@ public class MvtCaisseBeanTest extends TestCase {
             aMvt1.setCOMM("Blabla");
             aMvt1.create(aDBSession);
     
-            aMvt2.setDT_MVT("01/07/2002 12:12:13");
+            aMvt2.setDT_MVT("01/07/2002 12:12:13", Locale.getDefault());
             aMvt2.setCD_PAIEMENT(cdPaiement);
             aMvt2.setCD_MOD_REGL(ModReglBean.MOD_REGL_ESP);
             aMvt2.setCD_TYP_MCA(1); // Encaissement
@@ -75,7 +76,7 @@ public class MvtCaisseBeanTest extends TestCase {
             aMvt2.setCOMM("Blabla");
             aMvt2.create(aDBSession);
     
-            aMvt3.setDT_MVT("01/07/2002 12:12:12");
+            aMvt3.setDT_MVT("01/07/2002 12:12:12", Locale.getDefault());
             aMvt3.setCD_PAIEMENT(cdPaiement);
             aMvt3.setCD_MOD_REGL(ModReglBean.MOD_REGL_ESP);
             aMvt3.setCD_TYP_MCA(1); // Encaissement
@@ -235,7 +236,7 @@ public class MvtCaisseBeanTest extends TestCase {
             
             // Création d'un vieux mouvement
             aMvt = new MvtCaisseBean();
-            aMvt.setDT_MVT("01/01/1998 00:00:00");
+            aMvt.setDT_MVT("01/01/1998 00:00:00", Locale.getDefault());
             aMvt.setCD_PAIEMENT(0);
             aMvt.setDEVISE("EUR");
             aMvt.setCD_MOD_REGL(10);
