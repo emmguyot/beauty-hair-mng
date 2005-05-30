@@ -1,3 +1,20 @@
+/*
+ * Bean de gestion d'un mouvement de stock
+ * Copyright (C) 2001-2005 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.bean;
 
 import java.sql.*;
@@ -273,7 +290,7 @@ public class MvtStkBean extends TimeStampBean {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Création non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.creationKo" + BasicSession.TAG_I18N));
         }
 
         // Fin de la transaction
@@ -307,7 +324,7 @@ public class MvtStkBean extends TimeStampBean {
         while (aRS.next()) {
             java.util.Date lastDT_MVT = aRS.getTimestamp(1);
             if (lastDT_MVT.compareTo(DT_MVT.getTime()) != 0) {
-                throw (new FctlException("Vous ne pouvez pas supprimer ce mouvement. Supprimez d'abord les plus récents."));
+                throw (new FctlException(BasicSession.TAG_I18N + "mvtStkBean.deleteKo" + BasicSession.TAG_I18N));
             }
         }
         aRS.close();
@@ -322,7 +339,7 @@ public class MvtStkBean extends TimeStampBean {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Suppression non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.suppressionOk" + BasicSession.TAG_I18N));
         }
 
         // Inverse la mise à jour de l'article
@@ -356,7 +373,7 @@ public class MvtStkBean extends TimeStampBean {
      */
     public void maj(DBSession dbConnect) throws com.increg.commun.exception.FctlException {
 
-        throw (new com.increg.commun.exception.FctlException("Mise à jour interdite"));
+        throw (new com.increg.commun.exception.FctlException(BasicSession.TAG_I18N + "mvtStkBean.noUpdate" + BasicSession.TAG_I18N));
     }
 
     /**
@@ -618,7 +635,7 @@ public class MvtStkBean extends TimeStampBean {
         catch (Exception e) {
             System.out.println("Erreur dans Purge des mouvements de stock : " + e.toString());
             dbConnect.cleanTransaction();
-            throw new FctlException("Erreur à la purge des mouvements de stock.");
+            throw new FctlException(BasicSession.TAG_I18N + "mvtStkBean.purgeKo" + BasicSession.TAG_I18N);
         }
         
         // Fin de cette transaction
@@ -673,21 +690,22 @@ public class MvtStkBean extends TimeStampBean {
      * Insert the method's description here.
      * Creation date: (16/09/2001 19:31:27)
      * @param newDT_MVT String
+     * @param aLocale Configuration pour parser la date
      * @exception Exception en cas d'erreur de format de date
      */
-    public void setDT_MVT(String newDT_MVT) throws Exception {
+    public void setDT_MVT(String newDT_MVT, Locale aLocale) throws Exception {
 
         if ((newDT_MVT != null) && (newDT_MVT.length() != 0)) {
             DT_MVT = Calendar.getInstance();
 
-            java.text.DateFormat formatDate = java.text.DateFormat.getDateTimeInstance(java.text.DateFormat.SHORT, java.text.DateFormat.MEDIUM);
+            java.text.DateFormat formatDate = java.text.DateFormat.getDateTimeInstance(java.text.DateFormat.SHORT, java.text.DateFormat.MEDIUM, aLocale);
             try {
                 DT_MVT.setTime(formatDate.parse(newDT_MVT));
             }
             catch (Exception e) {
                 System.out.println("Erreur de conversion : " + e.toString());
                 DT_MVT = null;
-                throw (new Exception("Erreur de conversion de la date du mouvement"));
+                throw (new Exception(BasicSession.TAG_I18N + "mvtStkBean.formatDateMvt" + BasicSession.TAG_I18N));
             }
         }
         else {

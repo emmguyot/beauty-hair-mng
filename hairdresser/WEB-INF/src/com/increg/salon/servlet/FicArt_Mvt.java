@@ -177,7 +177,7 @@ public class FicArt_Mvt extends ConnectedServlet {
                         // C'est une nouvelle ligne
                         MvtStkBean aMvt = new MvtStkBean();
                         aMvt.setCD_ART(aArt.getCD_ART());
-                        aMvt.setDT_MVT(tab_DT_MVT);
+                        aMvt.setDT_MVT(tab_DT_MVT, mySalon.getLangue());
                         aMvt.setCD_TYP_MVT(tab_CD_TYP_MVT);
                         aMvt.setQTE(tab_QTE);
                         aMvt.setVAL_MVT_HT(tab_VAL_MVT_HT);
