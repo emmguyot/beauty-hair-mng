@@ -1,3 +1,20 @@
+/*
+ * Création d'un paiement 
+ * Copyright (C) 2001-2005 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.servlet;
 
 import java.sql.ResultSet;
@@ -13,7 +30,8 @@ import com.increg.salon.bean.SalonSession;
 import com.increg.salon.request.EditionFacture;
 
 /**
- * Création d'un paiement Creation date: (10/09/2001 21:47:36)
+ * Création d'un paiement 
+ * Creation date: (10/09/2001 21:47:36)
  * 
  * @author Emmanuel GUYOT <emmguyot@wanadoo.fr>
  */
@@ -52,15 +70,15 @@ public class FicPaiement extends ConnectedServlet {
                 // Première phase de création
                 request.setAttribute("Action", "Creation");
                 // Un bean vide
-                aPaiement = new PaiementBean();
+                aPaiement = new PaiementBean(mySalon.getMessagesBundle());
                 aPaiement.setDT_PAIEMENT(aPaiement.getDT_PAIEMENT_defaut());
             } else if (Action.equals("Rafraichissement")) {
-                aPaiement = new PaiementBean();
+                aPaiement = new PaiementBean(mySalon.getMessagesBundle());
 
                 try {
                     aPaiement.setCD_PAIEMENT(CD_PAIEMENT);
                     aPaiement.setCD_MOD_REGL(CD_MOD_REGL);
-                    aPaiement.setDT_PAIEMENT(DT_PAIEMENT);
+                    aPaiement.setDT_PAIEMENT(DT_PAIEMENT, mySalon.getLangue());
 
                     // enregistre les paiements des factures
                     for (int i = 0; i < listeCoche.size(); i++) {
@@ -87,12 +105,12 @@ public class FicPaiement extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                aPaiement = new PaiementBean();
+                aPaiement = new PaiementBean(mySalon.getMessagesBundle());
 
                 try {
                     aPaiement.setCD_PAIEMENT(CD_PAIEMENT);
                     aPaiement.setCD_MOD_REGL(CD_MOD_REGL);
-                    aPaiement.setDT_PAIEMENT(DT_PAIEMENT);
+                    aPaiement.setDT_PAIEMENT(DT_PAIEMENT, mySalon.getLangue());
 
                     aPaiement.create(myDBSession);
 
@@ -132,7 +150,7 @@ public class FicPaiement extends ConnectedServlet {
                 try {
                     aPaiement.setCD_PAIEMENT(CD_PAIEMENT);
                     aPaiement.setCD_MOD_REGL(CD_MOD_REGL);
-                    aPaiement.setDT_PAIEMENT(DT_PAIEMENT);
+                    aPaiement.setDT_PAIEMENT(DT_PAIEMENT, mySalon.getLangue());
 
                     aPaiement.maj(myDBSession);
 
@@ -213,7 +231,7 @@ public class FicPaiement extends ConnectedServlet {
                     aPaiement.delete(myDBSession);
                     mySalon.setMessage("Info", "Suppression effectuée.");
                     // Un bean vide
-                    aPaiement = new PaiementBean();
+                    aPaiement = new PaiementBean(mySalon.getMessagesBundle());
                     request.setAttribute("Action", "Creation");
                 } catch (Exception e) {
                     mySalon.setMessage("Erreur", e.toString());

@@ -1,8 +1,19 @@
 /*
- * Created on 14 avr. 2004
- *
- * To change the template for this generated file go to
- * Window>Preferences>Java>Code Generation>Code and Comments
+ * 
+ * Copyright (C) 2001-2005 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
  */
 package com.increg.salon.bean.test;
 
@@ -12,6 +23,7 @@ import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Vector;
 
 import com.increg.commun.DBSession;
@@ -75,7 +87,7 @@ public class FactBeanTest extends TestCase {
     public void testCalculTVARepartie1() throws Exception {
         
         FactBean aFact = new FactBean();
-        PaiementBean aPaiement = new PaiementBean();
+        PaiementBean aPaiement = new PaiementBean(ResourceBundle.getBundle("messages"));
         try {
             DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
             Calendar dateJUnit = Calendar.getInstance();

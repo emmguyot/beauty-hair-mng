@@ -80,7 +80,7 @@ public void performTask(
 			// Première phase de création
 			request.setAttribute("Action", "Creation");
 			// Un bean vide
-			aArt = new ArtBean();
+			aArt = new ArtBean(mySalon.getMessagesBundle());
 		}
 		else if (Action.equals("Creation")) {
 			// Crée réellement l'article
@@ -88,7 +88,7 @@ public void performTask(
 			/**
 			 * Création du bean et enregistrement
 			 */
-			aArt = new ArtBean();
+			aArt = new ArtBean(mySalon.getMessagesBundle());
 			aArt.setCD_ART(CD_ART);
 			aArt.setCD_CATEG_ART(CD_CATEG_ART);
 			aArt.setCD_TYP_ART(CD_TYP_ART);
@@ -139,7 +139,7 @@ public void performTask(
 			 */
             if ((CD_ART == null) || (CD_ART.length() == 0) || (CD_ART.equals("0"))) {
 				// On est en création : le Bean est créé de zero
-				aArt = new ArtBean();
+				aArt = new ArtBean(mySalon.getMessagesBundle());
 			}
 			else {
 				// Recharge à partir de la base
@@ -223,7 +223,7 @@ public void performTask(
 			/**
 			 * Création du bean et enregistrement
 			 */
-			aArt = new ArtBean();
+			aArt = new ArtBean(mySalon.getMessagesBundle());
 
 			aArt.setLIB_ART(LIB_ART);
 			aArt.setCD_CATEG_ART(CD_CATEG_ART);
@@ -281,7 +281,7 @@ public void performTask(
 	            aArt.delete(myDBSession);
 	            mySalon.setMessage("Info", "Suppression effectuée.");
 	            // Un bean vide
-	            aArt = new ArtBean();
+	            aArt = new ArtBean(mySalon.getMessagesBundle());
 	            request.setAttribute("Action", "Creation");
 	        }	
 			catch (Exception e) {

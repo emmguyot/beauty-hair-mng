@@ -88,9 +88,10 @@ public class ArtBean extends TimeStampBean {
     
 	/**
 	 * ArtBean constructor comment.
+	 * @param rb Messages à utiliser
 	 */
-	public ArtBean() {
-		super();
+	public ArtBean(ResourceBundle rb) {
+		super(rb);
         INDIC_MIXTE = "N";
         INDIC_PERIM = "N";
         LIB_ART_orig = "";
@@ -832,7 +833,9 @@ public class ArtBean extends TimeStampBean {
         aPrest.setCD_UNIT_MES(CD_UNIT_MES);
         aPrest.setCD_ART(CD_ART);
         aPrest.setINDIC_PERIM(INDIC_PERIM);
-        aPrest.setCOMM(BasicSession.TAG_I18N + "artBean.commentaireDuplication" + BasicSession.TAG_I18N);
+		if (message != null) {
+			aPrest.setCOMM(message.getString("artBean.commentaireDuplication"));
+		}
     
         aPrest.create(myDBSession);
     }

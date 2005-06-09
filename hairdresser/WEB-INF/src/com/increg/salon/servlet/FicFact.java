@@ -1,3 +1,20 @@
+/*
+ * Création/Modification/Suppression d'une Facture / Historique
+ * Copyright (C) 2001-2005 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.servlet;
 
 import java.util.List;
@@ -18,8 +35,8 @@ import com.increg.salon.bean.SalonSession;
 import com.increg.salon.request.EditionFacture;
 
 /**
- * Création/Modification/Suppression d'une Facture / Historique Creation date:
- * (17/08/2001 22:51:52)
+ * Création/Modification/Suppression d'une Facture / Historique
+ * Creation date: (17/08/2001 22:51:52)
  * 
  * @author Emmanuel GUYOT <emmguyot@wanadoo.fr>
  */
@@ -123,7 +140,7 @@ public class FicFact extends ConnectedServlet {
                 aFact.setCD_CLI(CD_CLI);
                 aFact.setFACT_HISTO(FACT_HISTO);
 
-                aPaiement = new PaiementBean();
+                aPaiement = new PaiementBean(mySalon.getMessagesBundle());
             }
             // *****************************************************************************************
             else if (Action.equals("Creation")) {
@@ -133,7 +150,7 @@ public class FicFact extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 aFact = new FactBean();
-                aPaiement = new PaiementBean();
+                aPaiement = new PaiementBean(mySalon.getMessagesBundle());
 
                 try {
                     aFact.setCD_CLI(CD_CLI);
@@ -186,7 +203,7 @@ public class FicFact extends ConnectedServlet {
                     aPaiement = PaiementBean.getPaiementBean(myDBSession, Long
                             .toString(aFact.getCD_PAIEMENT()));
                 } else {
-                    aPaiement = new PaiementBean();
+                    aPaiement = new PaiementBean(mySalon.getMessagesBundle());
                 }
 
             }
@@ -222,7 +239,7 @@ public class FicFact extends ConnectedServlet {
                 }
 
                 // Initialisation par défaut
-                aPaiement = new PaiementBean();
+                aPaiement = new PaiementBean(mySalon.getMessagesBundle());
                 try {
                     myDBSession.setDansTransactions(true);
 
@@ -249,12 +266,12 @@ public class FicFact extends ConnectedServlet {
                                     myDBSession, CD_PAIEMENT);
                         } else {
                             // Nouveau Paiement
-                            aPaiement = new PaiementBean();
+                            aPaiement = new PaiementBean(mySalon.getMessagesBundle());
                         }
 
                         if ((nbPrest > 0) || (Action.equals("AjoutLigne"))) {
                             aPaiement.setCD_MOD_REGL(CD_MOD_REGL);
-                            aPaiement.setDT_PAIEMENT(DT_PAIEMENT);
+                            aPaiement.setDT_PAIEMENT(DT_PAIEMENT, mySalon.getLangue());
 
                             if ((CD_PAIEMENT != null)
                                     && (CD_PAIEMENT.length() > 0)
@@ -309,7 +326,7 @@ public class FicFact extends ConnectedServlet {
 
                     if (paiementASuppr) {
                         aPaiement.delete(myDBSession);
-                        aPaiement = new PaiementBean();
+                        aPaiement = new PaiementBean(mySalon.getMessagesBundle());
                     }
 
                     // Nouvelle facture ? Ajout au encours si ce n'est pas un
@@ -381,7 +398,7 @@ public class FicFact extends ConnectedServlet {
                         // Reset du paiement au cas ou la création du paiement a
                         // déjà été faite
                         aFact.setCD_PAIEMENT(0);
-                        aPaiement = new PaiementBean();
+                        aPaiement = new PaiementBean(mySalon.getMessagesBundle());
                     }
                     if ((CD_FACT == null) || (CD_FACT.length() == 0)
                             || (CD_FACT.equals("0"))) {
@@ -462,7 +479,7 @@ public class FicFact extends ConnectedServlet {
                 aFact = FactBean.getFactBean(myDBSession, CD_FACT);
 
                 // Initialisation par défaut
-                aPaiement = new PaiementBean();
+                aPaiement = new PaiementBean(mySalon.getMessagesBundle());
 
                 try {
                     // Vérification si paiement regroupé ou mouvements de stock
@@ -531,7 +548,7 @@ public class FicFact extends ConnectedServlet {
                         aFact.setCD_CLI(CD_CLI);
                         aFact.setFACT_HISTO("N");
 
-                        aPaiement = new PaiementBean();
+                        aPaiement = new PaiementBean(mySalon.getMessagesBundle());
 
                         request.setAttribute("Action", "Creation");
                     }

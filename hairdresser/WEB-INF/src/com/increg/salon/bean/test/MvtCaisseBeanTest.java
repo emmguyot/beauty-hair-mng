@@ -1,9 +1,27 @@
+/*
+ * Test des mouvements de caisse 
+ * Copyright (C) 2001-2005 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.bean.test;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Vector;
 
 import com.increg.commun.DBSession;
@@ -46,7 +64,7 @@ public class MvtCaisseBeanTest extends TestCase {
        
         long cdPaiement = 999999;
 
-        PaiementBean aPaiement = new PaiementBean();
+        PaiementBean aPaiement = new PaiementBean(ResourceBundle.getBundle("messages"));
         MvtCaisseBean aMvt1 = new MvtCaisseBean();        
         MvtCaisseBean aMvt2 = new MvtCaisseBean();        
         MvtCaisseBean aMvt3 = new MvtCaisseBean();        
@@ -54,7 +72,7 @@ public class MvtCaisseBeanTest extends TestCase {
             // Creation du Paiement
             aPaiement.setCD_MOD_REGL(ModReglBean.MOD_REGL_ESP);
             aPaiement.setCD_PAIEMENT(cdPaiement);
-            aPaiement.setDT_PAIEMENT("06/07/2002");
+            aPaiement.setDT_PAIEMENT("06/07/2002", Locale.getDefault());
             aPaiement.setPRX_TOT_TTC("1001.02");
             aPaiement.create(aDBSession);
             
