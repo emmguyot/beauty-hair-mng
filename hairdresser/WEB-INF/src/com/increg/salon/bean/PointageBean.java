@@ -1,13 +1,37 @@
+/*
+ * Bean de gestion de collaborateur 
+ * Copyright (C) 2001-2005 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.bean;
 
-import java.util.*;
-import java.sql.*;
+import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Vector;
 
-import com.increg.commun.exception.*;
-import com.increg.commun.*;
-import java.text.*;
-import com.increg.util.*;
-import java.math.*;
+import com.increg.commun.BasicSession;
+import com.increg.commun.DBSession;
+import com.increg.commun.TimeStampBean;
+import com.increg.commun.exception.FctlException;
+import com.increg.util.SimpleDateFormatEG;
 /**
  * Bean de gestion de collaborateur
  * Creation date: (22/08/2001 13:17:38)
@@ -209,7 +233,7 @@ public class PointageBean extends TimeStampBean {
                 nb = dbConnect.doExecuteSQL(reqs);
 
                 if (nb[0] != 1) {
-                    throw (new SQLException("Création non effectuée"));
+                    throw (new SQLException(BasicSession.TAG_I18N + "message.creationKo" + BasicSession.TAG_I18N));
                 }
             }
         }
@@ -241,7 +265,7 @@ public class PointageBean extends TimeStampBean {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Suppression non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.suppressionKo" + BasicSession.TAG_I18N));
         }
 
     }
@@ -343,7 +367,7 @@ public class PointageBean extends TimeStampBean {
                 nb = dbConnect.doExecuteSQL(reqs);
 
                 if (nb[0] != 1) {
-                    throw (new SQLException("Mise à jour non effectuée"));
+                    throw (new SQLException(BasicSession.TAG_I18N + "message.enregistrementKo" + BasicSession.TAG_I18N));
                 }
             }
         }
@@ -741,10 +765,10 @@ public class PointageBean extends TimeStampBean {
             catch (Exception e) {
                 System.out.println("Erreur de conversion : " + e.toString());
                 DT_DEBUT = null;
-                throw (new Exception("Erreur de conversion de la date de début"));
+                throw (new Exception(BasicSession.TAG_I18N + "pointageBean.formatDateDebut" + BasicSession.TAG_I18N));
             }
             if ((DT_DEBUT != null) && (DT_FIN != null) && (!DT_DEBUT.before(DT_FIN))) {
-                throw new FctlException("La date de fin doit être après la date de début.");
+                throw new FctlException(BasicSession.TAG_I18N + "pointageBean.chronoDebutFin" + BasicSession.TAG_I18N);
             }
         }
         else {
@@ -773,10 +797,10 @@ public class PointageBean extends TimeStampBean {
             catch (Exception e) {
                 System.out.println("Erreur de conversion : " + e.toString());
                 DT_FIN = null;
-                throw (new Exception("Erreur de conversion de la date de fin"));
+                throw (new Exception(BasicSession.TAG_I18N + "pointageBean.formatDateFin" + BasicSession.TAG_I18N));
             }
             if ((DT_DEBUT != null) && (DT_FIN != null) && (!DT_DEBUT.before(DT_FIN))) {
-                throw new FctlException("La date de fin doit être après la date de début.");
+                throw new FctlException(BasicSession.TAG_I18N + "pointageBean.chronoDebutFin" + BasicSession.TAG_I18N);
             }
         }
         else {
@@ -844,7 +868,7 @@ public class PointageBean extends TimeStampBean {
         if (!ok) {
             throw (
                 new com.increg.commun.exception.FctlException(
-                    "Ce pointage recouvre un autre pointage : Ceci est impossible."));
+                    BasicSession.TAG_I18N + "pointageBean.recouvrement" + BasicSession.TAG_I18N));
         }
 
         return ok;
@@ -877,7 +901,7 @@ public class PointageBean extends TimeStampBean {
         catch (Exception e) {
             System.out.println("Erreur dans Purge des pointages : " + e.toString());
             dbConnect.cleanTransaction();
-            throw new FctlException("Erreur à la purge des pointages.");
+            throw new FctlException(BasicSession.TAG_I18N + "pointageBean.purgeKo" + BasicSession.TAG_I18N);
         }
         
         // Fin de cette transaction
