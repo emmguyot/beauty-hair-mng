@@ -129,7 +129,7 @@ public abstract class SalonSession extends BasicSession {
             config = configName;
             resconfig = ResourceBundle.getBundle(configName);
             if (resconfig == null) {
-                throw new MissingResourceException("Fichier de licence introuvable", "config.properties", "");
+                throw new MissingResourceException(BasicSession.TAG_I18N + "salonSession.noBundle" + BasicSession.TAG_I18N, "config.properties", "");
             }
         } catch (MissingResourceException e) {
             // Fichier de configuration invalide ou introuvable
@@ -150,13 +150,13 @@ public abstract class SalonSession extends BasicSession {
                 // Il faut proposer la restauration de la base
                 myDBSession = null;
                 mySociete = null;
-                throw new ReloadNeededException("Mise à jour de la base en erreur :" + e.toString()); 
+                throw new ReloadNeededException(BasicSession.TAG_I18N + "salonSession.majBaseKo" + BasicSession.TAG_I18N + e.toString()); 
             }
 
             // Vérification de la base
             if (!majBase.checkDatabase(myDBSession)) {
                 System.out.println("La base de données n'est pas cohérente");
-                throw new ReloadNeededException("La base de données n'est pas cohérente");
+                throw new ReloadNeededException(BasicSession.TAG_I18N + "salonSession.baseCorrupt" + BasicSession.TAG_I18N);
             }
                         
             // Initialisation de la société
@@ -212,7 +212,7 @@ public abstract class SalonSession extends BasicSession {
             e.printStackTrace();
             myDBSession = null;
             mySociete = null;
-            throw (new Exception("Démarrage impossible"));
+            throw (new Exception(BasicSession.TAG_I18N + "salonSession.startKo" + BasicSession.TAG_I18N + e.toString()));
         }
         
     }

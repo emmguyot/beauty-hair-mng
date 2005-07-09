@@ -54,7 +54,7 @@ public class FicStat extends ConnectedServlet {
                 // Première phase de création
                 request.setAttribute("Action", "Creation");
                 // Un bean vide
-                aStat = new StatBean();
+                aStat = new StatBean(mySalon.getMessagesBundle());
             }
             else if (Action.equals("Creation")) {
                 // Crée réellement la stat
@@ -62,7 +62,7 @@ public class FicStat extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                aStat = new StatBean();
+                aStat = new StatBean(mySalon.getMessagesBundle());
                 aStat.setLIB_STAT(LIB_STAT);
                 aStat.setREQ_SQL(REQ_SQL);
                 aStat.setLABEL_X(LABEL_X);
@@ -114,7 +114,7 @@ public class FicStat extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                aStat = new StatBean();
+                aStat = new StatBean(mySalon.getMessagesBundle());
 
                 aStat.setLIB_STAT(LIB_STAT);
                 aStat.setREQ_SQL(REQ_SQL);
@@ -154,7 +154,7 @@ public class FicStat extends ConnectedServlet {
                     aStat.delete(myDBSession);
                     mySalon.setMessage("Info", "Suppression effectuée.");
                     // Un bean vide
-                    aStat = new StatBean();
+                    aStat = new StatBean(mySalon.getMessagesBundle());
                     request.setAttribute("Action", "Creation");
                 }
                 catch (Exception e) {

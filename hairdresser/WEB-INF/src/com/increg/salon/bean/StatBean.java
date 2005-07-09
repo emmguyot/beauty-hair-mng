@@ -1,9 +1,27 @@
+/*
+ * Bean de gestion de statistiques génériques 
+ * Copyright (C) 2001-2005 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.bean;
 import com.increg.commun.exception.FctlException;
 import com.increg.commun.exception.NoImplementationException;
 import com.increg.util.*;
 import com.increg.commun.*;
 
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.sql.*;
@@ -42,8 +60,8 @@ public class StatBean extends TimeStampBean {
 /**
  * ClientBean constructor comment.
  */
-public StatBean() {
-	super();
+public StatBean(ResourceBundle rb) {
+	super(rb);
 }
 
 /**
@@ -180,7 +198,7 @@ public void create(DBSession dbConnect) throws java.sql.SQLException {
 	nb = dbConnect.doExecuteSQL(reqs);
 
 	if (nb[0] != 1) {
-		throw (new SQLException("Création non effectuée"));
+		throw (new SQLException(BasicSession.TAG_I18N + "message.creationKo" + BasicSession.TAG_I18N));
 	}	
 }
 
@@ -202,7 +220,7 @@ public void delete(DBSession dbConnect) throws java.sql.SQLException {
 	nb = dbConnect.doExecuteSQL(reqs);
 
 	if (nb[0] != 1) {
-		throw (new SQLException("Suppression non effectuée"));
+		throw (new SQLException(BasicSession.TAG_I18N + "message.suppressionKo" + BasicSession.TAG_I18N));
 	}	
 		
 }
@@ -462,7 +480,11 @@ public Vector regroupeData (Vector lstJeuValeur, String periode) throws NoImplem
             // Rien à faire
             newLstJeuValeur = lstJeuValeur;
         } else {
-            throw new NoImplementationException("Le traitement de regroupement pour " + anX.getClass().getName() + " n'est pas encore prêt.");
+
+			String msg = MessageFormat.format(message.getString("statBean.regroupementNoImplementation"), 
+					new Object[] { anX.getClass().getName() });
+        	
+            throw new NoImplementationException(msg);
         }
         
     }
@@ -730,7 +752,7 @@ public void maj(DBSession dbConnect) throws java.sql.SQLException {
 	nb = dbConnect.doExecuteSQL(reqs);
 
 	if (nb[0] != 1) {
-		throw (new SQLException("Mise à jour non effectuée"));
+		throw (new SQLException(BasicSession.TAG_I18N + "message.enregistrementKo" + BasicSession.TAG_I18N));
 	}
 
 }
