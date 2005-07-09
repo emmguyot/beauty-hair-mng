@@ -66,7 +66,7 @@ public class AccueilPointage extends ConnectedServlet {
                     PointageBean.getPointageBean(
                         myDBSession,
                         Integer.toString(aCollab.getCD_COLLAB()),
-                        formatDate.formatEG(Calendar.getInstance().getTime()));
+                        formatDate.formatEG(Calendar.getInstance().getTime()), mySalon.getLangue());
 
                 if ((aPointage == null)
                     || ((aPointage.getDT_FIN() != null) && (aPointage.getDT_FIN().getTime().compareTo(new java.util.Date()) < 0))) {

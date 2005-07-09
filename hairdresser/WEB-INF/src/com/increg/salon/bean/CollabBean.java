@@ -23,6 +23,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -189,7 +190,7 @@ public class CollabBean extends TimeStampBean {
             }
         }
         try {
-            java.util.Date DtNais = rs.getDate("DT_NAIS");
+            Date DtNais = rs.getDate("DT_NAIS");
             if (DtNais != null) {
                 DT_NAIS = Calendar.getInstance();
                 DT_NAIS.setTime(DtNais);
@@ -854,7 +855,7 @@ public class CollabBean extends TimeStampBean {
      * @exception FctlException En cas d'erreur durant la mise à jour
      * @return Nombre d'enregistrements purgés : -1 En cas d'erreur
      */
-    public static int purge(DBSession dbConnect, java.util.Date dateLimite) throws FctlException {
+    public static int purge(DBSession dbConnect, Date dateLimite) throws FctlException {
         
         int nbEnreg = -1;
         
@@ -1371,7 +1372,6 @@ public class CollabBean extends TimeStampBean {
         collabs = new LinkedList();
         List collabsList = CollabBean.getAllCollabsAsList(myDBSession);
         Iterator collabIter = collabsList.iterator();
-        SimpleDateFormatEG formatDate = new SimpleDateFormatEG("dd/MM/yyyy HH:mm:ss");
         
         while (collabIter.hasNext()) {
             CollabBean aCollab = (CollabBean) collabIter.next();
@@ -1384,7 +1384,7 @@ public class CollabBean extends TimeStampBean {
                     PointageBean.getPointageBean(
                         myDBSession,
                         Integer.toString(aCollab.getCD_COLLAB()),
-                        formatDate.formatEG(Calendar.getInstance().getTime()));
+                        new Date());
         
                 if ((aPointage != null)
                     && (aPointage.getDT_DEBUT() != null)

@@ -18,7 +18,9 @@
 package com.increg.salon.bean;
 
 import java.sql.*;
+import java.text.ParseException;
 import java.util.*;
+import java.util.Date;
 import java.math.*;
 import com.increg.commun.*;
 import com.increg.commun.exception.FctlException;
@@ -445,10 +447,33 @@ public class MvtStkBean extends TimeStampBean {
      * @param CD_ART java.lang.String
      * @param DT_MVT Date du mouvement
      * @param CD_FACT Facture concernée
+     * @param aLocale Configuration pour parser la date
+     * @throws Exception Si le format est incorrect
      * @return Mouvement correspondant à la clé
      */
-    public static MvtStkBean getMvtStkBean(DBSession dbConnect, String CD_ART, String DT_MVT, String CD_FACT) {
-        String reqSQL = "select * from MVT_STK where CD_ART=" + CD_ART + " and DT_MVT='" + DT_MVT + "'";
+    public static MvtStkBean getMvtStkBean(DBSession dbConnect, String CD_ART, String DT_MVT, String CD_FACT, Locale aLocale) throws Exception {
+
+        java.text.DateFormat formatDate =
+            java.text.DateFormat.getDateTimeInstance(
+                java.text.DateFormat.SHORT,
+                java.text.DateFormat.MEDIUM, aLocale);
+        Date dtMvt = null;
+        try {
+            dtMvt = formatDate.parse(DT_MVT);
+        }
+        catch (ParseException e) {
+            System.out.println("Erreur de conversion : " + e.toString());
+            throw (new Exception(BasicSession.TAG_I18N + "mvtStkBean.formatDateMvt" + BasicSession.TAG_I18N));
+		}
+
+        // Passage en GMT +0
+        java.text.DateFormat formatDateStd =
+            java.text.DateFormat.getDateTimeInstance(
+                java.text.DateFormat.SHORT,
+                java.text.DateFormat.MEDIUM);
+        DT_MVT = formatDateStd.format(dtMvt);
+        
+    	String reqSQL = "select * from MVT_STK where CD_ART=" + CD_ART + " and DT_MVT='" + DT_MVT + "'";
         if ((CD_FACT == null) || (CD_FACT.equals("")) || (CD_FACT.equals("0"))) {
             reqSQL = reqSQL + " and CD_FACT is null";
         }

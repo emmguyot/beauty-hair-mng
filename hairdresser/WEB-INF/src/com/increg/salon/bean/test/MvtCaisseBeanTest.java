@@ -181,7 +181,7 @@ public class MvtCaisseBeanTest extends TestCase {
     public void testCheckAndFix() throws Exception {
         
         // Par défaut une caisse est bonne
-        Assert.assertTrue(MvtCaisseBean.checkAndFix(aDBSession, Long.toString(ModReglBean.MOD_REGL_ESP), "01/01/2002 12:12:12"));
+        Assert.assertTrue(MvtCaisseBean.checkAndFix(aDBSession, Long.toString(ModReglBean.MOD_REGL_ESP), "01/01/2002 12:12:12", Locale.getDefault()));
         
         // Insertion d'une incohérence dans la caisse : Le solde final est bon, mais des mises à jour sont nécessaires
         MvtCaisseBean aMvt = new MvtCaisseBean();
@@ -195,7 +195,7 @@ public class MvtCaisseBeanTest extends TestCase {
         aMvt.setCOMM("Incohérence ajoutée pour test");
         aMvt.create(aDBSession);
         
-        Assert.assertTrue(MvtCaisseBean.checkAndFix(aDBSession, Long.toString(ModReglBean.MOD_REGL_ESP), "01/01/2002 12:12:12"));
+        Assert.assertTrue(MvtCaisseBean.checkAndFix(aDBSession, Long.toString(ModReglBean.MOD_REGL_ESP), "01/01/2002 12:12:12", Locale.getDefault()));
 
         aMvt.delete(aDBSession);
 
@@ -214,7 +214,7 @@ public class MvtCaisseBeanTest extends TestCase {
         aMvt.setMONTANT("20");
         aMvt.maj(aDBSession);  // Mise à jour : Ne modifie pas la caisse => Incohérence finale
         
-        Assert.assertTrue(!MvtCaisseBean.checkAndFix(aDBSession, Long.toString(ModReglBean.MOD_REGL_ESP), "01/01/2002 12:12:12"));
+        Assert.assertTrue(!MvtCaisseBean.checkAndFix(aDBSession, Long.toString(ModReglBean.MOD_REGL_ESP), "01/01/2002 12:12:12", Locale.getDefault()));
 
         aMvt.delete(aDBSession);
     }

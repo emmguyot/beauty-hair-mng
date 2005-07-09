@@ -117,7 +117,7 @@ public class FicRDV extends ConnectedServlet {
 
                     aRDV.setCD_COLLAB(CD_COLLAB);
                     aRDV.setDUREE(DUREE);
-                    aRDV.setDT_DEBUT(DT_DEBUT);
+                    aRDV.setDT_DEBUT(DT_DEBUT, mySalon.getLangue());
                     aRDV.setCOMM(COMM);
 
                     aRDV.create(myDBSession);
@@ -138,7 +138,7 @@ public class FicRDV extends ConnectedServlet {
                 // Affichage de la fiche en modification
                 request.setAttribute("Action", "Modification");
 
-                aRDV = RDVBean.getRDVBean(myDBSession, CD_CLI, DT_DEBUT);
+                aRDV = RDVBean.getRDVBean(myDBSession, CD_CLI, DT_DEBUT, mySalon.getLangue());
 
             }
             else if (Action.equals("Modification")) {
@@ -147,7 +147,7 @@ public class FicRDV extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                aRDV = RDVBean.getRDVBean(myDBSession, CD_CLI, DT_DEBUT);
+                aRDV = RDVBean.getRDVBean(myDBSession, CD_CLI, DT_DEBUT, mySalon.getLangue());
 
                 try {
                     aRDV.setCD_COLLAB(CD_COLLAB);
@@ -174,7 +174,7 @@ public class FicRDV extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                RDVBean aRDVtoDelete = RDVBean.getRDVBean(myDBSession, CD_CLI, DT_DEBUT);
+                RDVBean aRDVtoDelete = RDVBean.getRDVBean(myDBSession, CD_CLI, DT_DEBUT, mySalon.getLangue());
 
                 try {
                     aRDVtoDelete.delete(myDBSession);
@@ -183,7 +183,7 @@ public class FicRDV extends ConnectedServlet {
                     aRDV = new RDVBean();
                     aRDV.setCD_CLI(CD_CLI);
                     aRDV.setCD_COLLAB(CD_COLLAB);
-                    aRDV.setDT_DEBUT(DT_DEBUT);
+                    aRDV.setDT_DEBUT(DT_DEBUT, mySalon.getLangue());
                     aRDV.setDUREE(DUREE);
                     aRDV.setCOMM(COMM);
                     request.setAttribute("Action", "Creation");
@@ -200,7 +200,7 @@ public class FicRDV extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 boolean exist = false;
-                aRDV = RDVBean.getRDVBean(myDBSession, CD_CLI, DT_DEBUT);
+                aRDV = RDVBean.getRDVBean(myDBSession, CD_CLI, DT_DEBUT, mySalon.getLangue());
                 if (aRDV == null) {
                     aRDV = new RDVBean();
                     request.setAttribute("Action", "Creation");
@@ -217,7 +217,7 @@ public class FicRDV extends ConnectedServlet {
                     aRDV.setDUREE(DUREE);
                     aRDV.setCOMM(COMM);
                     // Date en dernier en cas d'erreur de format
-                    aRDV.setDT_DEBUT(DT_DEBUT);
+                    aRDV.setDT_DEBUT(DT_DEBUT, mySalon.getLangue());
 
                     if (!aRDV.verifChevauchement(myDBSession, exist)) {
                         // Chevauchement

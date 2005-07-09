@@ -354,13 +354,23 @@ public class PaiementBean extends TimeStampBean {
             throw (new SQLException(BasicSession.TAG_I18N + "message.suppressionKo" + BasicSession.TAG_I18N));
         }
 
-        // Mise à jour des soldes de caisse à partir de la date min
-        MvtCaisseBean aMvt = MvtCaisseBean.getLastMvtCaisseBean(dbConnect,
-                Integer.toString(CD_MOD_REGL), formatDate.formatEG(dateMin
-                        .getTime()));
-        MvtCaisseBean.checkAndFix(dbConnect, Integer.toString(CD_MOD_REGL),
-                formatDate.formatEG(aMvt.getDT_MVT().getTime()));
-
+        try {
+	        // Mise à jour des soldes de caisse à partir de la date min
+	        MvtCaisseBean aMvt = MvtCaisseBean.getLastMvtCaisseBean(dbConnect,
+	                Integer.toString(CD_MOD_REGL), formatDate.formatEG(dateMin
+	                        .getTime()), Locale.FRENCH);
+	        MvtCaisseBean.checkAndFix(dbConnect, Integer.toString(CD_MOD_REGL),
+	                formatDate.formatEG(aMvt.getDT_MVT().getTime()), Locale.FRENCH);
+        }
+        catch (SQLException e) {
+        	// Propage l'exception
+			throw e;
+		}
+        catch (Exception e) {
+			// Problème de conversion de la date
+        	System.out.println("Erreur de conversion de la date");
+        	e.printStackTrace();
+		}
         // Fin de la transaction
         dbConnect.endTransaction();
 

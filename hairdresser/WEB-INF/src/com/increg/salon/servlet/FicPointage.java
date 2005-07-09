@@ -61,8 +61,8 @@ public void performTask(
 
 			try {
 	            aPointage.setCD_COLLAB(CD_COLLAB);
-	            aPointage.setDT_FIN(DT_FIN);
-	            aPointage.setDT_DEBUT(DT_DEBUT);
+	            aPointage.setDT_FIN(DT_FIN, mySalon.getLangue());
+	            aPointage.setDT_DEBUT(DT_DEBUT, mySalon.getLangue());
 	            aPointage.setCD_TYP_POINTAGE(CD_TYP_POINTAGE);
 	            aPointage.setCOMM(COMM);
 
@@ -79,7 +79,7 @@ public void performTask(
 			// Affichage de la fiche en modification
 			request.setAttribute("Action", "Modification");
 
-			aPointage = PointageBean.getPointageBean(myDBSession, CD_COLLAB, DT_DEBUT);
+			aPointage = PointageBean.getPointageBean(myDBSession, CD_COLLAB, DT_DEBUT, mySalon.getLangue());
 			request.setAttribute("PointageBean", aPointage);
 
 		}
@@ -89,11 +89,11 @@ public void performTask(
 			/**
 			 * Création du bean et enregistrement
 			 */
-			aPointage = PointageBean.getPointageBean(myDBSession, CD_COLLAB, DT_DEBUT);
+			aPointage = PointageBean.getPointageBean(myDBSession, CD_COLLAB, DT_DEBUT, mySalon.getLangue());
 
 			try {
 	            //aPointage.setCD_COLLAB(CD_COLLAB);
-	            aPointage.setDT_FIN(DT_FIN);
+	            aPointage.setDT_FIN(DT_FIN, mySalon.getLangue());
 	            //aPointage.setDT_DEBUT(DT_DEBUT);
 	            aPointage.setCD_TYP_POINTAGE(CD_TYP_POINTAGE);
 	            aPointage.setCOMM(COMM);
@@ -113,7 +113,7 @@ public void performTask(
 			/**
 			 * Création du bean et enregistrement
 			 */
-			aPointage = PointageBean.getPointageBean(myDBSession, CD_COLLAB, DT_DEBUT);
+			aPointage = PointageBean.getPointageBean(myDBSession, CD_COLLAB, DT_DEBUT, mySalon.getLangue());
 
 			try {
 	            aPointage.delete(myDBSession);

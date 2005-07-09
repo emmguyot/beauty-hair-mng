@@ -20,11 +20,14 @@ package com.increg.salon.bean;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Vector;
 
 import com.increg.commun.BasicSession;
@@ -638,17 +641,50 @@ public class PointageBean extends TimeStampBean {
      * @param dbConnect com.increg.salon.bean.DBSession
      * @param CD_COLLAB java.lang.String
      * @param DT_DEBUT java.lang.String
+     * @param aLocale Configuration pour parser la date
+     * @throws Exception Probleme de décodage
      * @return Pointage obtenu ou null
      */
-    public static PointageBean getPointageBean(
-        DBSession dbConnect,
-        String CD_COLLAB,
-        String DT_DEBUT) {
+    public static PointageBean getPointageBean(DBSession dbConnect, String CD_COLLAB, String DT_DEBUT, Locale aLocale) throws Exception {
+    	
+        java.text.DateFormat formatDate =
+            java.text.DateFormat.getDateTimeInstance(
+                java.text.DateFormat.SHORT,
+                java.text.DateFormat.SHORT, aLocale);
+        Date dtDebut = null;
+        try {
+            dtDebut = formatDate.parse(DT_DEBUT);
+        }
+        catch (ParseException e) {
+            System.out.println("Erreur de conversion : " + e.toString());
+            throw (new Exception(BasicSession.TAG_I18N + "pointageBean.formatDateFin" + BasicSession.TAG_I18N));
+		}
+        
+        return getPointageBean(dbConnect, CD_COLLAB, dtDebut);
+    }
+
+    /**
+     * Création d'un Bean collab à partir de sa clé
+     * Creation date: (18/08/2001 17:05:45)
+     * @param dbConnect com.increg.salon.bean.DBSession
+     * @param CD_COLLAB java.lang.String
+     * @param DT_DEBUT Date de début
+     * @return Pointage obtenu ou null
+     */
+    public static PointageBean getPointageBean(DBSession dbConnect, String CD_COLLAB, Date DT_DEBUT) {
+    	
+        // Passage en GMT +0
+        java.text.DateFormat formatDateStd =
+            java.text.DateFormat.getDateTimeInstance(
+                java.text.DateFormat.SHORT,
+                java.text.DateFormat.SHORT);
+        String dtDebut = formatDateStd.format(DT_DEBUT);
+        
         String reqSQL =
             "select * from POINTAGE where CD_COLLAB="
                 + CD_COLLAB
                 + " and DT_DEBUT<='"
-                + DT_DEBUT
+                + dtDebut
                 + "' order by DT_DEBUT desc limit 1";
         PointageBean res = null;
 
@@ -678,7 +714,6 @@ public class PointageBean extends TimeStampBean {
         //Recupere tous les collaborateurs
         List collabsList = CollabBean.getAllCollabsAsList(dbConnect);
         Iterator collabIter = collabsList.iterator();
-        SimpleDateFormatEG formatDate = new SimpleDateFormatEG("dd/MM/yyyy HH:mm:ss");
 
         //Pour chaque collaborateur, on recupere le dernier pointage
         //Si le collaborateur est present, on l'ajoute a la liste
@@ -689,7 +724,7 @@ public class PointageBean extends TimeStampBean {
                 PointageBean.getPointageBean(
                     dbConnect,
                     Integer.toString(aCollab.getCD_COLLAB()),
-                    formatDate.formatEG(Calendar.getInstance().getTime()));
+                    new Date());
 
             if ((aPointage != null)
                 && (aPointage.getDT_DEBUT() != null)
@@ -748,9 +783,10 @@ public class PointageBean extends TimeStampBean {
      * Insert the method's description here.
      * Creation date: (29/09/2001 09:04:21)
      * @param newDT_DEBUT String
+     * @param aLocale Configuration pour parser la date
      * @throws Exception En cas d'erreur de conversion
      */
-    public void setDT_DEBUT(String newDT_DEBUT) throws Exception {
+    public void setDT_DEBUT(String newDT_DEBUT, Locale aLocale) throws Exception {
         if ((newDT_DEBUT != null) && (newDT_DEBUT.length() != 0)) {
             DT_DEBUT = Calendar.getInstance();
 
@@ -758,7 +794,7 @@ public class PointageBean extends TimeStampBean {
             java.text.DateFormat formatDate =
                 java.text.DateFormat.getDateTimeInstance(
                     java.text.DateFormat.SHORT,
-                    java.text.DateFormat.SHORT);
+                    java.text.DateFormat.SHORT, aLocale);
             try {
                 DT_DEBUT.setTime(formatDate.parse(newDT_DEBUT));
             }
@@ -780,9 +816,10 @@ public class PointageBean extends TimeStampBean {
      * Insert the method's description here.
      * Creation date: (29/09/2001 09:04:21)
      * @param newDT_FIN String
+     * @param aLocale Configuration pour parser la date
      * @throws Exception En cas d'erreur de conversion
      */
-    public void setDT_FIN(String newDT_FIN) throws Exception {
+    public void setDT_FIN(String newDT_FIN, Locale aLocale) throws Exception {
         if ((newDT_FIN != null) && (newDT_FIN.length() != 0)) {
             DT_FIN = Calendar.getInstance();
 
@@ -790,7 +827,7 @@ public class PointageBean extends TimeStampBean {
             java.text.DateFormat formatDate =
                 java.text.DateFormat.getDateTimeInstance(
                     java.text.DateFormat.SHORT,
-                    java.text.DateFormat.SHORT);
+                    java.text.DateFormat.SHORT, aLocale);
             try {
                 DT_FIN.setTime(formatDate.parse(newDT_FIN));
             }

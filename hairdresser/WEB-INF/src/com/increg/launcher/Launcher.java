@@ -69,7 +69,7 @@ public class Launcher extends JFrame implements Runnable, WindowListener, Action
         // Ajoute les éléments à la fenêtre
         addEveryComponents();
         pack();
-        setLocationRelativeTo(null);
+        //setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         
         // Ajoute la gestion des événements
@@ -275,7 +275,7 @@ public class Launcher extends JFrame implements Runnable, WindowListener, Action
         if (flagMaj.exists()) {
             // Mise à jour à faire
             File appDir = new File(resconfig.getString("InCrEG") + "/salon");
-            appDir.l
+            //appDir.l
             flagMaj.delete();        
         }
     }
