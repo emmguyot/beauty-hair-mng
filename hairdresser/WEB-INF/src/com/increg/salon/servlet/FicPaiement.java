@@ -82,7 +82,7 @@ public class FicPaiement extends ConnectedServlet {
 
                     // enregistre les paiements des factures
                     for (int i = 0; i < listeCoche.size(); i++) {
-                        FactBean aFact = FactBean.getFactBean(myDBSession, (String) listeCoche.get(i));
+                        FactBean aFact = FactBean.getFactBean(myDBSession, (String) listeCoche.get(i), mySalon.getMessagesBundle());
                         if (aPaiement.getPRX_TOT_TTC() == null) {
                             aPaiement.setPRX_TOT_TTC(aFact.getPRX_TOT_TTC());
                         } else {
@@ -116,7 +116,7 @@ public class FicPaiement extends ConnectedServlet {
 
                     // enregistre les paiements des factures
                     for (int i = 0; i < listeCoche.size(); i++) {
-                        FactBean aFact = FactBean.getFactBean(myDBSession, (String) listeCoche.get(i));
+                        FactBean aFact = FactBean.getFactBean(myDBSession, (String) listeCoche.get(i), mySalon.getMessagesBundle());
 
                         aFact.setCD_PAIEMENT(aPaiement.getCD_PAIEMENT());
                         aFact.maj(myDBSession);
@@ -138,14 +138,14 @@ public class FicPaiement extends ConnectedServlet {
                 // Affichage de la fiche en modification
                 request.setAttribute("Action", "Modification");
 
-                aPaiement = PaiementBean.getPaiementBean(myDBSession, CD_PAIEMENT);
+                aPaiement = PaiementBean.getPaiementBean(myDBSession, CD_PAIEMENT, mySalon.getMessagesBundle());
             } else if (Action.equals("Modification") || (Action.equals("Impression"))) {
                 // Modification effective de la fiche
 
                 /**
                  * Création du bean et enregistrement
                  */
-                aPaiement = PaiementBean.getPaiementBean(myDBSession, CD_PAIEMENT);
+                aPaiement = PaiementBean.getPaiementBean(myDBSession, CD_PAIEMENT, mySalon.getMessagesBundle());
 
                 try {
                     aPaiement.setCD_PAIEMENT(CD_PAIEMENT);
@@ -183,7 +183,7 @@ public class FicPaiement extends ConnectedServlet {
 
                         if (!trouve) {
                             // Nouvelle facture pour ce paiement
-                            FactBean aFact = FactBean.getFactBean(myDBSession, (String) listeCoche.get(i));
+                            FactBean aFact = FactBean.getFactBean(myDBSession, (String) listeCoche.get(i), mySalon.getMessagesBundle());
 
                             aFact.setCD_PAIEMENT(aPaiement.getCD_PAIEMENT());
                             aListeFact.add(aFact);
@@ -214,7 +214,7 @@ public class FicPaiement extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                aPaiement = PaiementBean.getPaiementBean(myDBSession, CD_PAIEMENT);
+                aPaiement = PaiementBean.getPaiementBean(myDBSession, CD_PAIEMENT, mySalon.getMessagesBundle());
 
                 try {
                     // Supprime les paiements des Factures utilisant ce paiement
@@ -263,7 +263,7 @@ public class FicPaiement extends ConnectedServlet {
                     /**
                      * Création du bean de consultation
                      */
-                    FactBean aFact = new FactBean(aRS);
+                    FactBean aFact = new FactBean(aRS, mySalon.getMessagesBundle());
                     listeFact.add(aFact);
                 }
 
@@ -287,7 +287,7 @@ public class FicPaiement extends ConnectedServlet {
 
             for (int i = 0; i < listeCoche.size(); i++) {
                 if (aFact == null) {
-                    aFact = FactBean.getFactBean(myDBSession, (String) listeCoche.get(i));
+                    aFact = FactBean.getFactBean(myDBSession, (String) listeCoche.get(i), mySalon.getMessagesBundle());
                 } else {
                     aFact.merge(myDBSession, (String) listeCoche.get(i));
                 }

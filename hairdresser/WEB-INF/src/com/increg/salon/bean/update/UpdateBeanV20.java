@@ -3,6 +3,7 @@ package com.increg.salon.bean.update;
 import com.increg.commun.DBSession;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ResourceBundle;
 
 /**
  * Bean de mise à jour de la base à partir d'une version 1.7 vers 2.0
@@ -14,8 +15,8 @@ public class UpdateBeanV20 extends UpdateBeanV17 {
 	/**
 	 * @see UpdateBeanV17
 	 */
-	public UpdateBeanV20(DBSession dbConnect) throws Exception {
-		super(dbConnect);
+	public UpdateBeanV20(DBSession dbConnect, ResourceBundle rb) throws Exception {
+		super(dbConnect, rb);
 	}
 
     /**

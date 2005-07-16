@@ -2,6 +2,7 @@ package com.increg.salon.bean.update;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ResourceBundle;
 
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.TypMvtBean;
@@ -18,8 +19,8 @@ public class UpdateBeanV21 extends UpdateBeanV20 {
 	 * @param dbConnect .
 	 * @throws Exception .
 	 */
-	public UpdateBeanV21(DBSession dbConnect) throws Exception {
-		super(dbConnect);
+	public UpdateBeanV21(DBSession dbConnect, ResourceBundle rb) throws Exception {
+		super(dbConnect, rb);
 	}
 
     /**

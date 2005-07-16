@@ -127,7 +127,7 @@ public class FicArt_Mvt extends ConnectedServlet {
                 // Affichage de la fiche en modification
                 request.setAttribute("Action", "Modification");
 
-                aArt = ArtBean.getArtBean(myDBSession, CD_ART);
+                aArt = ArtBean.getArtBean(myDBSession, CD_ART, mySalon.getMessagesBundle());
             }
             else if (
                 (Action != null)
@@ -157,7 +157,7 @@ public class FicArt_Mvt extends ConnectedServlet {
                 }
                 else {
                     // Recharge à partir de la base
-                    aArt = ArtBean.getArtBean(myDBSession, CD_ART);
+                    aArt = ArtBean.getArtBean(myDBSession, CD_ART, mySalon.getMessagesBundle());
                 }
 
                 aArt.setCD_ART(CD_ART);
@@ -192,7 +192,7 @@ public class FicArt_Mvt extends ConnectedServlet {
                     // Cas particulier de l'ajout d'une ligne
                     if (Action.equals("AjoutLigne")) {
                         // C'est une nouvelle ligne
-                        MvtStkBean aMvt = new MvtStkBean();
+                        MvtStkBean aMvt = new MvtStkBean(mySalon.getMessagesBundle());
                         aMvt.setCD_ART(aArt.getCD_ART());
                         aMvt.setDT_MVT(tab_DT_MVT, mySalon.getLangue());
                         aMvt.setCD_TYP_MVT(tab_CD_TYP_MVT);
@@ -202,15 +202,15 @@ public class FicArt_Mvt extends ConnectedServlet {
                         aMvt.setVAL_STK_AVANT(aArt.getVAL_STK_HT());
                         aMvt.create(myDBSession);
                         // Recharge l'article pour être à jour
-                        aArt = ArtBean.getArtBean(myDBSession, Long.toString(aArt.getCD_ART()));
+                        aArt = ArtBean.getArtBean(myDBSession, Long.toString(aArt.getCD_ART()), mySalon.getMessagesBundle());
                     }
                     else if (Action.equals("SuppressionLigne")) {
-                        MvtStkBean aMvt = MvtStkBean.getMvtStkBean(myDBSession, Long.toString(aArt.getCD_ART()), tab_DT_MVT_LAST, tab_CD_FACT_LAST, mySalon.getLangue());
+                        MvtStkBean aMvt = MvtStkBean.getMvtStkBean(myDBSession, Long.toString(aArt.getCD_ART()), tab_DT_MVT_LAST, tab_CD_FACT_LAST, mySalon.getLangue(), mySalon.getMessagesBundle());
 
                         if (aMvt != null) {
                             aMvt.delete(myDBSession);
                             // Recharge l'article pour être à jour
-                            aArt = ArtBean.getArtBean(myDBSession, Long.toString(aArt.getCD_ART()));
+                            aArt = ArtBean.getArtBean(myDBSession, Long.toString(aArt.getCD_ART()), mySalon.getMessagesBundle());
                         }
                     }
 
@@ -263,7 +263,7 @@ public class FicArt_Mvt extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                aArt = ArtBean.getArtBean(myDBSession, CD_ART);
+                aArt = ArtBean.getArtBean(myDBSession, CD_ART, mySalon.getMessagesBundle());
 
                 try {
                     // Suppression des lignes Fournisseurs en même temps
@@ -310,7 +310,7 @@ public class FicArt_Mvt extends ConnectedServlet {
                         /**
                          * Création du bean de consultation
                          */
-                        MvtStkBean aMvt = new MvtStkBean(aRS);
+                        MvtStkBean aMvt = new MvtStkBean(aRS, mySalon.getMessagesBundle());
                         listeMvt.add(aMvt);
                         vide = false;
                     }

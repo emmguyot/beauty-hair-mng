@@ -121,7 +121,7 @@ public void performTask(
 			// Affichage de la fiche en modification
 			request.setAttribute("Action", "Modification");
 
-			aArt = ArtBean.getArtBean(myDBSession, CD_ART);
+			aArt = ArtBean.getArtBean(myDBSession, CD_ART, mySalon.getMessagesBundle());
 		}
 		else if ((Action.equals ("Modification")) 
 				|| (Action.equals ("AjoutLigne"))
@@ -143,7 +143,7 @@ public void performTask(
 			}
 			else {
 				// Recharge à partir de la base
-	            aArt = ArtBean.getArtBean(myDBSession, CD_ART);
+	            aArt = ArtBean.getArtBean(myDBSession, CD_ART, mySalon.getMessagesBundle());
 			}
 
 			aArt.setCD_ART(CD_ART);
@@ -274,7 +274,7 @@ public void performTask(
 			/**
 			 * Création du bean et enregistrement
 			 */
-			aArt = ArtBean.getArtBean(myDBSession, CD_ART);
+			aArt = ArtBean.getArtBean(myDBSession, CD_ART, mySalon.getMessagesBundle());
 
 			try {
 				// Suppression des lignes Fournisseurs en même temps

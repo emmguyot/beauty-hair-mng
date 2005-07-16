@@ -75,16 +75,18 @@ public class MvtStkBean extends TimeStampBean {
 
     /**
      * FactBean constructor comment.
+     * @param rb Messages localisés
      */
-    public MvtStkBean() {
-        super();
+    public MvtStkBean(ResourceBundle rb) {
+        super(rb);
     }
     /**
      * MvtStkBean constructor comment.
      * @param rs java.sql.ResultSet
+     * @param rb Messages localisés
      */
-    public MvtStkBean(ResultSet rs) {
-        super(rs);
+    public MvtStkBean(ResultSet rs, ResourceBundle rb) {
+        super(rs, rb);
         try {
             CD_ART = rs.getLong("CD_ART");
         }
@@ -175,7 +177,7 @@ public class MvtStkBean extends TimeStampBean {
      */
     public MvtStkBean(DBSession dbConnect, String CD_ART) {
         super();
-        ArtBean aArt = ArtBean.getArtBean(dbConnect, CD_ART);
+        ArtBean aArt = ArtBean.getArtBean(dbConnect, CD_ART, message);
         setCD_ART(CD_ART);
         setSTK_AVANT(aArt.getQTE_STK());
         setVAL_STK_AVANT(aArt.getVAL_STK_HT());
@@ -449,9 +451,10 @@ public class MvtStkBean extends TimeStampBean {
      * @param CD_FACT Facture concernée
      * @param aLocale Configuration pour parser la date
      * @throws Exception Si le format est incorrect
+     * @param rb Messages localisés
      * @return Mouvement correspondant à la clé
      */
-    public static MvtStkBean getMvtStkBean(DBSession dbConnect, String CD_ART, String DT_MVT, String CD_FACT, Locale aLocale) throws Exception {
+    public static MvtStkBean getMvtStkBean(DBSession dbConnect, String CD_ART, String DT_MVT, String CD_FACT, Locale aLocale, ResourceBundle rb) throws Exception {
 
         java.text.DateFormat formatDate =
             java.text.DateFormat.getDateTimeInstance(
@@ -487,7 +490,7 @@ public class MvtStkBean extends TimeStampBean {
             ResultSet aRS = dbConnect.doRequest(reqSQL);
 
             while (aRS.next()) {
-                res = new MvtStkBean(aRS);
+                res = new MvtStkBean(aRS, rb);
             }
             aRS.close();
         }
@@ -501,9 +504,10 @@ public class MvtStkBean extends TimeStampBean {
      * Creation date: 3 nov. 2002
      * @param dbConnect com.increg.salon.bean.DBSession
      * @param CD_CMD_FOURN N° de commande fournisseur
+     * @param rb Messages localisés
      * @return liste des Mouvements correspondant à la commande
      */
-    public static Vector getMvtStkBeanFromCmd(DBSession dbConnect, String CD_CMD_FOURN) {
+    public static Vector getMvtStkBeanFromCmd(DBSession dbConnect, String CD_CMD_FOURN, ResourceBundle rb) {
         String reqSQL = "select * from MVT_STK where CD_CMD_FOURN=" + CD_CMD_FOURN + " order by DT_MVT";
         Vector lstMvt = new Vector();
 
@@ -512,7 +516,7 @@ public class MvtStkBean extends TimeStampBean {
             ResultSet aRS = dbConnect.doRequest(reqSQL);
 
             while (aRS.next()) {
-                MvtStkBean res = new MvtStkBean(aRS);
+                MvtStkBean res = new MvtStkBean(aRS, rb);
                 lstMvt.add(res);
             }
             aRS.close();
@@ -566,7 +570,7 @@ public class MvtStkBean extends TimeStampBean {
      */
     protected void majStk(DBSession dbConnect, BigDecimal qte, boolean undo) throws SQLException, FctlException {
 
-        ArtBean aArt = ArtBean.getArtBean(dbConnect, Long.toString(CD_ART));
+        ArtBean aArt = ArtBean.getArtBean(dbConnect, Long.toString(CD_ART), message);
         if (!undo) {
             // Tiens compte du sens du mouvement
             TypMvtBean myTypMvt = TypMvtBean.getTypMvtBean(dbConnect, Integer.toString(CD_TYP_MVT));
@@ -853,7 +857,7 @@ public class MvtStkBean extends TimeStampBean {
                 ResultSet rs = dbConnect.doRequest(reqSQL);
                 if (!rs.next()) {
                     // Il n'y en a pas : Reset du flag Mixte
-                    ArtBean aArt = ArtBean.getArtBean(dbConnect, Long.toString(CD_ART));
+                    ArtBean aArt = ArtBean.getArtBean(dbConnect, Long.toString(CD_ART), message);
                     aArt.setINDIC_MIXTE("N");
                     aArt.maj(dbConnect);
                 }
@@ -861,7 +865,7 @@ public class MvtStkBean extends TimeStampBean {
             }
             else {
                 // Passe l'article à mixte
-                ArtBean aArt = ArtBean.getArtBean(dbConnect, Long.toString(CD_ART));
+                ArtBean aArt = ArtBean.getArtBean(dbConnect, Long.toString(CD_ART), message);
                 if (!aArt.getINDIC_MIXTE().equals("O")) {
                     aArt.setINDIC_MIXTE("O");
                     aArt.maj(dbConnect);

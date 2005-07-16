@@ -179,17 +179,17 @@ public void performTask(javax.servlet.http.HttpServletRequest request, javax.ser
 		Vector lstMvt = new Vector();
 
 		while (aRS.next()) {
-			ArtBean aArt = new ArtBean(aRS);
+			ArtBean aArt = new ArtBean(aRS, mySalon.getMessagesBundle());
 			lstLignes.add(aArt);
 			// Dernier mouvement
 			String reqSQL2 = "select * from MVT_STK, TYP_MVT where MVT_STK.CD_TYP_MVT=TYP_MVT.CD_TYP_MVT and SENS_MVT='" + TypMvtBean.SENS_INVENTAIRE + "' and CD_ART=" + aArt.getCD_ART() + " order by DT_MVT desc limit 1";
 			ResultSet aRS2 = myDBSession.doRequest(reqSQL2);
 
 			if (aRS2.next()) {
-				lstMvt.add(new MvtStkBean(aRS2));
+				lstMvt.add(new MvtStkBean(aRS2, mySalon.getMessagesBundle()));
 			}
 			else {
-				lstMvt.add(new MvtStkBean());
+				lstMvt.add(new MvtStkBean(mySalon.getMessagesBundle()));
 			}
 		}
 		aRS.close();

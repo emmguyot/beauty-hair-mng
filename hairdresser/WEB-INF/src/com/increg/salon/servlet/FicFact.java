@@ -135,7 +135,7 @@ public class FicFact extends ConnectedServlet {
                 // Première phase de création
                 request.setAttribute("Action", "Creation");
                 // Un bean vide
-                aFact = new FactBean();
+                aFact = new FactBean(mySalon.getMessagesBundle());
                 // Place le code client si connu
                 aFact.setCD_CLI(CD_CLI);
                 aFact.setFACT_HISTO(FACT_HISTO);
@@ -149,7 +149,7 @@ public class FicFact extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                aFact = new FactBean();
+                aFact = new FactBean(mySalon.getMessagesBundle());
                 aPaiement = new PaiementBean(mySalon.getMessagesBundle());
 
                 try {
@@ -191,17 +191,17 @@ public class FicFact extends ConnectedServlet {
                 // Affichage de la fiche en modification
                 request.setAttribute("Action", "Modification");
 
-                aFact = FactBean.getFactBean(myDBSession, CD_FACT);
+                aFact = FactBean.getFactBean(myDBSession, CD_FACT, mySalon.getMessagesBundle());
                 if (aFact == null) {
                     mySalon.setMessage("Erreur", "La facture n'existe plus.");
                     mySalon.removeClient(CD_FACT);
                     allCorrect = false;
-                    aFact = new FactBean();
+                    aFact = new FactBean(mySalon.getMessagesBundle());
                 }
 
                 if (aFact.getCD_PAIEMENT() > 0) {
                     aPaiement = PaiementBean.getPaiementBean(myDBSession, Long
-                            .toString(aFact.getCD_PAIEMENT()));
+                            .toString(aFact.getCD_PAIEMENT()), mySalon.getMessagesBundle());
                 } else {
                     aPaiement = new PaiementBean(mySalon.getMessagesBundle());
                 }
@@ -232,10 +232,10 @@ public class FicFact extends ConnectedServlet {
                 if ((CD_FACT == null) || (CD_FACT.length() == 0)
                         || (CD_FACT.equals("0"))) {
                     // On est en création : le Bean est créé de zero
-                    aFact = new FactBean();
+                    aFact = new FactBean(mySalon.getMessagesBundle());
                 } else {
                     // Recharge à partir de la base
-                    aFact = FactBean.getFactBean(myDBSession, CD_FACT);
+                    aFact = FactBean.getFactBean(myDBSession, CD_FACT, mySalon.getMessagesBundle());
                 }
 
                 // Initialisation par défaut
@@ -263,7 +263,7 @@ public class FicFact extends ConnectedServlet {
                         if ((CD_PAIEMENT != null) && (CD_PAIEMENT.length() > 0)
                                 && (!CD_PAIEMENT.equals("0"))) {
                             aPaiement = PaiementBean.getPaiementBean(
-                                    myDBSession, CD_PAIEMENT);
+                                    myDBSession, CD_PAIEMENT, mySalon.getMessagesBundle());
                         } else {
                             // Nouveau Paiement
                             aPaiement = new PaiementBean(mySalon.getMessagesBundle());
@@ -301,7 +301,7 @@ public class FicFact extends ConnectedServlet {
 
                         // Faut-il supprimer le paiement ?
                         aPaiement = PaiementBean.getPaiementBean(myDBSession,
-                                CD_PAIEMENT);
+                                CD_PAIEMENT, mySalon.getMessagesBundle());
                         Vector listeFact = aPaiement.getFact(myDBSession);
                         if (listeFact.size() == 1) {
                             paiementASuppr = true;
@@ -476,7 +476,7 @@ public class FicFact extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                aFact = FactBean.getFactBean(myDBSession, CD_FACT);
+                aFact = FactBean.getFactBean(myDBSession, CD_FACT, mySalon.getMessagesBundle());
 
                 // Initialisation par défaut
                 aPaiement = new PaiementBean(mySalon.getMessagesBundle());
@@ -504,7 +504,7 @@ public class FicFact extends ConnectedServlet {
                         // Le forçage n'est possible que si le paiement n'est
                         // pas regroupé
                         aPaiement = PaiementBean.getPaiementBean(myDBSession,
-                                CD_PAIEMENT);
+                                CD_PAIEMENT, mySalon.getMessagesBundle());
                         if (supprimable
                                 && (aPaiement.getFact(myDBSession).size() == 1)
                                 && (mySalon.getMyIdent().getDroit("Facture",
@@ -525,7 +525,7 @@ public class FicFact extends ConnectedServlet {
                             aFact.delete(myDBSession);
 
                             aPaiement = PaiementBean.getPaiementBean(
-                                    myDBSession, CD_PAIEMENT);
+                                    myDBSession, CD_PAIEMENT, mySalon.getMessagesBundle());
                             aPaiement.deletePur(myDBSession);
 
                             myDBSession.endTransaction();
@@ -543,7 +543,7 @@ public class FicFact extends ConnectedServlet {
                         mySalon.setMessage("Info", "Suppression effectuée.");
 
                         // Un bean vide
-                        aFact = new FactBean();
+                        aFact = new FactBean(mySalon.getMessagesBundle());
                         // Place le code client si connu
                         aFact.setCD_CLI(CD_CLI);
                         aFact.setFACT_HISTO("N");

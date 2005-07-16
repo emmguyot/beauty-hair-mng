@@ -68,8 +68,8 @@ public StatBean(ResourceBundle rb) {
  * ClientBean à partir d'un RecordSet.
  * @param rs RecordSet dans lequel les données seront lues
  */
-public StatBean(ResultSet rs) {
-	super(rs);
+public StatBean(ResultSet rs, ResourceBundle rb) {
+	super(rs, rb);
 	try {
 		CD_STAT = rs.getLong("CD_STAT");
 	}
@@ -669,9 +669,10 @@ public java.lang.String getREQ_SQL() {
  * Creation date: (18/08/2001 17:05:45)
  * @param dbConnect com.increg.salon.bean.DBSession
  * @param CD_STAT java.lang.String
+ * @param rb Messages localisés
  * @return Bean créé
  */
-public static StatBean getStatBean(DBSession dbConnect, String CD_STAT) {
+public static StatBean getStatBean(DBSession dbConnect, String CD_STAT, ResourceBundle rb) {
 	String reqSQL = "select * from STAT where CD_STAT=" + CD_STAT;
 	StatBean res = null;
 
@@ -680,7 +681,7 @@ public static StatBean getStatBean(DBSession dbConnect, String CD_STAT) {
 		ResultSet aRS = dbConnect.doRequest(reqSQL);
 
 		while (aRS.next()) {
-			res = new StatBean(aRS);
+			res = new StatBean(aRS, rb);
 		}
 		aRS.close();
 	}

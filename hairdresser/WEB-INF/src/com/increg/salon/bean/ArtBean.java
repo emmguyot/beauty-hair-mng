@@ -99,9 +99,10 @@ public class ArtBean extends TimeStampBean {
 	/**
 	 * ArtBean constructor comment.
 	 * @param rs java.sql.ResultSet
+	 * @param rb Messages à utiliser
 	 */
-	public ArtBean(ResultSet rs) {
-		super(rs);
+	public ArtBean(ResultSet rs, ResourceBundle rb) {
+		super(rs, rb);
 		try {
 			CD_ART = rs.getLong("CD_ART");
 		}
@@ -401,9 +402,10 @@ public class ArtBean extends TimeStampBean {
 	 * Creation date: (19/08/2001 21:14:20)
 	 * @param dbConnect com.increg.salon.bean.DBSession
 	 * @param CD_ART java.lang.String
+	 * @param rb Messages localisés
 	 * @return Article Correspondant
 	 */
-	public static ArtBean getArtBean(DBSession dbConnect, String CD_ART) {
+	public static ArtBean getArtBean(DBSession dbConnect, String CD_ART, ResourceBundle rb) {
 		String reqSQL = "select * from ART where CD_ART=" + CD_ART;
 		ArtBean res = null;
 	
@@ -412,7 +414,7 @@ public class ArtBean extends TimeStampBean {
 			ResultSet aRS = dbConnect.doRequest(reqSQL);
 	
 			while (aRS.next()) {
-				res = new ArtBean(aRS);
+				res = new ArtBean(aRS, rb);
 			}
 			aRS.close();
 		}

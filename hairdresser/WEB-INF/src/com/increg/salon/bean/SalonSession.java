@@ -143,7 +143,7 @@ public abstract class SalonSession extends BasicSession {
                  * Mise à jour éventuelle de l'appli
                  * <b>A mettre à jour à chaque changement de version</b>
                  */
-                majBase = new UpdateBeanV33(myDBSession);
+                majBase = new UpdateBeanV33(myDBSession, messagesBundle);
             } catch (Exception e) {
                 System.out.println("Mise à jour de la base en erreur :");
                 e.printStackTrace();
@@ -170,7 +170,7 @@ public abstract class SalonSession extends BasicSession {
 
             while (aRS.next()) {
                 try {
-                    FactBean aFact = new FactBean(aRS);
+                    FactBean aFact = new FactBean(aRS, messagesBundle);
                     listeFact.add(aFact);
                 } catch (Exception e) {
                     System.out.println("Erreur à la lecture d'une facture pour l'en cours :");
@@ -252,7 +252,7 @@ public abstract class SalonSession extends BasicSession {
 
                 if (aRS.next()) {
                     // Prend le premier
-                    FactBean oldFact = FactBean.getFactBean(myDBSession, Long.toString(aRS.getLong("CD_FACT")));
+                    FactBean oldFact = FactBean.getFactBean(myDBSession, Long.toString(aRS.getLong("CD_FACT")), messagesBundle);
 
                     // Duplique la facture
                     aFact = (FactBean) oldFact.clone(myDBSession);
@@ -317,7 +317,7 @@ public abstract class SalonSession extends BasicSession {
 
                 if (aRS.next()) {
                     // Prend le premier
-                    FactBean oldFact = FactBean.getFactBean(myDBSession, Long.toString(aRS.getLong("CD_FACT")));
+                    FactBean oldFact = FactBean.getFactBean(myDBSession, Long.toString(aRS.getLong("CD_FACT")), messagesBundle);
 
                     // Duplique la facture
                     aFact = (FactBean) oldFact.clone(myDBSession);
@@ -362,7 +362,7 @@ public abstract class SalonSession extends BasicSession {
         if (!doublon) {
             // Création du Bean facture
             try {
-                FactBean aFact = new FactBean();
+                FactBean aFact = new FactBean(messagesBundle);
                 aFact.setCD_CLI(CD_CLI);
                 aFact.setFACT_HISTO("N");
                 aFact.create(myDBSession);
@@ -432,7 +432,7 @@ public abstract class SalonSession extends BasicSession {
 
         if (!trouve) {
             // Il faut l'ajouter
-            listeFact.add(FactBean.getFactBean(myDBSession, CD_FACT));
+            listeFact.add(FactBean.getFactBean(myDBSession, CD_FACT, messagesBundle));
         }
     }
 

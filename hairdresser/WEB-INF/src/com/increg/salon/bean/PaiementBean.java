@@ -81,11 +81,11 @@ public class PaiementBean extends TimeStampBean {
     /**
      * PaiementBean constructor comment.
      * 
-     * @param rs
-     *            java.sql.ResultSet
+     * @param rs java.sql.ResultSet
+     * @param rb Messages à utiliser
      */
-    public PaiementBean(ResultSet rs) {
-        super(rs);
+    public PaiementBean(ResultSet rs, ResourceBundle rb) {
+        super(rs, rb);
         try {
             CD_PAIEMENT = rs.getLong("CD_PAIEMENT");
         } catch (SQLException e) {
@@ -426,14 +426,12 @@ public class PaiementBean extends TimeStampBean {
      * Création d'un Bean Facture à partir de sa clé Creation date: (18/08/2001
      * 17:05:45)
      * 
-     * @param dbConnect
-     *            com.increg.salon.bean.DBSession
-     * @param CD_PAIEMENT
-     *            java.lang.String
+     * @param dbConnect com.increg.salon.bean.DBSession
+     * @param CD_PAIEMENT java.lang.String
+     * @param rb Messages à utiliser
      * @return Paiement correspondant au code
      */
-    public static PaiementBean getPaiementBean(DBSession dbConnect,
-            String CD_PAIEMENT) {
+    public static PaiementBean getPaiementBean(DBSession dbConnect, String CD_PAIEMENT, ResourceBundle rb) {
         String reqSQL = "select * from PAIEMENT where CD_PAIEMENT="
                 + CD_PAIEMENT;
         PaiementBean res = null;
@@ -443,7 +441,7 @@ public class PaiementBean extends TimeStampBean {
             ResultSet aRS = dbConnect.doRequest(reqSQL);
 
             while (aRS.next()) {
-                res = new PaiementBean(aRS);
+                res = new PaiementBean(aRS, rb);
             }
             aRS.close();
         } catch (Exception e) {
@@ -722,7 +720,7 @@ public class PaiementBean extends TimeStampBean {
             ResultSet aRS = dbConnect.doRequest(reqSQL);
 
             while (aRS.next()) {
-                lignes.add(new FactBean(aRS));
+                lignes.add(new FactBean(aRS, message));
             }
             aRS.close();
         } catch (Exception e) {

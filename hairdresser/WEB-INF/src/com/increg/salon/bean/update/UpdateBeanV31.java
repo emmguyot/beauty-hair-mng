@@ -3,6 +3,7 @@ package com.increg.salon.bean.update;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ResourceBundle;
 
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.FactBean;
@@ -19,8 +20,8 @@ public class UpdateBeanV31 extends UpdateBeanV30 {
      * @param dbConnect .
      * @throws Exception .
      */
-    public UpdateBeanV31(DBSession dbConnect) throws Exception {
-        super(dbConnect);
+    public UpdateBeanV31(DBSession dbConnect, ResourceBundle rb) throws Exception {
+        super(dbConnect, rb);
     }
 
     /**
@@ -120,7 +121,7 @@ public class UpdateBeanV31 extends UpdateBeanV30 {
             ResultSet rs = dbConnect.doRequest(sqlTVA);
             
             while (rs.next()) {
-                FactBean aFact = new FactBean(rs);
+                FactBean aFact = new FactBean(rs, messages);
                 
                 BigDecimal txTVA = aFact.getTVA().multiply(new BigDecimal(100)).divide(aFact.getPRX_TOT_HT(), 20, BigDecimal.ROUND_HALF_UP);
                 aFact.calculTotaux(dbConnect, txTVA);

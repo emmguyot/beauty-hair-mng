@@ -44,6 +44,10 @@ public class PaiementBeanTest extends TestCase {
      * Connexion à la base de donnée  
      */
     private DBSession aDBSession = new DBSession("config");
+    /**
+     * Messages localisés
+     */
+	private ResourceBundle msg = ResourceBundle.getBundle("messages");
 
     /**
      * Constructor for PaiementBeanTest.
@@ -92,7 +96,7 @@ public class PaiementBeanTest extends TestCase {
             }
             rs.close();
 
-            aFact = new FactBean();
+            aFact = new FactBean(msg);
             aFact.setCD_FACT(numFact);
             aFact.setCD_CLI(cdCli);
             aFact.setCD_COLLAB(1);
@@ -124,7 +128,7 @@ public class PaiementBeanTest extends TestCase {
             aFact.calculTotaux(aDBSession);
             
             // Paiement
-            aPaiement = new PaiementBean(ResourceBundle.getBundle("messages"));
+            aPaiement = new PaiementBean(msg);
             aPaiement.setCD_MOD_REGL(1);
             aPaiement.setCD_PAIEMENT(numPaiement);
             aPaiement.setDT_PAIEMENT("08/07/2002", Locale.getDefault());

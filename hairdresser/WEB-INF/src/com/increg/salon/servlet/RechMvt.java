@@ -85,7 +85,7 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
 		Vector lstLignes = new Vector();
 
 		while (aRS.next()) {
-			MvtStkBean aMvtStk = new MvtStkBean(aRS);
+			MvtStkBean aMvtStk = new MvtStkBean(aRS, mySalon.getMessagesBundle());
 			lstLignes.add(aMvtStk);
 		}
 		aRS.close();

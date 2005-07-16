@@ -243,7 +243,7 @@ public class FicCli extends ConnectedServlet {
                     /**
                      * Création du bean de consultation
                      */
-                    FactBean aFact = new FactBean(aRS);
+                    FactBean aFact = new FactBean(aRS, mySalon.getMessagesBundle());
                     Vector lignes = aFact.getLignes(myDBSession);
 
                     /**

@@ -23,6 +23,7 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.Vector;
 
@@ -112,9 +113,10 @@ public class FactBean extends TimeStampBean {
     
     /**
      * FactBean constructor comment.
+     * @param rb Messages localisés
      */
-    public FactBean() {
-        super();
+    public FactBean(ResourceBundle rb) {
+        super(rb);
 
         // Place la date du jour en date de prestation
         DT_PREST = Calendar.getInstance();
@@ -130,9 +132,10 @@ public class FactBean extends TimeStampBean {
     /**
      * FactBean constructor comment.
      * @param rs java.sql.ResultSet
+     * @param rb Messages localisés
      */
-    public FactBean(ResultSet rs) {
-        super(rs);
+    public FactBean(ResultSet rs, ResourceBundle rb) {
+        super(rs, rb);
         try {
             CD_CLI = rs.getLong("CD_CLI");
         } catch (SQLException e) {
@@ -766,7 +769,7 @@ public class FactBean extends TimeStampBean {
 
             // Maj du paiement si besoin
             if (getCD_PAIEMENT() != 0) {
-                PaiementBean myPaiement = PaiementBean.getPaiementBean(dbConnect, Long.toString(getCD_PAIEMENT()));
+                PaiementBean myPaiement = PaiementBean.getPaiementBean(dbConnect, Long.toString(getCD_PAIEMENT()), message);
                 myPaiement.calculTotaux(dbConnect);
             }
         } catch (Exception e) {
@@ -883,7 +886,7 @@ public class FactBean extends TimeStampBean {
 
             // Maj du paiement si besoin
             if (getCD_PAIEMENT() != 0) {
-                PaiementBean myPaiement = PaiementBean.getPaiementBean(dbConnect, Long.toString(getCD_PAIEMENT()));
+                PaiementBean myPaiement = PaiementBean.getPaiementBean(dbConnect, Long.toString(getCD_PAIEMENT()), message);
                 myPaiement.calculTotaux(dbConnect);
             }
         } catch (Exception e) {
@@ -900,7 +903,7 @@ public class FactBean extends TimeStampBean {
      */
     public Object clone(DBSession dbConnect) {
 
-        FactBean newFact = new FactBean();
+        FactBean newFact = new FactBean(message);
 
         // Copie du corps
         newFact.setCD_CLI(CD_CLI);
@@ -987,9 +990,10 @@ public class FactBean extends TimeStampBean {
      * Creation date: (18/08/2001 17:05:45)
      * @param dbConnect com.increg.salon.bean.DBSession
      * @param CD_FACT java.lang.String
+     * @param rb Messages localisés
      * @return Facture correspondante au code
      */
-    public static FactBean getFactBean(DBSession dbConnect, String CD_FACT) {
+    public static FactBean getFactBean(DBSession dbConnect, String CD_FACT, ResourceBundle rb) {
         String reqSQL = "select * from FACT where CD_FACT=" + CD_FACT;
         FactBean res = null;
 
@@ -998,7 +1002,7 @@ public class FactBean extends TimeStampBean {
             ResultSet aRS = dbConnect.doRequest(reqSQL);
 
             while (aRS.next()) {
-                res = new FactBean(aRS);
+                res = new FactBean(aRS, rb);
             }
             aRS.close();
         } catch (Exception e) {
@@ -1170,7 +1174,7 @@ public class FactBean extends TimeStampBean {
             ResultSet aRS = dbConnect.doRequest(reqSQL);
 
             while (aRS.next()) {
-                res = new FactBean(aRS);
+                res = new FactBean(aRS, message);
 
                 // Fusion proprement dite
                 if (lignes == null) {
@@ -1263,8 +1267,8 @@ public class FactBean extends TimeStampBean {
 
                 if (aHisto.hasMvtStk(dbConnect)) {
                     // Cette ligne implique un mouvement
-                    ArtBean aArt = ArtBean.getArtBean(dbConnect, Long.toString(aPrest.getCD_ART()));
-                    MvtStkBean aMvt = new MvtStkBean();
+                    ArtBean aArt = ArtBean.getArtBean(dbConnect, Long.toString(aPrest.getCD_ART()), message);
+                    MvtStkBean aMvt = new MvtStkBean(message);
 
                     aMvt.setCD_ART(aPrest.getCD_ART());
                     aMvt.setCD_FACT(CD_FACT);

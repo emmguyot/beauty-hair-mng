@@ -83,6 +83,14 @@ public abstract class TimeStampBean extends GenericBean {
 	}
 	/**
 	 * Insert the method's description here.
+	 * Creation date: (18/07/2001 22:56:22)
+	 */
+	public TimeStampBean(ResultSet rs, ResourceBundle rb) {
+		this(rs);
+		message = rb;
+	}
+	/**
+	 * Insert the method's description here.
 	 * Creation date: (18/07/2001 22:54:15)
 	 * @return java.util.Calendar
 	 */
