@@ -1,11 +1,14 @@
 package com.increg.salon.servlet;
 
+import java.text.MessageFormat;
 import java.util.Date;
+import java.util.ResourceBundle;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.ArtBean;
 import com.increg.salon.bean.ClientBean;
@@ -50,7 +53,8 @@ public class FicPurge extends ConnectedServlet {
         HttpSession mySession = request.getSession(false);
         SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
         DBSession myDBSession = mySalon.getMyDBSession();
-        SimpleDateFormatEG formatDate = new SimpleDateFormatEG("dd/MM/yy");
+        ResourceBundle msgBundle = mySalon.getMessagesBundle();
+		SimpleDateFormatEG formatDate = new SimpleDateFormatEG(msgBundle.getString("format.dateSimpleDefaut"));
 
         String msgInfo = "";
 
@@ -75,73 +79,73 @@ public class FicPurge extends ConnectedServlet {
                 if (mvtStk.booleanValue()) {
                     nbEnreg = MvtStkBean.purge(myDBSession, dateLimite);   
                     if (nbEnreg > 0) {
-                        msgInfo += "Purge des mouvements de stock effectuée (" + nbEnreg + ").\n";
+                    	msgInfo += MessageFormat.format(msgBundle.getString("ficPurge.purgeStockNb"), new Object[] { Integer.toString(nbEnreg) });
                     }            
                 }
                 if (mvtCaisse.booleanValue()) {
                     nbEnreg = MvtCaisseBean.purge(myDBSession, dateLimite);
                     if (nbEnreg > 0) {
-                        msgInfo += "Purge des mouvements de caisse effectuée (" + nbEnreg + ").\n";
+                    	msgInfo += MessageFormat.format(msgBundle.getString("ficPurge.purgeCaisseNb"), new Object[] { Integer.toString(nbEnreg) });
                     }            
                 }
                 if (histoPrest.booleanValue()) {
                     nbEnreg = HistoPrestBean.purge(myDBSession, dateLimite);            
                     if (nbEnreg > 0) {
-                        msgInfo += "Purge de l'historique effectuée (" + nbEnreg + ").\n";
+                    	msgInfo += MessageFormat.format(msgBundle.getString("ficPurge.purgeHistoryNb"), new Object[] { Integer.toString(nbEnreg) });
                     }
                     FactBean.purge(myDBSession, dateLimite);            
                 }
                 if (rdv.booleanValue()) {
                     nbEnreg = RDVBean.purge(myDBSession, dateLimite);            
                     if (nbEnreg > 0) {
-                        msgInfo += "Purge des rendez-vous effectuée (" + nbEnreg + ").\n";
+                    	msgInfo += MessageFormat.format(msgBundle.getString("ficPurge.purgeRDVNb"), new Object[] { Integer.toString(nbEnreg) });
                     }
                 }
                 if (pointage.booleanValue()) {
                     nbEnreg = PointageBean.purge(myDBSession, dateLimite);
                     if (nbEnreg > 0) {
-                        msgInfo += "Purge des pointages effectuée (" + nbEnreg + ").\n";
+                    	msgInfo += MessageFormat.format(msgBundle.getString("ficPurge.purgePointageNb"), new Object[] { Integer.toString(nbEnreg) });
                     }
                 }
                 if (paiement.booleanValue()) {
                     nbEnreg = PaiementBean.purge(myDBSession, dateLimite);            
                     if (nbEnreg > 0) {
-                        msgInfo += "Purge des paiements effectuée (" + nbEnreg + ").\n";
+                    	msgInfo += MessageFormat.format(msgBundle.getString("ficPurge.purgePaiementNb"), new Object[] { Integer.toString(nbEnreg) });
                     }
                 }
                 if (prest.booleanValue()) {
                     nbEnreg = PrestBean.purge(myDBSession, dateLimite);            
                     if (nbEnreg > 0) {
-                        msgInfo += "Purge des prestations effectuée (" + nbEnreg + ").\n";
+                    	msgInfo += MessageFormat.format(msgBundle.getString("ficPurge.purgePrestNb"), new Object[] { Integer.toString(nbEnreg) });
                     }
                 }
                 if (art.booleanValue()) {
                     nbEnreg = ArtBean.purge(myDBSession, dateLimite); 
                     if (nbEnreg > 0) {
-                        msgInfo += "Purge des articles effectuée (" + nbEnreg + ").\n";
+                    	msgInfo += MessageFormat.format(msgBundle.getString("ficPurge.purgeArticlesNb"), new Object[] { Integer.toString(nbEnreg) });
                     }
                 }
                 if (collab.booleanValue()) {
                     nbEnreg = CollabBean.purge(myDBSession, dateLimite);
                     if (nbEnreg > 0) {
-                        msgInfo += "Purge des collaborateurs effectuée (" + nbEnreg + ").\n";
+                    	msgInfo += MessageFormat.format(msgBundle.getString("ficPurge.purgeCollabNb"), new Object[] { Integer.toString(nbEnreg) });
                     }
                 }
                 if (client.booleanValue()) {
                     nbEnreg = ClientBean.purge(myDBSession, dateLimite);            
                     if (nbEnreg > 0) {
-                        msgInfo += "Purge des clients effectuée (" + nbEnreg + ").\n";
+                    	msgInfo += MessageFormat.format(msgBundle.getString("ficPurge.purgeClientNb"), new Object[] { Integer.toString(nbEnreg) });
                     }
                 }
                 if (clientPerime.booleanValue()) {
                     nbEnreg = ClientBean.purgePerime(myDBSession, dateLimite);
                     if (nbEnreg > 0) {
-                        msgInfo += "Purge des clients non actuels effectuée (" + nbEnreg + ").\n";
+                    	msgInfo += MessageFormat.format(msgBundle.getString("ficPurge.purgeClientInvalideNb"), new Object[] { Integer.toString(nbEnreg) });
                     }
                 }
                 
                 myDBSession.endTransaction();            
-                mySalon.setMessage("Info", "Purge effectuée correctement. Il est conseillé de faire une sauvegarde.");
+                mySalon.setMessage("Info", BasicSession.TAG_I18N + "ficPurge.purgeOk" + BasicSession.TAG_I18N);
     
             }
             catch (Exception e) {

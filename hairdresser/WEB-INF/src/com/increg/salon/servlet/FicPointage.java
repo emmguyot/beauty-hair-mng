@@ -67,7 +67,7 @@ public void performTask(
 	            aPointage.setCOMM(COMM);
 
 	            aPointage.create(myDBSession);
-	            mySalon.setMessage("Info", "Création effectuée.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.creationOk" + BasicSession.TAG_I18N);
 	            request.setAttribute("Action", "Modification");
 			}
 			catch (Exception e) {
@@ -99,7 +99,7 @@ public void performTask(
 	            aPointage.setCOMM(COMM);
 
 	            aPointage.maj(myDBSession);
-	            mySalon.setMessage("Info", "Enregistrement effectué.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.enregistrementOk" + BasicSession.TAG_I18N);
 	            request.setAttribute("Action", "Modification");
 			}
 			catch (Exception e) {
@@ -117,7 +117,7 @@ public void performTask(
 
 			try {
 	            aPointage.delete(myDBSession);
-	            mySalon.setMessage("Info", "Suppression effectuée.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.suppressionOk" + BasicSession.TAG_I18N);
 	            // Un bean vide
 	            aPointage = new PointageBean();
 	            request.setAttribute("Action", "Creation");

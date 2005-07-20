@@ -52,7 +52,7 @@ public void performTask(
 
 			try {
 	            aTypMvt.create(myDBSession);
-	            mySalon.setMessage("Info", "Création effectuée.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.creationOk" + BasicSession.TAG_I18N);
 	            request.setAttribute("Action", "Modification");
 			}
 			catch (Exception e) {
@@ -90,7 +90,7 @@ public void performTask(
 
 			try {
 	            aTypMvt.maj(myDBSession);
-	            mySalon.setMessage("Info", "Enregistrement effectué.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.enregistrementOk" + BasicSession.TAG_I18N);
 	            request.setAttribute("Action", "Modification");
 			}
 			catch (Exception e) {
@@ -108,7 +108,7 @@ public void performTask(
 
 			try {
 	            aTypMvt.delete(myDBSession);
-	            mySalon.setMessage("Info", "Suppression effectuée.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.suppressionOk" + BasicSession.TAG_I18N);
 	            // Un bean vide
 	            aTypMvt = new TypMvtBean();
 	            request.setAttribute("Action", "Creation");
@@ -131,7 +131,7 @@ public void performTask(
 
 			try {
 	            aTypMvt.create(myDBSession);
-	            mySalon.setMessage("Info", "Duplication effectuée. Vous travaillez maintenant sur la copie.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.duplicationOk" + BasicSession.TAG_I18N);
 	            request.setAttribute("Action", "Modification");
 			}
 			catch (Exception e) {

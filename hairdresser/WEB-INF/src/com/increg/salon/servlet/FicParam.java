@@ -59,14 +59,14 @@ public void performTask(
                 
                 try {
                     aParam.maj(myDBSession);
-                    mySalon.setMessage("Info", "Enregistrement effectué.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.enregistrementOk" + BasicSession.TAG_I18N);
                 }
                 catch (Exception e) {
                     mySalon.setMessage("Erreur", e.toString());
                 }
             }
             else {
-                mySalon.setMessage("Erreur", "Les deux valeurs ne sont pas identiques");
+                mySalon.setMessage("Erreur", BasicSession.TAG_I18N + "ficIdent.motDePasseDifferent" + BasicSession.TAG_I18N);
             }
             request.setAttribute("Action", Action);
 

@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.ClientBean;
 import com.increg.salon.bean.CollabBean;
@@ -139,10 +140,10 @@ public class FicRDV extends ConnectedServlet {
 
                     aRDV.create(myDBSession);
 
-                    mySalon.setMessage("Info", "Création effectuée.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.creationOk" + BasicSession.TAG_I18N);
                     if (!aRDV.verifChevauchement(myDBSession, true)) {
                         // Chevauchement
-                        mySalon.setMessage("Info", "Attention, ce rendez-vous est en conflit avec un autre.");
+                        mySalon.setMessage("Info", BasicSession.TAG_I18N + "ficRDV.conflitRDV" + BasicSession.TAG_I18N);
                     }
                     request.setAttribute("Action", "Modification");
                 }
@@ -173,10 +174,10 @@ public class FicRDV extends ConnectedServlet {
 
                     aRDV.maj(myDBSession);
 
-                    mySalon.setMessage("Info", "Enregistrement effectué.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.enregistrementOk" + BasicSession.TAG_I18N);
                     if (!aRDV.verifChevauchement(myDBSession, true)) {
                         // Chevauchement
-                        mySalon.setMessage("Info", "Attention, ce rendez-vous est en conflit avec un autre.");
+                        mySalon.setMessage("Info", BasicSession.TAG_I18N + "ficRDV.conflitRDV" + BasicSession.TAG_I18N);
                     }
                     request.setAttribute("Action", "Modification");
                 }
@@ -195,7 +196,7 @@ public class FicRDV extends ConnectedServlet {
 
                 try {
                     aRDVtoDelete.delete(myDBSession);
-                    mySalon.setMessage("Info", "Suppression effectuée.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.suppressionOk" + BasicSession.TAG_I18N);
                     // Un bean vide
                     aRDV = new RDVBean();
                     aRDV.setCD_CLI(CD_CLI);
@@ -238,7 +239,7 @@ public class FicRDV extends ConnectedServlet {
 
                     if (!aRDV.verifChevauchement(myDBSession, exist)) {
                         // Chevauchement
-                        mySalon.setMessage("Info", "Attention, ce rendez-vous est en conflit avec un autre.");
+                        mySalon.setMessage("Info", BasicSession.TAG_I18N + "ficRDV.conflitRDV" + BasicSession.TAG_I18N);
                     }
                 }
                 catch (Exception e) {

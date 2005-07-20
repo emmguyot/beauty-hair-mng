@@ -52,7 +52,7 @@ public void performTask(
 			try {
 	            aDevise.create(myDBSession);
                 mySalon.resetDevise();
-	            mySalon.setMessage("Info", "Création effectuée.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.creationOk" + BasicSession.TAG_I18N);
 	            request.setAttribute("Action", "Modification");
 			}
 			catch (Exception e) {
@@ -82,7 +82,7 @@ public void performTask(
 			try {
 	            aDevise.maj(myDBSession);
                 mySalon.resetDevise();
-	            mySalon.setMessage("Info", "Enregistrement effectué.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.enregistrementOk" + BasicSession.TAG_I18N);
 	            request.setAttribute("Action", "Modification");
 			}
 			catch (Exception e) {
@@ -101,7 +101,7 @@ public void performTask(
 			try {
 	            aDevise.delete(myDBSession);
                 mySalon.resetDevise();
-	            mySalon.setMessage("Info", "Suppression effectuée.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.suppressionOk" + BasicSession.TAG_I18N);
 	            // Un bean vide
 	            aDevise = new DeviseBean();
 	            request.setAttribute("Action", "Creation");
@@ -125,7 +125,7 @@ public void performTask(
 			try {
 	            aDevise.create(myDBSession);
                 mySalon.resetDevise();
-	            mySalon.setMessage("Info", "Duplication effectuée. Vous travaillez maintenant sur la copie.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.duplicationOk" + BasicSession.TAG_I18N);
 	            request.setAttribute("Action", "Modification");
 			}
 			catch (Exception e) {

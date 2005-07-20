@@ -22,6 +22,7 @@ import java.util.Vector;
 
 import javax.servlet.http.HttpSession;
 
+import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.ArtBean;
 import com.increg.salon.bean.MvtStkBean;
@@ -110,11 +111,11 @@ public class FicArt_Mvt extends ConnectedServlet {
                 try {
                     aArt.create(myDBSession);
 
-                    mySalon.setMessage("Info", "Création effectuée.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.creationOk" + BasicSession.TAG_I18N);
                     if (CD_TYP_ART.equals("1")) {
                         // Création automatique de la prestation
                         aArt.creationPrestation(myDBSession);
-                        mySalon.setMessage("Info", "Création effectuée. La prestation associée a également été créée.");
+                        mySalon.setMessage("Info", BasicSession.TAG_I18N + "ficArt" + BasicSession.TAG_I18N);
                     }
                     request.setAttribute("Action", "Modification");
                 }
@@ -178,7 +179,7 @@ public class FicArt_Mvt extends ConnectedServlet {
                         if (CD_TYP_ART.equals(Integer.toString(ArtBean.TYP_ART_VENT_DETAIL))) {
                             // Création automatique de la prestation
                             aArt.creationPrestation(myDBSession);
-                            mySalon.setMessage("Info", "Création effectuée. La prestation associée a également été créée.");
+                            mySalon.setMessage("Info", BasicSession.TAG_I18N + "ficArt.creationOk" + BasicSession.TAG_I18N);
                         }
                     }
                     else {
@@ -214,7 +215,7 @@ public class FicArt_Mvt extends ConnectedServlet {
                         }
                     }
 
-                    mySalon.setMessage("Info", "Enregistrement effectué.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.enregistrementOk" + BasicSession.TAG_I18N);
                     request.setAttribute("Action", "Modification");
                 }
                 catch (Exception e) {
@@ -249,7 +250,7 @@ public class FicArt_Mvt extends ConnectedServlet {
                         aArt.creationPrestation(myDBSession);
                     }
 
-                    mySalon.setMessage("Info", "Duplication effectuée. Vous travaillez maintenant sur la copie.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.duplicationOk" + BasicSession.TAG_I18N);
                     request.setAttribute("Action", "Modification");
                 }
                 catch (Exception e) {
@@ -268,7 +269,7 @@ public class FicArt_Mvt extends ConnectedServlet {
                 try {
                     // Suppression des lignes Fournisseurs en même temps
                     aArt.delete(myDBSession);
-                    mySalon.setMessage("Info", "Suppression effectuée.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.suppressionOk" + BasicSession.TAG_I18N);
                     // Un bean vide
                     aArt = new ArtBean(mySalon.getMessagesBundle());
                     request.setAttribute("Action", "Creation");

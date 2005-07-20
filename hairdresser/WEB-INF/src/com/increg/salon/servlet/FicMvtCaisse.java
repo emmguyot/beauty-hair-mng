@@ -63,7 +63,7 @@ public void performTask(
 
 	            aMvt.create(myDBSession);
 
-	            mySalon.setMessage("Info", "Création effectuée. Vous pouvez passer un nouveau mouvement.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "ficMvtCaisse.creationOk" + BasicSession.TAG_I18N);
 	            request.setAttribute("Action", "Creation");
 
 	            aMvt = new MvtCaisseBean();

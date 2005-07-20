@@ -23,6 +23,7 @@ import java.util.Vector;
 
 import javax.servlet.http.HttpSession;
 
+import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.FactBean;
 import com.increg.salon.bean.PaiementBean;
@@ -128,7 +129,7 @@ public class FicPaiement extends ConnectedServlet {
 
                     aPaiement.calculTotaux(myDBSession);
 
-                    mySalon.setMessage("Info", "Création effectuée.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.creationOk" + BasicSession.TAG_I18N);
                     request.setAttribute("Action", "Modification");
                 } catch (Exception e) {
                     mySalon.setMessage("Erreur", e.toString());
@@ -202,7 +203,7 @@ public class FicPaiement extends ConnectedServlet {
 
                     aPaiement.calculTotaux(myDBSession);
 
-                    mySalon.setMessage("Info", "Enregistrement effectué.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.enregistrementOk" + BasicSession.TAG_I18N);
                     request.setAttribute("Action", "Modification");
                 } catch (Exception e) {
                     mySalon.setMessage("Erreur", e.toString());
@@ -229,7 +230,7 @@ public class FicPaiement extends ConnectedServlet {
                         mySalon.addFact(Long.toString(aFact.getCD_FACT()));
                     }
                     aPaiement.delete(myDBSession);
-                    mySalon.setMessage("Info", "Suppression effectuée.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.suppressionOk" + BasicSession.TAG_I18N);
                     // Un bean vide
                     aPaiement = new PaiementBean(mySalon.getMessagesBundle());
                     request.setAttribute("Action", "Creation");

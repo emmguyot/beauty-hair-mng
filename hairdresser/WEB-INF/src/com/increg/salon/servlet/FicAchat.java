@@ -116,7 +116,7 @@ public void performTask(
                 aMvt.setVAL_MVT_HT(VAL_MVT_HT);
                 aMvt.setCD_CMD_FOURN(CD_CMD_FOURN);
                 aMvt.create(myDBSession);
-                mySalon.setMessage("Info", "Enregistrement effectué.");
+                mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.enregistrementOk" + BasicSession.TAG_I18N);
             }
             catch (Exception e) {
                 mySalon.setMessage("Erreur", e.toString());
@@ -130,7 +130,7 @@ public void performTask(
                 // C'est une nouvelle ligne
                 MvtStkBean aMvt = MvtStkBean.getMvtStkBean(myDBSession, paramSup1, paramSup2, null, mySalon.getLangue(), mySalon.getMessagesBundle());
                 aMvt.delete(myDBSession);
-                mySalon.setMessage("Info", "Suppression effectuée.");
+                mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.suppressionOk" + BasicSession.TAG_I18N);
             }
             catch (Exception e) {
                 mySalon.setMessage("Erreur", e.toString());

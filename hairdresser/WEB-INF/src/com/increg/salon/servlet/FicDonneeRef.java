@@ -49,7 +49,7 @@ public void performTask(
 
 			try {
 	            aDonneeRef.create(myDBSession);
-	            mySalon.setMessage("Info", "Création effectuée.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.creationOk" + BasicSession.TAG_I18N);
 	            request.setAttribute("Action", "Modification");
 			}
 			catch (Exception e) {
@@ -76,7 +76,7 @@ public void performTask(
 
 			try {
 	            aDonneeRef.maj(myDBSession);
-	            mySalon.setMessage("Info", "Enregistrement effectué.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.enregistrementOk" + BasicSession.TAG_I18N);
 	            request.setAttribute("Action", "Modification");
 			}
 			catch (Exception e) {
@@ -94,7 +94,7 @@ public void performTask(
 
 			try {
 	            aDonneeRef.delete(myDBSession);
-	            mySalon.setMessage("Info", "Suppression effectuée.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.suppressionOk" + BasicSession.TAG_I18N);
 	            // Un bean vide
 	            aDonneeRef = new DonneeRefBean(nomTable);
 	            request.setAttribute("Action", "Creation");
@@ -115,7 +115,7 @@ public void performTask(
 
 			try {
 	            aDonneeRef.create(myDBSession);
-	            mySalon.setMessage("Info", "Duplication effectuée. Vous travaillez maintenant sur la copie.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.duplicationOk" + BasicSession.TAG_I18N);
 			}
 			catch (Exception e) {
 	            mySalon.setMessage("Erreur", e.toString());
@@ -144,7 +144,7 @@ public void performTask(
 
 	}
 	catch (Exception e) {
-		System.out.println("FicCli::performTask : Erreur à la redirection : " + e.toString());
+		System.out.println("FicDonneeRef::performTask : Erreur à la redirection : " + e.toString());
 	}
 }
 }

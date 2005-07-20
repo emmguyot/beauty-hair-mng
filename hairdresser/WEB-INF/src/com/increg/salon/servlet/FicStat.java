@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.exception.FctlException;
 import com.increg.salon.bean.SalonSession;
@@ -70,7 +71,7 @@ public class FicStat extends ConnectedServlet {
 
                 try {
                     aStat.create(myDBSession);
-                    mySalon.setMessage("Info", "Création effectuée.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.creationOk" + BasicSession.TAG_I18N);
                     request.setAttribute("Action", "Modification");
                 }
                 catch (Exception e) {
@@ -100,7 +101,7 @@ public class FicStat extends ConnectedServlet {
 
                 try {
                     aStat.maj(myDBSession);
-                    mySalon.setMessage("Info", "Enregistrement effectué.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.enregistrementOk" + BasicSession.TAG_I18N);
                     request.setAttribute("Action", "Modification");
                 }
                 catch (Exception e) {
@@ -126,7 +127,7 @@ public class FicStat extends ConnectedServlet {
 
                     mySalon.setMessage(
                         "Info",
-                        "Duplication effectuée. Vous travaillez maintenant sur la copie.");
+                        BasicSession.TAG_I18N + "message.duplicationOk" + BasicSession.TAG_I18N);
                     request.setAttribute("Action", "Modification");
                 }
                 catch (Exception e) {
@@ -152,7 +153,7 @@ public class FicStat extends ConnectedServlet {
                     }
                     // Suppression de la stat
                     aStat.delete(myDBSession);
-                    mySalon.setMessage("Info", "Suppression effectuée.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.suppressionOk" + BasicSession.TAG_I18N);
                     // Un bean vide
                     aStat = new StatBean(mySalon.getMessagesBundle());
                     request.setAttribute("Action", "Creation");

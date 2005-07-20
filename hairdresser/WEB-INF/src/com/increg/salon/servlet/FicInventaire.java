@@ -143,7 +143,7 @@ public void performTask(javax.servlet.http.HttpServletRequest request, javax.ser
                 }
             }
             myDBSession.endTransaction();
-            mySalon.setMessage("Info", "Création des mouvements effectuée");
+            mySalon.setMessage("Info", BasicSession.TAG_I18N + "ficInventaire.creationOk" + BasicSession.TAG_I18N);
             request.setAttribute("RAZ", "ok");
         }
         catch (Exception e) {

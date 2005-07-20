@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.exception.FctlException;
 import com.increg.salon.bean.CriterePubBean;
@@ -58,7 +59,7 @@ public class FicCriterePub extends ConnectedServlet {
 
                 try {
                     aCriterePub.create(myDBSession);
-                    mySalon.setMessage("Info", "Création effectuée.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.creationOk" + BasicSession.TAG_I18N);
                     request.setAttribute("Action", "Modification");
                 }
                 catch (Exception e) {
@@ -86,7 +87,7 @@ public class FicCriterePub extends ConnectedServlet {
 
                 try {
                     aCriterePub.maj(myDBSession);
-                    mySalon.setMessage("Info", "Enregistrement effectué.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.enregistrementOk" + BasicSession.TAG_I18N);
                     request.setAttribute("Action", "Modification");
                 }
                 catch (Exception e) {
@@ -110,7 +111,7 @@ public class FicCriterePub extends ConnectedServlet {
 
                     mySalon.setMessage(
                         "Info",
-                        "Duplication effectuée. Vous travaillez maintenant sur la copie.");
+                        BasicSession.TAG_I18N + "message.duplicationOk" + BasicSession.TAG_I18N);
                     request.setAttribute("Action", "Modification");
                 }
                 catch (Exception e) {
@@ -129,7 +130,7 @@ public class FicCriterePub extends ConnectedServlet {
                 try {
                     // Suppression de la stat
                     aCriterePub.delete(myDBSession);
-                    mySalon.setMessage("Info", "Suppression effectuée.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.suppressionOk" + BasicSession.TAG_I18N);
                     // Un bean vide
                     aCriterePub = new CriterePubBean();
                     request.setAttribute("Action", "Creation");

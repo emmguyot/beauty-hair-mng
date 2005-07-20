@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.FeteBean;
 import com.increg.salon.bean.SalonSession;
@@ -55,7 +56,7 @@ public void performTask(
 	            aFete.setDT_FETE(DT_FETE, mySalon.getLangue());
 
 	            aFete.create(myDBSession);
-	            mySalon.setMessage("Info", "Création effectuée.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.creationOk" + BasicSession.TAG_I18N);
 	            request.setAttribute("Action", "Modification");
 			}
 			catch (Exception e) {
@@ -83,7 +84,7 @@ public void performTask(
 	            aFete.setDT_FETE(DT_FETE, mySalon.getLangue());
 
 	            aFete.maj(myDBSession);
-	            mySalon.setMessage("Info", "Enregistrement effectué.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.enregistrementOk" + BasicSession.TAG_I18N);
 	            request.setAttribute("Action", "Modification");
 			}
 			catch (Exception e) {
@@ -101,7 +102,7 @@ public void performTask(
 
 			try {
 	            aFete.delete(myDBSession);
-	            mySalon.setMessage("Info", "Suppression effectuée.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.suppressionOk" + BasicSession.TAG_I18N);
 	            // Un bean vide
 	            aFete = new FeteBean();
 	            request.setAttribute("Action", "Creation");
@@ -124,7 +125,7 @@ public void performTask(
 	            aFete.setDT_FETE(DT_FETE, mySalon.getLangue());
 
                 aFete.create(myDBSession);
-                mySalon.setMessage("Info", "Duplication effectuée. Vous travaillez maintenant sur la copie.");
+                mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.duplicationOk" + BasicSession.TAG_I18N);
                 request.setAttribute("Action", "Modification");
             }
             catch (Exception e) {

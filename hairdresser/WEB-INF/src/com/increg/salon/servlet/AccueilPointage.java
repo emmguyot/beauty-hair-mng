@@ -14,7 +14,6 @@ import com.increg.salon.bean.CollabBean;
 import com.increg.salon.bean.FeteBean;
 import com.increg.salon.bean.PointageBean;
 import com.increg.salon.bean.SalonSession;
-import com.increg.util.SimpleDateFormatEG;
 
 /**
  * Gestion de l'accueil avec pointage des collabs
@@ -33,7 +32,6 @@ public class AccueilPointage extends ConnectedServlet {
         HttpSession mySession = request.getSession(false);
         SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
         DBSession myDBSession = mySalon.getMyDBSession();
-        SimpleDateFormatEG formatDate = new SimpleDateFormatEG("dd/MM/yyyy HH:mm:ss");
 
         // Liste des collab cochés
         Vector lstCoche = new Vector();
@@ -66,7 +64,7 @@ public class AccueilPointage extends ConnectedServlet {
                     PointageBean.getPointageBean(
                         myDBSession,
                         Integer.toString(aCollab.getCD_COLLAB()),
-                        formatDate.formatEG(Calendar.getInstance().getTime()), mySalon.getLangue());
+                        Calendar.getInstance(mySalon.getLangue()).getTime());
 
                 if ((aPointage == null)
                     || ((aPointage.getDT_FIN() != null) && (aPointage.getDT_FIN().getTime().compareTo(new java.util.Date()) < 0))) {
