@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.ClientBean;
 import com.increg.salon.bean.SalonSession;
@@ -130,7 +131,7 @@ public class RechCli extends ConnectedServlet {
                 reqSQL.append(" and ");
             }
             reqSQL.append("0 = 1");
-            mySalon.setMessage("Info", "Veuillez saisir vos critères.");
+            mySalon.setMessage("Info", BasicSession.TAG_I18N + "rechCli.criteres" + BasicSession.TAG_I18N);
         }
         if ((nom != null) && (nom.length() > 0)) {
             if (!where) {

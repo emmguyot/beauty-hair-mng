@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.increg.commun.DBSession;
+import com.increg.commun.exception.NoImplementationException;
 import com.increg.salon.bean.FactBean;
 import com.increg.salon.bean.PaiementBean;
 import com.increg.salon.bean.SalonSession;
@@ -132,7 +133,7 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
 		request.setAttribute("listeEdition", liste);
 	}
 	else {
-		mySalon.setMessage("Erreur", "Format non implémenté.");
+		mySalon.setMessage("Erreur", new NoImplementationException());
 	}
 
 	try {

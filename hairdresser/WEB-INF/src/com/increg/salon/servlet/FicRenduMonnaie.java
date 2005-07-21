@@ -1,5 +1,6 @@
 package com.increg.salon.servlet;
 
+import com.increg.commun.BasicSession;
 import com.increg.salon.bean.*;
 import javax.servlet.http.*;
 import java.math.BigDecimal;
@@ -29,7 +30,7 @@ public class FicRenduMonnaie extends ConnectedServlet {
             aRendre = new BigDecimal(montantRegle).subtract(new BigDecimal(montant));
             if (aRendre.signum() < 0) { 
                 // Montant trop faible
-                mySalon.setMessage("Erreur", "Montant réglé trop faible");
+                mySalon.setMessage("Erreur", BasicSession.TAG_I18N + "ficRenduMonnaie.montantFaible" + BasicSession.TAG_I18N);
             }
         }
         catch (Throwable t) {

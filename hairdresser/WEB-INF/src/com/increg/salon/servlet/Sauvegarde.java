@@ -6,11 +6,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.Calendar;
 
 import javax.servlet.http.HttpSession;
 
 import com.ibm.ejs.security.util.Base64Coder;
+import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.Executer;
 import com.increg.salon.bean.ParamBean;
@@ -62,10 +64,10 @@ public class Sauvegarde extends ConnectedServlet {
                     Executer dumpProc =
                         new Executer("bash --login -c \"" + "/usr/bin/pg_dump -c -F c -Z 9 " + myDBSession.getBaseName() + " 2> /dev/null | gzip -9 2> /dev/null > '" + nomFichier + "'\"");
                     if (dumpProc.runAndWait() != 0) {
-                        mySalon.setMessage("Erreur", "La sauvegarde ne s'est pas bien déroulée.");
+                        mySalon.setMessage("Erreur", BasicSession.TAG_I18N + "sauvegarde.erreur" + BasicSession.TAG_I18N);
                     }
                     else {
-                        mySalon.setMessage("Info", "La sauvegarde est terminée.");
+                        mySalon.setMessage("Info", BasicSession.TAG_I18N + "sauvegarde.succes" + BasicSession.TAG_I18N);
                         if ((Type != null) && (Type.equals(Restauration.TYPE_INTERNET))) {
                             // Sauvegarde sur Internet
                             URL sauvURL = null;
@@ -88,7 +90,7 @@ public class Sauvegarde extends ConnectedServlet {
                             }
                             if (aCon == null) {
                                 // Connexion impossible
-                                throw (new Exception("Impossible de se connecter au serveur."));
+                                throw (new Exception(BasicSession.TAG_I18N + "message.serverKo" + BasicSession.TAG_I18N));
                             }
                             File fichier = new File(nomFichier);
                             String boundary = "------------7d1199c2401b4";
@@ -113,7 +115,7 @@ public class Sauvegarde extends ConnectedServlet {
                                 }
                             }
                             if (!connectionOk) {
-                                throw (new Exception("Impossible de se connecter au serveur"));
+                                throw (new Exception(BasicSession.TAG_I18N + "message.serverKo" + BasicSession.TAG_I18N));
                             }
 
                             // Lecture du fichier
@@ -147,10 +149,11 @@ public class Sauvegarde extends ConnectedServlet {
 
                             if (aCon.getResponseCode() != HttpURLConnection.HTTP_OK) {
                                 // Erreur
-                                mySalon.setMessage("Erreur", "Problème au dépot du fichier sur le serveur (" + aCon.getResponseMessage() + ")");
+                            	String msg = MessageFormat.format(mySalon.getMessagesBundle().getString("sauvegarde.uploadKo"), new Object[] { aCon.getResponseMessage() });
+                            	mySalon.setMessage("Erreur", msg);
                             }
                             else {
-                                mySalon.setMessage("Info", "La sauvegarde sur internet est terminée.");
+                                mySalon.setMessage("Info", BasicSession.TAG_I18N + "sauvegarde.internetSucces" + BasicSession.TAG_I18N);
                             }
 
                             /**

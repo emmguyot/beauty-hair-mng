@@ -84,7 +84,7 @@ public void performTask(
                     aTypMvt.setSENS_MVT(SENS_MVT);
                 }
                 else {
-                    mySalon.setMessage("Erreur", "Impossible de modifier le sens du mouvement car ce type de mouvement a déjà été utilisé");
+                    mySalon.setMessage("Erreur", BasicSession.TAG_I18N + "ficTypMvt.typeUtilise" + BasicSession.TAG_I18N);
                 }
             }
 
