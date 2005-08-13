@@ -126,6 +126,9 @@ public class FicCli extends ConnectedServlet {
                 request.setAttribute("Action", "Modification");
 
                 ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI);
+                if (assert((aCli != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
                 request.setAttribute("ClientBean", aCli);
 
             } else if (Action.equals("Modification")) {
@@ -135,6 +138,9 @@ public class FicCli extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI);
+                if (assert((aCli != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 
                 aCli.setCD_CLI(CD_CLI);
                 aCli.setCIVILITE(CIVILITE);
@@ -171,6 +177,9 @@ public class FicCli extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI);
+                if (assert((aCli != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 
                 try {
                     aCli.delete(myDBSession);

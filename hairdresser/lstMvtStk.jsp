@@ -89,7 +89,7 @@ Entre le :
 							       Integer.toString(aMvt.getCD_TYP_MVT())).toString(); %>
 	    <%= LIB_TYP_MVT %>
             <% if ((aMvt.getCD_FACT() != 0) 
-                    && (FactBean.getFactBean(mySalon.getMyDBSession(), Long.toString(aMvt.getCD_FACT())) 
+                    && (FactBean.getFactBean(mySalon.getMyDBSession(), Long.toString(aMvt.getCD_FACT()), mySalon.getMessagesBundle()) 
                         != null)){ %>
                 <a href="_FicheFact.jsp?Action=Modification&CD_FACT=<%= aMvt.getCD_FACT() %>" target="ClientFrame" title="Fiche facture">
                 <img src="images/fact.gif" border=0 align=top></a>
@@ -97,7 +97,7 @@ Entre le :
 	    </td>
 	    <td class="tabDonnees">
 	    <% String LIB_ART = ArtBean.getArtBean(mySalon.getMyDBSession(), 
-							       Long.toString(aMvt.getCD_ART())).toString(); %>
+							       Long.toString(aMvt.getCD_ART()), mySalon.getMessagesBundle()).toString(); %>
 	    <a href="_FicheArt_Mvt.jsp?Action=Modification&CD_ART=<%= aMvt.getCD_ART() %>" target="ClientFrame"><%= LIB_ART %></a>
 	    </td>
 	    <td class="Nombre"><salon:valeur valeur="<%= aMvt.getQTE() %>" valeurNulle="null">%%</salon:valeur></td>

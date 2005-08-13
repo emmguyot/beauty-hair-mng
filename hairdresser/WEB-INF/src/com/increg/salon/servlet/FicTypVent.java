@@ -81,6 +81,9 @@ public class FicTypVent extends ConnectedServlet {
                 request.setAttribute("Action", "Modification");
 
                 aTypVent = TypVentBean.getTypVentBean(myDBSession, CD_TYP_VENT);
+                if (assert((aTypVent != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
             } else if (Action.equals("Modification")) {
                 // Modification effective de la fiche
 
@@ -88,6 +91,9 @@ public class FicTypVent extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 aTypVent = TypVentBean.getTypVentBean(myDBSession, CD_TYP_VENT);
+                if (assert((aTypVent != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 
                 aTypVent.setCD_TYP_VENT(CD_TYP_VENT);
                 aTypVent.setLIB_TYP_VENT(LIB_TYP_VENT);
@@ -110,6 +116,9 @@ public class FicTypVent extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 aTypVent = TypVentBean.getTypVentBean(myDBSession, CD_TYP_VENT);
+                if (assert((aTypVent != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 
                 try {
                     aTypVent.delete(myDBSession);

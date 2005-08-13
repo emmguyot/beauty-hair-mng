@@ -67,6 +67,9 @@ public void performTask(
 			request.setAttribute("Action", "Modification");
 
 			aModRegl = ModReglBean.getModReglBean(myDBSession, CD_MOD_REGL);
+            if (assert((aModRegl != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 		}
 		else if (Action.equals("Modification")) {
 			// Modification effective de la fiche
@@ -75,6 +78,9 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aModRegl = ModReglBean.getModReglBean(myDBSession, CD_MOD_REGL);
+            if (assert((aModRegl != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 
 			aModRegl.setCD_MOD_REGL(CD_MOD_REGL);
 			aModRegl.setLIB_MOD_REGL(LIB_MOD_REGL);
@@ -99,6 +105,9 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aModRegl = ModReglBean.getModReglBean(myDBSession, CD_MOD_REGL);
+            if (assert((aModRegl != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 
 			try {
 	            aModRegl.delete(myDBSession);

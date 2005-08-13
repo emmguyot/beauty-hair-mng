@@ -65,6 +65,9 @@ public void performTask(
 			request.setAttribute("Action", "Modification");
 
 			aDevise = DeviseBean.getDeviseBean(myDBSession, CD_DEVISE);
+            if (assert((aDevise != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 		}
 		else if (Action.equals("Modification")) {
 			// Modification effective de la fiche
@@ -73,6 +76,9 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aDevise = DeviseBean.getDeviseBean(myDBSession, CD_DEVISE);
+            if (assert((aDevise != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 
 			aDevise.setCD_DEVISE(CD_DEVISE);
 			aDevise.setLIB_COURT_DEVISE(LIB_COURT_DEVISE);
@@ -97,6 +103,9 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aDevise = DeviseBean.getDeviseBean(myDBSession, CD_DEVISE);
+            if (assert((aDevise != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 
 			try {
 	            aDevise.delete(myDBSession);

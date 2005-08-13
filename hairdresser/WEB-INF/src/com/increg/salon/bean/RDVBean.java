@@ -425,7 +425,7 @@ public class RDVBean extends TimeStampBean {
                 java.text.DateFormat.SHORT);
         String dtDebut = formatDateStd.format(DT_DEBUT);
         
-        String reqSQL = "select * from RDV where CD_CLI=" + CD_CLI + " and DT_DEBUT='" + dtDebut + "'";
+        String reqSQL = "select * from RDV where CD_CLI=" + CD_CLI + " and DT_DEBUT='" + dtDebut + "+0'";
         RDVBean res = null;
 
         // Interroge la Base

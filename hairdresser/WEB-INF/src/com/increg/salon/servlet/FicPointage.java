@@ -80,6 +80,9 @@ public void performTask(
 			request.setAttribute("Action", "Modification");
 
 			aPointage = PointageBean.getPointageBean(myDBSession, CD_COLLAB, DT_DEBUT, mySalon.getLangue());
+            if (assert((aPointage != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 			request.setAttribute("PointageBean", aPointage);
 
 		}
@@ -90,6 +93,9 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aPointage = PointageBean.getPointageBean(myDBSession, CD_COLLAB, DT_DEBUT, mySalon.getLangue());
+            if (assert((aPointage != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 
 			try {
 	            //aPointage.setCD_COLLAB(CD_COLLAB);
@@ -114,6 +120,9 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aPointage = PointageBean.getPointageBean(myDBSession, CD_COLLAB, DT_DEBUT, mySalon.getLangue());
+            if (assert((aPointage != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 
 			try {
 	            aPointage.delete(myDBSession);

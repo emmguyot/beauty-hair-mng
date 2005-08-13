@@ -69,6 +69,9 @@ public void performTask(
 			request.setAttribute("Action", "Modification");
 
 			aFete = FeteBean.getFeteBean(myDBSession, CD_FETE);
+            if (assert((aFete != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 		}
 		else if (Action.equals("Modification")) {
 			// Modification effective de la fiche
@@ -77,6 +80,9 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aFete = FeteBean.getFeteBean(myDBSession, CD_FETE);
+            if (assert((aFete != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 
 			try {
 	            aFete.setCD_FETE(CD_FETE);
@@ -99,6 +105,9 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aFete = FeteBean.getFeteBean(myDBSession, CD_FETE);
+            if (assert((aFete != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 
 			try {
 	            aFete.delete(myDBSession);

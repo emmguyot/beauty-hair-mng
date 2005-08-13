@@ -66,6 +66,9 @@ public class FicTxTVA extends ConnectedServlet {
                 request.setAttribute("Action", "Modification");
 
                 aTva = TvaBean.getTvaBean(myDBSession, CD_TVA);
+                if (assert((aTva != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
             } else if (Action.equals("Modification")) {
                 // Modification effective de la fiche
 
@@ -73,6 +76,9 @@ public class FicTxTVA extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 aTva = TvaBean.getTvaBean(myDBSession, CD_TVA);
+                if (assert((aTva != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 
                 aTva.setCD_TVA(CD_TVA);
                 aTva.setLIB_TVA(LIB_TVA);
@@ -93,6 +99,9 @@ public class FicTxTVA extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 aTva = TvaBean.getTvaBean(myDBSession, CD_TVA);
+                if (assert((aTva != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 
                 try {
                     aTva.delete(myDBSession);

@@ -63,6 +63,9 @@ public void performTask(
 			request.setAttribute("Action", "Modification");
 
 			aTypMca = TypMcaBean.getTypMcaBean(myDBSession, CD_TYP_MCA);
+            if (assert((aTypMca != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 		}
 		else if (Action.equals("Modification")) {
 			// Modification effective de la fiche
@@ -71,6 +74,9 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aTypMca = TypMcaBean.getTypMcaBean(myDBSession, CD_TYP_MCA);
+            if (assert((aTypMca != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 
 			aTypMca.setCD_TYP_MCA(CD_TYP_MCA);
 			aTypMca.setLIB_TYP_MCA(LIB_TYP_MCA);
@@ -101,6 +107,9 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aTypMca = TypMcaBean.getTypMcaBean(myDBSession, CD_TYP_MCA);
+            if (assert((aTypMca != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 
 			try {
 	            aTypMca.delete(myDBSession);

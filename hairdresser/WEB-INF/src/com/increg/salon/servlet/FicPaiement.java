@@ -140,6 +140,9 @@ public class FicPaiement extends ConnectedServlet {
                 request.setAttribute("Action", "Modification");
 
                 aPaiement = PaiementBean.getPaiementBean(myDBSession, CD_PAIEMENT, mySalon.getMessagesBundle());
+                if (assert((aPaiement != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
             } else if (Action.equals("Modification") || (Action.equals("Impression"))) {
                 // Modification effective de la fiche
 
@@ -147,6 +150,9 @@ public class FicPaiement extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 aPaiement = PaiementBean.getPaiementBean(myDBSession, CD_PAIEMENT, mySalon.getMessagesBundle());
+                if (assert((aPaiement != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 
                 try {
                     aPaiement.setCD_PAIEMENT(CD_PAIEMENT);
@@ -216,6 +222,9 @@ public class FicPaiement extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 aPaiement = PaiementBean.getPaiementBean(myDBSession, CD_PAIEMENT, mySalon.getMessagesBundle());
+                if (assert((aPaiement != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 
                 try {
                     // Supprime les paiements des Factures utilisant ce paiement

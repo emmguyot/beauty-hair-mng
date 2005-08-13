@@ -72,6 +72,9 @@ public void performTask(
 			request.setAttribute("Action", "Modification");
 
 			aTrAge = TrAgeBean.getTrAgeBean(myDBSession, CD_TR_AGE);
+            if (assert((aTrAge != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 		}
 		else if (Action.equals("Modification")) {
 			// Modification effective de la fiche
@@ -80,6 +83,9 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aTrAge = TrAgeBean.getTrAgeBean(myDBSession, CD_TR_AGE);
+            if (assert((aTrAge != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 
 			aTrAge.setCD_TR_AGE(CD_TR_AGE);
 			aTrAge.setLIB_TR_AGE(LIB_TR_AGE);
@@ -103,6 +109,9 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aTrAge = TrAgeBean.getTrAgeBean(myDBSession, CD_TR_AGE);
+            if (assert((aTrAge != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 
 			try {
 	            aTrAge.delete(myDBSession);

@@ -105,6 +105,11 @@ public abstract class SalonSession extends BasicSession {
      */
     protected boolean autoConnect;
     
+    /**
+     * Indicateur si la base est optimisée
+     */
+    protected boolean optimizeDB;
+
 	
     /**
      * SalonSession constructor comment.
@@ -153,6 +158,20 @@ public abstract class SalonSession extends BasicSession {
                 throw new ReloadNeededException(BasicSession.TAG_I18N + "salonSession.majBaseKo" + BasicSession.TAG_I18N + e.toString()); 
             }
 
+            optimizeDB = false;
+            try {
+                if ((resconfig.getString("optimize") != null) && (resconfig.getString("optimize").equals("1"))) {
+                	optimizeDB = true;
+                }
+            } catch (Exception ignored) {
+                // ignore the exception
+            	optimizeDB = false;
+            }
+
+            if (optimizeDB) {
+            	majBase.optimizeDatabase(myDBSession);
+            }
+            
             // Vérification de la base
             if (!majBase.checkDatabase(myDBSession)) {
                 System.out.println("La base de données n'est pas cohérente");

@@ -72,6 +72,9 @@ public class FicCriterePub extends ConnectedServlet {
                 request.setAttribute("Action", "Modification");
 
                 aCriterePub = CriterePubBean.getCriterePubBean(myDBSession, CD_CRITERE_PUB);
+                if (assert((aCriterePub != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
             }
             else if (Action.equals("Modification")) {
                 // Modification effective de la fiche
@@ -80,6 +83,9 @@ public class FicCriterePub extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 aCriterePub = CriterePubBean.getCriterePubBean(myDBSession, CD_CRITERE_PUB);
+                if (assert((aCriterePub != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 
                 aCriterePub.setCD_CRITERE_PUB(CD_CRITERE_PUB);
                 aCriterePub.setLIB_CRITERE_PUB(LIB_CRITERE_PUB);
@@ -126,6 +132,9 @@ public class FicCriterePub extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 aCriterePub = CriterePubBean.getCriterePubBean(myDBSession, CD_CRITERE_PUB);
+                if (assert((aCriterePub != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 
                 try {
                     // Suppression de la stat
@@ -143,6 +152,9 @@ public class FicCriterePub extends ConnectedServlet {
             else if (Action.equals("Construction")) {
                 // Définition du graphe de stat et de ses paramètres
                 aCriterePub = CriterePubBean.getCriterePubBean(myDBSession, CD_CRITERE_PUB);
+                if (assert((aCriterePub != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 
                 // Construit la liste des paramètres à valoriser pour afficher la statistique
                 Vector listeParam = aCriterePub.getParameters();
@@ -152,6 +164,9 @@ public class FicCriterePub extends ConnectedServlet {
             else if (Action.equals("Extraction")) {
                 // Affichage du graphe
                 aCriterePub = CriterePubBean.getCriterePubBean(myDBSession, CD_CRITERE_PUB);
+                if (assert((aCriterePub != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 
                 // Constitue la liste des paramètres pour utilisation
                 Map paramMap = new HashMap();

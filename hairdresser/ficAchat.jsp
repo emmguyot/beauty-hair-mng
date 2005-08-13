@@ -150,7 +150,7 @@ Type de mouvement :
         // Lignes déjà saisies
 	for (int i = lstLignes.size() - 1; i >= 0; i--) {
 	    MvtStkBean aMvtAchat = (MvtStkBean) lstLignes.get(i);
-	    ArtBean aArt = ArtBean.getArtBean(mySalon.getMyDBSession(), Long.toString(aMvtAchat.getCD_ART()));
+	    ArtBean aArt = ArtBean.getArtBean(mySalon.getMyDBSession(), Long.toString(aMvtAchat.getCD_ART()), mySalon.getMessagesBundle());
 	    MvtStkBean aMvt = (MvtStkBean) lstMvt.get(i);
 	%>
 	<tr>

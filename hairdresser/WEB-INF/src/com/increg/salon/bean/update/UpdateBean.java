@@ -39,24 +39,6 @@ public class UpdateBean {
         System.out.println("Version base detectee : " + version);
         
         majVersion(dbConnect);
-        
-        // Nettoyage de la base
-        try {
-            dbConnect.doExecuteSQL(new String[] {"vacuum"});
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-            // Ignore l'erreur
-        }
-
-        // Optimisation de la base
-        try {
-            dbConnect.doExecuteSQL(new String[] {"vacuum analyze"});
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-            // Ignore l'erreur
-        }
     }
 
     /**
@@ -113,5 +95,29 @@ public class UpdateBean {
      */
     public boolean checkDatabase(DBSession dbConnect, String[] lstTables, String[] lstSeq) throws ReloadNeededException {
         return true;
+    }
+
+    /**
+     * Optimization de la base de données
+     * @param dbConnect Connection à utiliser
+     */
+    public void optimizeDatabase(DBSession dbConnect) {
+        // Nettoyage de la base
+        try {
+            dbConnect.doExecuteSQL(new String[] {"vacuum"});
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            // Ignore l'erreur
+        }
+
+        // Optimisation de la base
+        try {
+            dbConnect.doExecuteSQL(new String[] {"vacuum analyze"});
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            // Ignore l'erreur
+        }
     }
 }

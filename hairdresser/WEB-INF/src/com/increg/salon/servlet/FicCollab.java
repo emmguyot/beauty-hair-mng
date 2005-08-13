@@ -100,6 +100,9 @@ public class FicCollab extends ConnectedServlet {
                 request.setAttribute("Action", "Modification");
 
                 aCollab = CollabBean.getCollabBean(myDBSession, CD_COLLAB);
+                if (assert((aCollab != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
                 request.setAttribute("CollabBean", aCollab);
 
             }
@@ -110,6 +113,9 @@ public class FicCollab extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 aCollab = CollabBean.getCollabBean(myDBSession, CD_COLLAB);
+                if (assert((aCollab != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 
                 try {
                     aCollab.setCD_COLLAB(CD_COLLAB);
@@ -148,6 +154,9 @@ public class FicCollab extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 aCollab = CollabBean.getCollabBean(myDBSession, CD_COLLAB);
+                if (assert((aCollab != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 
                 try {
                     aCollab.delete(myDBSession);

@@ -85,7 +85,7 @@ Entre le :
 							       Integer.toString(aMvt.getCD_TYP_MCA())).toString(); %>
 	    <%= LIB_TYP_MCA %>
             <% if ((aMvt.getCD_PAIEMENT() != 0) 
-                    && (PaiementBean.getPaiementBean(mySalon.getMyDBSession(), Long.toString(aMvt.getCD_PAIEMENT())) 
+                    && (PaiementBean.getPaiementBean(mySalon.getMyDBSession(), Long.toString(aMvt.getCD_PAIEMENT()), mySalon.getMessagesBundle()) 
                         != null)) { %>
                 <a href="_FichePaiement.jsp?Action=Modification&CD_PAIEMENT=<%= aMvt.getCD_PAIEMENT() %>" target="ClientFrame" title="Fiche paiement">
                 <img src="images/fact.gif" border=0 align=top></a>

@@ -65,6 +65,9 @@ public void performTask(
 			request.setAttribute("Action", "Modification");
 
 			aTypMvt = TypMvtBean.getTypMvtBean(myDBSession, CD_TYP_MVT);
+            if (assert((aTypMvt != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 		}
 		else if (Action.equals("Modification")) {
 			// Modification effective de la fiche
@@ -73,6 +76,9 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aTypMvt = TypMvtBean.getTypMvtBean(myDBSession, CD_TYP_MVT);
+            if (assert((aTypMvt != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 
 			aTypMvt.setCD_TYP_MVT(CD_TYP_MVT);
 			aTypMvt.setLIB_TYP_MVT(LIB_TYP_MVT);
@@ -105,6 +111,9 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aTypMvt = TypMvtBean.getTypMvtBean(myDBSession, CD_TYP_MVT);
+            if (assert((aTypMvt != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 
 			try {
 	            aTypMvt.delete(myDBSession);

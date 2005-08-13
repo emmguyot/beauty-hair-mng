@@ -86,6 +86,9 @@ public class FicPrest extends ConnectedServlet {
                 request.setAttribute("Action", "Modification");
 
                 aPrest = PrestBean.getPrestBean(myDBSession, CD_PREST);
+                if (assert((aPrest != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
             }
             else if (Action.equals("Rechargement")) {
                 // Rechargement : La prestation peut être ou pas déjà créée
@@ -97,6 +100,9 @@ public class FicPrest extends ConnectedServlet {
                 }
                 else {
                     aPrest = PrestBean.getPrestBean(myDBSession, CD_PREST);
+                    if (assert((aPrest != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                    	return;
+                    }
                 }
 
                 aPrest.setCD_PREST(CD_PREST);
@@ -135,6 +141,9 @@ public class FicPrest extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 aPrest = PrestBean.getPrestBean(myDBSession, CD_PREST);
+                if (assert((aPrest != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 
                 aPrest.setCD_PREST(CD_PREST);
                 aPrest.setLIB_PREST(LIB_PREST);
@@ -201,6 +210,9 @@ public class FicPrest extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 aPrest = PrestBean.getPrestBean(myDBSession, CD_PREST);
+                if (assert((aPrest != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 
                 try {
                     aPrest.delete(myDBSession);

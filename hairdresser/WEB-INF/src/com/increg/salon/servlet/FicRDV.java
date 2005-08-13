@@ -157,6 +157,9 @@ public class FicRDV extends ConnectedServlet {
                 request.setAttribute("Action", "Modification");
 
                 aRDV = RDVBean.getRDVBean(myDBSession, CD_CLI, DT_DEBUT, mySalon.getLangue());
+                if (assert((aRDV != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 
             }
             else if (Action.equals("Modification")) {
@@ -166,6 +169,9 @@ public class FicRDV extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 aRDV = RDVBean.getRDVBean(myDBSession, CD_CLI, DT_DEBUT, mySalon.getLangue());
+                if (assert((aRDV != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 
                 try {
                     aRDV.setCD_COLLAB(CD_COLLAB);
@@ -193,6 +199,10 @@ public class FicRDV extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 RDVBean aRDVtoDelete = RDVBean.getRDVBean(myDBSession, CD_CLI, DT_DEBUT, mySalon.getLangue());
+                if (!aRDVtoDelete.verifChevauchement(myDBSession, true)) {
+                    // Chevauchement
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "ficRDV.conflitRDV" + BasicSession.TAG_I18N);
+                }
 
                 try {
                     aRDVtoDelete.delete(myDBSession);

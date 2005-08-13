@@ -212,34 +212,34 @@ function Init() {
                 </td>
    				<td align="right">
                     <span class="souslien">
-                    	<i18n:message key="ficCli.nouveauRDV" id="paramBouton" />
+                    	<i18n:message key="ficCli.nouveauRDV" id="paramBouton1" />
                     	<salon:bouton url="<%= \"_FicheRDV.jsp?Action=Creation&CD_CLI=\" + aCli.getCD_CLI() %>" 
-                                    alt="<%= paramBouton %>" 
+                                    alt="<%= paramBouton1 %>" 
                                     target="ClientFrame" 
                                     img="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/priseRDV.gif\" %>" />&nbsp;&nbsp;
-                    	<i18n:message key="ficCli.fichesTechs" id="paramBouton" />
+                    	<i18n:message key="ficCli.fichesTechs" id="paramBouton2" />
                     	<salon:bouton url="<%= \"_FicheTech.jsp?CD_CLI=\" + aCli.getCD_CLI() %>" 
-                                    alt="<%= paramBouton %>" 
+                                    alt="<%= paramBouton2 %>" 
                                     target="ClientFrame" 
                                     img="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/imprFicTech.gif\" %>" />&nbsp;&nbsp; 
-                    	<i18n:message key="ficCli.abonnements" id="paramBouton" />
+                    	<i18n:message key="ficCli.abonnements" id="paramBouton3" />
                         <salon:bouton url="<%= \"ListeAbonnement.jsp?CD_CLI=\" + aCli.getCD_CLI() %>" 
-                                    alt="<%= paramBouton %>" 
+                                    alt="<%= paramBouton3 %>" 
                                     target="ClientFrame" 
                                     img="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/Abonnement.gif\" %>" />&nbsp;&nbsp; 
                         <%
                         if (peutCreerFacture) { %>
-                    		<i18n:message key="ficCli.nouvelleFacture" id="paramBouton" />
+                    		<i18n:message key="ficCli.nouvelleFacture" id="paramBouton4" />
                                 <salon:bouton url="<%= \"_FicheFact.jsp?FACT_HISTO=N&CD_CLI=\" + aCli.getCD_CLI() %>" 
-                                            alt="<%= paramBouton %>" 
+                                            alt="<%= paramBouton4 %>" 
                                             target="ClientFrame" 
                                             img="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/accueilClient.gif\" %>" 
                                             imgOn="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/accueilClient2.gif\" %>"/>&nbsp;&nbsp;
                         <%
                         } %>
-                        <i18n:message key="ficCli.nouvelHisto" id="paramBouton" />
+                        <i18n:message key="ficCli.nouvelHisto" id="paramBouton5" />
                         <salon:bouton url="<%= \"_FicheFact.jsp?FACT_HISTO=O&CD_CLI=\" + aCli.getCD_CLI() %>" 
-                                    alt="<%= paramBouton %>" 
+                                    alt="<%= paramBouton5 %>" 
                                     target="ClientFrame" 
                                     img="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/nouvHisto.gif\" %>" />
                     </span>

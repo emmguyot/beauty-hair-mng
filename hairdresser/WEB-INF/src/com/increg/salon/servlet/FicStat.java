@@ -84,6 +84,9 @@ public class FicStat extends ConnectedServlet {
                 request.setAttribute("Action", "Modification");
 
                 aStat = StatBean.getStatBean(myDBSession, CD_STAT, mySalon.getMessagesBundle());
+                if (assert((aStat != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
             }
             else if (Action.equals("Modification")) {
                 // Modification effective de la fiche
@@ -92,6 +95,9 @@ public class FicStat extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 aStat = StatBean.getStatBean(myDBSession, CD_STAT, mySalon.getMessagesBundle());
+                if (assert((aStat != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 
                 aStat.setCD_STAT(CD_STAT);
                 aStat.setLIB_STAT(LIB_STAT);
@@ -142,6 +148,9 @@ public class FicStat extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 aStat = StatBean.getStatBean(myDBSession, CD_STAT, mySalon.getMessagesBundle());
+                if (assert((aStat != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 
                 // Récup des historiques associés
                 Vector lstHisto = StatHistoBean.getStatHistoBean(myDBSession, CD_STAT);
@@ -166,6 +175,9 @@ public class FicStat extends ConnectedServlet {
             else if (Action.equals("Construction")) {
                 // Définition du graphe de stat et de ses paramètres
                 aStat = StatBean.getStatBean(myDBSession, CD_STAT, mySalon.getMessagesBundle());
+                if (assert((aStat != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 
                 // Par défaut
                 request.setAttribute("Couleur$0", "0x6e04f2");
@@ -192,6 +204,9 @@ public class FicStat extends ConnectedServlet {
             else if (Action.equals("Graphe")) {
                 // Affichage du graphe
                 aStat = StatBean.getStatBean(myDBSession, CD_STAT, mySalon.getMessagesBundle());
+                if (assert((aStat != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 
                 Vector lstJeuValeur = new Vector();
                 Vector lstCouleur = new Vector();

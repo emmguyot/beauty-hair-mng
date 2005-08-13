@@ -134,7 +134,7 @@ function Init() {
 							       Integer.toString(aMvt.getCD_TYP_MVT())).toString(); %>
 	    <%= LIB_TYP_MVT %>
             <% if ((aMvt.getCD_FACT() != 0) 
-                    && (FactBean.getFactBean(mySalon.getMyDBSession(), Long.toString(aMvt.getCD_FACT())) 
+                    && (FactBean.getFactBean(mySalon.getMyDBSession(), Long.toString(aMvt.getCD_FACT()), mySalon.getMessagesBundle()) 
                         != null)){ %>
                 <a href="_FicheFact.jsp?Action=Modification&CD_FACT=<%= aMvt.getCD_FACT() %>" target="ClientFrame" title="Fiche facture">
                 <img src="images/fact.gif" border=0 align=top></a>

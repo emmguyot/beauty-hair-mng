@@ -62,6 +62,9 @@ public void performTask(
 			request.setAttribute("Action", "Modification");
 
 			aDonneeRef = DonneeRefBean.getDonneeRefBean(myDBSession, nomTable, CD);
+            if (assert((aDonneeRef != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 		}
 		else if (Action.equals("Modification")) {
 			// Modification effective de la fiche
@@ -70,6 +73,9 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aDonneeRef = DonneeRefBean.getDonneeRefBean(myDBSession, nomTable, CD);
+            if (assert((aDonneeRef != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 
 			aDonneeRef.setCD(CD);
 			aDonneeRef.setLIB(LIB);
@@ -91,6 +97,9 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aDonneeRef = DonneeRefBean.getDonneeRefBean(myDBSession, nomTable, CD);
+            if (assert((aDonneeRef != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 
 			try {
 	            aDonneeRef.delete(myDBSession);
