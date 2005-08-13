@@ -5,7 +5,7 @@
 <title>Choix de la base à utiliser</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
-<link rel="shortcut icon" href="images/icone32.ico" >
+<link rel="shortcut icon" href="images/favivon.ico" >
 </head>
 <%
     MultiConfigBean aMCBean = (MultiConfigBean) request.getAttribute("MultiConfigBean");

@@ -8,6 +8,8 @@
     }
 %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
 <title>Liste des clients</title>
@@ -22,7 +24,7 @@
     Vector listeLignes = (Vector) request.getAttribute("Liste");
     int longueurCle = 2;
 %>
-<h1><img src="images/titres/lstCli.gif"></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstCli.gif"></h1>
 <form name="fiche" action="rechCli.srv" method="post">
 	<p>Premi&egrave;re lettre du nom : 
 	<input type="hidden" name="premLettre" value="<%= premLettre %>">

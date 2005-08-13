@@ -11,6 +11,8 @@
     }
 %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
 <title>Liste des mouvements de caisse</title>
@@ -32,7 +34,7 @@ function Init() {
    Date DT_FIN = (Date) request.getAttribute("DT_FIN");
    String CD_TYP_MCA = request.getParameter("CD_TYP_MCA");
 %>
-<h1><img src="images/titres/lstMvtCaisse.gif"></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstMvtCaisse.gif"></h1>
 <form name="fiche" action="rechMca.srv" method="post">
 <p>
 Mode de réglement :

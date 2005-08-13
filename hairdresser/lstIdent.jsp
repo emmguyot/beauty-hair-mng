@@ -14,7 +14,7 @@
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
 <body class="donnees">
-<h1><img src="images/titres/lstIdent.gif"></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstIdent.gif"></h1>
 <table width="100%" border="1" >
 	<tr>
 		<th>Libellé</th>

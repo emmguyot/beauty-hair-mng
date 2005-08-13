@@ -2,7 +2,16 @@
 <%@ page import="com.increg.salon.bean.ModReglBean,
 	       com.increg.salon.request.Journal
 	       " %>
+<%@ page import="com.increg.salon.bean.SalonSession" %>
+<%
+    SalonSession mySalon = (SalonSession) session.getAttribute("SalonSession");
+    if (mySalon == null) {
+        getServletConfig().getServletContext().getRequestDispatcher("/reconnect.html").forward(request, response);
+    }
+%>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
 <title>Journal</title>
@@ -27,7 +36,7 @@ function Init() {
    Date DT_DEBUT = (Date) request.getAttribute("DT_DEBUT");
    Date DT_FIN = (Date) request.getAttribute("DT_FIN");
 %>
-<h1><img src="images/titres/lstJournal.gif"></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstJournal.gif"></h1>
 <form name="fiche" action="rechJournal.srv" method="post">
 <p>
 Mode de paiement :

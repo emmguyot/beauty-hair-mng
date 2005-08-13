@@ -12,6 +12,8 @@
     }
 %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
 <title>Fiche article</title>
@@ -50,7 +52,7 @@ function Init() {
 }
 //-->
 </script>
-<h1><img src="images/titres/ficArt.gif" alt=<salon:TimeStamp bean="<%= aArt %>" />></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/ficArt.gif" alt=<salon:TimeStamp bean="<%= aArt %>" />></h1>
 <salon:message salonSession="<%= mySalon %>" />
 <form method="post" action="ficArt_Mvt.srv" name="fiche">
 

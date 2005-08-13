@@ -8,6 +8,8 @@
     }
 %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
 <title>Publipostage</title>
@@ -35,7 +37,7 @@ function Init() {
 //-->
 </script>
 <salon:valeur valeurNulle="0" valeur="<%= aCriterePub.getLIB_CRITERE_PUB() %>" >
-    <h1><img src="images/titres/ficPub.gif" alt=<salon:TimeStamp bean="<%= aCriterePub %>" />><br><span class="ssTitre">%%</span></h1>
+    <h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/ficPub.gif" alt=<salon:TimeStamp bean="<%= aCriterePub %>" />><br><span class="ssTitre">%%</span></h1>
 </salon:valeur>
 <salon:message salonSession="<%= mySalon %>" />
 <form method="post" action="ficCriterePub.srv" name="fiche">

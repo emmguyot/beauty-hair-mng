@@ -14,6 +14,8 @@
     }
 %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
 <title>Liste des abonnements du clients</title>
@@ -39,7 +41,7 @@ function Init() {
     // Recupère la liste
     HashMap lstLignes = aCli.getAbonnements();
 %>
-<h1><img src="images/titres/lstAbonnement.gif"></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstAbonnement.gif"></h1>
 
 <p>
 	<span class="obligatoire">Client</span> :

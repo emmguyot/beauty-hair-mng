@@ -8,6 +8,8 @@
     }
 %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
 <title>Liste des collaborateurs</title>
@@ -19,7 +21,7 @@
    // Récupération des paramètres
    String INDIC_VALID = (String) request.getAttribute("INDIC_VALID");
 %>
-<h1><img src="images/titres/lstCollab.gif"></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstCollab.gif"></h1>
 <form name="fiche" action="rechCollab.srv" method="post">
 Affiche anciens collaborateurs : 
    <input type="checkbox" name="INDIC_VALID"

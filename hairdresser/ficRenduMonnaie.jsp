@@ -7,6 +7,8 @@
     }
 %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 
 <head>
@@ -26,7 +28,7 @@
 
 %>
 
-<h1><img src="images/titres/ficRenduMonnaie.gif"></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/ficRenduMonnaie.gif"></h1>
 <div style="{text-align: right;}"><salon:bouton url="javascript:window.close()" imgOn="images/quit2.gif" img="images/quit.gif" alt="Fermer la fenêtre" /></div>
 <salon:message salonSession="<%= mySalon %>" />
 <br>

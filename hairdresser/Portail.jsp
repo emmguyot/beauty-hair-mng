@@ -6,6 +6,8 @@
     }
 %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
 <title><%=mySalon.getMySociete().getRAIS_SOC()%></title>
@@ -40,7 +42,7 @@ function checkAndSubmit()
                     <tr> 
                         <td height="291" width="469" valign="top" class="action" align="center"> 
                                     <p>&nbsp;</p>
-                                    <p><img src="images/titres/Portail.gif" width="448" height="72" border="0"></p>
+                                    <p><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/Portail.gif" width="448" height="72" border="0"></p>
                                     <h1><%=mySalon.getMySociete().getRAIS_SOC()%></h1>
                                     <p><img src="images/perso/Logo.gif" width="130" height="68" border="0"></p>
                                     <p>&nbsp;</p>
@@ -60,7 +62,7 @@ function checkAndSubmit()
                                             <p class="obligatoire" align="center">Mot de 
                                                 passe : 
                                                 <input type="password" name="MOT_PASSE" maxlength="20">
-                                            <salon:bouton url="javascript:checkAndSubmit()" imgOn="images/valider2.gif" img="images/valider.gif" alt="Valider" />
+                                            <salon:bouton url="javascript:checkAndSubmit()" imgOn="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/valider2.gif\" %>" img="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/valider.gif\" %>" alt="Valider" />
                                                 <% if ((mySalon.getMessage("Erreur") != null) 
             && (mySalon.getMessage("Erreur").length() > 0)) { %>
                                             </p>

@@ -1,5 +1,12 @@
 <%@ page import="java.util.Vector,com.increg.salon.bean.ClientBean" %><%
+%><%@ page import="com.increg.salon.bean.SalonSession" %><%
+    SalonSession mySalon = (SalonSession) session.getAttribute("SalonSession");
+    if (mySalon == null) {
+        getServletConfig().getServletContext().getRequestDispatcher("/reconnect.html").forward(request, response);
+    }
 %><%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %><%
+%><%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %><%
+%><i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/><%
 %>Civilité;Nom;Prénom;Adresse;Code Postal;Ville;Téléphone;Portable;Email;Date Anniversaire<%
     response.setContentType("application/download; name=clients.csv"); 
     response.setHeader("Content-Disposition","attachment; filename=clients.csv;");

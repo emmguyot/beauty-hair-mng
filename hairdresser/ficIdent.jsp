@@ -8,6 +8,8 @@
     }
 %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
 <title>Fiche Identification</title>
@@ -44,7 +46,7 @@ function Init() {
 }
 //-->
 </script>
-<h1><img src="images/titres/ficIdent.gif" alt=<salon:TimeStamp bean="<%= aIdent %>" />></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/ficIdent.gif" alt=<salon:TimeStamp bean="<%= aIdent %>" />></h1>
 <salon:message salonSession="<%= mySalon %>" />
 <form method="post" action="ficIdent.srv" name="fiche">
 	 <p> 

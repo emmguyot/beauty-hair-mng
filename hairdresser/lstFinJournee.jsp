@@ -12,6 +12,8 @@
     }
 %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
 <title>Fin de journée</title>
@@ -24,7 +26,7 @@
 <!--
 function Init() {
    <%
-   // Positionne les liens d'actions
+   // Positionne les liens d actions
    %>
    MM_showHideLayers('NOUVEAU?bottomFrame','','hide');
 }
@@ -46,7 +48,7 @@ function Init() {
     Vector listeCaisse = (Vector) request.getAttribute("ListeCaisse");
     
 %>
-<h1><img src="images/titres/lstFinJournee.gif"></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstFinJournee.gif"></h1>
 <form name="fiche" action="rechFinJournee.srv" method="post">
 <p>
 Journée du :

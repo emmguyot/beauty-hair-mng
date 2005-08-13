@@ -10,6 +10,8 @@
     }
 %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
 <title>Récap des ventes</title>
@@ -33,7 +35,7 @@ function Init() {
    Date DT_DEBUT = (Date) request.getAttribute("DT_DEBUT");
    Date DT_FIN = (Date) request.getAttribute("DT_FIN");
 %>
-<h1><img src="images/titres/lstRecapVentes.gif"></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstRecapVentes.gif"></h1>
 <form name="fiche" action="rechVente.srv" method="post">
 <p>
 Entre le :
