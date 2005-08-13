@@ -388,6 +388,7 @@ public class JspC implements Options {
                         for (int i = 0; i < files.length; i++) {
                             File f2 = new File(s, files[i]);
                             if (f2.isDirectory()) {
+                            	// MODIF EG : Suppression des répertoires qui ne sont pas bien gérés par Jasper
 //                                dirs.push(f2.getPath());
                                 log.println("Répertoire ignoré = " + f2.getPath());
                             }
