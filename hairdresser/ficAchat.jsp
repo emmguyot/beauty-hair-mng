@@ -271,7 +271,7 @@ function SupprimerLigne(cdArt, dtMvt)
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideFicheAchat.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideFicheAchat.html");
 }
 
 </script>

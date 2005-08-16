@@ -93,7 +93,7 @@ function Nouveau()
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideListeCli.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideListeCli.html");
 }
 
 </script>

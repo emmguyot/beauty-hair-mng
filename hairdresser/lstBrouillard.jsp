@@ -275,7 +275,7 @@ TreeMap lstLignes = (TreeMap) request.getAttribute("Liste");
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideListeBrouillard.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideListeBrouillard.html");
 }
 
 //-->

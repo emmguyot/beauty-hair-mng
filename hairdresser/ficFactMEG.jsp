@@ -144,7 +144,7 @@ function Valider()
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideFicheFact.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideFicheFact.html");
 }
 
 </script>

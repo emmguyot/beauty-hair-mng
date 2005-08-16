@@ -234,7 +234,7 @@ function Imprimer()
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideFichePaiement.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideFichePaiement.html");
 }
 
 //Ouverture du calcul de rendu

@@ -103,7 +103,7 @@ Le calcul de ces chiffres comprend des arrondis : Les centimes sont donc donnés 
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideListeTVA.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideListeTVA.html");
 }
 
 //-->

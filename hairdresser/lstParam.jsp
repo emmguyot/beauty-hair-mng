@@ -55,7 +55,7 @@ function Init() {
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideListeParam.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideListeParam.html");
 }
 
 //-->

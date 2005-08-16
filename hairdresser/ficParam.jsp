@@ -76,7 +76,7 @@ function Enregistrer()
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideFicheParam.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideFicheParam.html");
 }
 
 function RetourListe()

@@ -122,7 +122,7 @@ function Supprimer()
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideFicheTypVent.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideFicheTypVent.html");
 }
 
 function RetourListe()

@@ -164,7 +164,7 @@ function Nouveau()
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideListeArt.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideListeArt.html");
 }
 
 </script>

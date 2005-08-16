@@ -160,7 +160,7 @@ function toutesPrest()
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideFicheCli.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideFicheCli.html");
 }
 
 </script>

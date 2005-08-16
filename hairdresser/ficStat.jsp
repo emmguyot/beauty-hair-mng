@@ -129,7 +129,7 @@ function RetourListe()
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideFiche.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideFiche.html");
 }
 
 </script>

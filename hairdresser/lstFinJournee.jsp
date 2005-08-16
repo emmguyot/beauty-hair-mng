@@ -345,7 +345,7 @@ Journée du :
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideListeFinJournee.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideListeFinJournee.html");
 }
 
 //-->

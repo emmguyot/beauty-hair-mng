@@ -166,7 +166,7 @@ function Enregistrer()
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideFicheInventaire.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideFicheInventaire.html");
 }
 
 </script>

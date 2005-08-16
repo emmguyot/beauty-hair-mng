@@ -153,7 +153,7 @@ function Valider()
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideFichePurge.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideFichePurge.html");
 }
 
 </script>

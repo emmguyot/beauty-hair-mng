@@ -461,7 +461,7 @@ function RetourListe()
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideFicheStat.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideFicheStat.html");
 }
 
 </script>

@@ -301,7 +301,7 @@ function RetourListe()
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideFicheCriterePub.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideFicheCriterePub.html");
 }
 
 </script>

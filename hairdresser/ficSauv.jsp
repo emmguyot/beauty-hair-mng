@@ -78,7 +78,7 @@ function Valider()
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideFicheRest.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideFicheRest.html");
 }
 
 </script>

@@ -206,7 +206,7 @@ function Imprimer()
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideFicheTech.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideFicheTech.html");
 }
 
 </script>
