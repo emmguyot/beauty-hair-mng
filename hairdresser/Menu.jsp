@@ -170,34 +170,15 @@ MM_reloadPage(true);
 <div id="coinHG" style="position:absolute; height=20px; z-index:1; visibility:hidden"><img src="images/perso/coin_hg.gif"></div>
 <div id="coinBG" style="position:absolute; height=20px; z-index:1; visibility:hidden"><img src="images/perso/coin_bg.gif"></div>
 
-<br>
-<!-- Adjust the placement of the clock in the line below -->
-<img src="images/horloge.gif" align="middle"><span id="pendule" style="position:absolute;"></span> 
-<SCRIPT LANGUAGE="JavaScript">
-
-function clock() {
-   if (!document.layers && !document.all) return;
-   var digital = new Date();
-   var hours = digital.getHours();
-   var minutes = digital.getMinutes();
-   var seconds = digital.getSeconds();
-   if (minutes <= 9) minutes = "0" + minutes;
-   if (seconds <= 9) seconds = "0" + seconds;
-   dispTime = hours + ":" + minutes + ":" + seconds;
-   if (document.layers) {
-      document.layers.pendule.document.write(dispTime);
-      document.layers.pendule.document.close();
-   }
-   else if (document.all)
-      pendule.innerHTML = dispTime;
-   setTimeout("clock()", 1000);
-}
-</script>
+<p style="text-align: center">
+<img src="images/horloge.gif" style="float: left; vertical-align: middle;margin-top: 15px;margin-bottom: 15px;"><span id="pendule" style="text-align: center"></span>
+</p>
+<script language="JavaScript" src="include/<%= mySalon.getLangue().getLanguage() %>/dateHome.js"> </script>
 
 <p class="tabDonnees">
 <font size=-1>
-<a href="histo.html" target="ClientFrame"><%@ include file="include/version.inc" %></a><br/>
-<a href="contact.html" target="ClientFrame">&copy; 2002-2005</a></font></p>
+<a href="<%= mySalon.getLangue().getLanguage() %>/histo.html" target="ClientFrame"><%@ include file="include/version.inc" %></a><br/>
+<a href="<%= mySalon.getLangue().getLanguage() %>/contact.html" target="ClientFrame">&copy; 2002-2005</a></font></p>
 
 <SCRIPT FOR=window EVENT=onscroll LANGUAGE="JScript">
 PlaceCoins()

@@ -25,7 +25,7 @@
 <p align="center"><img src="images/perso/Salon.jpg"></p>
 <salon:message salonSession="<%= mySalon %>" />
 <form method="post" action="accueilPointage.srv" name="fiche">
-<p align="center"><span class="Obligatoire">Collaborateurs pr&eacute;sents :</span>
+<p align="center"><span class="Obligatoire"><i18n:message key="accueil.collabPresent" /> :</span>
    <input type="hidden" name="Action" value="Modification">
 <%
    Vector lstCollab = (Vector) request.getAttribute("lstCollab");
@@ -57,7 +57,7 @@
 </p>
 </form>
 <% if (lstFete.size() > 0) { %>
-<p>Aujourd'hui, nous f&ecirc;tons les 
+<p><i18n:message key="accueil.feteJour" />
 <%   for (int i=0; i < lstFete.size(); i++) { 
       FeteBean aFete = (FeteBean) lstFete.get(i); %>
       <b><%= aFete.getPRENOM() %></b><% if (i != (lstFete.size()-1)) { %>,<% }
@@ -65,9 +65,9 @@
 </p>
 <% } %>
 <p>
-<a href="glossaire.html">Glossaire de l'application</a>
+<a href="<%= mySalon.getLangue().getLanguage() %>/glossaire.html"><i18n:message key="accueil.glossaire" /></a>
 </p>
-<salon:include file="include/salonNews.inc" />
+<salon:include file="include/<%= mySalon.getLangue().getLanguage() %>/salonNews.inc" />
 
 <SCRIPT FOR=window EVENT=onscroll LANGUAGE="JScript">
 PlaceCoins()
