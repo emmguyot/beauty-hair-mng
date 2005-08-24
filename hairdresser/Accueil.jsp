@@ -67,7 +67,7 @@
 <p>
 <a href="<%= mySalon.getLangue().getLanguage() %>/glossaire.html"><i18n:message key="accueil.glossaire" /></a>
 </p>
-<salon:include file="include/<%= mySalon.getLangue().getLanguage() %>/salonNews.inc" />
+<salon:include file="<%= \"include/\" + mySalon.getLangue().getLanguage() + \"/salonNews.inc\" %>" />
 
 <SCRIPT FOR=window EVENT=onscroll LANGUAGE="JScript">
 PlaceCoins()
