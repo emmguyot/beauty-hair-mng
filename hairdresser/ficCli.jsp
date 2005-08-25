@@ -62,7 +62,8 @@ function Init() {
         <input type="hidden" name="Action" value="<%=Action%>">
         <input type="hidden" name="NbPrest" value="<%=NbPrest%>">
         <span class="facultatif"><i18n:message key="label.civilite" /> :</span> 
-        <salon:selection valeur="<%= aCli.getCIVILITE() %>" valeurs='<%= "|Mle|Mme|M. " %>'>
+        <i18n:message key="valeur.civilite" id="valeurCivilite" />
+        <salon:selection valeur="<%= aCli.getCIVILITE() %>" valeurs='<%= "|Mle|Mme|M. " %>' libelle='<%= valeurCivilite %>'>
             <select name="CIVILITE">
                 %%
             </select>
@@ -180,7 +181,8 @@ function Init() {
                             %%
                         </select><br>
                         </salon:DBselection> 
-                        <salon:selection valeur="<%= aCli.getINDIC_VALID() %>" valeurs='<%= "O|N" %>' libelle="Oui|Non">
+                    	<i18n:message key="valeur.ouiNon" id="valeurOuiNon" />
+                        <salon:selection valeur="<%= aCli.getINDIC_VALID() %>" valeurs='<%= "O|N" %>' libelle="<%= valeurOuiNon %>" />">
                             <select name="INDIC_VALID">
                                 %%
                             </select>
