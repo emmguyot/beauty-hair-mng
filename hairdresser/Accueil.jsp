@@ -20,7 +20,7 @@
 </head>
 <%@ include file="include/commun.js" %>
 <body class="donnees">
-<div id="coinHD" style="position:absolute; height=52px; z-index:1; visibility:hidden"><salon:bouton url="javascript:top.close()" imgOn="images/quit2.gif" img="images/quit.gif" alt="Fermer la fenêtre"/></div>
+<div id="coinHD" style="position:absolute; height=52px; z-index:1; visibility:hidden"><salon:bouton url="javascript:top.close()" imgOn="images/quit2.gif" img="images/quit.gif" alt="<i18n:message key="message.fermer" />"/></div>
 <h1 align="center"><%=mySalon.getMySociete().getRAIS_SOC()%></h1>
 <p align="center"><img src="images/perso/Salon.jpg"></p>
 <salon:message salonSession="<%= mySalon %>" />

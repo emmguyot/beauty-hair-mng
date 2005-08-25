@@ -15,7 +15,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Achats d'articles</title>
+<title><i18n:message key="ficAchat.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -52,11 +52,11 @@ function Init() {
 <salon:message salonSession="<%= mySalon %>" />
 <form method="post" action="ficAchat.srv" name="fiche">
 <p>
-N° de commande/facture : 
+<i18n:message key="ficAchat.commande" /> : 
 <salon:valeur valeur="<%= CD_CMD_FOURN %>" valeurNulle="null">
     <input name="CD_CMD_FOURN" type="text" maxlength="10" size="10" value="%%">
 </salon:valeur>
-Fournisseur :
+<i18n:message key="label.fournisseur" /> :
 <salon:DBselection valeur="<%= CD_FOURN %>" sql="select CD_FOURN, RAIS_SOC from FOURN order by RAIS_SOC">
    <select name="CD_FOURN" onChange="Recharge(0)">
       %%
@@ -71,7 +71,7 @@ CD_FOURN = ((CD_FOURN == null) || (CD_FOURN.length() == 0) || (CD_FOURN.equals("
 <input name="Action" type="hidden" value="">
 <input name="paramSup1" type="hidden" value="">
 <input name="paramSup2" type="hidden" value="">
-Type de mouvement :
+<i18n:message key="label.typeMouvement" /> :
 <salon:DBselection valeur="<%= CD_TYP_MVT %>" sql='<%= "select CD_TYP_MVT, LIB_TYP_MVT from TYP_MVT where SENS_MVT=\'" + TypMvtBean.SENS_ENTREE + "\' order by LIB_TYP_MVT" %>'>
    <select name="CD_TYP_MVT">
       %%
@@ -79,13 +79,13 @@ Type de mouvement :
 </salon:DBselection>
 <table width="100%" border="0" >
 	<tr>
-		<th>Catégorie</th>
-		<th>Libellé</th>
-		<th>Qté<br>en<br>stock</th>
-		<th>Valeur<br>unitaire<br>stock</th>
-		<th>Date dernier<br>achat</th>
-		<th>Qté<br>achetée</th>
-		<th>Valeur<br>unitaire<br>achat</th>
+		<th><i18n:message key="label.categorie" /></th>
+		<th><i18n:message key="label.libelle" /></th>
+		<th><i18n:message key="label.qteStockTableau" /></th>
+		<th><i18n:message key="label.valeurStockUnitTableau" /></th>
+		<th><i18n:message key="label.dernierAchat" /></th>
+		<th><i18n:message key="label.qteAchat" /></th>
+		<th><i18n:message key="label.valeurAchatUnit" /></th>
                 <th></th>
 	</tr>
 	<%
@@ -133,7 +133,8 @@ Type de mouvement :
             </td>
 	    <td class="Nombre"><salon:valeur valeur="<%= QTE_STK %>" valeurNulle="null">%%&nbsp;</salon:valeur></td>
 	    <td class="Nombre"><salon:valeur valeur="<%= VAL_STK_HT %>" valeurNulle="null">%%&nbsp;</salon:valeur></td>
-	    <td class="tabDonnees"><salon:valeur valeur="<%= DT_MVT %>" valeurNulle="null" format="dd/MM/yyyy">%%&nbsp;</salon:valeur></td>
+            <i18n:message key="format.dateSimpleDefaut" id="formatDate" />
+	    <td class="tabDonnees"><salon:valeur valeur="<%= DT_MVT %>" valeurNulle="null" format="<%= formatDate %>">%%&nbsp;</salon:valeur></td>
 	    <td class="tabDonnees">
                 <salon:valeur valeur='<%= QTE %>' valeurNulle="null">
                     <input type="text" name="QTE" value="%%" size="3">
@@ -145,7 +146,7 @@ Type de mouvement :
                 </salon:valeur>
             </td>
             <td class="tabDonnees">
-                <a href="javascript:AjouterLigne()"><img src=images/plus.gif width="15" height="15" border="0" alt="Enregistrer la ligne"></a>
+                <a href="javascript:AjouterLigne()"><img src=images/plus.gif width="15" height="15" border="0" alt="<i18n:message key="label.enregistrerLigne" />"></a>
             </td>
         </tr>
         <%
@@ -167,7 +168,7 @@ Type de mouvement :
             <td class="tabDonnees"><a href="_FicheArt.jsp?Action=Modification&CD_ART=<%= aArt.getCD_ART() %>" target="ClientFrame"><%= aArt.toString() %></a></td>
 	    <td class="Nombre"><salon:valeur valeur="<%= aArt.getQTE_STK() %>" valeurNulle="null">%%</salon:valeur></td>
 	    <td class="Nombre"><salon:valeur valeur="<%= aArt.getVAL_STK_HT() %>" valeurNulle="null">%%</salon:valeur></td>
-	    <td class="tabDonnees"><salon:valeur valeur="<%= (aMvt != null) ? aMvt.getDT_MVT() : null %>" valeurNulle="null" format="dd/MM/yyyy"><a href="_FicheArt_Mvt.jsp?Action=Modification&CD_ART=<%= aArt.getCD_ART() %>" target="ClientFrame">%%</a>&nbsp;</salon:valeur></td>
+	    <td class="tabDonnees"><salon:valeur valeur="<%= (aMvt != null) ? aMvt.getDT_MVT() : null %>" valeurNulle="null" format="<%= formatDate %>"><a href="_FicheArt_Mvt.jsp?Action=Modification&CD_ART=<%= aArt.getCD_ART() %>" target="ClientFrame">%%</a>&nbsp;</salon:valeur></td>
 	    <td class="Nombre">
                 <salon:valeur valeur='<%= aMvtAchat.getQTE() %>' valeurNulle="null">
                         %%
@@ -180,7 +181,7 @@ Type de mouvement :
             </td>
             <td>
                 <salon:valeur valeur='<%= aMvtAchat.getDT_MVT() %>' valeurNulle="null" timezone="true">
-                    <a href="javascript:SupprimerLigne(<%= aArt.getCD_ART() %>, '%%')"><img src=images/moins.gif width="15" height="15" border="0" alt="Supprimer la ligne"></a>
+                    <a href="javascript:SupprimerLigne(<%= aArt.getCD_ART() %>, '%%')"><img src=images/moins.gif width="15" height="15" border="0" alt="<i18n:message key="label.supprimerLigne" />"></a>
                 </salon:valeur>
             </td>
 	</tr>
@@ -225,24 +226,24 @@ function ControleEnreg ()
 {
    // Verification des données obligatoires
    if (document.fiche.CD_CMD_FOURN.value == "") {
-      alert ("Le N° de commande/facture fournisseur doit être saisi. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="ficAchat.commandeManquant" />");
       return false;
    }
    if (document.fiche.CD_CATEG_ART.selectedIndex <= 0) {
-      alert ("La catégorie de l'article doit être sélectionnée. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="ficAchat.categorieManquant" />");
       return false;
    }
    if (document.fiche.CD_ART.selectedIndex <= 0) {
-      alert ("L'article doit être sélectionné. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="ficAchat.articleManquant" />");
       return false;
    }
    // Verification des données obligatoires
    if (document.fiche.QTE.value == "") {
-      alert ("La quantité doit être saisie. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="ficAchat.quantiteManquant" />");
       return false;
    }
    if (document.fiche.VAL_MVT_HT.value == "") {
-      alert ("La valeur d'achat doit être saisie. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="ficAchat.valeurAchatManquant" />");
       return false;
    }
    return true;
