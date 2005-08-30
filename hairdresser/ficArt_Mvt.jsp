@@ -16,7 +16,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Fiche article</title>
+<title><i18n:message key="ficArt.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -62,17 +62,17 @@ function Init() {
    <table border="0" cellspacing="0" width="100%">
    <tr>
       <td align="right"> <span class="souslien"> 
-		<a href="_FicheArt.jsp?Action=Modification&CD_ART=<%= aArt.getCD_ART() %>" target="ClientFrame">Fournisseurs de l'article</a> </span> </td>
+        <a href="_FicheArt.jsp?Action=Modification&CD_ART=<%= aArt.getCD_ART() %>" target="ClientFrame"><i18n:message key="ficArt_Mvt.fournArticle" /></a> </span> </td>
    </tr>
    </table>
 <% } %>
    <table border="0" width="100%">
 	 <tr>
-		  <th>Date</th>
-		  <th>Type de mouvement</th>
-		  <th>Quantité</th>
-		  <th>Valeur unitaire</th>
-		  <th>Stock avant</th>
+		  <th><i18n:message key="label.date" /></th>
+		  <th><i18n:message key="label.typeMouvement" /></th>
+		  <th><i18n:message key="label.qte" /></th>
+		  <th><i18n:message key="label.valeurUnit" /></th>
+		  <th><i18n:message key="label.stockAvant" /></th>
 		  <th>&nbsp;</th>
 	 </tr>
 	 <%
@@ -110,7 +110,7 @@ function Init() {
 	       </salon:valeur>
 	    </td>
 	    <td class="tabDonnees">
-		  <a href="javascript:AjouterLigne(<%= i %>)"><img src=images/plus.gif width="15" height="15" border="0" alt="Ajouter le mouvement"></a>
+		  <a href="javascript:AjouterLigne(<%= i %>)"><img src=images/plus.gif width="15" height="15" border="0" alt="<i18n:message key="label.ajouterMouvement" />"></a>
 	    </td>
 	 </tr>
 	 <%
@@ -138,7 +138,7 @@ function Init() {
             <% if ((aMvt.getCD_FACT() != 0) 
                     && (FactBean.getFactBean(mySalon.getMyDBSession(), Long.toString(aMvt.getCD_FACT()), mySalon.getMessagesBundle()) 
                         != null)){ %>
-                <a href="_FicheFact.jsp?Action=Modification&CD_FACT=<%= aMvt.getCD_FACT() %>" target="ClientFrame" title="Fiche facture">
+                <a href="_FicheFact.jsp?Action=Modification&CD_FACT=<%= aMvt.getCD_FACT() %>" target="ClientFrame" title="<i18n:message key="ficFact.title" />">
                 <img src="images/fact.gif" border=0 align=top></a>
             <% } %>
             </td>
@@ -159,7 +159,7 @@ function Init() {
 		     <a href="javascript:Precedent()"><img src="images/haut.gif" width="17" height="9" border="0" ></a>
 	       <% }
 	          else if ((i == 0)  && (DebMvt == 0)) { %>
-		     <a href="javascript:SupprimerLigne()"><img src="images/moins.gif" width="15" height="15" border="0" alt="Supprimer le dernier mouvement"></a>
+		     <a href="javascript:SupprimerLigne()"><img src="images/moins.gif" width="15" height="15" border="0" alt="<i18n:message key="label.supprimerMouvement" />"></a>
 	       <% } 
 	          else if ((i+1) == listeMvt.size()) { %>
 		     <a href="javascript:Suivant()"><img src="images/bas.gif" border="0" width="17" height="9" ></a>
@@ -224,7 +224,7 @@ function ControleEnreg ()
 {
    // Verification des données obligatoires
    if (document.fiche.LIB_ART.value == "") {
-      alert ("Le libellé doit être saisi. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="ficArt_Mvt.libelleManquant" />");
       return false;
    }
    return true;
@@ -256,7 +256,7 @@ function Enregistrer()
 {
    // Verification des données obligatoires
    if (document.fiche.LIB_ART.value == "") {
-      alert ("Le libellé doit être saisi. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="ficArt_Mvt.libelleManquant" />");
       return;
    }
    document.fiche.submit();
@@ -266,7 +266,7 @@ function Enregistrer()
 function Supprimer()
 {
     if ((document.fiche.CD_ART.value != "0") && (document.fiche.CD_ART.value != "")) {
-        if (confirm ("Cette suppression est définitive. Confirmez-vous cette action ?")) {
+        if (confirm ("<i18n:message key="message.suppressionDefinitiveConfirm" />")) {
             document.fiche.Action.value = "Suppression";
             document.fiche.submit();
         }

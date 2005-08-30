@@ -15,7 +15,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Fiche article</title>
+<title><i18n:message key="ficArt.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -59,18 +59,18 @@ function Init() {
    <table border="0" cellspacing="0" width="100%">
    <tr>
       <td align="right"> <span class="souslien"> 
-		<a href="_FicheArt_Mvt.jsp?Action=Modification&CD_ART=<%= aArt.getCD_ART() %>" target="ClientFrame">Mouvements sur l'article</a> </span> </td>
+		<a href="_FicheArt_Mvt.jsp?Action=Modification&CD_ART=<%= aArt.getCD_ART() %>" target="ClientFrame"><i18n:message key="ficArt.mvtArticle" /></a> </span> </td>
    </tr>
    </table>
 <% } %>
    <table border="0" width="100%">
 	 <tr>
-		  <th>Fournisseur</th>
-		  <th>Libellé</th>
-		  <th>Référence</th>
-		  <th>Commande<br>mini</th>
-		  <th>Prix<br>unitaire HT</th>
-		  <th>Principal</th>
+		  <th><i18n:message key="label.fournisseur" /></th>
+		  <th><i18n:message key="label.libelle" /></th>
+		  <th><i18n:message key="label.reference" /></th>
+		  <th><i18n:message key="label.miniCommande" /></th>
+		  <th><i18n:message key="label.prixUnitaireHT" /></th>
+		  <th><i18n:message key="label.principal" /></th>
 		  <th>&nbsp;</th>
 	 </tr>
 	 <%
@@ -115,14 +115,15 @@ function Init() {
 	       </salon:valeur>
 	    </td>
 	    <td class="tabDonnees">
-		<salon:selection valeur="<%= aFourn.getFOURN_PRINC() %>" valeurs='<%= "N|O" %>' libelle="Non|Oui">
+                <i18n:message key="valeur.nonOui" id="valeurNonOui" />
+		<salon:selection valeur="<%= aFourn.getFOURN_PRINC() %>" valeurs='<%= "N|O" %>' libelle="<%= valeurNonOui %>">
 		  <select name="FOURN_PRINC<%= i %>" onChange="exclusionPrinc(<%= i %>)">
 		     %%
 		  </select>
 		</salon:selection>
 	    </td>
 	    <td class="tabDonnees">
-		  <a href="javascript:SupprimerLigne(<%= i %>)"><img src=images/moins.gif width="15" height="15" border="0" alt="Supprimer la ligne"></a>
+		  <a href="javascript:SupprimerLigne(<%= i %>)"><img src=images/moins.gif width="15" height="15" border="0" alt="<i18n:message key="label.supprimerLigne" />"></a>
 	    </td>
 	 </tr>
 	 <%
@@ -155,14 +156,14 @@ function Init() {
 	       </salon:valeur>
 	    </td>
 	    <td class="tabDonnees">
-		<salon:selection valeur='<%= (listeFourn.size()>0) ? "N" : "O" %>' valeurs='<%= "N|O" %>' libelle="Non|Oui">
+		<salon:selection valeur='<%= (listeFourn.size()>0) ? "N" : "O" %>' valeurs='<%= "N|O" %>' libelle="<%= valeurNonOui %>">
 		  <select name="FOURN_PRINC<%= i %>" onChange="exclusionPrinc(<%= i %>)">
 		     %%
 		  </select>
 		</salon:selection>
 	    </td>
 	    <td class="tabDonnees">
-		  <a href="javascript:AjouterLigne(<%= i %>)"><img src=images/plus.gif width="15" height="15" border="0" alt="Ajouter la ligne"></a>
+		  <a href="javascript:AjouterLigne(<%= i %>)"><img src=images/plus.gif width="15" height="15" border="0" alt="<i18n:message key="label.ajouterLigne" />"></a>
 	    </td>
 	 </tr>
    </table>
@@ -193,7 +194,7 @@ function ControleEnreg ()
 {
    // Verification des données obligatoires
    if (document.fiche.LIB_ART.value == "") {
-      alert ("Le libellé doit être saisi. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="message.suppressionDefinitiveConfirm" />");
       return false;
    }
    return true;
@@ -228,7 +229,7 @@ function Enregistrer()
 {
    // Verification des données obligatoires
    if (document.fiche.LIB_ART.value == "") {
-      alert ("Le libellé doit être saisi. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="ficArt_Mvt.libelleManquant" />");
       return;
    }
    document.fiche.submit();
@@ -238,7 +239,7 @@ function Enregistrer()
 function Supprimer()
 {
    if ((document.fiche.CD_ART.value != "0") && (document.fiche.CD_ART.value != "")) {
-       if (confirm ("Cette suppression est définitive. Confirmez-vous cette action ?")) {
+       if (confirm ("<i18n:message key="message.suppressionDefinitiveConfirm" />")) {
           document.fiche.Action.value = "Suppression";
           document.fiche.submit();
        }

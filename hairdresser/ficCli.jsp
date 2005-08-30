@@ -405,7 +405,7 @@ function Nouveau()
 function Supprimer()
 {
     if ((document.fiche.CD_CLI.value != "0") && (document.fiche.CD_CLI.value != "")) {
-        if (confirm ("<i18n:message key="label.suppressionDefinitiveConfirm" />")) {
+        if (confirm ("<i18n:message key="message.suppressionDefinitiveConfirm" />")) {
             document.fiche.Action.value = "Suppression";
             document.fiche.submit();
         }
