@@ -237,7 +237,7 @@ public class FicFact extends ConnectedServlet {
                 } else {
                     // Recharge à partir de la base
                     aFact = FactBean.getFactBean(myDBSession, CD_FACT, mySalon.getMessagesBundle());
-                    if (assert((aFact != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                    if (assertOrError((aFact != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                     	return;
                     }
                 }
@@ -472,7 +472,7 @@ public class FicFact extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 aFact = FactBean.getFactBean(myDBSession, CD_FACT, mySalon.getMessagesBundle());
-                if (assert((aFact != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                if (assertOrError((aFact != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
 

@@ -84,7 +84,7 @@ public void performTask(
 			request.setAttribute("Action", "Modification");
 
 			aFourn = FournBean.getFournBean(myDBSession, CD_FOURN);
-            if (assert((aFourn != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            if (assertOrError((aFourn != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
             	return;
             }
 		}
@@ -95,7 +95,7 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aFourn = FournBean.getFournBean(myDBSession, CD_FOURN);
-            if (assert((aFourn != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            if (assertOrError((aFourn != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
             	return;
             }
 
@@ -131,7 +131,7 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aFourn = FournBean.getFournBean(myDBSession, CD_FOURN);
-            if (assert((aFourn != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            if (assertOrError((aFourn != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
             	return;
             }
 

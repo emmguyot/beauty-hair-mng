@@ -140,7 +140,7 @@ public class FicPaiement extends ConnectedServlet {
                 request.setAttribute("Action", "Modification");
 
                 aPaiement = PaiementBean.getPaiementBean(myDBSession, CD_PAIEMENT, mySalon.getMessagesBundle());
-                if (assert((aPaiement != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                if (assertOrError((aPaiement != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
             } else if (Action.equals("Modification") || (Action.equals("Impression"))) {
@@ -150,7 +150,7 @@ public class FicPaiement extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 aPaiement = PaiementBean.getPaiementBean(myDBSession, CD_PAIEMENT, mySalon.getMessagesBundle());
-                if (assert((aPaiement != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                if (assertOrError((aPaiement != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
 
@@ -222,7 +222,7 @@ public class FicPaiement extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 aPaiement = PaiementBean.getPaiementBean(myDBSession, CD_PAIEMENT, mySalon.getMessagesBundle());
-                if (assert((aPaiement != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                if (assertOrError((aPaiement != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
 

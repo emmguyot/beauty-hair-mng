@@ -76,7 +76,7 @@ public void performTask(
 			request.setAttribute("Action", "Modification");
 
 			aIdent = IdentBean.getIdentBean(myDBSession, CD_IDENT);
-            if (assert((aIdent != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            if (assertOrError((aIdent != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
             	return;
             }
 			request.setAttribute("IdentBean", aIdent);
@@ -89,7 +89,7 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aIdent = IdentBean.getIdentBean(myDBSession, CD_IDENT);
-            if (assert((aIdent != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            if (assertOrError((aIdent != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
             	return;
             }
 
@@ -122,7 +122,7 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aIdent = IdentBean.getIdentBean(myDBSession, CD_IDENT);
-            if (assert((aIdent != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            if (assertOrError((aIdent != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
             	return;
             }
 

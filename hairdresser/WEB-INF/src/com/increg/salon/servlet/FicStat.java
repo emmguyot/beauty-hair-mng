@@ -84,7 +84,7 @@ public class FicStat extends ConnectedServlet {
                 request.setAttribute("Action", "Modification");
 
                 aStat = StatBean.getStatBean(myDBSession, CD_STAT, mySalon.getMessagesBundle());
-                if (assert((aStat != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                if (assertOrError((aStat != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
             }
@@ -95,7 +95,7 @@ public class FicStat extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 aStat = StatBean.getStatBean(myDBSession, CD_STAT, mySalon.getMessagesBundle());
-                if (assert((aStat != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                if (assertOrError((aStat != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
 
@@ -148,7 +148,7 @@ public class FicStat extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 aStat = StatBean.getStatBean(myDBSession, CD_STAT, mySalon.getMessagesBundle());
-                if (assert((aStat != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                if (assertOrError((aStat != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
 
@@ -175,7 +175,7 @@ public class FicStat extends ConnectedServlet {
             else if (Action.equals("Construction")) {
                 // Définition du graphe de stat et de ses paramètres
                 aStat = StatBean.getStatBean(myDBSession, CD_STAT, mySalon.getMessagesBundle());
-                if (assert((aStat != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                if (assertOrError((aStat != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
 
@@ -204,7 +204,7 @@ public class FicStat extends ConnectedServlet {
             else if (Action.equals("Graphe")) {
                 // Affichage du graphe
                 aStat = StatBean.getStatBean(myDBSession, CD_STAT, mySalon.getMessagesBundle());
-                if (assert((aStat != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                if (assertOrError((aStat != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
 

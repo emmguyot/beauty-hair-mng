@@ -66,7 +66,7 @@ public class FicTxTVA extends ConnectedServlet {
                 request.setAttribute("Action", "Modification");
 
                 aTva = TvaBean.getTvaBean(myDBSession, CD_TVA);
-                if (assert((aTva != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                if (assertOrError((aTva != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
             } else if (Action.equals("Modification")) {
@@ -76,7 +76,7 @@ public class FicTxTVA extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 aTva = TvaBean.getTvaBean(myDBSession, CD_TVA);
-                if (assert((aTva != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                if (assertOrError((aTva != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
 
@@ -99,7 +99,7 @@ public class FicTxTVA extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 aTva = TvaBean.getTvaBean(myDBSession, CD_TVA);
-                if (assert((aTva != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                if (assertOrError((aTva != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
 

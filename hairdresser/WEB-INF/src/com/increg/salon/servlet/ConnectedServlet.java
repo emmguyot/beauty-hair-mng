@@ -125,7 +125,7 @@ public abstract class ConnectedServlet extends javax.servlet.http.HttpServlet {
 	 * @param response Réponse HTTP
 	 * @return true si erreur
 	 */
-	protected boolean assert(boolean condition, String messageErreur, HttpServletRequest request, HttpServletResponse response) {
+	protected boolean assertOrError(boolean condition, String messageErreur, HttpServletRequest request, HttpServletResponse response) {
 		if (!condition) {
 	        HttpSession mySession = request.getSession(false);
 	        SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");

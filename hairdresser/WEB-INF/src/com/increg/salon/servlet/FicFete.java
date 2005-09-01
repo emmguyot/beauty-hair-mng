@@ -69,7 +69,7 @@ public void performTask(
 			request.setAttribute("Action", "Modification");
 
 			aFete = FeteBean.getFeteBean(myDBSession, CD_FETE);
-            if (assert((aFete != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            if (assertOrError((aFete != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
             	return;
             }
 		}
@@ -80,7 +80,7 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aFete = FeteBean.getFeteBean(myDBSession, CD_FETE);
-            if (assert((aFete != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            if (assertOrError((aFete != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
             	return;
             }
 
@@ -105,7 +105,7 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aFete = FeteBean.getFeteBean(myDBSession, CD_FETE);
-            if (assert((aFete != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            if (assertOrError((aFete != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
             	return;
             }
 

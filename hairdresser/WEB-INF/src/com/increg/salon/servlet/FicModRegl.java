@@ -67,7 +67,7 @@ public void performTask(
 			request.setAttribute("Action", "Modification");
 
 			aModRegl = ModReglBean.getModReglBean(myDBSession, CD_MOD_REGL);
-            if (assert((aModRegl != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            if (assertOrError((aModRegl != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
             	return;
             }
 		}
@@ -78,7 +78,7 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aModRegl = ModReglBean.getModReglBean(myDBSession, CD_MOD_REGL);
-            if (assert((aModRegl != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            if (assertOrError((aModRegl != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
             	return;
             }
 
@@ -105,7 +105,7 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aModRegl = ModReglBean.getModReglBean(myDBSession, CD_MOD_REGL);
-            if (assert((aModRegl != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            if (assertOrError((aModRegl != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
             	return;
             }
 

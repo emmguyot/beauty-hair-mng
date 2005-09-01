@@ -42,7 +42,7 @@ public void performTask(
 			request.setAttribute("Action", "Modification");
 
 			aParam = ParamBean.getParamBean(myDBSession, CD_PARAM);
-            if (assert((aParam != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            if (assertOrError((aParam != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
             	return;
             }
 		}
@@ -53,7 +53,7 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aParam = ParamBean.getParamBean(myDBSession, CD_PARAM);
-            if (assert((aParam != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            if (assertOrError((aParam != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
             	return;
             }
 

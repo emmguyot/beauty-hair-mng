@@ -63,7 +63,7 @@ public void performTask(
 			request.setAttribute("Action", "Modification");
 
 			aTypMca = TypMcaBean.getTypMcaBean(myDBSession, CD_TYP_MCA);
-            if (assert((aTypMca != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            if (assertOrError((aTypMca != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
             	return;
             }
 		}
@@ -74,7 +74,7 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aTypMca = TypMcaBean.getTypMcaBean(myDBSession, CD_TYP_MCA);
-            if (assert((aTypMca != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            if (assertOrError((aTypMca != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
             	return;
             }
 
@@ -107,7 +107,7 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aTypMca = TypMcaBean.getTypMcaBean(myDBSession, CD_TYP_MCA);
-            if (assert((aTypMca != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            if (assertOrError((aTypMca != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
             	return;
             }
 

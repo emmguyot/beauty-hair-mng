@@ -81,7 +81,7 @@ public class FicTypVent extends ConnectedServlet {
                 request.setAttribute("Action", "Modification");
 
                 aTypVent = TypVentBean.getTypVentBean(myDBSession, CD_TYP_VENT);
-                if (assert((aTypVent != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                if (assertOrError((aTypVent != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
             } else if (Action.equals("Modification")) {
@@ -91,7 +91,7 @@ public class FicTypVent extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 aTypVent = TypVentBean.getTypVentBean(myDBSession, CD_TYP_VENT);
-                if (assert((aTypVent != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                if (assertOrError((aTypVent != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
 
@@ -116,7 +116,7 @@ public class FicTypVent extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 aTypVent = TypVentBean.getTypVentBean(myDBSession, CD_TYP_VENT);
-                if (assert((aTypVent != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                if (assertOrError((aTypVent != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
 

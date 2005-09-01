@@ -86,7 +86,7 @@ public class FicPrest extends ConnectedServlet {
                 request.setAttribute("Action", "Modification");
 
                 aPrest = PrestBean.getPrestBean(myDBSession, CD_PREST);
-                if (assert((aPrest != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                if (assertOrError((aPrest != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
             }
@@ -100,7 +100,7 @@ public class FicPrest extends ConnectedServlet {
                 }
                 else {
                     aPrest = PrestBean.getPrestBean(myDBSession, CD_PREST);
-                    if (assert((aPrest != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                    if (assertOrError((aPrest != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                     	return;
                     }
                 }
@@ -141,7 +141,7 @@ public class FicPrest extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 aPrest = PrestBean.getPrestBean(myDBSession, CD_PREST);
-                if (assert((aPrest != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                if (assertOrError((aPrest != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
 
@@ -210,7 +210,7 @@ public class FicPrest extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 aPrest = PrestBean.getPrestBean(myDBSession, CD_PREST);
-                if (assert((aPrest != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                if (assertOrError((aPrest != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
 

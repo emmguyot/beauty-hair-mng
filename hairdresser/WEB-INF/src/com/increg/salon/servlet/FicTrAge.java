@@ -72,7 +72,7 @@ public void performTask(
 			request.setAttribute("Action", "Modification");
 
 			aTrAge = TrAgeBean.getTrAgeBean(myDBSession, CD_TR_AGE);
-            if (assert((aTrAge != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            if (assertOrError((aTrAge != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
             	return;
             }
 		}
@@ -83,7 +83,7 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aTrAge = TrAgeBean.getTrAgeBean(myDBSession, CD_TR_AGE);
-            if (assert((aTrAge != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            if (assertOrError((aTrAge != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
             	return;
             }
 
@@ -109,7 +109,7 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aTrAge = TrAgeBean.getTrAgeBean(myDBSession, CD_TR_AGE);
-            if (assert((aTrAge != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            if (assertOrError((aTrAge != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
             	return;
             }
 

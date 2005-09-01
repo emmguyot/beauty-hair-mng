@@ -65,7 +65,7 @@ public void performTask(
 			request.setAttribute("Action", "Modification");
 
 			aTypMvt = TypMvtBean.getTypMvtBean(myDBSession, CD_TYP_MVT);
-            if (assert((aTypMvt != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            if (assertOrError((aTypMvt != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
             	return;
             }
 		}
@@ -76,7 +76,7 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aTypMvt = TypMvtBean.getTypMvtBean(myDBSession, CD_TYP_MVT);
-            if (assert((aTypMvt != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            if (assertOrError((aTypMvt != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
             	return;
             }
 
@@ -111,7 +111,7 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aTypMvt = TypMvtBean.getTypMvtBean(myDBSession, CD_TYP_MVT);
-            if (assert((aTypMvt != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            if (assertOrError((aTypMvt != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
             	return;
             }
 

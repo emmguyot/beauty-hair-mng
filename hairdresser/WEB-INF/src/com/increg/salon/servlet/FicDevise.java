@@ -65,7 +65,7 @@ public void performTask(
 			request.setAttribute("Action", "Modification");
 
 			aDevise = DeviseBean.getDeviseBean(myDBSession, CD_DEVISE);
-            if (assert((aDevise != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            if (assertOrError((aDevise != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
             	return;
             }
 		}
@@ -76,7 +76,7 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aDevise = DeviseBean.getDeviseBean(myDBSession, CD_DEVISE);
-            if (assert((aDevise != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            if (assertOrError((aDevise != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
             	return;
             }
 
@@ -103,7 +103,7 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aDevise = DeviseBean.getDeviseBean(myDBSession, CD_DEVISE);
-            if (assert((aDevise != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            if (assertOrError((aDevise != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
             	return;
             }
 

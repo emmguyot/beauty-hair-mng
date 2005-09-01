@@ -62,7 +62,7 @@ public void performTask(
 			request.setAttribute("Action", "Modification");
 
 			aDonneeRef = DonneeRefBean.getDonneeRefBean(myDBSession, nomTable, CD);
-            if (assert((aDonneeRef != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            if (assertOrError((aDonneeRef != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
             	return;
             }
 		}
@@ -73,7 +73,7 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aDonneeRef = DonneeRefBean.getDonneeRefBean(myDBSession, nomTable, CD);
-            if (assert((aDonneeRef != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            if (assertOrError((aDonneeRef != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
             	return;
             }
 
@@ -97,7 +97,7 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aDonneeRef = DonneeRefBean.getDonneeRefBean(myDBSession, nomTable, CD);
-            if (assert((aDonneeRef != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            if (assertOrError((aDonneeRef != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
             	return;
             }
 

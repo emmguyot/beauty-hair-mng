@@ -84,7 +84,7 @@ public void performTask(
             if (Action.equals("Rechargement+")) {
                 // Positionne la valeur par défaut du mouvement
                 ArtBean aArt = ArtBean.getArtBean(myDBSession, CD_ART, mySalon.getMessagesBundle());
-                if (assert((aArt != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                if (assertOrError((aArt != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
                 bdQTE = new BigDecimal("1");
@@ -132,7 +132,7 @@ public void performTask(
                 
                 // C'est une nouvelle ligne
                 MvtStkBean aMvt = MvtStkBean.getMvtStkBean(myDBSession, paramSup1, paramSup2, null, mySalon.getLangue(), mySalon.getMessagesBundle());
-                if (assert((aMvt != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                if (assertOrError((aMvt != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
                 aMvt.delete(myDBSession);

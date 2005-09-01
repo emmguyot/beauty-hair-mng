@@ -157,7 +157,7 @@ public class FicRDV extends ConnectedServlet {
                 request.setAttribute("Action", "Modification");
 
                 aRDV = RDVBean.getRDVBean(myDBSession, CD_CLI, DT_DEBUT, mySalon.getLangue());
-                if (assert((aRDV != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                if (assertOrError((aRDV != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
 
@@ -169,7 +169,7 @@ public class FicRDV extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 aRDV = RDVBean.getRDVBean(myDBSession, CD_CLI, DT_DEBUT, mySalon.getLangue());
-                if (assert((aRDV != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                if (assertOrError((aRDV != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
 

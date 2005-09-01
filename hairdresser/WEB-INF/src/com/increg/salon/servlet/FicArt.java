@@ -122,7 +122,7 @@ public void performTask(
 			request.setAttribute("Action", "Modification");
 
 			aArt = ArtBean.getArtBean(myDBSession, CD_ART, mySalon.getMessagesBundle());
-            if (assert((aArt != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            if (assertOrError((aArt != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
             	return;
             }
 		}
@@ -147,7 +147,7 @@ public void performTask(
 			else {
 				// Recharge à partir de la base
 	            aArt = ArtBean.getArtBean(myDBSession, CD_ART, mySalon.getMessagesBundle());
-                if (assert((aArt != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                if (assertOrError((aArt != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
 			}
@@ -281,7 +281,7 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aArt = ArtBean.getArtBean(myDBSession, CD_ART, mySalon.getMessagesBundle());
-            if (assert((aArt != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            if (assertOrError((aArt != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
             	return;
             }
 

@@ -72,7 +72,7 @@ public class FicCriterePub extends ConnectedServlet {
                 request.setAttribute("Action", "Modification");
 
                 aCriterePub = CriterePubBean.getCriterePubBean(myDBSession, CD_CRITERE_PUB);
-                if (assert((aCriterePub != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                if (assertOrError((aCriterePub != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
             }
@@ -83,7 +83,7 @@ public class FicCriterePub extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 aCriterePub = CriterePubBean.getCriterePubBean(myDBSession, CD_CRITERE_PUB);
-                if (assert((aCriterePub != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                if (assertOrError((aCriterePub != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
 
@@ -132,7 +132,7 @@ public class FicCriterePub extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 aCriterePub = CriterePubBean.getCriterePubBean(myDBSession, CD_CRITERE_PUB);
-                if (assert((aCriterePub != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                if (assertOrError((aCriterePub != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
 
@@ -152,7 +152,7 @@ public class FicCriterePub extends ConnectedServlet {
             else if (Action.equals("Construction")) {
                 // Définition du graphe de stat et de ses paramètres
                 aCriterePub = CriterePubBean.getCriterePubBean(myDBSession, CD_CRITERE_PUB);
-                if (assert((aCriterePub != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                if (assertOrError((aCriterePub != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
 
@@ -164,7 +164,7 @@ public class FicCriterePub extends ConnectedServlet {
             else if (Action.equals("Extraction")) {
                 // Affichage du graphe
                 aCriterePub = CriterePubBean.getCriterePubBean(myDBSession, CD_CRITERE_PUB);
-                if (assert((aCriterePub != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                if (assertOrError((aCriterePub != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
 
