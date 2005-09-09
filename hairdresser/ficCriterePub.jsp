@@ -11,7 +11,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Fiche Critères de Publipostage</title>
+<title><i18n:message key="ficCriterePub.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -55,13 +55,13 @@ function Init() {
 		  <input type="hidden" name="CD_CRITERE_PUB" value="%%" >
 	        </salon:valeur>
 		<input type="hidden" name="Action" value="<%=Action%>">
-		<span class="obligatoire">Libellé :</span> 
+		<span class="obligatoire"><i18n:message key="label.libelle" /> :</span> 
 		<salon:valeur valeurNulle="null" valeur="<%= aCriterePub.getLIB_CRITERE_PUB() %>" >
 		  <input type="text" name="LIB_CRITERE_PUB" value="%%" size=80>
 	        </salon:valeur>
        </p>
 	 <p>
-	        <span class="obligatoire">Clause :</span> 
+	        <span class="obligatoire"><i18n:message key="label.clause" /> :</span> 
 	        <salon:valeur valeurNulle="null" valeur="<%= aCriterePub.getCLAUSE() %>" >
 		  <textarea name="CLAUSE" rows="5" cols="80">%%</textarea>
 	        </salon:valeur>
@@ -84,7 +84,7 @@ function Enregistrer()
 {
    // Verification des données obligatoires
    if ((document.fiche.LIB_CRITERE_PUB.value == "") || (document.fiche.CLAUSE.value == "")) {
-      alert ("Le libellé du critère et la clause doivent être saisis. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="ficCriterePub.libelleClauseManquant" />");
       return;
    }
    if ((document.fiche.Action.value != "Creation") && (document.fiche.Action.value != "Modification")) {
@@ -97,7 +97,7 @@ function Enregistrer()
 function Supprimer()
 {
     if ((document.fiche.CD_CRITERE_PUB.value != "0") && (document.fiche.CD_CRITERE_PUB.value != "")) {
-        if (confirm ("Cette suppression est définitive. Confirmez-vous cette action ?")) {
+        if (confirm ("<i18n:message key="message.suppressionDefinitiveConfirm" />")) {
             document.fiche.Action.value = "Suppression";
             document.fiche.submit();
         }

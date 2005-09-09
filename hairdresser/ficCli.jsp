@@ -182,7 +182,7 @@ function Init() {
                         </select><br>
                         </salon:DBselection> 
                     	<i18n:message key="valeur.ouiNon" id="valeurOuiNon" />
-                        <salon:selection valeur="<%= aCli.getINDIC_VALID() %>" valeurs='<%= "O|N" %>' libelle="<%= valeurOuiNon %>" />">
+                        <salon:selection valeur="<%= aCli.getINDIC_VALID() %>" valeurs='<%= "O|N" %>' libelle="<%= valeurOuiNon %>">
                             <select name="INDIC_VALID">
                                 %%
                             </select>
