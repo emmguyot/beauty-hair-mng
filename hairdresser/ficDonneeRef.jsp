@@ -18,7 +18,9 @@
    String Action = (String) request.getAttribute("Action");
    DonneeRefBean aDonneeRef = (DonneeRefBean) request.getAttribute("DonneeRefBean");
 %>
-<title>Fiche <%= chaineTable %></title>
+<title><i18n:message key="ficDonneeRef.title" >
+    <i18n:messageArg value="<%= chaineTable %>" />
+</i18n:message></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -30,7 +32,7 @@
 
 function Init() {
    <%
-   // Positionne les liens d'actions
+   // Positionne les liens d actions
    if (! Action.equals("Creation")) {
       %>
       MM_showHideLayers('SUPPRIMER?bottomFrame','','show');
@@ -59,7 +61,7 @@ function Init() {
 		<input type="hidden" name="Action" value="<%=Action%>">
 		<input type="hidden" name="nomTable" value="<%=nomTable%>">
 		<input type="hidden" name="chaineTable" value="<%=chaineTable%>">
-		<span class="obligatoire">Libellé :</span> 
+		<span class="obligatoire"><i18n:message key="label.libelle" /> :</span> 
 		<salon:valeur valeurNulle="null" valeur="<%= aDonneeRef.getLIB() %>" >
 		  <input type="text" name="LIB" value="%%" size=40>
 	        </salon:valeur>
@@ -73,7 +75,7 @@ function Enregistrer()
 {
    // Verification des données obligatoires
    if (document.fiche.LIB.value == "") {
-      alert ("Le libellé doit être saisi. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="ficDonneeRef.libelleManquant" />");
       return;
    }
    document.fiche.submit();
@@ -83,7 +85,7 @@ function Enregistrer()
 function Supprimer()
 {
     if ((document.fiche.CD.value != "0") && (document.fiche.CD.value != "")) {
-        if (confirm ("Cette suppression est définitive. Confirmez-vous cette action ?")) {
+        if (confirm ("<i18n:message key="message.suppressionDefinitiveConfirm" />")) {
             document.fiche.Action.value = "Suppression";
             document.fiche.submit();
         }
