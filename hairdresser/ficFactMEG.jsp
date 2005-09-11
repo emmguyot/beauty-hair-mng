@@ -17,7 +17,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Fiche Facture : Mise en Garde</title>
+<title><i18n:message key="ficFactMEG.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -59,14 +59,14 @@ function Init() {
 
     <table width="100%"> 
         <tr>
-            <td class="label">Client : </td>
+            <td class="label"><i18n:message key="label.client" /> : </td>
             <td> 
             <%
                 ClientBean aCli = ClientBean.getClientBean(mySalon.getMyDBSession(), Long.toString(aFact.getCD_CLI()));
             %>
                 <span class="readonly"><a href="_FicheCli.jsp?Action=Modification&CD_CLI=<%= aFact.getCD_CLI() %>" target="ClientFrame"><%= aCli.toString() %></a></span> 
             </td>
-            <td class="label">Date de la prestation : </td>
+            <td class="label"><i18n:message key="label.dtPrest" /> : </td>
             <td>
                 <salon:valeur valeurNulle="null" valeur="<%= aFact.getDT_PREST() %>" >
                     <span class="readonly">%%</span>
@@ -74,7 +74,7 @@ function Init() {
             </td>
         </tr>
         <tr>
-            <td class="label"><h2>Total à payer : </h2></td>
+            <td class="label"><h2><i18n:message key="ficFact.totalPayer" /> : </h2></td>
             <td><h2><salon:valeur valeurNulle="null" valeur="<%= aFact.getPRX_TOT_TTC() %>" >
                         <span class="readonly">%% <%= mySalon.getDevise().toString() %></span>
                     </salon:valeur>
@@ -90,7 +90,7 @@ function Init() {
                     } // for 
                     %>
             </h2></td>
-            <td class="label">dont TVA : </td>
+            <td class="label"><i18n:message key="ficFact.dontTVA" /> : </td>
             <td class="tabDonneesGauche">
                 <salon:valeur valeurNulle="null" valeur="<%= aFact.getTVA() %>" > 
                     <span class="readonly">%% <%= mySalon.getDevise().toString() %></span>
@@ -98,7 +98,7 @@ function Init() {
             </td>
 	</tr>
 	<tr>
-	<td class="label">Mode de paiement : </td>
+	<td class="label"><i18n:message key="ficFact.modePaiement" /> : </td>
 	<td>
 	    <salon:valeur valeurNulle="0" valeur="<%= aPaiement.getCD_PAIEMENT() %>" >
 	       <input type="hidden" name="CD_PAIEMENT" value="%%" >
@@ -115,7 +115,7 @@ function Init() {
                     <a href="_FichePaiement.jsp?Action=Modification&CD_PAIEMENT=<%= aPaiement.getCD_PAIEMENT() %>" target="ClientFrame">Paiements regroupés</a> 
             <% } %>
         </td>
-	<td class="label">Date de paiement : </td>
+	<td class="label"><i18n:message key="ficFact.dtPaiement" /> : </td>
 	<td>
             <salon:valeur valeurNulle="null" valeur="<%= aPaiement.getDT_PAIEMENT() %>" > 
                 <input type="hidden" name="DT_PAIEMENT" value="%%">
@@ -126,9 +126,9 @@ function Init() {
 	</table>
         
     <hr>
-   <p class="warning"><span class="big">Vous allez supprimer une facture réglée.</span></p>
-   <p class="big">Ceci est une opération exceptionnelle et requiert un mot de passe pour exécuter cette opération. En effet, une erreur de manipulation engendrerait une erreur dans les mouvements de caisse, le solde de la caisse et éventuellement dans les mouvements de stocks et la quantité en stock de vos articles.</p>
-   <p class="big">Si cette opération est nécessaire, vous pouvez, <b>en connaissance de cause et sous votre seule responsabilité</b>, valider cette action en saisissant le mot de passe des opérations exceptionnelles :
+   <p class="warning"><span class="big"><i18n:message key="ficFactMEG.sousTitre" /></span></p>
+   <p class="big"><i18n:message key="ficFactMEG.texte" /></p>
+   <p class="big"><i18n:message key="ficFactMEG.texte2" /> :
    
    <input type="password" name="MOT_PASSE"></p>
 </form>

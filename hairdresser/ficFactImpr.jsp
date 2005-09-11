@@ -25,7 +25,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Fiche Facture</title>
+<title><i18n:message key="ficFact.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -69,12 +69,12 @@
 	 	CollabBean collab = CollabBean.getCollabBean(mySalon.getMyDBSession(), Integer.toString(aFact.getCD_COLLAB()));
 	 	if (collab.getCIVILITE().equals("M. ")) {
 	 %>
-	 		Coiffeur
+	 		<i18n:message key="label.coiffeur" />
 	 <%
 	 	}
 	 	else {
 	 %>
-	 		Coiffeuse
+	 		<i18n:message key="label.coiffeuse" />
 	 <%
 	 	}
 	 %> : <%= collab.toString() %>
@@ -85,7 +85,7 @@
 		  </salon:valeur>
 	 </td></tr>
 	 <tr>
-	 <td colspan="2">Client :
+	 <td colspan="2"><i18n:message key="label.client" /> :
 	 <%
 	       ClientBean aCli = ClientBean.getClientBean(mySalon.getMyDBSession(), Long.toString(aFact.getCD_CLI()));
 	 %>
@@ -133,7 +133,7 @@
 	 <% if (((aFact.getREMISE_PRC() != null) && (aFact.getREMISE_PRC().compareTo(new BigDecimal(0)) == 1))
 		  || ((aFact.getREMISE_FIXE() != null) && (aFact.getREMISE_FIXE().compareTo(new BigDecimal(0)) == 1))) { %>
 	 <tr>
-	 <td>Total prestations : </td>
+	 <td><i18n:message key="ficFact.totalPrest" /> : </td>
 	 <td class="Nombre"><salon:valeur valeurNulle="null" valeur="<%= totPrest%>" >
 		  %%
 	       </salon:valeur>
@@ -144,7 +144,7 @@
 	 </tr>
 	 <% if ((aFact.getREMISE_PRC() != null) && (aFact.getREMISE_PRC().compareTo(new BigDecimal(0)) == 1)) { %>
 	 <tr>
-	 <td>Remise en % : </td>
+	 <td><i18n:message key="ficFact.remisePrc" /> : </td>
 	 <td class="Nombre">
 	       <% if (aFact.getCD_FACT() == 0) { 
 		  // Facture regroupée : Remise approximative %>
@@ -158,7 +158,7 @@
 	 <% } %>
 	 <% if ((aFact.getREMISE_FIXE() != null) && (aFact.getREMISE_FIXE().compareTo(new BigDecimal(0)) == 1)) { %>
 	 <tr>
-	 <td>Remise fixe : </td>
+	 <td><i18n:message key="ficFact.remiseFixe" /> : </td>
 	 <td class="Nombre"><salon:valeur valeurNulle="null" valeur="<%= aFact.getREMISE_FIXE() %>" >
 		  %%
 	       </salon:valeur>
@@ -170,7 +170,7 @@
 	 <% }
 	 } %>
 	 <tr>
-	 <td>Total à payer : </td>
+	 <td><i18n:message key="ficFact.totalPayer" /> : </td>
 	 <td class="Nombre"><salon:valeur valeurNulle="null" valeur="<%= aFact.getPRX_TOT_TTC() %>" >
 		  <span class="readonly">%%</span>
 	       </salon:valeur>
@@ -205,7 +205,7 @@
         
 	 %>
 		 <tr>
-		 <td><font size=-2>dont TVA <%= aTva.getTX_TVA() %>% : </font></td>
+		 <td><font size=-2><i18n:message key="ficFact.dontTVA" /> <%= aTva.getTX_TVA() %>% : </font></td>
 		 <td class="Nombre">
 	       <font size=-2>
 	       <salon:valeur valeurNulle="null" valeur="<%= aFact.getTVA(aTva) %>" > 
@@ -223,12 +223,12 @@
 	 }
 	 %>
 	 <tr>
-	 <td><font size=-2>Taxe et service 15% compris</font></td>
+	 <td><font size=-2><i18n:message key="ficFactImpr.taxeComprise" /></font></td>
 	 </tr>
 	 </table>
 	 <table width="100%">
 	 <tr>
-	 <td>Mode de paiement : 
+	 <td><i18n:message key="ficFact.modePaiement" /> : 
 		     <salon:valeur valeur='<%= DonneeRefBean.getDonneeRefBean(mySalon.getMyDBSession(), "MOD_REGL", Integer.toString(aPaiement.getCD_MOD_REGL())).toString() %>' valeurNulle="null">
 			%%
 		     </salon:valeur>
