@@ -155,7 +155,7 @@ MM_reloadPage(true);
 
    for (int i=0; i < listeFact.size(); i++) {
       FactBean aFact = (FactBean) listeFact.get(i);
-      ClientBean aCli = ClientBean.getClientBean(mySalon.getMyDBSession(), Long.toString(aFact.getCD_CLI()));
+      ClientBean aCli = ClientBean.getClientBean(mySalon.getMyDBSession(), Long.toString(aFact.getCD_CLI()), mySalon.getMessagesBundle());
       String chaine = aCli.toString();
       %>
 	<tr><td class="ligneTab4"><nobr><font size=-1><a href="_FicheFact.jsp?Action=Modification&CD_FACT=<%= aFact.getCD_FACT() %>" target="ClientFrame" title="<%= chaine %>"><%= chaine.substring(0,Math.min(20,chaine.length())) %></a></font></nobr></td></tr>

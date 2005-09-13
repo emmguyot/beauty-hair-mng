@@ -63,7 +63,7 @@ public class RechAbonnement extends ConnectedServlet {
         HttpSession mySession = request.getSession(false);
         SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession"); 
         DBSession myDBSession = mySalon.getMyDBSession();
-        ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI);
+        ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI, mySalon.getMessagesBundle());
 
         // Stocke le client
         request.setAttribute("ClientBean", aCli);

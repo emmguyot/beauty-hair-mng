@@ -140,7 +140,7 @@ function Init() {
 	       <% } %>
 	       >
 	    </td>
-	      <td><salon:valeur valeurNulle="null" valeur="<%= ClientBean.getClientBean(mySalon.getMyDBSession(), Long.toString(aFact.getCD_CLI())).toString() %>" > 
+	      <td><salon:valeur valeurNulle="null" valeur="<%= ClientBean.getClientBean(mySalon.getMyDBSession(), Long.toString(aFact.getCD_CLI()), mySalon.getMessagesBundle()).toString() %>" > 
 				<a href="_FicheCli.jsp?Action=Modification&CD_CLI=<%= aFact.getCD_CLI() %>" target="ClientFrame" title="Fiche client">%%</a> 
 				</salon:valeur> </td>
 	      <td class="tabDonnees"><salon:valeur valeur="<%= aFact.getDT_PREST() %>" valeurNulle="null"> 

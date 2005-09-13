@@ -81,6 +81,7 @@ function Init() {
 	       
 	 %>
 	 <input type="hidden" name="NbFourn" value="<%= listeFourn.size() %>">
+         <i18n:message key="valeur.nonOui" id="valeurNonOui" />
 	 <%
 	 for (i=0; i< listeFourn.size(); i++) {
 	       CatFournBean aFourn = (CatFournBean) listeFourn.get(i);
@@ -115,7 +116,6 @@ function Init() {
 	       </salon:valeur>
 	    </td>
 	    <td class="tabDonnees">
-                <i18n:message key="valeur.nonOui" id="valeurNonOui" />
 		<salon:selection valeur="<%= aFourn.getFOURN_PRINC() %>" valeurs='<%= "N|O" %>' libelle="<%= valeurNonOui %>">
 		  <select name="FOURN_PRINC<%= i %>" onChange="exclusionPrinc(<%= i %>)">
 		     %%

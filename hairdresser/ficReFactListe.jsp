@@ -64,7 +64,7 @@
 	       </td>
 	       <td>
 	       <%
-		  ClientBean aCli = ClientBean.getClientBean(mySalon.getMyDBSession(), Long.toString(aFact.getCD_CLI()));
+		  ClientBean aCli = ClientBean.getClientBean(mySalon.getMyDBSession(), Long.toString(aFact.getCD_CLI()), mySalon.getMessagesBundle());
 	       %>
 		  <%= aCli.toString() %>
 	       </td>

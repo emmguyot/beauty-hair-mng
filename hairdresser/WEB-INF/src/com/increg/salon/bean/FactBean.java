@@ -1288,7 +1288,7 @@ public class FactBean extends TimeStampBean {
                     aMvt.create(dbConnect);
                 } else if (aPrest.isConsommationAbonnement()) {
                     // Consommation d'un abonnements du client
-                    ClientBean aCli = ClientBean.getClientBean(dbConnect, Long.toString(CD_CLI));
+                    ClientBean aCli = ClientBean.getClientBean(dbConnect, Long.toString(CD_CLI), message);
                     if (!aCli.consommeAbonnement(aPrest.getCD_PREST(), aHisto.getQTE().intValue(), undo || (CD_PAIEMENT == 0))) {
                         // Le client n'a pas l'abonnement
                         throw new FctlException(BasicSession.TAG_I18N + "factBean.abonnementManquant" + BasicSession.TAG_I18N);
@@ -1297,7 +1297,7 @@ public class FactBean extends TimeStampBean {
                     }
                 } else if (aPrest.isAbonnement()) {
                     // Impacte le client avec l'achat de l'abonnement
-                    ClientBean aCli = ClientBean.getClientBean(dbConnect, Long.toString(CD_CLI));
+                    ClientBean aCli = ClientBean.getClientBean(dbConnect, Long.toString(CD_CLI), message);
                     if (!aCli.consommeAbonnement(aPrest.getCD_PREST_ABONNEMENT(), aHisto.getQTE().multiply(new BigDecimal(aPrest.getCPT_ABONNEMENT())).negate().intValue(), undo || (CD_PAIEMENT == 0))) {
                         // Problème...
                         throw new FctlException(BasicSession.TAG_I18N + "factBean.abonnementErreur" + BasicSession.TAG_I18N);

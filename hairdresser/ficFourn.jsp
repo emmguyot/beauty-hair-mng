@@ -12,7 +12,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Fiche Fournisseur</title>
+<title><i18n:message key="ficFourn.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -55,24 +55,25 @@ function Init() {
 		  <input type="hidden" name="CD_FOURN" value="%%" >
 	        </salon:valeur>
 		<input type="hidden" name="Action" value="<%=Action%>">
-		<span class="obligatoire">Raison sociale :</span> 
+		<span class="obligatoire"><i18n:message key="label.raisSoc" /> :</span> 
 		<salon:valeur valeurNulle="null" valeur="<%= aFourn.getRAIS_SOC() %>" >
 		  <input type="text" name="RAIS_SOC" value="%%" size="30">
 	        </salon:valeur>
 	 </p>
 	 <p>
-		<font size="+1">Contact :</font><br>
-		<span class="facultatif">Civilit&eacute; :</span> 
-		<salon:selection valeur="<%= aFourn.getCIVILITE_CONT() %>" valeurs='<%= "|Mle|Mme|M. " %>'>
+		<font size="+1"><i18n:message key="label.contact" /> :</font><br>
+		<span class="facultatif"><i18n:message key="label.civilite" /> :</span> 
+                <i18n:message key="valeur.civilite" id="valeurCivilite" />
+		<salon:selection valeur="<%= aFourn.getCIVILITE_CONT() %>" valeurs='<%= valeurCivilite %>'>
 		  <select name="CIVILITE_CONT">
 		     %%
 		  </select>
 		</salon:selection>
-		<span class="obligatoire">Nom :</span> 
+		<span class="obligatoire"><i18n:message key="label.nom" /> :</span> 
 		<salon:valeur valeurNulle="null" valeur="<%= aFourn.getNOM_CONT() %>" >
 		  <input type="text" name="NOM_CONT" value="%%" >
 	        </salon:valeur>
-		<span class="facultatif">Pr&eacute;nom :</span> 
+		<span class="facultatif"><i18n:message key="label.prenom" /> :</span> 
 		<salon:valeur valeurNulle="null" valeur="<%= aFourn.getPRENOM_CONT() %>" >
 		  <input type="text" name="PRENOM_CONT" value="%%" >
 	        </salon:valeur>
@@ -80,32 +81,32 @@ function Init() {
 	<table border="0" cellspacing="0">
 		<tr> 
 			<td> 
-				<p><span class="facultatif">Adresse :</span> 
+				<p><span class="facultatif"><i18n:message key="label.adresse" /> :</span> 
 				       <salon:valeur valeurNulle="null" valeur="<%= aFourn.getRUE() %>" >
 					  <textarea name="RUE" rows="2" cols="40">%%</textarea>
 				       </salon:valeur>
 				</p>
-				<p><span class="facultatif">Code postal :</span> 
+				<p><span class="facultatif"><i18n:message key="label.cdPostal" /> :</span> 
 				       <salon:valeur valeurNulle="null" valeur="<%= aFourn.getCD_POSTAL() %>" >
 					  <input type="text" name="CD_POSTAL" size="6" maxlength="5" value="%%">
 				       </salon:valeur>
-					<span class="facultatif">Ville :</span> 
+					<span class="facultatif"><i18n:message key="label.ville" /> :</span> 
 				       <salon:valeur valeurNulle="null" valeur="<%= aFourn.getVILLE() %>" >
 					  <input type="text" name="VILLE" value="%%">
 				       </salon:valeur>
 				</p>
 			</td>
 			<td> 
-				<p align="right"><span class="facultatif">T&eacute;l&eacute;phone :</span></p>
-				<p align="right"><span class="facultatif">Fax :</span></p>
-				<p align="right"><span class="facultatif">Email :</span></p>
+				<p align="right"><span class="facultatif"><i18n:message key="label.telephone" /> :</span></p>
+				<p align="right"><span class="facultatif"><i18n:message key="label.fax" /> :</span></p>
+				<p align="right"><span class="facultatif"><i18n:message key="label.email" /> :</span></p>
 			</td>
 			<td>
 				<p>
 				    <salon:valeur valeurNulle="null" valeur="<%= aFourn.getTEL() %>" >
 					<input type="text" name="TEL" value="%%" size=14>
 				    </salon:valeur>
-				<span class="facultatif">Portable&nbsp;:&nbsp;</span>
+				<span class="facultatif"><i18n:message key="label.portable" />&nbsp;:&nbsp;</span>
 				    <salon:valeur valeurNulle="null" valeur="<%= aFourn.getPORTABLE() %>" >
 					<input type="text" name="PORTABLE" value="%%" size=14>
 				    </salon:valeur>
@@ -123,7 +124,7 @@ function Init() {
 			</td>
 		</tr>
 	</table>
-	<p><span class="facultatif">Mode de règlement :</span> 
+	<p><span class="facultatif"><i18n:message key="label.modePaiement" /> :</span> 
 	       <salon:DBselection valeur="<%= aFourn.getCD_MOD_REGL() %>" sql='<%= "select CD_MOD_REGL, LIB_MOD_REGL from MOD_REGL where UTILISABLE=\'O\' or CD_MOD_REGL=" + Integer.toString(aFourn.getCD_MOD_REGL()) + " order by LIB_MOD_REGL" %>'>
 		  <select name="CD_MOD_REGL">
 		     <option value=""></option>
@@ -134,7 +135,7 @@ function Init() {
 	<table border="0" cellspacing="0">
         <tr>
 	<td>
-	 <span class="facultatif">Commentaire :</span> 
+	 <span class="facultatif"><i18n:message key="label.commentaire" /> :</span> 
 	    <salon:valeur valeurNulle="null" valeur="<%= aFourn.getCOMM() %>" >
 		<textarea name="COMM" cols="40" rows="2">%%</textarea>
 	    </salon:valeur>
@@ -151,7 +152,7 @@ function Enregistrer()
 {
    // Verification des données obligatoires
    if ((document.fiche.RAIS_SOC.value == "") || (document.fiche.NOM_CONT.value == "")) {
-      alert ("La raison sociale et le nom doivent être saisis. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="ficFourn.raisSocManquant" />");
       return;
    }
    document.fiche.submit();
@@ -167,7 +168,7 @@ function Nouveau()
 function Supprimer()
 {
     if ((document.fiche.CD_FOURN.value != "0") && (document.fiche.CD_FOURN.value != "")) {
-        if (confirm ("Cette suppression est définitive. Confirmez-vous cette action ?")) {
+        if (confirm ("<i18n:message key="message.suppressionDefinitiveConfirm" />")) {
             document.fiche.Action.value = "Suppression";
             document.fiche.submit();
         }

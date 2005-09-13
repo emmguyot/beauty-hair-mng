@@ -78,7 +78,8 @@ public class AccueilRDV extends ConnectedServlet {
 
         // Récupère la connexion
         HttpSession mySession = request.getSession(false);
-        DBSession myDBSession = ((SalonSession) mySession.getAttribute("SalonSession")).getMyDBSession();
+        SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
+        DBSession myDBSession = mySalon.getMyDBSession();
 
         // Interroge la Base
         try {
@@ -86,7 +87,7 @@ public class AccueilRDV extends ConnectedServlet {
             Vector lstLignes = new Vector();
 
             while (aRS.next()) {
-                lstLignes.add(new ClientBean(aRS));
+                lstLignes.add(new ClientBean(aRS, mySalon.getMessagesBundle()));
             }
             aRS.close();
 

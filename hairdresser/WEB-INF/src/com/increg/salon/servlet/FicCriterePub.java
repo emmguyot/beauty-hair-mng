@@ -45,7 +45,7 @@ public class FicCriterePub extends ConnectedServlet {
                 // Première phase de création
                 request.setAttribute("Action", "Creation");
                 // Un bean vide
-                aCriterePub = new CriterePubBean();
+                aCriterePub = new CriterePubBean(mySalon.getMessagesBundle());
             }
             else if (Action.equals("Creation")) {
                 // Crée réellement le critère
@@ -53,7 +53,7 @@ public class FicCriterePub extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                aCriterePub = new CriterePubBean();
+                aCriterePub = new CriterePubBean(mySalon.getMessagesBundle());
                 aCriterePub.setLIB_CRITERE_PUB(LIB_CRITERE_PUB);
                 aCriterePub.setCLAUSE(CLAUSE);
 
@@ -71,7 +71,7 @@ public class FicCriterePub extends ConnectedServlet {
                 // Affichage de la fiche en modification
                 request.setAttribute("Action", "Modification");
 
-                aCriterePub = CriterePubBean.getCriterePubBean(myDBSession, CD_CRITERE_PUB);
+                aCriterePub = CriterePubBean.getCriterePubBean(myDBSession, CD_CRITERE_PUB, mySalon.getMessagesBundle());
                 if (assertOrError((aCriterePub != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
@@ -82,7 +82,7 @@ public class FicCriterePub extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                aCriterePub = CriterePubBean.getCriterePubBean(myDBSession, CD_CRITERE_PUB);
+                aCriterePub = CriterePubBean.getCriterePubBean(myDBSession, CD_CRITERE_PUB, mySalon.getMessagesBundle());
                 if (assertOrError((aCriterePub != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
@@ -107,7 +107,7 @@ public class FicCriterePub extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                aCriterePub = new CriterePubBean();
+                aCriterePub = new CriterePubBean(mySalon.getMessagesBundle());
 
                 aCriterePub.setLIB_CRITERE_PUB(LIB_CRITERE_PUB);
                 aCriterePub.setCLAUSE(CLAUSE);
@@ -131,7 +131,7 @@ public class FicCriterePub extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                aCriterePub = CriterePubBean.getCriterePubBean(myDBSession, CD_CRITERE_PUB);
+                aCriterePub = CriterePubBean.getCriterePubBean(myDBSession, CD_CRITERE_PUB, mySalon.getMessagesBundle());
                 if (assertOrError((aCriterePub != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
@@ -141,7 +141,7 @@ public class FicCriterePub extends ConnectedServlet {
                     aCriterePub.delete(myDBSession);
                     mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.suppressionOk" + BasicSession.TAG_I18N);
                     // Un bean vide
-                    aCriterePub = new CriterePubBean();
+                    aCriterePub = new CriterePubBean(mySalon.getMessagesBundle());
                     request.setAttribute("Action", "Creation");
                 }
                 catch (Exception e) {
@@ -151,7 +151,7 @@ public class FicCriterePub extends ConnectedServlet {
             }
             else if (Action.equals("Construction")) {
                 // Définition du graphe de stat et de ses paramètres
-                aCriterePub = CriterePubBean.getCriterePubBean(myDBSession, CD_CRITERE_PUB);
+                aCriterePub = CriterePubBean.getCriterePubBean(myDBSession, CD_CRITERE_PUB, mySalon.getMessagesBundle());
                 if (assertOrError((aCriterePub != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
@@ -163,7 +163,7 @@ public class FicCriterePub extends ConnectedServlet {
             }
             else if (Action.equals("Extraction")) {
                 // Affichage du graphe
-                aCriterePub = CriterePubBean.getCriterePubBean(myDBSession, CD_CRITERE_PUB);
+                aCriterePub = CriterePubBean.getCriterePubBean(myDBSession, CD_CRITERE_PUB, mySalon.getMessagesBundle());
                 if (assertOrError((aCriterePub != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }

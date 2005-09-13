@@ -22,7 +22,8 @@ public void performTask(javax.servlet.http.HttpServletRequest request, javax.ser
 
 	// Récupère la connexion
 	HttpSession mySession = request.getSession(false);
-	DBSession myDBSession = ((SalonSession) mySession.getAttribute("SalonSession")).getMyDBSession();
+	SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
+	DBSession myDBSession = mySalon.getMyDBSession();
 	
 	// Interroge la Base
 	try {
@@ -30,7 +31,7 @@ public void performTask(javax.servlet.http.HttpServletRequest request, javax.ser
 		Vector lstLignes = new Vector();
 
 		while (aRS.next()) {
-			lstLignes.add(new CriterePubBean(aRS));
+			lstLignes.add(new CriterePubBean(aRS, mySalon.getMessagesBundle()));
 		}
 		aRS.close();
 

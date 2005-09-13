@@ -83,7 +83,7 @@ public class FicCli extends ConnectedServlet {
                 // Première phase de création
                 request.setAttribute("Action", "Creation");
                 // Un bean vide
-                ClientBean aCli = new ClientBean();
+                ClientBean aCli = new ClientBean(mySalon.getMessagesBundle());
                 request.setAttribute("ClientBean", aCli);
             } else if (Action.equals("Creation")) {
                 // Crée réellement le client
@@ -91,7 +91,7 @@ public class FicCli extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                ClientBean aCli = new ClientBean();
+                ClientBean aCli = new ClientBean(mySalon.getMessagesBundle());
                 aCli.setCD_CLI(CD_CLI);
                 aCli.setCIVILITE(CIVILITE);
                 aCli.setNOM(NOM);
@@ -125,7 +125,7 @@ public class FicCli extends ConnectedServlet {
                 // Affichage de la fiche en modification
                 request.setAttribute("Action", "Modification");
 
-                ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI);
+                ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI, mySalon.getMessagesBundle());
                 if (assertOrError((aCli != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
@@ -137,7 +137,7 @@ public class FicCli extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI);
+                ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI, mySalon.getMessagesBundle());
                 if (assertOrError((aCli != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
@@ -176,7 +176,7 @@ public class FicCli extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI);
+                ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI, mySalon.getMessagesBundle());
                 if (assertOrError((aCli != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
@@ -185,7 +185,7 @@ public class FicCli extends ConnectedServlet {
                     aCli.delete(myDBSession);
                     mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.suppressionOk" + BasicSession.TAG_I18N);
                     // Un bean vide
-                    aCli = new ClientBean();
+                    aCli = new ClientBean(mySalon.getMessagesBundle());
                     request.setAttribute("Action", "Creation");
                 } catch (Exception e) {
                     mySalon.setMessage("Erreur", e);
@@ -196,7 +196,7 @@ public class FicCli extends ConnectedServlet {
                 // Affichage de la fiche en modification
                 request.setAttribute("Action", "Modification");
 
-                ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI);
+                ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI, mySalon.getMessagesBundle());
                 request.setAttribute("ClientBean", aCli);
                 NbPrest = Long.toString(Long.MAX_VALUE);
             } else if (Action.equals("Commentaire")) {
@@ -220,7 +220,7 @@ public class FicCli extends ConnectedServlet {
 
                 request.setAttribute("Action", "Modification");
 
-                ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI);
+                ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI, mySalon.getMessagesBundle());
                 request.setAttribute("ClientBean", aCli);
             } else {
                 System.out.println("Action non codée : " + Action);

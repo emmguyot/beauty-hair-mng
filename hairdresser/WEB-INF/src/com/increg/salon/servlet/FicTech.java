@@ -33,7 +33,7 @@ public void performTask(
 	SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
 	DBSession myDBSession = mySalon.getMyDBSession();
 
-	ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI);
+	ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI, mySalon.getMessagesBundle());
 	Vector listeComment = new Vector();
 	boolean all = false;//Permet de savoir si il faut cocher toutes les cases ou non
 	

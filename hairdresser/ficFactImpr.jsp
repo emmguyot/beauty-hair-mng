@@ -87,7 +87,7 @@
 	 <tr>
 	 <td colspan="2"><i18n:message key="label.client" /> :
 	 <%
-	       ClientBean aCli = ClientBean.getClientBean(mySalon.getMyDBSession(), Long.toString(aFact.getCD_CLI()));
+	       ClientBean aCli = ClientBean.getClientBean(mySalon.getMyDBSession(), Long.toString(aFact.getCD_CLI()), mySalon.getMessagesBundle());
 	 %>
 	       <%= aCli.toString() %>
 	 </td>
@@ -228,7 +228,7 @@
 	 </table>
 	 <table width="100%">
 	 <tr>
-	 <td><i18n:message key="ficFact.modePaiement" /> : 
+	 <td><i18n:message key="label.modePaiement" /> : 
 		     <salon:valeur valeur='<%= DonneeRefBean.getDonneeRefBean(mySalon.getMyDBSession(), "MOD_REGL", Integer.toString(aPaiement.getCD_MOD_REGL())).toString() %>' valeurNulle="null">
 			%%
 		     </salon:valeur>

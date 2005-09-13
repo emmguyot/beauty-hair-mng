@@ -49,17 +49,19 @@ public class CriterePubBean extends TimeStampBean {
 
     /**
      * ClientBean constructor comment.
+     * @param rb Messages à utiliser
      */
-    public CriterePubBean() {
-    	super();
+    public CriterePubBean(ResourceBundle rb) {
+    	super(rb);
     }
 
 	/**
 	 * ClientBean à partir d'un RecordSet.
 	 * @param rs ResultSet dans lequel les données seront lues
+     * @param rb Messages à utiliser
 	 */
-	public CriterePubBean(ResultSet rs) {
-		super(rs);
+	public CriterePubBean(ResultSet rs, ResourceBundle rb) {
+		super(rs, rb);
 		try {
 			CD_CRITERE_PUB = rs.getLong("CD_CRITERE_PUB");
 		}
@@ -227,7 +229,7 @@ public class CriterePubBean extends TimeStampBean {
 		try {
 			ResultSet aRS = dbConnect.doRequest(reqSubst);
 			while (aRS.next()) {
-		        res.add(new ClientBean(aRS));
+		        res.add(new ClientBean(aRS, message));
 			}
 			aRS.close();
 		}
@@ -296,9 +298,10 @@ public class CriterePubBean extends TimeStampBean {
 	 * Creation date: (18/08/2001 17:05:45)
 	 * @param dbConnect com.increg.salon.bean.DBSession
 	 * @param CD_CRITERE_PUB java.lang.String
+     * @param rb Messages à utiliser
 	 * @return Bean créé
 	 */
-	public static CriterePubBean getCriterePubBean(DBSession dbConnect, String CD_CRITERE_PUB) {
+	public static CriterePubBean getCriterePubBean(DBSession dbConnect, String CD_CRITERE_PUB, ResourceBundle rb) {
 		String reqSQL = "select * from CRITERE_PUB where CD_CRITERE_PUB=" + CD_CRITERE_PUB;
 		CriterePubBean res = null;
 	
@@ -307,7 +310,7 @@ public class CriterePubBean extends TimeStampBean {
 			ResultSet aRS = dbConnect.doRequest(reqSQL);
 	
 			while (aRS.next()) {
-				res = new CriterePubBean(aRS);
+				res = new CriterePubBean(aRS, rb);
 			}
 			aRS.close();
 		}

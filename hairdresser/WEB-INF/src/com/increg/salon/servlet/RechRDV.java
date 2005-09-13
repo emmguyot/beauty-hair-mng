@@ -121,7 +121,7 @@ public class RechRDV extends ConnectedServlet {
 
             while (aRS.next()) {
                 RDVBean aRDV = new RDVBean(aRS);
-                lstLignes.add(new RDVFact(myDBSession, aRDV));
+                lstLignes.add(new RDVFact(myDBSession, aRDV, mySalon.getMessagesBundle()));
             }
             aRS.close();
 
@@ -140,7 +140,7 @@ public class RechRDV extends ConnectedServlet {
                     }
                 }
                 if (!affectationOk) {
-                    RDVFact aRDVFact = new RDVFact(myDBSession, aFact);
+                    RDVFact aRDVFact = new RDVFact(myDBSession, aFact, mySalon.getMessagesBundle());
                     if (aRDVFact.getDate().getTime().after(dtDebut.getTime())
                         && aRDVFact.getDate().getTime().before(dtFin.getTime())) {
                             

@@ -84,7 +84,7 @@ function Init() {
 	 <td class="label"><span class="obligatoire"><i18n:message key="label.client" /></span> : </td>
 	 <td> 
 	 <%
-	    ClientBean aCli = ClientBean.getClientBean(mySalon.getMyDBSession(), Long.toString(aFact.getCD_CLI()));
+	    ClientBean aCli = ClientBean.getClientBean(mySalon.getMyDBSession(), Long.toString(aFact.getCD_CLI()), mySalon.getMessagesBundle());
 	 %>
 	    <span class="readonly"><a href="_FicheCli.jsp?Action=Modification&CD_CLI=<%= aFact.getCD_CLI() %>" target="ClientFrame"><%= aCli.toString() %></a></span> 
 	 </td>
@@ -412,7 +412,7 @@ function Init() {
 	<span ID="PAIEMENT" style="position:absolute; visibility:visible">
 	<table width="100%">
 	<tr>
-	<td class="label"><span class="obligatoire"><i18n:message key="ficFact.modePaiement" /></span> : </td>
+	<td class="label"><span class="obligatoire"><i18n:message key="label_common.modePaiement" /></span> : </td>
 	<td>
 	    <salon:valeur valeurNulle="0" valeur="<%= aPaiement.getCD_PAIEMENT() %>" >
 	       <input type="hidden" name="CD_PAIEMENT" value="%%" >

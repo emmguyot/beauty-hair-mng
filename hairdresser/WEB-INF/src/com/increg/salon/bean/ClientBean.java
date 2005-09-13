@@ -26,6 +26,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Set;
 
 import com.increg.commun.BasicSession;
@@ -120,18 +121,20 @@ public class ClientBean extends TimeStampBean implements Comparable {
     
     /**
      * ClientBean constructor comment.
+     * @param rb Messages à utiliser
      */
-    public ClientBean() {
-        super();
+    public ClientBean(ResourceBundle rb) {
+        super(rb);
         INDIC_VALID = "O";
         abonnements = new HashMap();
     }
     /**
      * ClientBean à partir d'un RecordSet.
      * @param rs ResultSet dans lequel piocher les données
+     * @param rb Messages à utiliser
      */
-    public ClientBean(ResultSet rs) {
-        super(rs);
+    public ClientBean(ResultSet rs, ResourceBundle rb) {
+        super(rs, rb);
         try {
             CD_CATEG_CLI = rs.getInt("CD_CATEG_CLI");
         }
@@ -594,11 +597,10 @@ public class ClientBean extends TimeStampBean implements Comparable {
      * Creation date: (18/08/2001 17:05:45)
      * @param dbConnect com.increg.salon.bean.DBSession
      * @param CD_CLI java.lang.String
+     * @param rb Messages à utiliser
      * @return Bean créée
      */
-    public static ClientBean getClientBean(
-        DBSession dbConnect,
-        String CD_CLI) {
+    public static ClientBean getClientBean(DBSession dbConnect, String CD_CLI, ResourceBundle rb) {
         String reqSQL = "select * from CLI where CD_CLI=" + CD_CLI;
         ClientBean res = null;
 
@@ -607,7 +609,7 @@ public class ClientBean extends TimeStampBean implements Comparable {
             ResultSet aRS = dbConnect.doRequest(reqSQL);
 
             while (aRS.next()) {
-                res = new ClientBean(aRS);
+                res = new ClientBean(aRS, rb);
             }
             aRS.close();
         }
@@ -1296,7 +1298,11 @@ public class ClientBean extends TimeStampBean implements Comparable {
      * @see com.increg.salon.bean.TimeStampBean
      */
     public String toString() {
-        return getCIVILITE() + " " + getNOM() + " " + getPRENOM();
+    	String labelCivilite = "";
+    	if (getCIVILITE().length() > 0) {
+    		labelCivilite = message.getString("label." + getCIVILITE());
+    	}
+        return labelCivilite + " " + getNOM() + " " + getPRENOM();
     }
 
     /**
@@ -1306,7 +1312,8 @@ public class ClientBean extends TimeStampBean implements Comparable {
     public String toStringListe() {
         String res = getNOM() + " " + getPRENOM();
         if (getCIVILITE().length() > 0) {
-            res = res + " (" + getCIVILITE() + ")";
+        	String labelCivilite = message.getString("label." + getCIVILITE());
+            res = res + " (" + labelCivilite + ")";
         }
         return res;
     }

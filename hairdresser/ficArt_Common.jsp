@@ -28,8 +28,8 @@
 		  <input type="text" name="LIB_ART" value="%%" size=40 onChange="set('LIB_ART')">
 	        </salon:valeur>
 		<span class="obligatoire"><i18n:message key="label.articlePerime" /> :</span> 
-                <i18n:message key="valeur.nonOui" id="valeurNonOui" />
-                <salon:selection valeur='<%= aArt.getINDIC_PERIM() %>' valeurs='<%= "N|O" %>' libelle="<%= valeurNonOui %>">
+                <i18n:message key="valeur.nonOui" id="valeurNonOui_common" />
+                <salon:selection valeur='<%= aArt.getINDIC_PERIM() %>' valeurs='<%= "N|O" %>' libelle="<%= valeurNonOui_common %>">
                     <select name="INDIC_PERIM">
                         %%
                     </select>

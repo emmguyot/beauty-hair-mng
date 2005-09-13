@@ -122,7 +122,7 @@ public class FicRDV extends ConnectedServlet {
                 try {
                     if (Action.equals("Creation+")) {
                         // Création du client
-                        ClientBean aClient = new ClientBean();
+                        ClientBean aClient = new ClientBean(mySalon.getMessagesBundle());
                         aClient.setNOM(NOM);
                         aClient.setPRENOM(PRENOM);
                         aClient.create(myDBSession);

@@ -857,7 +857,8 @@ public class PaiementBean extends TimeStampBean {
 										ClientBean.getClientBean(
 													dbConnect,
 													Long.toString(((FactBean) lstFact.get(i))
-															.getCD_CLI())).toString()
+															.getCD_CLI()), 
+													message).toString()
 									});
                     Comm = Comm + msg;
                 }

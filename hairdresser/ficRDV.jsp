@@ -18,7 +18,7 @@
     // Récupération des paramètres
     String Action = (String) request.getAttribute("Action");
     RDVBean aRDV = (RDVBean) request.getAttribute("RDVBean");
-    ClientBean aCli = ClientBean.getClientBean(mySalon.getMyDBSession(), Long.toString(aRDV.getCD_CLI()));
+    ClientBean aCli = ClientBean.getClientBean(mySalon.getMyDBSession(), Long.toString(aRDV.getCD_CLI()), mySalon.getMessagesBundle());
     Vector dispo = (Vector) request.getAttribute("Dispo");
     List collabs = (List) request.getAttribute("collabs");
 %>
