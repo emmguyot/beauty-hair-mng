@@ -15,7 +15,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Inventaire des articles</title>
+<title><i18n:message key="ficInventaire.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -43,24 +43,24 @@ function Init() {
 <h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/ficInventaire.gif"></h1>
 <salon:message salonSession="<%= mySalon %>" />
 <form method="post" action="ficInventaire.srv" name="fiche">
-<p>Type d'article :
+<p><i18n:message key="label.typeArticle" /> :
 <salon:DBselection valeur="<%= CD_TYP_ART %>" sql="select CD_TYP_ART, LIB_TYP_ART from TYP_ART order by LIB_TYP_ART">
    <select name="CD_TYP_ART" onChange="document.fiche.submit()">
-      <option value="">( Tous )</option>
+      <option value=""><i18n:message key="label.tousDsListe" /></option>
       %%
    </select>
 </salon:DBselection>
-Catégorie article :
+<i18n:message key="label.categorieArticle" /> :
 <salon:DBselection valeur="<%= CD_CATEG_ART %>" sql="select CD_CATEG_ART, LIB_CATEG_ART from CATEG_ART order by LIB_CATEG_ART">
    <select name="CD_CATEG_ART" onChange="document.fiche.submit()">
-      <option value="">( Toutes )</option>
+      <option value=""><i18n:message key="label.toutesDsListe" /></option>
       %%
    </select>
 </salon:DBselection>
 <input name="Action" type="hidden" value="">
 </p>
 <hr>
-Type de mouvement :
+<i18n:message key="label.typeMouvement" /> :
 <salon:DBselection valeur="<%= CD_TYP_MVT %>" sql='<%= "select CD_TYP_MVT, LIB_TYP_MVT from TYP_MVT where SENS_MVT=\'" + TypMvtBean.SENS_INVENTAIRE + "\' order by LIB_TYP_MVT" %>'>
    <select name="CD_TYP_MVT">
       %%
@@ -68,15 +68,15 @@ Type de mouvement :
 </salon:DBselection>
 <table width="100%" border="1" >
 	<tr>
-		<th>Libellé</th>
-		<th>Type<br>d'article</th>
-		<th>Catégorie</th>
-		<th>Qté<br>en<br>stock</th>
-		<th>Valeur<br>unitaire<br>stock</th>
-		<th>Valeur<br>globale<br>stock</th>
-		<th>Date dernier<br>inventaire</th>
-		<th>Qté<br>comptée</th>
-		<th>Valeur<br>unitaire<br>inventaire</th>
+		<th><i18n:message key="label.libelle" /></th>
+		<th><i18n:message key="label.typeArticleListe" /></th>
+		<th><i18n:message key="label.categorieArticle" /></th>
+		<th><i18n:message key="label.qteStockTableau" /></th>
+		<th><i18n:message key="label.valeurStockUnitTableau" /></th>
+		<th><i18n:message key="label.valeurStockGlobal" /></th>
+		<th><i18n:message key="label.dernierInventaire" /></th>
+		<th><i18n:message key="label.qteCompte" /></th>
+		<th><i18n:message key="label.valeurInventaireUnit" /></th>
 	</tr>
 	<%
 	// Recupère la liste
@@ -117,7 +117,8 @@ Type de mouvement :
 	       }
 	    %>
 	    <td class="Nombre"><salon:valeur valeur="<%= valeurGlobale %>" valeurNulle="null">%%</salon:valeur></td>
-	    <td><salon:valeur valeur="<%= aMvt.getDT_MVT() %>" valeurNulle="null" format="dd/MM/yyyy"><a href="_FicheArt_Mvt.jsp?Action=Modification&CD_ART=<%= aArt.getCD_ART() %>" target="ClientFrame">%%</a>&nbsp;</salon:valeur></td>
+            <i18n:message key="format.dateSimpleDefaut" id="formatDate" />
+	    <td><salon:valeur valeur="<%= aMvt.getDT_MVT() %>" valeurNulle="null" format="<%= formatDate %>"><a href="_FicheArt_Mvt.jsp?Action=Modification&CD_ART=<%= aArt.getCD_ART() %>" target="ClientFrame">%%</a>&nbsp;</salon:valeur></td>
 	    <td class="Nombre">
             <% if (request.getAttribute("RAZ") != null) { %>
                 <input type="text" name="QTE_STK<%= aArt.getCD_ART() %>" value="" size=5>

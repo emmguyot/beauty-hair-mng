@@ -11,7 +11,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Liste des sauvegardes</title>
+<title><i18n:message key="ficGestSauv.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -38,8 +38,9 @@ function Init() {
 <form name="fiche" action="restauration.srv" method="post">
 <p>
     <input type="hidden" name="Action" value="Gestion">
-    Type de sauvegarde :
-	<salon:selection valeur="<%= Type %>" valeurs='<%= "D|M|I" %>' libelle="Disque dur (tous les jours)|Média amovible (une fois par semaine)|Internet (une fois par semaine)">
+    <i18n:message key="label.typeSauvegarde" /> :
+        <i18n:message key="valeur.typeSauvegarde" id="valeurType" />
+	<salon:selection valeur="<%= Type %>" valeurs='<%= "D|M|I" %>' libelle="<%= valeurType %>">
         <select name="Type" onChange="rechargeListe()">
             %%
         </select>
@@ -47,8 +48,8 @@ function Init() {
 <hr>
 <table width="100%" border="1" >
 	<tr>
-		<th>Sélection<br/>pour suppression<br/><a href="javascript:selection()">Tout sélectionner</a></th>
-		<th>Nom de la sauvegarde</th>
+		<th><i18n:message key="ficGestSauv.selectSuppr" /><br/><a href="javascript:selection()"><i18n:message key="label.toutSelection" /></a></th>
+		<th><i18n:message key="label.nomSauvegarde" /></th>
 	</tr>
         <%
         for (Iterator i=listeFichier.iterator(); i.hasNext(); ) {
@@ -95,7 +96,7 @@ function Supprimer()
         }
     }
     if (ok) {
-        if (confirm ("Cette suppression est définitive. Confirmez-vous la suppression des sauvegardes sélectionnées ?")) {
+        if (confirm ("<i18n:message key="ficGestSauv.confirmSuppr" />")) {
             document.fiche.Action.value = "Suppression";
             document.fiche.submit();
         }

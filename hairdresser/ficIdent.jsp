@@ -12,7 +12,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Fiche Identification</title>
+<title><i18n:message key="ficIdent.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -54,28 +54,29 @@ function Init() {
 		  <input type="hidden" name="CD_IDENT" value="%%" >
 	        </salon:valeur>
 		<input type="hidden" name="Action" value="<%=Action%>">
-		<span class="obligatoire">Libellé :</span> 
+		<span class="obligatoire"><i18n:message key="label.libelle" /> :</span> 
 		<salon:valeur valeurNulle="null" valeur="<%= aIdent.getLIB_IDENT() %>" >
 		  <input type="text" name="LIB_IDENT" value="%%" size="30">
 	        </salon:valeur>
 	 </p>
 	 <p>
-		<span class="obligatoire">Mot de passe :</span> 
+		<span class="obligatoire"><i18n:message key="label.motPasse" /> :</span> 
 		<salon:valeur valeurNulle="null" valeur="<%= aIdent.getMOT_PASSE() %>" >
 		  <input type="password" name="MOT_PASSE" value="%%" >
-                  <span class="obligatoire">Mot de passe (pour vérification) :</span> 
+                  <span class="obligatoire"><i18n:message key="label.motPasseVerif" /> :</span> 
 		  <input type="password" name="MOT_PASSE2" value="%%" >
 	        </salon:valeur>
         </p>
         <p>
-	        <span class="obligatoire">Profil :</span> 
+	        <span class="obligatoire"><i18n:message key="label.profil" /> :</span> 
 	        <salon:DBselection valeur="<%= aIdent.getCD_PROFIL() %>" sql='<%= "select CD_PROFIL, LIB_PROFIL from PROFIL order by LIB_PROFIL" %>'>
 		  <select name="CD_PROFIL">
 		     %%
 		  </select>
 		</salon:DBselection>
-	        <span class="obligatoire">Etat du compte :</span> 
-		<salon:selection valeur="<%= aIdent.getETAT_CPT() %>" valeurs='<%= "A|B" %>' libelle="Actif|Bloqué">
+	        <span class="obligatoire"><i18n:message key="label.etatCompte" /> :</span> 
+                <i18n:message key="valeur.etatCompte" id="valeurEtat" />
+		<salon:selection valeur="<%= aIdent.getETAT_CPT() %>" valeurs='<%= "A|B" %>' libelle="<%= valeurEtat %>">
 		  <select name="ETAT_CPT">
 		     %%
 		  </select>
@@ -91,7 +92,7 @@ function Enregistrer()
 {
    // Verification des données obligatoires
    if ((document.fiche.LIB_IDENT.value == "") || (document.fiche.MOT_PASSE.value == "")) {
-      alert ("Le libellé et le mot de passe doivent être saisis. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="ficIdent.libelleMotPasseManquant" />");
       return;
    }
    document.fiche.submit();
@@ -101,7 +102,7 @@ function Enregistrer()
 function Supprimer()
 {
     if ((document.fiche.CD_IDENT.value != "0") && (document.fiche.CD_IDENT.value != "")) {
-        if (confirm ("Cette suppression est définitive. Confirmez-vous cette action ?")) {
+        if (confirm ("<i18n:message key="message.suppressionDefinitiveConfirm" />")) {
             document.fiche.Action.value = "Suppression";
             document.fiche.submit();
         }
