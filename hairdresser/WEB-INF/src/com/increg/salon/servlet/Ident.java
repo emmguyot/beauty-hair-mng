@@ -86,8 +86,8 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
             catch (Exception e2) {
                 // Ignore : Il n'y a plus rien à faire
             }
-            return;
         }
+        return;
 	}
 
 	// Récupère le paramètre

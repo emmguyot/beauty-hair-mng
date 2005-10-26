@@ -1300,7 +1300,7 @@ public class ClientBean extends TimeStampBean implements Comparable {
     public String toString() {
     	String labelCivilite = "";
     	if (getCIVILITE().length() > 0) {
-    		labelCivilite = message.getString("label." + getCIVILITE());
+    		labelCivilite = message.getString("label." + getCIVILITE().replace(' ', '_'));
     	}
         return labelCivilite + " " + getNOM() + " " + getPRENOM();
     }
@@ -1312,7 +1312,7 @@ public class ClientBean extends TimeStampBean implements Comparable {
     public String toStringListe() {
         String res = getNOM() + " " + getPRENOM();
         if (getCIVILITE().length() > 0) {
-        	String labelCivilite = message.getString("label." + getCIVILITE());
+        	String labelCivilite = message.getString("label." + getCIVILITE().replace(' ', '_'));
             res = res + " (" + labelCivilite + ")";
         }
         return res;
