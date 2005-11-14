@@ -16,7 +16,7 @@
    String Action = (String) request.getAttribute("Action");
    ParamBean aParam = (ParamBean) request.getAttribute("ParamBean");
 %>
-<title>Fiche paramètre de l'application</title>
+<title><i18n:message key="ficParam.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -40,20 +40,20 @@ function Init() {
 		  <input type="hidden" name="CD_PARAM" value="%%" >
 	        </salon:valeur>
 		<input type="hidden" name="Action" value="<%=Action%>">
-		<span class="obligatoire">Description :</span> 
+		<span class="obligatoire"><i18n:message key="label.description" /> :</span> 
 		<salon:valeur valeurNulle="null" valeur="<%= aParam.getLIB_PARAM() %>" >
                     <input type="hidden" name="LIB_PARAM" value="%%">
                     <span class="readOnly">%%</span>
 	        </salon:valeur>
         </p>
 	<p>
-		<span class="obligatoire">Valeur du paramètre :</span> 
+		<span class="obligatoire"><i18n:message key="label.paramValue" /> :</span> 
 		<salon:valeur valeur="<%= aParam.getVAL_PARAM() %>" valeurNulle="null">
                     <% if (aParam.getCD_PARAM() != ParamBean.CD_OP_EXCEPTIONNEL) { %>
                         <input type="text" name="VAL_PARAM" value="%%" size=80>
                     <% } else { %>
                         <input type="password" name="VAL_PARAM" value="%%" size=80></p><p>
-                        <span class="obligatoire">Valeur du paramètre (pour vérification) :</span> 
+                        <span class="obligatoire"><i18n:message key="label.paramValueVerif" /> :</span> 
                         <input type="password" name="VAL_PARAM2" value="%%" size=80>
                     <% } %></td>
 		</salon:valeur>
@@ -67,7 +67,7 @@ function Enregistrer()
 {
    // Verification des données obligatoires
    if (document.fiche.VAL_PARAM.value == "") {
-      alert ("La valeur doit être saisie. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="ficParam.valeurManquante" />");
       return;
    }
    document.fiche.submit();

@@ -16,7 +16,7 @@
    String Action = (String) request.getAttribute("Action");
    ModReglBean aModRegl = (ModReglBean) request.getAttribute("ModReglBean");
 %>
-<title>Fiche modes de règlement</title>
+<title><i18n:message key="ficModRegl.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -47,7 +47,7 @@ function Init() {
 }
 //-->
 </script>
-<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/ficParam.gif"><br><span class="ssTitre">Modes de règlement</span></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/ficParam.gif"><br><span class="ssTitre"><i18n:message key="ficModRegl.sousTitre" /></span></h1>
 <salon:message salonSession="<%= mySalon %>" />
 <form method="post" action="ficModRegl.srv" name="fiche">
 	<p> 
@@ -55,26 +55,29 @@ function Init() {
 		  <input type="hidden" name="CD_MOD_REGL" value="%%" >
 	        </salon:valeur>
 		<input type="hidden" name="Action" value="<%=Action%>">
-		<span class="obligatoire">Libellé :</span> 
+		<span class="obligatoire"><i18n:message key="label.libelle" />:</span> 
 		<salon:valeur valeurNulle="null" valeur="<%= aModRegl.getLIB_MOD_REGL() %>" >
 		  <input type="text" name="LIB_MOD_REGL" value="%%" size=40>
 	        </salon:valeur>
-		<span class="obligatoire">Actuel :</span> 
-		<salon:selection valeur="<%= aModRegl.getUTILISABLE() %>" valeurs='<%= "O|N" %>' libelle="Oui|Non">
+		<span class="obligatoire"><i18n:message key="" /><i18n:message key="label.modReglActuel" /> :</span> 
+                <i18n:message key="valeur.ouiNon" id="paramActuel" />
+		<salon:selection valeur="<%= aModRegl.getUTILISABLE() %>" valeurs='<%= "O|N" %>' libelle="<%= paramActuel %>">
 		  <select name="UTILISABLE">
 		     %%
 		  </select>
 		</salon:selection>
 	</p>
         <p>
-		<span class="obligatoire">Impression de chèques :</span> 
-		<salon:selection valeur="<%= aModRegl.getIMP_CHEQUE() %>" valeurs='<%= "O|N" %>' libelle="Oui|Non">
+		<span class="obligatoire"><i18n:message key="label.impressionCheque" /> :</span> 
+                <i18n:message key="valeur.ouiNon" id="paramCheque" />
+		<salon:selection valeur="<%= aModRegl.getIMP_CHEQUE() %>" valeurs='<%= "O|N" %>' libelle="<%= paramCheque %>">
 		  <select name="IMP_CHEQUE">
 		     %%
 		  </select>
 		</salon:selection>
-		<span class="obligatoire">Rendu de monnaie :</span> 
-		<salon:selection valeur="<%= aModRegl.getRENDU_MONNAIE() %>" valeurs='<%= "O|N" %>' libelle="Oui|Non">
+		<span class="obligatoire"><i18n:message key="label.renduMonnaie" /> :</span> 
+                <i18n:message key="valeur.ouiNon" id="paramMonnaie" />
+		<salon:selection valeur="<%= aModRegl.getRENDU_MONNAIE() %>" valeurs='<%= "O|N" %>' libelle="<%= paramMonnaie %>">
 		  <select name="RENDU_MONNAIE">
 		     %%
 		  </select>
@@ -89,7 +92,7 @@ function Enregistrer()
 {
    // Verification des données obligatoires
    if (document.fiche.LIB_MOD_REGL.value == "") {
-      alert ("Le libellé doit être saisi. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="ficModRegl.libelleManquant" />");
       return;
    }
    document.fiche.submit();
@@ -99,7 +102,7 @@ function Enregistrer()
 function Supprimer()
 {
     if ((document.fiche.CD_MOD_REGL.value != "0") && (document.fiche.CD_MOD_REGL.value != "")) {
-        if (confirm ("Cette suppression est définitive et non conseillée. Confirmez-vous cette action ?")) {
+        if (confirm ("<i18n:message key="message.suppressionDefinitiveConfirm" />")) {
             document.fiche.Action.value = "Suppression";
             document.fiche.submit();
         }
@@ -110,7 +113,7 @@ function Supprimer()
 function Dupliquer()
 {
    if (document.fiche.LIB_MOD_REGL.value == "") {
-      alert ("Le libellé doit être saisi. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="ficModRegl.libelleManquant" />");
       return;
    }
    document.fiche.Action.value = "Duplication";

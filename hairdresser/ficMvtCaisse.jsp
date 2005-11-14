@@ -15,7 +15,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Fiche mouvement de caisse</title>
+<title><i18n:message key="ficMvtCaisse.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -55,25 +55,25 @@ function Init() {
 <form method="post" action="ficMvtCaisse.srv" name="fiche">
 	<p> 
 		<input type="hidden" name="Action" value="<%=Action%>">
-		<span class="obligatoire">Date du mouvement :</span> 
+		<span class="obligatoire"><i18n:message key="label.dtMouvement" /> :</span> 
 	        <salon:valeur valeurNulle="null" valeur="<%= aMvt.getDT_MVT() %>" >
 		  <input type="hidden" name="DT_MVT" value="%%">
 		  <span class="readonly">%%</span>
 	        </salon:valeur>
 	 </p>
 	 <p>
-	       <span class="obligatoire">Mode de réglement :</span> 
+	       <span class="obligatoire"><i18n:message key="label.modeRegl" /> :</span> 
 	       <salon:DBselection valeur="<%= aMvt.getCD_MOD_REGL() %>" sql='<%= "select CD_MOD_REGL, LIB_MOD_REGL from MOD_REGL where CD_MOD_REGL not in (" + Integer.toString(ModReglBean.MOD_REGL_ESP_FRF) + "," + Integer.toString(ModReglBean.MOD_REGL_CHQ_FRF) + ") order by LIB_MOD_REGL"%>'>
 		     <select name="CD_MOD_REGL" onchange="ChangeMvt()">
 			%%
 		     </select>
 	       </salon:DBselection>
-	       Solde de la caisse : 
+	       <i18n:message key="label.soldeCaisse" /> : 
 	       <input class="Nombre" type="text" name="SOLDE_AVANT" disabled value="" size=7 onchange="ChangeMvt()">
 	       <%= mySalon.getDevise().toString() %>
 	 </p>
 	 <p>
-	       <span class="obligatoire">Type de mouvement :</span> 
+	       <span class="obligatoire"><i18n:message key="label.typeMouvement" /> :</span> 
 	       <salon:DBselection valeur="<%= aMvt.getCD_TYP_MCA() %>" sql="select CD_TYP_MCA, LIB_TYP_MCA || ' (' || SENS_MCA::varchar || ')' from TYP_MCA order by LIB_TYP_MCA">
 		     <select name="CD_TYP_MCA" onchange="ChangeMvt()">
 			%%
@@ -81,14 +81,14 @@ function Init() {
 	       </salon:DBselection>
 	 </p>
 	 <p>
-	       <span class="obligatoire">Montant :</span> 
+	       <span class="obligatoire"><i18n:message key="label.montant" /> :</span> 
 	       <salon:valeur valeurNulle="null" valeur="<%= aMvt.getMONTANT() %>" >
 		  <input class="Nombre" type="text" name="MONTANT" value="%%" size="8">
 	       </salon:valeur>
 	       <%= mySalon.getDevise().toString() %>
 	</p>
 	<p>
-	 <span class="facultatif">Commentaire :</span> 
+	 <span class="facultatif"><i18n:message key="label.commentaire" /> :</span> 
 	    <salon:valeur valeurNulle="null" valeur="<%= aMvt.getCOMM() %>" >
 		<textarea name="COMM" cols="40" rows="2">%%</textarea>
 	    </salon:valeur>
@@ -131,7 +131,7 @@ function ControleEnreg ()
 {
    // Verification des données obligatoires
    if (document.fiche.MONTANT.value == "") {
-      alert ("Le montant doit être saisi. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="ficMvtCaisse.montantManquant" />");
       return false;
    }
    return true;

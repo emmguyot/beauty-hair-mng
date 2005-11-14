@@ -17,7 +17,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Fiche Paiement</title>
+<title><i18n:message key="ficPaiement.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -63,7 +63,7 @@ function Init() {
 
 	<table width="100%">
 	<tr>
-	<td class="label"><span class="obligatoire">Mode de paiement</span> : </td>
+	<td class="label"><span class="obligatoire"><i18n:message key="label.modePaiement" /></span> : </td>
 	<td>
 	       <salon:DBselection valeur="<%= aPaiement.getCD_MOD_REGL() %>" sql='<%= "select CD_MOD_REGL, LIB_MOD_REGL from MOD_REGL where UTILISABLE=\'O\' or CD_MOD_REGL=" + Integer.toString(aPaiement.getCD_MOD_REGL()) + " order by LIB_MOD_REGL" %>'>
 		  <select name="CD_MOD_REGL">
@@ -71,7 +71,7 @@ function Init() {
 		  </select>
 	       </salon:DBselection>
 	</td>
-	<td class="label"><span class="obligatoire">Date de paiement</span> : </td>
+	<td class="label"><span class="obligatoire"><i18n:message key="label.dtPaiement" /></span> : </td>
 	<td>
 	       <salon:valeur valeurNulle="null" valeur="<%= aPaiement.getDT_PAIEMENT() %>" > 
 		  <input type="hidden" name="DT_PAIEMENT" size="11" value="%%">
@@ -81,7 +81,7 @@ function Init() {
 	</td>
 	</tr>
 	<tr>
-	<td class="label"><span class="obligatoire">Total :</span></td>
+	<td class="label"><span class="obligatoire"><i18n:message key="label.total" /> :</span></td>
 	<td>
 	        <salon:valeur valeurNulle="null" valeur="<%= aPaiement.getPRX_TOT_TTC() %>" > 
 		     <span class="readonly">%% <%= mySalon.getDevise().toString() %></span>
@@ -102,9 +102,9 @@ function Init() {
             <% if (!Action.equals("Creation")) { 
                   ModReglBean aModRegl = ModReglBean.getModReglBean(mySalon.getMyDBSession(), Integer.toString(aPaiement.getCD_MOD_REGL()));
                   if (aModRegl.getIMP_CHEQUE().equals("O")) { %>
-                       <a href="ficChqImpr.jsp?montant=<%= aPaiement.getPRX_TOT_TTC() %>" target="_blank">Impression du chèque</a>
+                       <a href="ficChqImpr.jsp?montant=<%= aPaiement.getPRX_TOT_TTC() %>" target="_blank"><i18n:message key="label.impressionCheque" /></a>
              <%   } else if (aModRegl.getRENDU_MONNAIE().equals("O")) {%>
-                       <a href="javascript:calculRendu(<%= aPaiement.getPRX_TOT_TTC() %>)">Rendu de monnaie</a>
+                       <a href="javascript:calculRendu(<%= aPaiement.getPRX_TOT_TTC() %>)"><i18n:message key="label.renduMonnaie" /></a>
                  <%}
  
                } %>
@@ -116,9 +116,9 @@ function Init() {
    <table border="0" width="100%">
 	 <tr>
 		  <th>&nbsp;</th>
-		  <th>Client</th>
-		  <th>Date de facture</th>
-		  <th>Montant <%= mySalon.getDevise().toString() %></th>
+		  <th><i18n:message key="label.client" /></th>
+		  <th><i18n:message key="label.dtFact" /></th>
+		  <th><i18n:message key="label.montant" /> <%= mySalon.getDevise().toString() %></th>
 	 </tr>
 	 <%
 	 // Recupère la liste
@@ -141,10 +141,10 @@ function Init() {
 	       >
 	    </td>
 	      <td><salon:valeur valeurNulle="null" valeur="<%= ClientBean.getClientBean(mySalon.getMyDBSession(), Long.toString(aFact.getCD_CLI()), mySalon.getMessagesBundle()).toString() %>" > 
-				<a href="_FicheCli.jsp?Action=Modification&CD_CLI=<%= aFact.getCD_CLI() %>" target="ClientFrame" title="Fiche client">%%</a> 
+				<a href="_FicheCli.jsp?Action=Modification&CD_CLI=<%= aFact.getCD_CLI() %>" target="ClientFrame" title="<i18n:message key="ficCli.title" />">%%</a> 
 				</salon:valeur> </td>
 	      <td class="tabDonnees"><salon:valeur valeur="<%= aFact.getDT_PREST() %>" valeurNulle="null"> 
-				<a href="_FicheFact.jsp?Action=Modification&CD_FACT=<%= aFact.getCD_FACT() %>" target="ClientFrame" title="Fiche facture">%%</a> 
+				<a href="_FicheFact.jsp?Action=Modification&CD_FACT=<%= aFact.getCD_FACT() %>" target="ClientFrame" title="<i18n:message key="ficFact.title" />">%%</a> 
 				</salon:valeur> </td>
 	    <td class="label">
 	        <salon:valeur valeurNulle="null" valeur="<%= aFact.getPRX_TOT_TTC() %>" > 
@@ -192,7 +192,7 @@ function Verif()
    }
    // Verification des données obligatoires
    if (! coche) {
-      alert ("Vous devez cochez au moins une facture.");
+      alert ("<i18n:message key="ficPaiement.cocheFacture" />");
       return false;
    }
    return true;
@@ -211,7 +211,7 @@ function Enregistrer()
 function Supprimer()
 {
    if ((document.fiche.CD_PAIEMENT.value != "0") && (document.fiche.CD_PAIEMENT.value != "")) {
-       if (confirm ("Cette suppression annulera le paiement de ces factures. Confirmez-vous cette action ?")) {
+       if (confirm ("<i18n:message key="ficPaiement.suppressionDefinitiveConfirm" />")) {
           document.fiche.Action.value = "Suppression";
           document.fiche.submit();
        }

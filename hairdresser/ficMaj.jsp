@@ -18,7 +18,7 @@
    TreeSet listeFichier = (TreeSet) request.getAttribute("listeFichier");
    String Type = (String) request.getAttribute("Type");
 %>
-<title>Mise à jour</title>
+<title><i18n:message key="ficMaj.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -39,17 +39,18 @@ function Init() {
 <h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/ficMaj.gif"></h1>
 <salon:message salonSession="<%= mySalon %>" />
 <form method="post" action="miseAJour.srv" name="fiche">
-	<p class="warning"> Attention : La mise à jour peut être longue. </p>
+	<p class="warning"> <i18n:message key="ficMaj.warning" /> </p>
 	<p>
 		<input type="hidden" name="Action" value="MiseAJour">
 		<input type="hidden" name="lock" value="">
-		<span class="obligatoire">Mise à jour à partir de  :</span> 
-		<salon:selection valeur="<%= Type %>" valeurs='<%= "I|D" %>' libelle="Internet|Disque dur">
+		<span class="obligatoire"><i18n:message key="ficMaj.source" />  :</span> 
+                <i18n:message key="valeur.sourceMaj" id="valeurSource" />
+		<salon:selection valeur="<%= Type %>" valeurs='<%= "I|D" %>' libelle="<%= valeurSource %>">
 		  <select name="Type" onChange="rechargeListe()">
 		     %%
 		  </select>
 		</salon:selection>
-		<span class="obligatoire">Version à installer :</span> 
+		<span class="obligatoire"><i18n:message key="label.versionUpdate" /> :</span> 
 		  <select name="nomFichier">
 		<%
 		  for (Iterator i=listeFichier.iterator(); i.hasNext(); ) {
@@ -63,7 +64,7 @@ function Init() {
 	</p>
 </form>
 <span id="AttenteSpan" style="visibility: hidden">
-<p class="Warning"><img name="Attente" src="images/attente.gif" width="231" height="10" alt="Opération en cours..."></p>
+<p class="Warning"><img name="Attente" src="images/attente.gif" width="231" height="10" alt="<i18n:message key="message.patience" />"></p>
 </span>
 <script language="JavaScript">
 // Fonctions d'action
@@ -78,7 +79,7 @@ function rechargeListe()
 function Valider()
 {
     if (document.fiche.lock.value == "") {
-        if (confirm("Attention vous allez supprimer le programme actuel pour le remplacer par cette nouvelle version. Cette mise à jour peut prendre plusieurs minutes. Etes-vous sur de vouloir lancer la mise à jour ?")) {
+        if (confirm("<i18n:message key="ficMaj.warningAvantAction" />")) {
             MM_showHideLayers('AttenteSpan','','show');
             document.fiche.lock.value = "xx";
             document.fiche.submit();
