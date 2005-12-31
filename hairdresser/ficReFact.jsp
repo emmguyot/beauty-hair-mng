@@ -16,7 +16,7 @@
    Date DT_FIN = (Date) request.getAttribute("DT_FIN");
 %>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<title>Réédition de factures</title>
+<title><i18n:message key="ficReFact.title" /></title>
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
 <body class="donnees" onLoad="document.fiche.DT_DEBUT.focus()">
@@ -37,17 +37,18 @@ function Init() {
 <salon:message salonSession="<%= mySalon %>" />
 <form method="post" action="reFact.srv" name="fiche" target="_blank">
 	<p> 
-		<span class="obligatoire">Entre le :</span> 
-        <salon:date type="text" name="DT_DEBUT" valeurDate="<%= DT_DEBUT %>" valeurNulle="null" format="dd/MM/yyyy" calendrier="true">%%</salon:date>
-		<span class="obligatoire">et le :</span> 
-        <salon:date type="text" name="DT_FIN" valeurDate="<%= DT_FIN %>" valeurNulle="null" format="dd/MM/yyyy" calendrier="true">%%</salon:date>
+            <span class="obligatoire"><i18n:message key="label.debut" /> :</span> 
+            <i18n:message key="format.dateSimpleDefaut" id="formatDate" />
+            <salon:date type="text" name="DT_DEBUT" valeurDate="<%= DT_DEBUT %>" valeurNulle="null" format="<%= formatDate %>" calendrier="true">%%</salon:date>
+            <span class="obligatoire"><i18n:message key="label.fin" /> :</span> 
+            <salon:date type="text" name="DT_FIN" valeurDate="<%= DT_FIN %>" valeurNulle="null" format="<%= formatDate %>" calendrier="true">%%</salon:date>
 	</p>
         <p>
-		<span class="obligatoire">Format d'édition :</span>
-		  <select name="format">
-		     <option value="F">Fiche</option>
-		     <option value="L">Liste</option>
-		  </select>
+            <span class="obligatoire"><i18n:message key="label.formatEdition" /> :</span>
+            <select name="format">
+                <option value="F"><i18n:message key="valeur.editionFiche" /></option>
+                <option value="L"><i18n:message key="valeur.editionEtat" /></option>
+            </select>
         </p>
 </form>
 <script language="JavaScript">

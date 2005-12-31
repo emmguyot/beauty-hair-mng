@@ -27,7 +27,7 @@
    String MsgInfo = (String) request.getAttribute("MsgInfo");
    String Date = request.getParameter("Date");
 %>
-<title>Epuration des données</title>
+<title><i18n:message key="ficPurge.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -46,87 +46,87 @@ function Init() {
 <h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/ficPurge.gif"></h1>
 <salon:message salonSession="<%= mySalon %>" />
 <form method="post" action="ficPurge.srv" name="fiche">
-    <p class="warning">Attention : L'épuration de données n'est réversible que<br>si vous avez effectué préalablement une sauvegarde.</p>
+    <p class="warning"><i18n:message key="ficPurge.warning" /></p>
     <p>
         <input type="hidden" name="Action" value="Purge">
         <input type="hidden" name="lock" value="">
-        <span class="obligatoire">Epuration jusqu'au :</span> 
+        <span class="obligatoire"><i18n:message key="label.limiteEpuration" /> :</span> 
         <salon:valeur valeur="<%= Date %>" valeurNulle="null">
             <input type="text" name="Date" value="%%" size="11" maxlength="10" onChange="FormateDate(this)">
         </salon:valeur>
     </p>
-    <p>Données à épurer : <br>
+    <p><i18n:message key="label.donneeEpurees" /> : <br>
     <blockquote>
         <input type="checkbox" name="Paiement" <%
             if (Paiement.booleanValue()) { %>
                 checked
             <%
             }
-            %> >Paiements<br>
+            %> ><i18n:message key="label.paiment" /><br>
         <input type="checkbox" name="Histo_prest" <%
             if (Histo_prest.booleanValue()) { %>
                 checked
             <%
             }
-            %> >Historique des prestations et factures<br>
+            %> ><i18n:message key="label.historiquePrestFact" /><br>
         <input type="checkbox" name="RDV" <%
             if (RDV.booleanValue()) { %>
                 checked
             <%
             }
-            %> >Rendez-vous<br>
+            %> ><i18n:message key="label.RDV" /><br>
         <input type="checkbox" name="Mvt_caisse" <%
             if (Mvt_caisse.booleanValue()) { %>
                 checked
             <%
             }
-            %> >Mouvements caisse<br>
+            %> ><i18n:message key="label.mvtCaisse" /><br>
         <input type="checkbox" name="Mvt_stk" <%
             if (Mvt_stk.booleanValue()) { %>
                 checked
             <%
             }
-            %> >Mouvements de stock<br>
+            %> ><i18n:message key="label.mvtStock" /><br>
         <input type="checkbox" name="Client" <%
             if (Client.booleanValue()) { %>
                 checked
             <%
             }
-            %> >Clients sans historique<br>
+            %> ><i18n:message key="label.clientSsHisto" /><br>
         <input type="checkbox" name="Art" <%
             if (Art.booleanValue()) { %>
                 checked
             <%
             }
-            %> >Articles inutiles<br>
+            %> ><i18n:message key="label.articleInutiles" /><br>
         <input type="checkbox" name="Prest" <%
             if (Prest.booleanValue()) { %>
                 checked
             <%
             }
-            %> >Prestations inutiles<br>
+            %> ><i18n:message key="label.prestationInutile" /><br>
         <input type="checkbox" name="Client_perime" <%
             if (Client_perime.booleanValue()) { %>
                 checked
             <%
             }
-            %> >Clients périmés sans historique<br>
+            %> ><i18n:message key="label.clientPerime" /><br>
         <input type="checkbox" name="Pointage" <%
             if (Pointage.booleanValue()) { %>
                 checked
             <%
             }
-            %> >Pointages<br>
+            %> ><i18n:message key="label.pointage" /><br>
         <input type="checkbox" name="Collab" <%
             if (Collab.booleanValue()) { %>
                 checked
             <%
             }
-            %> >Anciens collaborateurs
+            %> ><i18n:message key="label.collabAncien" />
     </blockquote>
 </form>
 <span id="AttenteSpan" style="visibility: hidden">
-<p class="Warning"><img name="Attente" src="images/attente.gif" width="231" height="10" alt="Opération en cours..."></p>
+<p class="Warning"><img name="Attente" src="images/attente.gif" width="231" height="10" alt="<i18n:message key="label.operationEnCours" />"></p>
 </span>
 <salon:valeur valeur="<%= MsgInfo %>" valeurNulle="null" expand="true">
     %%
@@ -138,11 +138,11 @@ function Init() {
 function Valider()
 {
     if (document.fiche.Date.value == "") {
-        alert ("La date limite d'épuration doit être saisie.");
+        alert ("<i18n:message key="ficPurge.limiteManquant" />");
         return;
     }
     if (document.fiche.lock.value == "") {
-        if (confirm("Attention vous allez supprimer les données existantes antérieures à la date saisie. Etes-vous sûr de vouloir lancer l'épuration ?")) {
+        if (confirm("<i18n:message key="ficPurge.warningAction" />")) {
             MM_showHideLayers('AttenteSpan','','show');
             document.fiche.lock.value = "xx";
             document.fiche.submit();

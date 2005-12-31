@@ -22,7 +22,7 @@
     Vector dispo = (Vector) request.getAttribute("Dispo");
     List collabs = (List) request.getAttribute("collabs");
 %>
-<title>Fiche Rendez-vous</title>
+<title><i18n:message key="ficRDV.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -57,59 +57,62 @@ function Init() {
 
 <form method="post" action="ficRDV.srv" name="fiche">
     <table><tr><td valign="top">
-	 <p><span class="obligatoire">Client :</span> 
+	 <p><span class="obligatoire"><i18n:message key="label.client" /> :</span> 
             <input type="hidden" name="CD_CLI" value="<%= aRDV.getCD_CLI() %>">
             <input type="hidden" name="Action" value="<%= Action %>">
             <salon:valeur valeurNulle="null" valeur="<%= aCli.toString() %>" >
                 <span class="readonly"><a href="_FicheCli.jsp?Action=Modification&CD_CLI=<%= aCli.getCD_CLI() %>" target="ClientFrame">%%</a></span> 
             </salon:valeur>
-            <span class="obligatoire">Collaborateur :</span> 
+            <span class="obligatoire"><i18n:message key="label.collaborateur" /> :</span> 
 		    <salon:selection valeur="<%= aRDV.getCD_COLLAB() %>" valeurs="<%= collabs %>">
 		       <select name="CD_COLLAB" onchange="RechargeDispo()">
 				  %%
 		       </select>
 		    </salon:selection>
 	 </p>
-	 <p><span class="obligatoire">Début :</span> 
+	 <p><span class="obligatoire"><i18n:message key="label.debut" /> :</span> 
+            <i18n:message key="format.dateSimpleDefaut" id="paramDate" />
+            <i18n:message key="format.heureSimpleDefaut" id="paramHeure" />
             <%
             if (Action.equals("Creation")) { %>
-                <salon:date type="text" name="DT_DEBUT" valeurDate="<%= aRDV.getDT_DEBUT() %>" valeurNulle="null" format="dd/MM/yyyy" calendrier="true" onchange="RechargeDispo()">%%</salon:date>
-                <salon:date type="text" name="HR_DEBUT" valeurNulle="null" valeurDate="<%= aRDV.getDT_DEBUT() %>" format="HH:mm">%%</salon:date>
+                <salon:date type="text" name="DT_DEBUT" valeurDate="<%= aRDV.getDT_DEBUT() %>" valeurNulle="null" format="<%= paramDate %>" calendrier="true" onchange="RechargeDispo()">%%</salon:date>
+                <salon:date type="text" name="HR_DEBUT" valeurNulle="null" valeurDate="<%= aRDV.getDT_DEBUT() %>" format="<%= paramHeure %>">%%</salon:date>
             <%
             } 
             else { %>
-                <salon:date type="readonly" name="DT_DEBUT" valeurDate="<%= aRDV.getDT_DEBUT() %>" valeurNulle="null" format="dd/MM/yyyy">%%</salon:date>
-                <salon:date type="readonly" name="HR_DEBUT" valeurNulle="null" valeurDate="<%= aRDV.getDT_DEBUT() %>" format="HH:mm">%%</salon:date>
+                <salon:date type="readonly" name="DT_DEBUT" valeurDate="<%= aRDV.getDT_DEBUT() %>" valeurNulle="null" format="<%= paramDate %>">%%</salon:date>
+                <salon:date type="readonly" name="HR_DEBUT" valeurNulle="null" valeurDate="<%= aRDV.getDT_DEBUT() %>" format="<%= paramHeure %>">%%</salon:date>
             <%
             } %>
-	    <span class="obligatoire">Durée (minutes) :</span> 
+	    <span class="obligatoire"><i18n:message key="label.duree" /> :</span> 
 	       <salon:valeur valeurNulle="null" valeur="<%= aRDV.getDUREE() %>">
 		  <input type="text" name="DUREE" size="3" value="%%">
 	       </salon:valeur>
 	 </p>
 	<p>
-	<span class="facultatif">Commentaire :</span> 
+	<span class="facultatif"><i18n:message key="label.commentaire" /> :</span> 
 	    <salon:valeur valeurNulle="null" valeur="<%= aRDV.getCOMM() %>" >
 		<textarea name="COMM" cols="40" rows="2">%%</textarea>
 	    </salon:valeur>
 	</p>
-        <p>Commentaire du client :
+        <p><i18n:message key="label.commentaireClient" /> :
 	    <salon:valeur valeurNulle="null" valeur="<%= aCli.getCOMM() %>" expand="true">
 		<span class="readonly">%%</span>
 	    </salon:valeur>
         </p>
     </td>
     <td valign="top" style="padding-left: 30px">
-        <p>Disponibilités :</p>
+        <p><i18n:message key="label.disponibilite" /> :</p>
         <table>
+        <i18n:message key="format.heureSimpleDefaut" id="paramHeure" />
         <%
             for (int i = 0; i < dispo.size(); i++) {
                 RDVBean dispoRDV = (RDVBean) dispo.get(i);
         %>
                 <tr><td>
-                    <salon:date type="readonly" name="HR_DEBUT" valeurNulle="null" valeurDate="<%= dispoRDV.getDT_DEBUT() %>" format="HH:mm">%%</salon:date>
+                    <salon:date type="readonly" name="HR_DEBUT" valeurNulle="null" valeurDate="<%= dispoRDV.getDT_DEBUT() %>" format="<%= paramHeure %>">%%</salon:date>
                     ...
-                    <salon:date type="readonly" name="HR_DEBUT" valeurNulle="null" valeurDate="<%= dispoRDV.getDT_FIN() %>" format="HH:mm">%%</salon:date>
+                    <salon:date type="readonly" name="HR_DEBUT" valeurNulle="null" valeurDate="<%= dispoRDV.getDT_FIN() %>" format="<%= paramHeure %>">%%</salon:date>
                 
                 </td></tr>
         <%
@@ -129,7 +132,7 @@ function Enregistrer()
 {
    // Verification des données obligatoires
    if ((document.fiche.DT_DEBUT.value == "") || (document.fiche.HR_DEBUT.value == "")) {
-      alert ("La date de début du pointage doit être saisie");
+      alert ("<i18n:message key="ficRDV.debutManquant" />");
       return;
    }
    lock = true;
@@ -149,8 +152,8 @@ function Supprimer()
 
 function RetourListe() {
     if (document.fiche.DT_DEBUT.value != "") {
-        parent.location.href = "ListeRDV.jsp?DT_DEBUT=" + doEscape(document.fiche.DT_DEBUT.value + " 00:00") 
-                + "&DT_FIN=" + doEscape(document.fiche.DT_DEBUT.value + " 23:59");
+        parent.location.href = "ListeRDV.jsp?DT_DEBUT=" + doEscape(document.fiche.DT_DEBUT.value + " <i18n:message key="valeur.minuit" />") 
+                + "&DT_FIN=" + doEscape(document.fiche.DT_DEBUT.value + " <i18n:message key="valeur.minuitMoins1" />");
     }
     else {
         parent.location.href = "ListeRDV.jsp";
