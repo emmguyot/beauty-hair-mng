@@ -412,7 +412,7 @@ function Init() {
 	<span ID="PAIEMENT" style="position:absolute; visibility:visible">
 	<table width="100%">
 	<tr>
-	<td class="label"><span class="obligatoire"><i18n:message key="label_common.modePaiement" /></span> : </td>
+	<td class="label"><span class="obligatoire"><i18n:message key="label.modePaiement" /></span> : </td>
 	<td>
 	    <salon:valeur valeurNulle="0" valeur="<%= aPaiement.getCD_PAIEMENT() %>" >
 	       <input type="hidden" name="CD_PAIEMENT" value="%%" >
