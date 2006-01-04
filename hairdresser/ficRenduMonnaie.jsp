@@ -12,7 +12,7 @@
 <html>
 
 <head>
-<title>Rendu Monnaie</title>
+<title><i18n:message key="ficRenduMonnaie.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 
@@ -29,7 +29,8 @@
 %>
 
 <h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/ficRenduMonnaie.gif"></h1>
-<div style="{text-align: right;}"><salon:bouton url="javascript:window.close()" imgOn="images/quit2.gif" img="images/quit.gif" alt="Fermer la fenêtre" /></div>
+<i18n:message key="message.fermer" id="msgFermer" />
+<div style="{text-align: right;}"><salon:bouton url="javascript:window.close()" imgOn="images/quit2.gif" img="images/quit.gif" alt="<%= msgFermer %>" /></div>
 <salon:message salonSession="<%= mySalon %>" />
 <br>
 <form method="post" action="ficRenduMonnaie.srv" name="fiche"> 
@@ -37,7 +38,7 @@
 <table>
 <tr>
     <td>
-        <span class="obligatoire">Montant à payer : </span>
+        <span class="obligatoire"><i18n:message key="label.montantARegler" /> : </span>
     </td>
     <td>
         <salon:valeur valeurNulle="null" valeur="<%= montant %>" >
@@ -48,13 +49,13 @@
 </tr>
 <tr>
     <td>
-        <span class="obligatoire">Montant réglé : </span>
+        <span class="obligatoire"><i18n:message key="label.montantRegle" /> : </span>
     </td>
     <td>
         <salon:valeur valeurNulle="null" valeur="<%= montantRegle %>" >
 	    <input type="text" name="montantRegle" value="%%" size=10 onChange="document.fiche.submit()" >
         </salon:valeur>
-        <input type="image" src="images/calculatrice.gif" alt="Calculer">
+        <input type="image" src="images/calculatrice.gif" alt="<i18n:message key="message.calculer" />">
     </td>
 </tr>
 </table>

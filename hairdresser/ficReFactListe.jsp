@@ -18,7 +18,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Fiche Facture</title>
+<title><i18n:message key="ficReFactListe.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -31,15 +31,15 @@
 
 <table width="100%" border=1 rules="groups">
 <tr>
-   <th>Date</th>
-   <th>Client</th>
-   <th>Prestation</th>
-   <th>Qté</th>
-   <th>Prix<br>Unitaire</th>
-   <th>Remise<br>%</th>
-   <th>Remise<br>fixe</th>
-   <th>Total<br>Facture</th>
-   <th>Mode<br>Paiement</th>
+   <th><i18n:message key="label.date" /></th>
+   <th><i18n:message key="label.client" /></th>
+   <th><i18n:message key="label.prestation" /></th>
+   <th><i18n:message key="label.qte" /></th>
+   <th><i18n:message key="label.prixUnitaireTableau" /></th>
+   <th><i18n:message key="label.remisePrc" /></th>
+   <th><i18n:message key="label.remiseFixe" /></th>
+   <th><i18n:message key="label.totalFacture" /></th>
+   <th><i18n:message key="label.modePaiementTableau" /></th>
 </tr>
    
 <% for (int iListe=0; iListe < listeEdition.size(); iListe++) { 
