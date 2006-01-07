@@ -28,9 +28,9 @@
 
 %>
 
-<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/ficRenduMonnaie.gif"></h1>
 <i18n:message key="message.fermer" id="msgFermer" />
-<div style="{text-align: right;}"><salon:bouton url="javascript:window.close()" imgOn="images/quit2.gif" img="images/quit.gif" alt="<%= msgFermer %>" /></div>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/ficRenduMonnaie.gif">
+<salon:bouton url="javascript:window.close()" imgOn="images/quit2.gif" img="images/quit.gif" alt="<%= msgFermer %>" /></h1>
 <salon:message salonSession="<%= mySalon %>" />
 <br>
 <form method="post" action="ficRenduMonnaie.srv" name="fiche"> 

@@ -635,7 +635,7 @@ function Aide()
 
 //Ouverture du calcul de rendu
 function calculRendu(montant) {
-  window.open("ficRenduMonnaie.srv?montant=" + montant + "&montantRegle=" + montant + "&aRendre=", 'Calcul', config='height=250,width=400,left=312,top=234');
+  window.open("ficRenduMonnaie.srv?montant=" + montant + "&montantRegle=" + montant + "&aRendre=", 'Calcul', config='height=250,width=440,left=312,top=234');
 }
 
 </script>
