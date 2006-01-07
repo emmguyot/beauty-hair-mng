@@ -270,7 +270,6 @@ public class FactBeanTest extends TestCase {
     
         for (Iterator tvaIter = listeTVA.iterator(); tvaIter.hasNext();) {
             TVA aTVA = (TVA) tvaIter.next();
-            BigDecimal txTva = TvaBean.getTvaBean(aDBSession, Integer.toString(aTVA.getCD_TYP_VENT())).getTX_TVA();
             BigDecimal tva = aTVA.getTotal();
             BigDecimal ht = aTVA.getTotalHT();
             BigDecimal ttc = aTVA.getTotalTTC();
