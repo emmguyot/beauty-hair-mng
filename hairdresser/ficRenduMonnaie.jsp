@@ -26,8 +26,8 @@
 
 %>
 
-<h1><img src="images/titres/ficRenduMonnaie.gif"></h1>
-<div style="{text-align: right;}"><salon:bouton url="javascript:window.close()" imgOn="images/quit2.gif" img="images/quit.gif" alt="Fermer la fenêtre" /></div>
+<h1><img src="images/titres/ficRenduMonnaie.gif">
+<salon:bouton url="javascript:window.close()" imgOn="images/quit2.gif" img="images/quit.gif" alt="Fermer la fenêtre" /></h1>
 <salon:message salonSession="<%= mySalon %>" />
 <br>
 <form method="post" action="ficRenduMonnaie.srv" name="fiche"> 
