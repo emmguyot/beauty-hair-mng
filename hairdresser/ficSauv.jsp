@@ -17,7 +17,7 @@
    String Fichier = (String) request.getAttribute("Fichier");
    String Type = request.getParameter("Type");
 %>
-<title>Sauvegarde</title>
+<title><i18n:message key="ficSauv.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -41,12 +41,13 @@ function Init() {
 	<p> 
 		<input type="hidden" name="Action" value="Sauvegarde">
 		<input type="hidden" name="lock" value="">
-		<span class="obligatoire">Nom de la sauvegarde :</span> 
+		<span class="obligatoire"><i18n:message key="label.nomSauvegarde" /> :</span> 
 		<salon:valeur valeurNulle="null" valeur="<%= Fichier %>" >
 		  <input type="text" name="Fichier" value="%%" size=40>
 	        </salon:valeur>
-		<span class="obligatoire">Type de sauvegarde :</span> 
-		<salon:selection valeur="<%= Type %>" valeurs='<%= "D|M|I" %>' libelle="Disque dur (tous les jours)|Média amovible (une fois par semaine)|Internet (une fois par semaine)">
+		<span class="obligatoire"><i18n:message key="label.typeSauvegarde" /> :</span> 
+                <i18n:message key="valeur.typeSauvegarde" id="valeurType" />
+		<salon:selection valeur="<%= Type %>" valeurs='<%= "D|M|I" %>' libelle="<%= valeurType %>">
 		  <select name="Type">
 		     %%
 		  </select>
@@ -54,7 +55,7 @@ function Init() {
 	</p>
 </form>
 <span id="AttenteSpan" style="visibility: hidden">
-<p class="Warning"><img name="Attente" src="images/attente.gif" width="231" height="10" alt="Opération en cours..."></p>
+<p class="Warning"><img name="Attente" src="images/attente.gif" width="231" height="10" alt="<i18n:message key="message.patience" />"></p>
 </span>
 <salon:include file="include/salonNews.inc" />
 <script language="JavaScript">
@@ -66,7 +67,7 @@ function Valider()
     if (document.fiche.lock.value == "") {
         // Verification des données obligatoires
         if (document.fiche.Fichier.value == "") {
-            alert ("Le nom de la sauvegarde doit être saisi. La sauvegarde ne peut avoir lieu.");
+            alert ("<i18n:message key="ficSauv.nomManquant" />");
             return;
         }
         MM_showHideLayers('AttenteSpan','','show');

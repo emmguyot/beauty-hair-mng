@@ -18,7 +18,7 @@
    TreeSet listeFichier = (TreeSet) request.getAttribute("listeFichier");
    String Type = (String) request.getAttribute("Type");
 %>
-<title>Restauration</title>
+<title><i18n:message key="ficRest.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -39,18 +39,18 @@ function Init() {
 <h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/ficRest.gif"></h1>
 <salon:message salonSession="<%= mySalon %>" />
 <form method="post" action="restauration.srv" name="fiche">
-	<p class="warning"> Attention : La restauration des données peut provoquer 
-		la perte de données. </p>
+	<p class="warning"> <i18n:message key="ficRest.warning" /> </p>
 	<p>
 		<input type="hidden" name="Action" value="Restauration">
 		<input type="hidden" name="lock" value="">
-		<span class="obligatoire">Type de sauvegarde :</span> 
-		<salon:selection valeur="<%= Type %>" valeurs='<%= "D|M|I" %>' libelle="Disque dur (tous les jours)|Média amovible (une fois par semaine)|Internet (une fois par semaine)">
+		<span class="obligatoire"><i18n:message key="label.typeSauvegarde" /> :</span> 
+                <i18n:message key="valeur.typeSauvegarde" id="valeurType" />
+		<salon:selection valeur="<%= Type %>" valeurs='<%= "D|M|I" %>' libelle="<%= valeurType %>">
 		  <select name="Type" onChange="rechargeListe()">
 		     %%
 		  </select>
 		</salon:selection>
-		<span class="obligatoire">Nom de la sauvegarde :</span> 
+		<span class="obligatoire"><i18n:message key="label.nomSauvegarde" /> :</span> 
 		  <select name="nomFichier">
 		<%
 		  for (Iterator i=listeFichier.iterator(); i.hasNext(); ) {
@@ -64,7 +64,7 @@ function Init() {
 	</p>
 </form>
 <span id="AttenteSpan" style="visibility: hidden">
-<p class="Warning"><img name="Attente" src="images/attente.gif" width="231" height="10" alt="Opération en cours..."></p>
+<p class="Warning"><img name="Attente" src="images/attente.gif" width="231" height="10" alt="<i18n:message key="message.patience" />"></p>
 </span>
 <salon:include file="include/salonNews.inc" />
 <script language="JavaScript">
@@ -80,7 +80,7 @@ function rechargeListe()
 function Valider()
 {
    if (document.fiche.lock.value == "") {
-        if (confirm("Attention vous allez supprimer les données existantes pour les remplacer par celles de la sauvegarde. Etes-vous sur de vouloir lancer la restauration ?")) {
+        if (confirm("<i18n:message key="ficRest.restaure" />")) {
             MM_showHideLayers('AttenteSpan','','show');
             document.fiche.lock.value = "xx";
             document.fiche.submit();
