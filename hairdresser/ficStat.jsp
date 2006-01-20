@@ -11,7 +11,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Fiche statistique</title>
+<title><i18n:message key="ficStat.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -55,27 +55,27 @@ function Init() {
 		  <input type="hidden" name="CD_STAT" value="%%" >
 	        </salon:valeur>
 		<input type="hidden" name="Action" value="<%=Action%>">
-		<span class="obligatoire">Libellé :</span> 
+		<span class="obligatoire"><i18n:message key="label.libelle" /> :</span> 
 		<salon:valeur valeurNulle="null" valeur="<%= aStat.getLIB_STAT() %>" >
 		  <input type="text" name="LIB_STAT" value="%%" size=80>
 	        </salon:valeur>
        </p>
        <p>
-		<span class="facultatif">Axe X :</span> 
+		<span class="facultatif"><i18n:message key="label.axeX" /> :</span> 
 		<salon:valeur valeurNulle="null" valeur="<%= aStat.getLABEL_X() %>" >
 		  <input type="text" name="LABEL_X" value="%%" >
 	        </salon:valeur>
-		<span class="facultatif">Axe Y:</span> 
+		<span class="facultatif"><i18n:message key="label.axeY" /> :</span> 
 		<salon:valeur valeurNulle="null" valeur="<%= aStat.getLABEL_Y() %>" >
 		  <input type="text" name="LABEL_Y" value="%%" >
 	        </salon:valeur>
 	</p>
 	 <p>
-	        <span class="obligatoire">Requête :</span> 
+	        <span class="obligatoire"><i18n:message key="label.requete" /> :</span> 
 	        <salon:valeur valeurNulle="null" valeur="<%= aStat.getREQ_SQL() %>" >
 		  <textarea name="REQ_SQL" rows="5" cols="80">%%</textarea>
 	        </salon:valeur>
-	        <a href="javascript:Visualiser()"><img src="images/stat2.gif" border=0 alt="Test de la requète"></a>
+	        <a href="javascript:Visualiser()"><img src="images/stat2.gif" border=0 alt="<i18n:message key="ficStat.testRequete" />"></a>
 	 </p>
 </form>
 
@@ -94,7 +94,7 @@ function Enregistrer()
 {
    // Verification des données obligatoires
    if ((document.fiche.LIB_STAT.value == "") || (document.fiche.REQ_SQL.value == "")) {
-      alert ("Le libellé de la statistique et la requête doivent être saisis. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="ficStat.libelleRequeteManquant" />");
       return;
    }
    if ((document.fiche.Action.value != "Creation") && (document.fiche.Action.value != "Modification")) {
@@ -107,7 +107,7 @@ function Enregistrer()
 function Supprimer()
 {
     if ((document.fiche.CD_STAT.value != "0") && (document.fiche.CD_STAT.value != "")) {
-        if (confirm ("Cette suppression est définitive. Confirmez-vous cette action ?")) {
+        if (confirm ("<i18n:message key="message.suppressionDefinitiveConfirm" />")) {
             document.fiche.Action.value = "Suppression";
             document.fiche.submit();
         }

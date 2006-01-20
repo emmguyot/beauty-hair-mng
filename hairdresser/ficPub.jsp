@@ -52,7 +52,8 @@ function Init() {
 		<%
                 if (listeParam.contains("PeriodeTemps")) { %>
 		  <tr><td><span class="obligatoire"><i18n:message key="label.periode" /> : </span></td>
-                  <salon:selection valeur='<%= (String) request.getAttribute("PeriodeTemps$0") %>' valeurs='<%= "month|day" %>' libelle="Mois|Journée">
+                  <i18n:message key="valeur.periode" id="valeurPeriode" />
+                  <salon:selection valeur='<%= (String) request.getAttribute("PeriodeTemps$0") %>' valeurs='<%= "month|day" %>' libelle="<%= valeurPeriode %>">
                     <td><select name="PeriodeTemps">
 		     %%
                     </select></td>

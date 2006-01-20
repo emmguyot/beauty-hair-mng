@@ -12,7 +12,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Fiche Société</title>
+<title><i18n:message key="ficSoc.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -38,24 +38,25 @@ function Init() {
 <form method="post" action="ficSoc.srv" name="fiche">
 	 <p> 
 		<input type="hidden" name="Action" value="<%=Action%>">
-		<span class="obligatoire">Raison sociale :</span> 
+		<span class="obligatoire"><i18n:message key="label.raisSoc" /> :</span> 
 		<salon:valeur valeurNulle="null" valeur="<%= aSoc.getRAIS_SOC() %>" >
 		  <input type="text" name="RAIS_SOC" value="%%" size="30">
 	        </salon:valeur>
 	 </p>
 	 <p>
-		<font size="+1">Gérant :</font><br>
-		<span class="facultatif">Civilit&eacute; :</span> 
-		<salon:selection valeur="<%= aSoc.getCIVILITE_GER() %>" valeurs='<%= "|Mle|Mme|M. " %>'>
+		<font size="+1"><i18n:message key="label.gerant" /> :</font><br>
+		<span class="facultatif"><i18n:message key="label.civilite" /> :</span> 
+                <i18n:message key="valeur.civilite" id="valeurCivilite" />
+		<salon:selection valeur="<%= aSoc.getCIVILITE_GER() %>" valeurs='<%= valeurCiviltie %>'>
 		  <select name="CIVILITE_GER">
 		     %%
 		  </select>
 		</salon:selection>
-		<span class="obligatoire">Nom :</span> 
+		<span class="obligatoire"><i18n:message key="label.nom" /> :</span> 
 		<salon:valeur valeurNulle="null" valeur="<%= aSoc.getNOM_GER() %>" >
 		  <input type="text" name="NOM_GER" value="%%" >
 	        </salon:valeur>
-		<span class="facultatif">Pr&eacute;nom :</span> 
+		<span class="facultatif"><i18n:message key="label.prenom" /> :</span> 
 		<salon:valeur valeurNulle="null" valeur="<%= aSoc.getPRENOM_GER() %>" >
 		  <input type="text" name="PRENOM_GER" value="%%" >
 	        </salon:valeur>
@@ -63,31 +64,31 @@ function Init() {
 	<table border="0" cellspacing="0">
 		<tr> 
 			<td> 
-				<p><span class="facultatif">Adresse :</span> 
+				<p><span class="facultatif"><i18n:message key="label.adresse" /> :</span> 
 				       <salon:valeur valeurNulle="null" valeur="<%= aSoc.getRUE() %>" >
 					  <textarea name="RUE" rows="2" cols="40">%%</textarea>
 				       </salon:valeur>
 				</p>
-				<p><span class="facultatif">Code postal :</span> 
+				<p><span class="facultatif"><i18n:message key="label.cdPostal" /> :</span> 
 				       <salon:valeur valeurNulle="null" valeur="<%= aSoc.getCD_POSTAL() %>" >
 					  <input type="text" name="CD_POSTAL" size="6" maxlength="5" value="%%">
 				       </salon:valeur>
-					<span class="facultatif">Ville :</span> 
+					<span class="facultatif"><i18n:message key="label.ville" /> :</span> 
 				       <salon:valeur valeurNulle="null" valeur="<%= aSoc.getVILLE() %>" >
 					  <input type="text" name="VILLE" value="%%">
 				       </salon:valeur>
 				</p>
 			</td>
 			<td> 
-				<p align="right"><span class="facultatif">T&eacute;l&eacute;phone :</span></p>
-				<p align="right"><span class="facultatif">Email :</span></p>
+				<p align="right"><span class="facultatif"><i18n:message key="label.telephone" /> :</span></p>
+				<p align="right"><span class="facultatif"><i18n:message key="label.email" /> :</span></p>
 			</td>
 			<td>
 				<p>
 				    <salon:valeur valeurNulle="null" valeur="<%= aSoc.getTEL() %>" >
 					<input type="text" name="TEL" value="%%" size=14>
 				    </salon:valeur>
-				<span class="facultatif">Portable&nbsp;:&nbsp;</span>
+				<span class="facultatif"><i18n:message key="label.portable" />&nbsp;:&nbsp;</span>
 				    <salon:valeur valeurNulle="null" valeur="<%= aSoc.getPORTABLE() %>" >
 					<input type="text" name="PORTABLE" value="%%" size=14>
 				    </salon:valeur>
@@ -101,23 +102,23 @@ function Init() {
 		</tr>
 	</table>
         <p>
-            <span class="obligatoire">Code Siret :</span> 
+            <span class="obligatoire"><i18n:message key="label.siret" /> :</span> 
             <salon:valeur valeurNulle="null" valeur="<%= aSoc.getCD_SIRET() %>" >
                 <input type="text" name="CD_SIRET" value="%%" maxlength="14" size="15">
             </salon:valeur>
-            <span class="obligatoire">Code NAF :</span> 
+            <span class="obligatoire"><i18n:message key="label.naf" /> :</span> 
             <salon:valeur valeurNulle="null" valeur="<%= aSoc.getCD_APE() %>" >
                 <input type="text" name="CD_APE" value="%%" maxlength="4" size="5">
             </salon:valeur>
         </p>
         <p>
-            <span class="obligatoire">Données Salon de Coiffure :</span> 
+            <span class="obligatoire"><i18n:message key="label.donneesSalon" /> :</span> 
 			<salon:selection valeur="<%= aSoc.getFLG_SALON() %>" valeurs='<%= "O|N" %>' libelle='<%= "Oui|Non" %>' >
 			  <select name="FLG_SALON">
 			     %%
 			  </select>
 			</salon:selection>
-            <span class="obligatoire">Données Institut de Beauté :</span> 
+            <span class="obligatoire"><i18n:message key="label.donneesInstitut" /> :</span> 
 			<salon:selection valeur="<%= aSoc.getFLG_INSTITUT() %>" valeurs='<%= "O|N" %>' libelle='<%= "Oui|Non" %>' >
 			  <select name="FLG_INSTITUT">
 			     %%
@@ -134,14 +135,14 @@ function Enregistrer()
 {
     // Verification des données obligatoires
     if ((document.fiche.RAIS_SOC.value == "") || (document.fiche.NOM_GER.value == "")) {
-        alert ("La raison sociale et le nom doivent être saisis. L'enregistrement n'a pas pu avoir lieu.");
+        alert ("<i18n:message key="ficSoc.raiSocManquant" />");
         return;
     }
     if (document.fiche.CD_SIRET.value == "") {
-        document.fiche.CD_SIRET.value = "SO";
+        document.fiche.CD_SIRET.value = "<i18n:message key="valeur.SO" />";
     }
     if (document.fiche.CD_APE.value == "") {
-        document.fiche.CD_APE.value = "SO";
+        document.fiche.CD_APE.value = "<i18n:message key="valeur.SO" />";
     }
     document.fiche.submit();
 }
