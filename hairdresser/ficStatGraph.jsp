@@ -12,7 +12,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Graphe statistique</title>
+<title><i18n:message key="ficStatGraph.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -61,8 +61,9 @@ function Init() {
                 int nbItem = 5; %>
                 <%
 		if (listeParam.contains("PeriodeTemps")) { %>
-		  <tr><td><span class="obligatoire">Période : </span></td>
-                  <salon:selection valeur='<%= (String) request.getAttribute("PeriodeTemps$0") %>' valeurs='<%= "month|day" %>' libelle="Mois|Journée">
+		  <tr><td><span class="obligatoire"><i18n:message key="label.periode" /> : </span></td>
+                  <i18n:message key="valeur.periode" id="valeurPeriode" />
+                  <salon:selection valeur='<%= (String) request.getAttribute("PeriodeTemps$0") %>' valeurs='<%= "month|day" %>' libelle="<%= valeurPeriode %>">
                     <td><select name="PeriodeTemps">
 		     %%
                     </select></td>
@@ -82,13 +83,13 @@ function Init() {
                         <span class="facultatif">
                     <%
                     } %>
-                    Graphe N°<%= i+1 %></span></td>
+                    <i18n:message key="label.grapheNumero" /><%= i+1 %></span></td>
                 <%
                 } %>
                 </tr>
 		<%
                 if (listeParam.contains("DateDebut")) { %>
-		  <tr><td><span class="obligatoire">Date&nbsp;de&nbsp;début&nbsp;: </span></td>
+		  <tr><td><span class="obligatoire"><i18n:message key="label.dtDebut" />: </span></td>
                   <%
                   for (int i = 0; i < nbItem; i++ ) { %>
 		  <salon:valeur valeurNulle="null" valeur='<%= (String) request.getAttribute("DateDebut$" + i) %>' >
@@ -99,7 +100,7 @@ function Init() {
 		  </tr>
 	        <% } 
 		if (listeParam.contains("DateFin")) { %>
-		  <tr><td><span class="obligatoire">Date&nbsp;de&nbsp;fin&nbsp;: </span></td>
+		  <tr><td><span class="obligatoire"><i18n:message key="label.dtFin" />: </span></td>
                   <%
                   for (int i = 0; i < nbItem; i++ ) { %>
 		  <salon:valeur valeurNulle="null" valeur='<%= (String) request.getAttribute("DateFin$" + i) %>' >
@@ -110,7 +111,7 @@ function Init() {
 		  </tr>
 	        <% } 
 		if (listeParam.contains("CD_COLLAB")) { %>
-		  <tr><td><span class="obligatoire">Collaborateur&nbsp;: </span></td>
+		  <tr><td><span class="obligatoire"><i18n:message key="label.collaborateur" />&nbsp;: </span></td>
                   <%
                   for (int i = 0; i < nbItem; i++ ) { %>
 		  <salon:DBselection valeur='<%= (String) request.getAttribute("CD_COLLAB$" + i) %>' sql="select CD_COLLAB, PRENOM from COLLAB order by PRENOM, NOM">
@@ -123,7 +124,7 @@ function Init() {
 		  </tr>
 	        <% } 
 		if (listeParam.contains("CD_TYP_CHEV")) { %>
-		  <tr><td><span class="obligatoire">Type&nbsp;de&nbsp;cheveux&nbsp;: </span></td>
+		  <tr><td><span class="obligatoire"><i18n:message key="label.typeCheveux" />: </span></td>
                   <%
                   for (int i = 0; i < nbItem; i++ ) { %>
 		  <salon:DBselection valeur='<%= (String) request.getAttribute("CD_TYP_CHEV$" + i) %>' sql="select CD_TYP_CHEV, LIB_TYP_CHEV from TYP_CHEV order by LIB_TYP_CHEV">
@@ -136,7 +137,7 @@ function Init() {
 		  </tr>
 	        <% } 
 		if (listeParam.contains("CD_TYP_PEAU")) { %>
-		  <tr><td><span class="obligatoire">Type&nbsp;de&nbsp;peau&nbsp;: </span></td>
+		  <tr><td><span class="obligatoire"><i18n:message key="label.typePeau" />: </span></td>
                   <%
                   for (int i = 0; i < nbItem; i++ ) { %>
 		  <salon:DBselection valeur='<%= (String) request.getAttribute("CD_TYP_PEAU$" + i) %>' sql="select CD_TYP_PEAU, LIB_TYP_PEAU from TYP_PEAU order by LIB_TYP_PEAU">
@@ -149,7 +150,7 @@ function Init() {
 		  </tr>
 	        <% } 
 		if (listeParam.contains("CD_CATEG_CLI")) { %>
-		  <tr><td><span class="obligatoire">Catégorie&nbsp;de&nbsp;clients&nbsp;: </span></td>
+		  <tr><td><span class="obligatoire"><i18n:message key="label.categorieClient" />: </span></td>
                   <%
                   for (int i = 0; i < nbItem; i++ ) { %>
 		  <salon:DBselection valeur='<%= (String) request.getAttribute("CD_CATEG_CLI$" + i) %>' sql="select CD_CATEG_CLI, LIB_CATEG_CLI from CATEG_CLI order by LIB_CATEG_CLI">
@@ -162,7 +163,7 @@ function Init() {
 		  </tr>
 	        <% } 
 		if (listeParam.contains("CD_TR_AGE")) { %>
-		  <tr><td><span class="obligatoire">Tranche&nbsp;d'âge&nbsp;: </span></td>
+		  <tr><td><span class="obligatoire"><i18n:message key="label.trancheAge" />: </span></td>
                   <%
                   for (int i = 0; i < nbItem; i++ ) { %>
 		  <salon:DBselection valeur='<%= (String) request.getAttribute("CD_TR_AGE$" + i) %>' sql="select CD_TR_AGE, LIB_TR_AGE from TR_AGE order by AGE_MIN">
@@ -175,7 +176,7 @@ function Init() {
 		  </tr>
 	        <% } 
 		if (listeParam.contains("CD_ORIG")) { %>
-		  <tr><td><span class="obligatoire">Origine&nbsp;du&nbsp;client&nbsp;: </span></td>
+		  <tr><td><span class="obligatoire"><i18n:message key="label.origine" />: </span></td>
                   <%
                   for (int i = 0; i < nbItem; i++ ) { %>
 		  <salon:DBselection valeur='<%= (String) request.getAttribute("CD_ORIG$" + i) %>' sql="select CD_ORIG, LIB_ORIG from ORIG order by LIB_ORIG">
@@ -188,7 +189,7 @@ function Init() {
 		  </tr>
 	        <% } 
 		if (listeParam.contains("CD_MOD_REGL")) { %>
-		  <tr><td><span class="obligatoire">Mode&nbsp;de&nbsp;réglement&nbsp;: </span></td>
+		  <tr><td><span class="obligatoire"><i18n:message key="label.modePaiement" />: </span></td>
                   <%
                   for (int i = 0; i < nbItem; i++ ) { %>
 		  <salon:DBselection valeur='<%= (String) request.getAttribute("CD_MOD_REGL$" + i) %>' sql="select CD_MOD_REGL, LIB_MOD_REGL from MOD_REGL order by LIB_MOD_REGL">
@@ -201,7 +202,7 @@ function Init() {
 		  </tr>
 	        <% } 
 		if (listeParam.contains("CD_TYP_VENT")) { %>
-		  <tr><td><span class="obligatoire">Type&nbsp;de&nbsp;prestation&nbsp;: </span></td>
+		  <tr><td><span class="obligatoire"><i18n:message key="label.typePrest" />: </span></td>
                   <%
                   for (int i = 0; i < nbItem; i++ ) { %>
 		  <salon:DBselection valeur='<%= (String) request.getAttribute("CD_TYP_VENT$" + i) %>' sql="select CD_TYP_VENT, LIB_TYP_VENT from TYP_VENT order by LIB_TYP_VENT">
@@ -214,7 +215,7 @@ function Init() {
 		  </tr>
 	        <% } 
 		if (listeParam.contains("CD_CATEG_PREST")) { %>
-		  <tr><td><span class="obligatoire">Catégorie&nbsp;de&nbsp;prestation&nbsp;: </span></td>
+		  <tr><td><span class="obligatoire"><i18n:message key="label.categoriePrest" />: </span></td>
                   <%
                   for (int i = 0; i < nbItem; i++ ) { %>
 		  <salon:DBselection valeur='<%= (String) request.getAttribute("CD_CATEG_PREST$" + i) %>' sql="select CD_CATEG_PREST, LIB_CATEG_PREST from CATEG_PREST order by LIB_CATEG_PREST">
@@ -227,7 +228,7 @@ function Init() {
 		  </tr>
 	        <% } 
 		if (listeParam.contains("CD_TYP_ART")) { %>
-		  <tr><td><span class="obligatoire">Type&nbsp;d'article&nbsp;: </span></td>
+		  <tr><td><span class="obligatoire"><i18n:message key="label.typeArticle" />: </span></td>
                   <%
                   for (int i = 0; i < nbItem; i++ ) { %>
 		  <salon:DBselection valeur='<%= (String) request.getAttribute("CD_TYP_ART$" + i) %>' sql="select CD_TYP_ART, LIB_TYP_ART from TYP_ART order by LIB_TYP_ART">
@@ -240,7 +241,7 @@ function Init() {
 		  </tr>
 	        <% } 
 		if (listeParam.contains("CD_CATEG_ART")) { %>
-		  <tr><td><span class="obligatoire">Catégorie&nbsp;d'article&nbsp;: </span></td>
+		  <tr><td><span class="obligatoire"><i18n:message key="label.categorieArticle" />: </span></td>
                   <%
                   for (int i = 0; i < nbItem; i++ ) { %>
 		  <salon:DBselection valeur='<%= (String) request.getAttribute("CD_CATEG_ART$" + i) %>' sql="select CD_CATEG_ART, LIB_CATEG_ART from CATEG_ART order by LIB_CATEG_ART">
@@ -253,7 +254,7 @@ function Init() {
 		  </tr>
 	        <% } 
 		if (listeParam.contains("CD_MARQUE")) { %>
-		  <tr><td><span class="obligatoire">Marque&nbsp;: </span></td>
+		  <tr><td><span class="obligatoire"><i18n:message key="label.marque" />: </span></td>
                   <%
                   for (int i = 0; i < nbItem; i++ ) { %>
 		  <salon:DBselection valeur='<%= (String) request.getAttribute("CD_MARQUE$" + i) %>' sql="select CD_MARQUE, LIB_MARQUE from MARQUE order by LIB_MARQUE">
@@ -266,7 +267,7 @@ function Init() {
 		  </tr>
 	        <% } 
 		if (listeParam.contains("CD_TYP_MVT")) { %>
-		  <tr><td><span class="obligatoire">Type&nbsp;de&nbsp;mouvement&nbsp;de&nbsp;stock&nbsp;: </span></td>
+		  <tr><td><span class="obligatoire"><i18n:message key="label.typeMouvementStock" />: </span></td>
                   <%
                   for (int i = 0; i < nbItem; i++ ) { %>
 		  <salon:DBselection valeur='<%= (String) request.getAttribute("CD_TYP_MVT$" + i) %>' sql="select CD_TYP_MVT, LIB_TYP_MVT from TYP_MVT order by LIB_TYP_MVT">
@@ -279,7 +280,7 @@ function Init() {
 		  </tr>
 	        <% } 
 		if (listeParam.contains("CD_TYP_MCA")) { %>
-		  <tr><td><span class="obligatoire">Type&nbsp;de&nbsp;mouvement&nbsp;de&nbsp;caisse&nbsp;: </span></td>
+		  <tr><td><span class="obligatoire"><i18n:message key="label.typeMouvementCaisse" />: </span></td>
                   <%
                   for (int i = 0; i < nbItem; i++ ) { %>
 		  <salon:DBselection valeur='<%= (String) request.getAttribute("CD_TYP_MCA$" + i) %>' sql="select CD_TYP_MCA, LIB_TYP_MCA from TYP_MCA order by LIB_TYP_MCA">
@@ -292,7 +293,7 @@ function Init() {
 		  </tr>
 	        <% } 
 		if (listeParam.contains("CD_FCT")) { %>
-		  <tr><td><span class="obligatoire">Type&nbsp;de&nbsp;mouvement&nbsp;de&nbsp;caisse&nbsp;: </span></td>
+		  <tr><td><span class="obligatoire"><i18n:message key="label.fonction" />: </span></td>
                   <%
                   for (int i = 0; i < nbItem; i++ ) { %>
 		  <salon:DBselection valeur='<%= (String) request.getAttribute("CD_FCT$" + i) %>' sql="select CD_FCT, LIB_FCT from FCT order by LIB_FCT">
@@ -305,7 +306,7 @@ function Init() {
 		  </tr>
 	        <% } 
 		if (listeParam.contains("CD_TYP_CONTR")) { %>
-		  <tr><td><span class="obligatoire">Type&nbsp;de&nbsp;contrat&nbsp;: </span></td>
+		  <tr><td><span class="obligatoire"><i18n:message key="label.typeContrat" />: </span></td>
                   <%
                   for (int i = 0; i < nbItem; i++ ) { %>
 		  <salon:DBselection valeur='<%= (String) request.getAttribute("CD_TYP_CONTR$" + i) %>' sql="select CD_TYP_CONTR, LIB_TYP_CONTR from TYP_CONTR order by LIB_TYP_CONTR">
@@ -318,7 +319,7 @@ function Init() {
 		  </tr>
 	        <% } 
 		if (listeParam.contains("CD_TYP_POINTAGE")) { %>
-		  <tr><td><span class="obligatoire">Type&nbsp;de&nbsp;pointage&nbsp;: </span></td>
+		  <tr><td><span class="obligatoire"><i18n:message key="label.typePointage" />: </span></td>
                   <%
                   for (int i = 0; i < nbItem; i++ ) { %>
 		  <salon:DBselection valeur='<%= (String) request.getAttribute("CD_TYP_POINTAGE$" + i) %>' sql="select CD_TYP_POINTAGE, LIB_TYP_POINTAGE from TYP_POINTAGE order by LIB_TYP_POINTAGE">
@@ -331,10 +332,11 @@ function Init() {
 		  </tr>
 	        <% } 
 		if (listeParam.contains("Genre")) { %>
-		  <tr><td><span class="obligatoire">Genre : </span></td>
+		  <tr><td><span class="obligatoire"><i18n:message key="label.genre" /> : </span></td>
+                  <i18n:message key="valeur.femmeHomme" id="paramFemmeHomme" />
                   <%
                   for (int i = 0; i < nbItem; i++ ) { %>
-                  <salon:selection valeur='<%= (String) request.getAttribute("Genre$" + i) %>' valeurs='<%= "F|M" %>' libelle="Femme|Homme">
+                  <salon:selection valeur='<%= (String) request.getAttribute("Genre$" + i) %>' valeurs='<%= "F|M" %>' libelle="<%= paramFemmeHomme %>">
                     <td><select name="Genre$<%= i %>">
 		     %%
                     </select></td>
@@ -344,7 +346,7 @@ function Init() {
 		  </tr>
 	        <% } %>
                 <tr>
-                    <td><span class="obligatoire">Couleur&nbsp;:</span></td>
+                    <td><span class="obligatoire"><i18n:message key="label.couleur" />:</span></td>
                   <%
                   for (int i = 0; i < nbItem; i++ ) { %>
                     <salon:selection valeur='<%= (String) request.getAttribute("Couleur$" + i) %>' 
@@ -360,7 +362,7 @@ function Init() {
       </table>
 
        <p class="tabDonnees">
-	        <a href="javascript:Zoom()"><img name="graph" src="images/bspacer.gif" alt="Cliquez pour agrandir" border="0"></a>
+	        <a href="javascript:Zoom()"><img name="graph" src="images/bspacer.gif" alt="<i18n:message key="message.zoom" />" border="0"></a>
        </p>
 <salon:madeBy />
 </form>
@@ -429,29 +431,6 @@ function Valider()
    document.graph.src = URLImage;
 }
 
-
-// Enregistrement des données du client
-function Enregistrer()
-{
-   // Verification des données obligatoires
-   if ((document.fiche.LIB_STAT.value == "") || (document.fiche.REQ_SQL.value == "")) {
-      alert ("Le libellé de la statistique et la requête doivent être saisis. L'enregistrement n'a pas pu avoir lieu.");
-      return;
-   }
-   if ((document.fiche.Action.value != "Creation") && (document.fiche.Action.value != "Modification")) {
-      document.fiche.Action.value = "Modification";
-   }
-   document.fiche.submit();
-}
-
-// Suppression du client
-function Supprimer()
-{
-   if (confirm ("Cette suppression est définitive. Confirmez-vous cette action ?")) {
-      document.fiche.Action.value = "Suppression";
-      document.fiche.submit();
-   }
-}
 
 function RetourListe()
 {

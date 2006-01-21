@@ -15,7 +15,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Fiche Technique</title>
+<title><i18n:message key="ficTech.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -49,11 +49,11 @@ function Init() {
 </salon:valeur>
       <table width="100%"> 
 	<tr>
-	<td class="label"><span class="obligatoire">Client</span> : </td>
+	<td class="label"><span class="obligatoire"><i18n:message key="label.client" /></span> : </td>
 			<td> <span class="readonly"><a href="_FicheCli.jsp?Action=Modification&CD_CLI=<%= aCli.getCD_CLI() %>" target="ClientFrame"><%= aCli.toString() %></a></span> 
 			</td>
 	<% if (mySalon.getMySociete().isSalon()) { %>
-	<td class="label"><span class="facultatif">Type de cheveux</span> : </td>
+	<td class="label"><span class="facultatif"><i18n:message key="label.typeCheveux" /></span> : </td>
 	<td>
 	    <%
 	       DonneeRefBean typChev = DonneeRefBean.getDonneeRefBean(mySalon.getMyDBSession(), "TYP_CHEV", Integer.toString(aCli.getCD_TYP_CHEV()));
@@ -66,7 +66,7 @@ function Init() {
 	</td>
 	<% }
 	   if (mySalon.getMySociete().isInstitut()) { %>
-	<td class="label"><span class="facultatif">Type de peau</span> : </td>
+	<td class="label"><span class="facultatif"><i18n:message key="label.typePeau" /></span> : </td>
 	<td>
 	    <%
 	       DonneeRefBean typPeau = DonneeRefBean.getDonneeRefBean(mySalon.getMyDBSession(), "TYP_PEAU", Integer.toString(aCli.getCD_TYP_PEAU()));
@@ -78,7 +78,7 @@ function Init() {
 	    &nbsp;
 	</td>
 	<% } %>
-	<td class="label"><span class="facultatif">Date d'anniversaire</span> : </td>
+	<td class="label"><span class="facultatif"><i18n:message key="label.dtAnniversaire" /></span> : </td>
 	<td>
 		  <salon:valeur valeur="<%= aCli.getDT_ANNIV() %>" valeurNulle="null">
 			   <span class="readonly">%%</span>
@@ -86,7 +86,7 @@ function Init() {
         </td>
 	</tr>
 	<tr>
-	<td class="label"><span class="obligatoire">Catégories de prestation</span> : </td>
+	<td class="label"><span class="obligatoire"><i18n:message key="label.categoriePrest" /></span> : </td>
 	<td>
 		<salon:DBcheckbox nom = "CD_CATEG_PREST" tabValeur = "<%=(String[]) CD_CATEG_PREST_SELECT%>" 
 		                  action="document.fiche.submit()" longueurMax = "25" cocheTout = "<%= cocheTout %>"
@@ -94,7 +94,7 @@ function Init() {
 		     %%
 	    </salon:DBcheckbox>
 	</td>
-	<td class="label"><span class="obligatoire">Nombre d'historiques</span> : </td>
+	<td class="label"><span class="obligatoire"><i18n:message key="label.nbHistorique" /></span> : </td>
 	<td class="tabDonneesGauche">
 	    <salon:valeur valeurNulle="null" valeur="<%= NbComment %>" >
 	       <input type="text" name="NbComment" size="2" maxlength="2" value="%%" onChange="document.fiche.submit()">
@@ -117,7 +117,7 @@ function Init() {
 							       Long.toString(aPrest.getCD_PREST())); %>
                     <% if (CD_CATEG_PREST != thePrest.getCD_CATEG_PREST()) {
                         if ((CD_CATEG_PREST != 0) && (!firstComm)) { %>
-                                <td class="small"> idem depuis le
+                                <td class="small"> <i18n:message key="ficTech.idem" />
                                     <salon:valeur valeur="<%= lastPrest.getDT_PREST() %>" valeurNulle="null">
                                         %%
                                     </salon:valeur>
@@ -136,7 +136,7 @@ function Init() {
                     } %>
                     <% if ((lastCD_PREST != aPrest.getCD_PREST()) || (!lastComm.equals(aPrest.getCOMM()))) {
                         if ((CD_CATEG_PREST != 0) && (!firstComm)) { %>
-                                <td class="small"> idem depuis le
+                                <td class="small"> <i18n:message key="ficTech.idem" />
                                     <salon:valeur valeur="<%= lastPrest.getDT_PREST() %>" valeurNulle="null">
                                         %%
                                     </salon:valeur>
@@ -175,7 +175,7 @@ function Init() {
                     lastPrest = aPrest;
                 }
                 if ((CD_CATEG_PREST != 0) && (!firstComm)) { %>
-                        <td class="small"> idem depuis le
+                        <td class="small"> <i18n:message key="ficTech.idem" />
                             <salon:valeur valeur="<%= lastPrest.getDT_PREST() %>" valeurNulle="null">
                                 %%
                             </salon:valeur>

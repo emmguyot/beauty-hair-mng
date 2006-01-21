@@ -15,7 +15,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Fiche Technique</title>
+<title><i18n:message key="ficTech.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -30,21 +30,19 @@
 %>
 <table class="ficheImpr" style="{ width: <%= mySalon.getLargeurFiche() %> }" width="400">
 	<tr> 
-		<td width="44" valign="top"><span class="obligatoire">Client</span> 
+		<td width="44" valign="top"><span class="obligatoire"><i18n:message key="label.client" /></span> 
 			: </td>
 		<td valign="top" colspan="5"> <span class="readonly"><%= aCli.toString() %></span> 
 		</td>
 	</tr>
 	<tr> 
-		<td colspan="4" valign="top"><span class="facultatif">Date 
-			d'anniversaire</span> : </td>
+		<td colspan="4" valign="top"><span class="facultatif"><i18n:message key="label.dtAnniversaire" /></span> : </td>
 		<td valign="top" colspan="2"> <salon:valeur valeur="<%= aCli.getDT_ANNIV() %>" valeurNulle="null"> 
 			<span class="readonly">%%</span> </salon:valeur> </td>
 	</tr>
 	<% if (mySalon.getMySociete().isSalon()) { %>
 	<tr> 
-		<td colspan="3" valign="top"><span class="facultatif">Type 
-			de cheveux</span> : </td>
+		<td colspan="3" valign="top"><span class="facultatif"><i18n:message key="label.typeCheveux" /></span> : </td>
 		<td valign="top" colspan="3"> 
 			<%
 	       DonneeRefBean typChev = DonneeRefBean.getDonneeRefBean(mySalon.getMyDBSession(), "TYP_CHEV", Integer.toString(aCli.getCD_TYP_CHEV()));
@@ -57,8 +55,7 @@
 	<% }
 	   if (mySalon.getMySociete().isInstitut()) { %>
 	<tr> 
-		<td colspan="3" valign="top"><span class="facultatif">Type 
-			de peau</span> : </td>
+		<td colspan="3" valign="top"><span class="facultatif"><i18n:message key="label.typePeau" /></span> : </td>
 		<td valign="top" colspan="3"> 
 			<%
 	       DonneeRefBean typPeau = DonneeRefBean.getDonneeRefBean(mySalon.getMyDBSession(), "TYP_PEAU", Integer.toString(aCli.getCD_TYP_PEAU()));
@@ -90,7 +87,7 @@
 							       Long.toString(aPrest.getCD_PREST())); %>
                     <% if (CD_CATEG_PREST != thePrest.getCD_CATEG_PREST()) {
                         if ((CD_CATEG_PREST != 0) && (!firstComm)) { %>
-                                <td colspan="4" class="small"> idem depuis le
+                                <td colspan="4" class="small"> <i18n:message key="ficTech.idem" />
                                     <salon:valeur valeur="<%= lastPrest.getDT_PREST() %>" valeurNulle="null">
                                         %%
                                     </salon:valeur>
@@ -106,7 +103,7 @@
                     } %>
                     <% if ((lastCD_PREST != aPrest.getCD_PREST()) || (!lastComm.equals(aPrest.getCOMM()))) {
                         if ((CD_CATEG_PREST != 0) && (!firstComm)) { %>
-                                <td colspan="4" class="small"> idem depuis le
+                                <td colspan="4" class="small"> <i18n:message key="ficTech.idem" />
                                     <salon:valeur valeur="<%= lastPrest.getDT_PREST() %>" valeurNulle="null">
                                         %%
                                     </salon:valeur>
@@ -139,7 +136,7 @@
                     lastPrest = aPrest;
                 }  
                 if ((CD_CATEG_PREST != 0) && (!firstComm)) { %>
-                        <td colspan="4" class="small"> idem depuis le
+                        <td colspan="4" class="small"> <i18n:message key="ficTech.idem" />
                             <salon:valeur valeur="<%= lastPrest.getDT_PREST() %>" valeurNulle="null">
                                 %%
                             </salon:valeur>
