@@ -35,7 +35,7 @@
    String Action = (String) request.getAttribute("Action");
    TypMcaBean aTypMca = (TypMcaBean) request.getAttribute("TypMcaBean");
 %>
-<title>Fiche Types de mouvements de caisse</title>
+<title><i18n:message key="ficTypMca.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -47,7 +47,7 @@
 
 function Init() {
    <%
-   // Positionne les liens d'actions
+   // Positionne les liens dactions
    if (! Action.equals("Creation")) {
       %>
       MM_showHideLayers('SUPPRIMER?bottomFrame','','show');
@@ -66,7 +66,7 @@ function Init() {
 }
 //-->
 </script>
-<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/ficParam.gif"><br><span class="ssTitre">Types de mouvements de caisse</span></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/ficParam.gif"><br><span class="ssTitre"><i18n:message key="label.typeMouvementCaisse" /></span></h1>
 <salon:message salonSession="<%= mySalon %>" />
 <form method="post" action="ficTypMca.srv" name="fiche">
 	<p> 
@@ -74,12 +74,13 @@ function Init() {
 		  <input type="hidden" name="CD_TYP_MCA" value="%%" >
 	        </salon:valeur>
 		<input type="hidden" name="Action" value="<%=Action%>">
-		<span class="obligatoire">Libellé :</span> 
+		<span class="obligatoire"><i18n:message key="label.libelle" /> :</span> 
 		<salon:valeur valeurNulle="null" valeur="<%= aTypMca.getLIB_TYP_MCA() %>" >
 		  <input type="text" name="LIB_TYP_MCA" value="%%" size=40>
 	        </salon:valeur>
-		<span class="obligatoire">Sens du mouvement :</span> 
-		<salon:selection valeur="<%= aTypMca.getSENS_MCA() %>" valeurs='<%= "E|S|I" %>' libelle="Entr&eacute;e|Sortie|Inventaire">
+		<span class="obligatoire"><i18n:message key="label.sensMouvement" /> :</span> 
+                <i18n:message key="valeur.sensMouvement" id="valeurSens" />
+		<salon:selection valeur="<%= aTypMca.getSENS_MCA() %>" valeurs='<%= "E|S|I" %>' libelle="<%= valeurSens %>">
 		  <select name="SENS_MCA">
 		     %%
 		  </select>
@@ -94,7 +95,7 @@ function Enregistrer()
 {
    // Verification des données obligatoires
    if (document.fiche.LIB_TYP_MCA.value == "") {
-      alert ("Le libellé doit être saisi. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="ficTypMca.libelleManquant" />");
       return;
    }
    document.fiche.submit();
@@ -104,7 +105,7 @@ function Enregistrer()
 function Supprimer()
 {
     if ((document.fiche.CD_TYP_MCA.value != "0") && (document.fiche.CD_TYP_MCA.value != "")) {
-        if (confirm ("Cette suppression est définitive et non conseillée. Confirmez-vous cette action ?")) {
+        if (confirm ("<i18n:message key="message.suppressionDefinitiveConfirm" />")) {
             document.fiche.Action.value = "Suppression";
             document.fiche.submit();
         }
@@ -115,7 +116,7 @@ function Supprimer()
 function Dupliquer()
 {
    if (document.fiche.LIB_TYP_MCA.value == "") {
-      alert ("Le libellé doit être saisi. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="ficTypMca.libelleManquant" />");
       return;
    }
    document.fiche.Action.value = "Duplication";

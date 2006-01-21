@@ -35,7 +35,7 @@
    String Action = (String) request.getAttribute("Action");
    TypVentBean aTypVent = (TypVentBean) request.getAttribute("TypVentBean");
 %>
-<title>Fiche type de prestations</title>
+<title><i18n:message key="ficTypVent.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -47,7 +47,7 @@
 
 function Init() {
    <%
-   // Positionne les liens d'actions
+   // Positionne les liens dactions
    if (! Action.equals("Creation")) {
       %>
       MM_showHideLayers('SUPPRIMER?bottomFrame','','show');
@@ -65,7 +65,7 @@ function Init() {
 }
 //-->
 </script>
-<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/ficParam.gif"><br><span class="ssTitre">Type de prestations</span></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/ficParam.gif"><br><span class="ssTitre"><i18n:message key="label.typePrest" /></span></h1>
 <salon:message salonSession="<%= mySalon %>" />
 <form method="post" action="ficTypVent.srv" name="fiche">
 	<p> 
@@ -73,28 +73,29 @@ function Init() {
 		  <input type="hidden" name="CD_TYP_VENT" value="%%" >
         </salon:valeur>
 		<input type="hidden" name="Action" value="<%=Action%>">
-		<span class="obligatoire">Libellé :</span> 
+		<span class="obligatoire"><i18n:message key="label.libelle" /> :</span> 
 		<salon:valeur valeurNulle="null" valeur="<%= aTypVent.getLIB_TYP_VENT() %>" >
             <input type="text" name="LIB_TYP_VENT" value="%%" size=30>
         </salon:valeur>
         </p>
 	<p>
-		<span class="obligatoire">Article associé :</span> 
-        <salon:selection valeur='<%= aTypVent.getMARQUE() %>' valeurs='<%= "N|O" %>' libelle="Non|Oui">
+		<span class="obligatoire"><i18n:message key="label.articleAssocie" /> :</span> 
+                <i18n:message key="valeur.nonOui" id="valeurMarque" />
+        <salon:selection valeur='<%= aTypVent.getMARQUE() %>' valeurs='<%= "N|O" %>' libelle="<%= valeurMarque %>">
             <select name="MARQUE">
                 %%
             </select>
         </salon:selection>
         </p>
 	<p>
-		<span class="obligatoire">Civilités associées :</span> 
-        <salon:checkbox valeurs="Mle|Mme|M. " libelle="Mle|Mme|M. "
-                        nom="CIVILITE" tabValeur='<%= aTypVent.getCIVILITE() %>'>
-            %%
-        </salon:checkbox>
+            <span class="obligatoire"><i18n:message key="label.civiliteAssocie" /> :</span> 
+            <i18n:message key="valeur.civiliteObligatoire" id="valeurCivilite" />
+            <salon:checkbox valeurs="Mle|Mme|M. " libelle="<%= valeurCivilite %>" nom="CIVILITE" tabValeur='<%= aTypVent.getCIVILITE() %>'>
+                %%
+            </salon:checkbox>
 	</p>
 	<p>
-		<span class="obligatoire">TVA applicable :</span> 
+		<span class="obligatoire"><i18n:message key="label.TVAapplicable" /> :</span> 
 		<salon:DBselection valeur="<%= aTypVent.getCD_TVA() %>" sql="select CD_TVA, LIB_TVA from TVA order by LIB_TVA">
 		  <select name="CD_TVA">
 		     %%
@@ -110,7 +111,7 @@ function Enregistrer()
 {
    // Verification des données obligatoires
    if (document.fiche.LIB_TYP_VENT.value == "") {
-      alert ("Le libellé doit être saisi. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="ficTypVent.libelleManquant" />");
       return;
    }
    document.fiche.submit();
@@ -120,7 +121,7 @@ function Enregistrer()
 function Dupliquer()
 {
    if (document.fiche.LIB_TYP_VENT.value == "") {
-      alert ("Le libellé doit être saisi. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="ficTypVent.libelleManquant" />");
       return;
    }
    document.fiche.Action.value = "Duplication";
@@ -131,7 +132,7 @@ function Dupliquer()
 function Supprimer()
 {
     if ((document.fiche.CD_TYP_VENT.value != "0") && (document.fiche.CD_TYP_VENT.value != "")) {
-        if (confirm ("Cette suppression est définitive. Confirmez-vous cette action ?")) {
+        if (confirm ("<i18n:message key="message.suppressionDefinitiveConfirm" />)) {
             document.fiche.Action.value = "Suppression";
             document.fiche.submit();
         }
