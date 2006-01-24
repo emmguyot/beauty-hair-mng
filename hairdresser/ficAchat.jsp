@@ -71,7 +71,7 @@ function Init() {
 <salon:message salonSession="<%= mySalon %>" />
 <form method="post" action="ficAchat.srv" name="fiche">
 <p>
-<i18n:message key="ficAchat.commande" /> : 
+<i18n:message key="label.commande" /> : 
 <salon:valeur valeur="<%= CD_CMD_FOURN %>" valeurNulle="null">
     <input name="CD_CMD_FOURN" type="text" maxlength="10" size="10" value="%%">
 </salon:valeur>

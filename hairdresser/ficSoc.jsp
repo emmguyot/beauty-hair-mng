@@ -66,7 +66,7 @@ function Init() {
 		<font size="+1"><i18n:message key="label.gerant" /> :</font><br>
 		<span class="facultatif"><i18n:message key="label.civilite" /> :</span> 
                 <i18n:message key="valeur.civilite" id="valeurCivilite" />
-		<salon:selection valeur="<%= aSoc.getCIVILITE_GER() %>" valeurs='<%= valeurCiviltie %>'>
+		<salon:selection valeur="<%= aSoc.getCIVILITE_GER() %>" valeurs='<%= valeurCivilite %>'>
 		  <select name="CIVILITE_GER">
 		     %%
 		  </select>
