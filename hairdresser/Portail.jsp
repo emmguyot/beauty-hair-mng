@@ -90,7 +90,7 @@ function checkAndSubmit()
                                             </p>
                                         </form>
                                         <div align="center"><font size="-1"><a href="histo.html"><%@ include file="include/version.inc" %></a> &copy; 
-                                                2002-2005 Valérie, Alexandre et Emmanuel Guyot<br>Ce logiciel n'offre ABSOLUMENT AUCUNE GARANTIE;<br/> Ce logiciel est gratuit et nous vous encourageons à le redistribuer selon les termes de la <a href="contact.html" target="_new">licence GPL.</a></font></div>
+                                                2002-2006 Valérie, Alexandre et Emmanuel Guyot<br>Ce logiciel n'offre ABSOLUMENT AUCUNE GARANTIE;<br/> Ce logiciel est gratuit et nous vous encourageons à le redistribuer selon les termes de la <a href="contact.html" target="_new">licence GPL.</a></font></div>
                                     </td>
                                 </tr>
                             </table>
