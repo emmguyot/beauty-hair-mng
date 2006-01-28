@@ -183,7 +183,7 @@ public abstract class SalonSession extends BasicSession {
 
             // Chargement de la liste des factures en attente de paiement
             String reqSQL =
-                "select * from FACT where (CD_PAIEMENT=0 or CD_PAIEMENT is null) and FACT_HISTO='N' order by DT_PREST";
+                "select * from FACT where (CD_PAIEMENT=0 or CD_PAIEMENT is null) and FACT_HISTO='N' order by CD_FACT";
 
             ResultSet aRS = myDBSession.doRequest(reqSQL);
 
