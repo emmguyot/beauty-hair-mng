@@ -133,6 +133,7 @@ public class PerformanceTest extends TestCase {
      */
     public void testPerformance() {
         
+        System.out.println("Ne pas lancer en debug, à lancer 2 fois ? ");
         Calendar fin = Calendar.getInstance();
         long elapsed = fin.getTime().getTime() - debut.getTime().getTime();
         System.out.println("Etape intermédiaire 1 (s) : " + elapsed / RATION_MS_S);
