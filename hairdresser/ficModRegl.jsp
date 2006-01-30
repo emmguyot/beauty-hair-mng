@@ -78,7 +78,7 @@ function Init() {
 		<salon:valeur valeurNulle="null" valeur="<%= aModRegl.getLIB_MOD_REGL() %>" >
 		  <input type="text" name="LIB_MOD_REGL" value="%%" size=40>
 	        </salon:valeur>
-		<span class="obligatoire"><i18n:message key="" /><i18n:message key="label.modReglActuel" /> :</span> 
+		<span class="obligatoire"><i18n:message key="label.modReglActuel" /> :</span> 
                 <i18n:message key="valeur.ouiNon" id="paramActuel" />
 		<salon:selection valeur="<%= aModRegl.getUTILISABLE() %>" valeurs='<%= "O|N" %>' libelle="<%= paramActuel %>">
 		  <select name="UTILISABLE">
