@@ -32,7 +32,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Brouillard</title>
+<title><i18n:message key="label.brouillard" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -42,7 +42,7 @@
 <!--
 function Init() {
    <%
-   // Positionne les liens d'actions
+   // Positionne les liens d actions
    %>
    MM_showHideLayers('NOUVEAU?bottomFrame','','hide');
 }
@@ -57,10 +57,11 @@ function Init() {
 <h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstBrouillard.gif"></h1>
 <form name="fiche" action="rechBrouillard.srv" method="post">
 <p>
-Entre le :
-    <salon:date type="text" name="DT_DEBUT" valeurDate="<%= DT_DEBUT %>" valeurNulle="null" format="dd/MM/yyyy" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
-   et le : 
-    <salon:date type="text" name="DT_FIN" valeurDate="<%= DT_FIN %>" valeurNulle="null" format="dd/MM/yyyy" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
+<i18n:message key="label.entreLe" /> :
+    <i18n:message key="format.dateSimpleDefaut" id="formatDate" />
+    <salon:date type="text" name="DT_DEBUT" valeurDate="<%= DT_DEBUT %>" valeurNulle="null" format="<%= formatDate %>" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
+<i18n:message key="label.etLe" /> : 
+    <salon:date type="text" name="DT_FIN" valeurDate="<%= DT_FIN %>" valeurNulle="null" format="<%= formatDate %>" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
 </p>
 </form>
 <hr>
@@ -77,10 +78,10 @@ TreeMap lstLignes = (TreeMap) request.getAttribute("Liste");
 <colgroup span="<%= lstTypesRem.size() %>">
 <colgroup span="<%= lstTypeMca.size() %>">
 	<tr>
-		<th rowspan=2>Date</th>
-	        <th colspan="<%= lstTypes.size() %>">Factures</th>
-		<th colspan="<%= lstTypesRem.size() %>">Remise</th>
-		<th colspan="<%= lstTypeMca.size() %>">Encaissements</th>
+		<th rowspan=2><i18n:message key="label.date" /></th>
+	        <th colspan="<%= lstTypes.size() %>"><i18n:message key="label.factures" /></th>
+		<th colspan="<%= lstTypesRem.size() %>"><i18n:message key="label.remise" /></th>
+		<th colspan="<%= lstTypeMca.size() %>"><i18n:message key="label.encaissement" /></th>
 	</tr>
 	<% if (lstLignes.size() > 0) { %>
 	<tr>

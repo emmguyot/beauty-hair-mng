@@ -37,7 +37,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Liste des abonnements du clients</title>
+<title><i18n:message key="lstAbonnement.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -47,7 +47,7 @@
 <!--
 function Init() {
    <%
-   // Positionne les liens d'actions
+   // Positionne les liens d actions
    %>
    MM_showHideLayers('NOUVEAU?bottomFrame','','hide');
 }
@@ -63,14 +63,14 @@ function Init() {
 <h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstAbonnement.gif"></h1>
 
 <p>
-	<span class="obligatoire">Client</span> :
+	<span class="obligatoire"><i18n:message key="label.client" /></span> :
 	<span class="readonly"><a href="_FicheCli.jsp?Action=Modification&CD_CLI=<%= aCli.getCD_CLI() %>" target="ClientFrame"><%= aCli.toString() %></a></span> 
 </p>
 
 <table border="1">
 	<tr>
-		<th>Prestation</th>
-		<th>Nombre restant</th>
+		<th><i18n:message key="label.prestation" /></th>
+		<th><i18n:message key="label.nbRestant" /></th>
 	</tr>
 	<%
 	Set prestSet = lstLignes.keySet();
@@ -100,18 +100,20 @@ function Init() {
 <table border="0" cellspacing="0" width="100%">
     <tr>
         <td>
-            <%=NbPrest%> derni&egrave;res prestations liées à un abonnement :
-                    &nbsp;&nbsp;<a href="javascript:toutesPrest()">Toutes les prestations abonnements</a> 
+            <i18n:message key="lstAbonnement.dernieresPrestations">
+                <i18n:messageArg value="<%= NbPrest %>" />
+            </i18n:message> :
+            &nbsp;&nbsp;<a href="javascript:toutesPrest()"><i18n:message key="lstAbonnement.toutesPrestations" /></a> 
         </td>
     </tr>
 </table>
 
 <table border="0" width="100%">
     <tr>
-        <th>Date</th>
-        <th>Prestation</th>
-        <th>Collaborateur</th>
-        <th>Commentaire</th>
+        <th><i18n:message key="label.date" /></th>
+        <th><i18n:message key="label.prestation" /></th>
+        <th><i18n:message key="label.collaborateur" /></th>
+        <th><i18n:message key="label.commentaire" /></th>
     </tr>
 <%
         // Recupère la liste
@@ -147,7 +149,7 @@ function Init() {
         </td>
         <td>
             <salon:valeur expand="true" valeurNulle="null" valeur="<%= aPrest.getCOMM() %>" >
-				%%
+                %%
 <%
             if (((Integer) request.getAttribute("Longueur")).intValue() == 0) { %>
                 &nbsp;
