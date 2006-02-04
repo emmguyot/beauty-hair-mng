@@ -87,14 +87,24 @@
 	 <%
 	 	CollabBean collab = CollabBean.getCollabBean(mySalon.getMyDBSession(), Integer.toString(aFact.getCD_COLLAB()));
 	 	if (collab.getCIVILITE().equals("M. ")) {
-	 %>
+                    if (mySalon.getMySociete().isInstitut()) { %>
+	 		<i18n:message key="label.estheticien" />
+            <%
+                    }
+                    else {
+            %>
 	 		<i18n:message key="label.coiffeur" />
-	 <%
+	 <%         }
 	 	}
 	 	else {
-	 %>
+                    if (mySalon.getMySociete().isInstitut()) { %>
+	 		<i18n:message key="label.estheticienne" />
+            <%
+                    }
+                    else {
+            %>
 	 		<i18n:message key="label.coiffeuse" />
-	 <%
+	 <%         }
 	 	}
 	 %> : <%= collab.toString() %>
 	 </td>
