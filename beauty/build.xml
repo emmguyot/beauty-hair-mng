@@ -323,6 +323,7 @@
 				<include name="ficDevise.jsp"/>
 				<include name="ficDonneeRef.jsp"/>
 				<include name="ficFact.jsp"/>
+				<include name="ficFactImpr.jsp"/>
 				<include name="ficFactMEG.jsp"/>
 				<include name="ficFactRedirect.jsp"/>
 				<include name="ficFete.jsp"/>
@@ -406,29 +407,8 @@
 
 				<!-- Par langue -->
 				<include name="afaire.html"/>
-				<include name="aideFiche.html"/>
-				<include name="aideFicheAchat.html"/>
-				<include name="aideFicheArt.html"/>
-				<include name="fr/aideFicheCli.html"/>
-				<include name="aideFicheCriterePub.html"/>
-				<include name="aideFicheFact.html"/>
-				<include name="aideFicheInventaire.html"/>
-				<include name="aideFichePaiement.html"/>
-				<include name="aideFicheParam.html"/>
-				<include name="aideFichePurge.html"/>
-				<include name="aideFicheRest.html"/>
-				<include name="aideFicheStat.html"/>
-				<include name="aideFicheTech.html"/>
-				<include name="aideFicheTypVent.html"/>
-				<include name="aideListe.html"/>
-				<include name="aideListeArt.html"/>
-				<include name="aideListeBrouillard.html"/>
-				<include name="aideListeCli.html"/>
-				<include name="aideListeFinJournee.html"/>
-				<include name="aideListeParam.html"/>
-				<include name="aideListeTVA.html"/>
-				<include name="aideTrucEtAstuce.html"/>
-				<include name="contact.html"/>
+				<include name="fr/*"/>
+				<include name="en/*"/>
 			</fileset>
 		</copy>
 		<chmod perm="-w"><fileset refid="Common Files" /></chmod>
