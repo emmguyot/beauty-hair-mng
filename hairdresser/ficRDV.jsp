@@ -123,7 +123,6 @@ function Init() {
     <td valign="top" style="padding-left: 30px">
         <p><i18n:message key="label.disponibilite" /> :</p>
         <table>
-        <i18n:message key="format.heureSimpleDefaut" id="paramHeure" />
         <%
             for (int i = 0; i < dispo.size(); i++) {
                 RDVBean dispoRDV = (RDVBean) dispo.get(i);

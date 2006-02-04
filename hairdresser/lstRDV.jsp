@@ -60,7 +60,7 @@
 </p>
 <p>
 <i18n:message key="label.entreLe" /> :
-<i18n:message key="format.dateSimpleDefaut" id="formatDate" />
+<i18n:message key="format.dateHeureSansSeconde" id="formatDate" />
     <salon:date type="text" name="DT_DEBUT" valeurDate="<%= DT_DEBUT %>" valeurNulle="null" format="<%= formatDate %>" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
 <i18n:message key="label.etLe" /> : 
     <salon:date type="text" name="DT_FIN" valeurDate="<%= DT_FIN %>" valeurNulle="null" format="<%= formatDate %>" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
@@ -126,11 +126,9 @@
                     <%
                     if (aRDV != null) {
                     %>
-                        <salon:valeur valeur="<%= aRDV.getDUREE() %>" valeurNulle="null">
-                            <i18n:message key="label.valeurDuree"> 
-                                <i18n:messageArg value="%%" />
-                            </i18n:message>
-                        </salon:valeur>
+                        <i18n:message key="label.valeurDuree"> 
+                            <i18n:messageArg value="<%= Integer.toString(aRDV.getDUREE()) %>" />
+                        </i18n:message>
                     <%
                     }
                     %>
