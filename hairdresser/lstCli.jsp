@@ -31,7 +31,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Liste des clients</title>
+<title><i18n:message key="title.lstCli" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -45,7 +45,7 @@
 %>
 <h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstCli.gif"></h1>
 <form name="fiche" action="rechCli.srv" method="post">
-	<p>Premi&egrave;re lettre du nom : 
+	<p><i18n:message key="label.premiereLettreNom" /> : 
 	<input type="hidden" name="premLettre" value="<%= premLettre %>">
 	<%
 	    String lien = "";
@@ -61,18 +61,18 @@
 	    <% }
 	    }
 	%>
-	&nbsp;&nbsp; Affiche anciens clients : 
+	&nbsp;&nbsp; <i18n:message key="label.affAncienClient" /> : 
     <input type="checkbox" name="INDIC_VALID"
 	    <% if ((INDIC_VALID != null) && (INDIC_VALID.equals("on"))) { %> checked <% } %>
     	onClick="document.fiche.submit()" >
     <%
     if (listeLignes.size() > 20) { 
     %>
-        <br/>Seconde lettre :
+        <br/><i18n:message key="label.secondeLettre" /> :
         <%
         String lastKey = "";
-		for (int i = 0; i < listeLignes.size(); i++) {
-	    	ClientBean aCli = (ClientBean) listeLignes.get(i);
+        for (int i = 0; i < listeLignes.size(); i++) {
+        ClientBean aCli = (ClientBean) listeLignes.get(i);
 
             String nextKey = aCli.getNOM().substring(0,Math.min(aCli.getNOM().length(), longueurCle)); 
             if (!nextKey.equals(lastKey))  {
@@ -84,7 +84,8 @@
         }
     }
     %>
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<salon:bouton url="rechCli.srv?type=advanced" img="images/rechAvancee.gif" alt="Recherche avancée..."/>
+        <i18n:message key="label.rechercheAvancee" id="rechAvancee" />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<salon:bouton url="rechCli.srv?type=advanced" img="images/rechAvancee.gif" alt="<%= rechAvancee %>"/>
 	<input type="hidden" name="type" value="simple">
 	</p>
 </form>

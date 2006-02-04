@@ -29,16 +29,16 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Liste de types de mouvements de caisse</title>
+<title><i18n:message key="title.lstTypMca" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
 <body class="donnees">
-<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstParam.gif"><br><span class="ssTitre">Types de mouvements de caisse</span></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstParam.gif"><br><span class="ssTitre"><i18n:message key="label.typeMouvementCaisse" /></span></h1>
 <table width="100%" border="1" >
 	<tr>
-		<th>Libellé</th>
-		<th>Sens</th>
+		<th><i18n:message key="label.libelle" /></th>
+		<th><i18n:message key="label.sensMouvement" /></th>
 	</tr>
 	<%
 	// Recupère la liste

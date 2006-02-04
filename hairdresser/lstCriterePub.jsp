@@ -30,7 +30,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Liste des Critères de publipostage</title>
+<title><i18n:message key="title.lstCriterePub" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -41,7 +41,7 @@
         <salon:autorisation entite="Publipostage" action="Modification">
 		<th></th>
         </salon:autorisation>
-		<th>Libellé</th>
+		<th><i18n:message key="label.libelle" /></th>
 	</tr>
 	<%
 	// Recupère la liste

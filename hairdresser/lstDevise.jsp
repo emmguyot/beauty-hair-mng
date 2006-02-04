@@ -29,17 +29,17 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Liste des devises</title>
+<title><i18n:message key="title.lstDevise" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
 <body class="donnees">
-<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstParam.gif"><br><span class="ssTitre">Devises</span></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstParam.gif"><br><span class="ssTitre"><i18n:message key="label.devises" /></span></h1>
 <table width="100%" border="1" >
 	<tr>
-		<th>Libellé court</th>
-		<th>Libellé</th>
-		<th>Rapport à la<br>devise principale</th>
+		<th><i18n:message key="label.libelleCourt" /></th>
+		<th><i18n:message key="label.libelle" /></th>
+		<th><i18n:message key="label.rapportDeviseTableau" /></th>
 	</tr>
 	<%
 	// Recupère la liste

@@ -30,6 +30,11 @@
 		<th>Adresse</th>
 		<th>Ville</th>
 	</tr>
+        <i18n:message key="label.dupliquerFacture" id="dupliquerFacture" />
+        <i18n:message key="label.accueilClient" id="accueilClient" />
+        <i18n:message key="erreur.pasCollaborateurPresent" id="pasCollab" />
+        <i18n:message key="label.imprimerFicheTech" id="impFichTech" />
+        <i18n:message key="label.ajouterRDV" id="ajoutRDV" />
 	<%
         String lastKey = "";
 	    
@@ -50,17 +55,17 @@
 	<tr><td width="75">
     <%
         if (peutCreerFacture) { %>
-	      <a href="addCli.srv?CD_CLI=<%= aCli.getCD_CLI() %>" title="Dupliquer sa facture" target=MenuFrame><img src=images/plus.gif border="0" width="15" height="15"></a>
-	      <a href="addCli.srv?Vide=1&CD_CLI=<%= aCli.getCD_CLI() %>" title="Accueillir ce client" target=MenuFrame><img src=images/plus2.gif border="0" width="15" height="15"></a>
+	      <a href="addCli.srv?CD_CLI=<%= aCli.getCD_CLI() %>" title="<%= dupliquerFacture %>" target=MenuFrame><img src=images/plus.gif border="0" width="15" height="15"></a>
+	      <a href="addCli.srv?Vide=1&CD_CLI=<%= aCli.getCD_CLI() %>" title="<%= accueilClient %>" target=MenuFrame><img src=images/plus2.gif border="0" width="15" height="15"></a>
     <%
         } 
         else { %>
-	      <img src=images/plusNon.gif border="0" width="15" height="15" alt="Action impossible : Pas de collaborateur présent"/>
-	      <img src=images/plus2Non.gif border="0" width="15" height="15" alt="Action impossible : Pas de collaborateur présent"/>
+	      <img src=images/plusNon.gif border="0" width="15" height="15" alt="<%= pasCollab %>"/>
+	      <img src=images/plus2Non.gif border="0" width="15" height="15" alt="<%= pasCollab %>"/>
     <%
         } %>
-	    <a href="ficTech.srv?Action=Impression&CD_CLI=<%= aCli.getCD_CLI() %>" title="Imprimer la fiche technique" target="_blank"><img src=images/Tech.gif border="0" width="15" height="15"></a>
-	    <a href="_FicheRDV.jsp?Action=Creation&CD_CLI=<%= aCli.getCD_CLI() %>" title="Ajouter un rendez-vous" target="ClientFrame"><img src=images/boutonRDV.gif border="0" width="15" height="15"></a></td>
+	    <a href="ficTech.srv?Action=Impression&CD_CLI=<%= aCli.getCD_CLI() %>" title="<%= impFichTech %>" target="_blank"><img src=images/Tech.gif border="0" width="15" height="15"></a>
+	    <a href="_FicheRDV.jsp?Action=Creation&CD_CLI=<%= aCli.getCD_CLI() %>" title="<%= ajoutRDV %>" target="ClientFrame"><img src=images/boutonRDV.gif border="0" width="15" height="15"></a></td>
 
 	    <td><a href="_FicheCli.jsp?Action=Modification&CD_CLI=<%= aCli.getCD_CLI() %>" target="ClientFrame"><%= aCli.toStringListe() %></a></td>
 	    <td>

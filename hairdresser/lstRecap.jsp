@@ -32,7 +32,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Récap des stocks</title>
+<title><i18n:message key="label.recapStock" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -42,7 +42,7 @@
 <!--
 function Init() {
    <%
-   // Positionne les liens d'actions
+   // Positionne les liens d actions
    %>
    MM_showHideLayers('NOUVEAU?bottomFrame','','hide');
 }
@@ -59,12 +59,13 @@ function Init() {
 <h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstRecap.gif"></h1>
 <form name="fiche" action="rechRecap.srv" method="post">
 <p>
-Entre le :
-    <salon:date type="text" name="DT_DEBUT" valeurDate="<%= DT_DEBUT %>" valeurNulle="null" format="dd/MM/yyyy" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
-   et le : 
-    <salon:date type="text" name="DT_FIN" valeurDate="<%= DT_FIN %>" valeurNulle="null" format="dd/MM/yyyy" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
+<i18n:message key="label.entreLe" /> :
+<i18n:message key="format.dateSimpleDefaut" id="formatDate" />
+    <salon:date type="text" name="DT_DEBUT" valeurDate="<%= DT_DEBUT %>" valeurNulle="null" format="<%= formatDate %>" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
+<i18n:message key="label.etLe" /> : 
+    <salon:date type="text" name="DT_FIN" valeurDate="<%= DT_FIN %>" valeurNulle="null" format="<%= formatDate %>" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
 </p>
-<table><tr><td>Type&nbsp;de&nbsp;mouvement&nbsp;:</td><td>
+<table><tr><td><i18n:message key="label.typeMouvement" />:</td><td>
 	<salon:DBcheckbox nom = "CD_TYP_MVT" tabValeur = "<%=(String[]) CD_TYP_MVT_SELECT%>" 
 	                  action="document.fiche.submit()" cocheTout = "<%= cocheTout %>"
 	                  sql="select CD_TYP_MVT, LIB_TYP_MVT from TYP_MVT order by CD_TYP_MVT">
@@ -82,7 +83,7 @@ TreeMap lstLignes = (TreeMap) request.getAttribute("Liste");
 <colgroup>
 <colgroup span="<%= lstTypes.size() %>">
     <tr>
-        <th rowspan=2>Article</th>
+        <th rowspan=2><i18n:message key="label.article" /></th>
         <% 
         {
             Set keys = lstTypes.keySet();

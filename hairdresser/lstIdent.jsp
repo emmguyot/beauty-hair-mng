@@ -26,9 +26,11 @@
         getServletConfig().getServletContext().getRequestDispatcher("/reconnect.html").forward(request, response);
     }
 %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Liste des Identifications</title>
+<title><i18n:message key="title.lstIdent" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -36,9 +38,9 @@
 <h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstIdent.gif"></h1>
 <table width="100%" border="1" >
 	<tr>
-		<th>Libellé</th>
-		<th>Profil</th>
-		<th>Etat</th>
+		<th><i18n:message key="label.libelle" /></th>
+		<th><i18n:message key="label.profil" /></th>
+		<th><i18n:message key="label.etatCompte" /></th>
 	</tr>
 	<%
 	// Recupère la liste

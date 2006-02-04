@@ -32,7 +32,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Liste des types de prestations</title>
+<title><i18n:message key="title.lstTypVent" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 <%@ include file="include/commun.js" %>
@@ -40,7 +40,7 @@
 <!--
 function Init() {
    <%
-   // Positionne les liens d'actions
+   // Positionne les liens d actions
    %>
    MM_showHideLayers('NOUVEAU?bottomFrame','','show');
 }
@@ -48,13 +48,13 @@ function Init() {
 </script>
 </head>
 <body class="donnees">
-<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstParam.gif"><br><span class="ssTitre">Types de prestations</span></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstParam.gif"><br><span class="ssTitre"><i18n:message key="label.typesPrest" /></span></h1>
 <table width="100%" border="1" >
 	<tr>
-		<th>Libellé</th>
-		<th>Article associé</th>
-		<th>Civilités associées</th>
-		<th>TVA applicable</th>
+		<th><i18n:message key="label.libelle" /></th>
+		<th><i18n:message key="label.articleAssocie" /></th>
+		<th><i18n:message key="label.civiliteAssocie" /></th>
+		<th><i18n:message key="label.TVAapplicable" /></th>
 	</tr>
 	<%
 	// Recupère la liste

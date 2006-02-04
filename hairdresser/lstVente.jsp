@@ -33,7 +33,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Récap des ventes</title>
+<title><i18n:message key="label.recapVentes" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -43,7 +43,7 @@
 <!--
 function Init() {
    <%
-   // Positionne les liens d'actions
+   // Positionne les liens d actions
    %>
    MM_showHideLayers('NOUVEAU?bottomFrame','','hide');
 }
@@ -57,20 +57,21 @@ function Init() {
 <h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstRecapVentes.gif"></h1>
 <form name="fiche" action="rechVente.srv" method="post">
 <p>
-Entre le :
-    <salon:date type="text" name="DT_DEBUT" valeurDate="<%= DT_DEBUT %>" valeurNulle="null" format="dd/MM/yyyy" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
-   et le : 
-    <salon:date type="text" name="DT_FIN" valeurDate="<%= DT_FIN %>" valeurNulle="null" format="dd/MM/yyyy" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
+<i18n:message key="label.entreLe" /> :
+<i18n:message key="format.dateSimpleDefaut" id="formatDate" />
+    <salon:date type="text" name="DT_DEBUT" valeurDate="<%= DT_DEBUT %>" valeurNulle="null" format="<%= formatDate %>" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
+<i18n:message key="label.etLe" /> : 
+    <salon:date type="text" name="DT_FIN" valeurDate="<%= DT_FIN %>" valeurNulle="null" format="<%= formatDate %>" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
 </p>
 </form>
 <hr>
 <table width="100%" border="1" >
 	<tr>
-		<th>Prestation</th>
-		<th>Quantité</th>
-		<th>HT</th>
-		<th>TVA</th>
-		<th>TTC</th>
+		<th><i18n:message key="label.prestation" /></th>
+		<th><i18n:message key="label.qte" /></th>
+		<th><i18n:message key="label.HT" /></th>
+		<th><i18n:message key="label.TVA" /></th>
+		<th><i18n:message key="label.TTC" /></th>
 	</tr>
 	<%
 	// Recupère la liste
@@ -105,7 +106,7 @@ Entre le :
 	%>
         <tfoot>
         <tr>
-            <td class="Total">Total</td>
+            <td class="Total"><i18n:message key="label.total" /></td>
             <td class="Nombre">&nbsp;</td>
             <td class="Nombre">
                 <salon:valeur valeur="<%= fullTotalHT %>" valeurNulle="null"> %% </salon:valeur>
@@ -119,7 +120,7 @@ Entre le :
         </tr>
         </tfoot>
 </table>
-Le calcul de ces chiffres comprend des arrondis : Les centimes sont donc donnés uniquement à titre indicatif.
+<i18n:message key="message.chiffresArrondis" />
 <salon:madeBy />
 <script language="JavaScript">
 <!--

@@ -34,7 +34,11 @@
    String nomTable = request.getParameter("nomTable");
    String chaineTable = request.getParameter("chaineTable");
 %>
-<title>Liste de <%= chaineTable %></title>
+<title>
+<i18n:message key="title.lstDonneeRef">
+    <i18n:messageArg value="<%= chaineTable %>" />
+</i18n:message>
+</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -42,7 +46,7 @@
 <h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstParam.gif"><br><span class="ssTitre"><%= chaineTable %></span></h1>
 <table width="100%" border="1" >
 	<tr>
-		<th>Libellé</th>
+		<th><i18n:message key="label.libelle" /></th>
 	</tr>
 	<%
 	// Recupère la liste

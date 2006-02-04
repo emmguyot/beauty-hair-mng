@@ -33,7 +33,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Journal</title>
+<title><i18n:message key="label.journal" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -43,7 +43,7 @@
 <!--
 function Init() {
    <%
-   // Positionne les liens d'actions
+   // Positionne les liens d actions
    %>
    MM_showHideLayers('NOUVEAU?bottomFrame','','hide');
 }
@@ -58,7 +58,7 @@ function Init() {
 <h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstJournal.gif"></h1>
 <form name="fiche" action="rechJournal.srv" method="post">
 <p>
-Mode de paiement :
+<i18n:message key="label.modePaiement" /> :
 <salon:DBselection valeur="<%= CD_MOD_REGL %>" sql='<%= "select CD_MOD_REGL, LIB_MOD_REGL from MOD_REGL where CD_MOD_REGL not in (" + Integer.toString(ModReglBean.MOD_REGL_ESP_FRF) + "," + Integer.toString(ModReglBean.MOD_REGL_CHQ_FRF) + ") order by LIB_MOD_REGL" %>'>
    <select name="CD_MOD_REGL" onChange="document.fiche.submit()">
       %%
@@ -66,10 +66,11 @@ Mode de paiement :
 </salon:DBselection>
 </p>
 <p>
-Entre le :
-    <salon:date type="text" name="DT_DEBUT" valeurDate="<%= DT_DEBUT %>" valeurNulle="null" format="dd/MM/yyyy" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
-   et le : 
-    <salon:date type="text" name="DT_FIN" valeurDate="<%= DT_FIN %>" valeurNulle="null" format="dd/MM/yyyy" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
+<i18n:message key="label.entreLe" /> :
+<i18n:message key="format.dateSimpleDefaut" id="formatDate" />
+    <salon:date type="text" name="DT_DEBUT" valeurDate="<%= DT_DEBUT %>" valeurNulle="null" format="<%= formatDate %>" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
+<i18n:message key="label.etLe" /> : 
+    <salon:date type="text" name="DT_FIN" valeurDate="<%= DT_FIN %>" valeurNulle="null" format="<%= formatDate %>" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
 </p>
 </form>
 <hr>
@@ -86,15 +87,15 @@ Journal total = (Journal) request.getAttribute("Total");
 <colgroup>
 	<thead>
 	<tr>
-		<th>Date</th>
-		<th>Fond de caisse</th>
+		<th><i18n:message key="label.date" /></th>
+		<th><i18n:message key="label.fondCaisse" /></th>
 		<% {
 		     Set keys = lstTypes.keySet();
 		     for (Iterator i= keys.iterator(); i.hasNext(); ) { %>
 			<th><%= (String) lstTypes.get(i.next()) %></th>
 		  <% }
 		  } %>
-		<th>Nouveau fond<br><i>calculé</i></th>
+		<th><i18n:message key="label.nouveauFond" /></th>
 	</tr>
 	</thead>
 	<tbody>
@@ -134,7 +135,7 @@ Journal total = (Journal) request.getAttribute("Total");
 	</tbody>
 	<tfoot>
 	<tr>
-	    <td class="Nombre" colspan="2">Totaux :</td>
+	    <td class="Nombre" colspan="2"><i18n:message key="label.totaux" /> :</td>
 	    <% Set typesKeys = lstTypes.keySet();
 	       for (Iterator j=typesKeys.iterator(); j.hasNext(); ) { %>
 	       <td class="Nombre">

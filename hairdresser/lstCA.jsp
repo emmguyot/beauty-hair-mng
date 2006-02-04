@@ -32,7 +32,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Chiffre d'affaires</title>
+<title><i18n:message key="label.ca" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -42,7 +42,7 @@
 <!--
 function Init() {
    <%
-   // Positionne les liens d'actions
+   // Positionne les liens d actions
    %>
    MM_showHideLayers('NOUVEAU?bottomFrame','','hide');
 }
@@ -57,19 +57,20 @@ function Init() {
 <h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstCA.gif"></h1>
 <form name="fiche" action="rechCA.srv" method="post">
 <p>
-Collaborateur :
+<i18n:message key="label.collaborateur" /> :
 <salon:DBselection valeur="<%= CD_COLLAB %>" sql="select CD_COLLAB, PRENOM from COLLAB order by PRENOM, NOM">
    <select name="CD_COLLAB" onChange="document.fiche.submit()">
-      <option value="">( Tous )</option>
+      <option value=""><i18n:message key="label.tousDsListe" /></option>
       %%
    </select>
 </salon:DBselection>
 </p>
 <p>
-Entre le :
-    <salon:date type="text" name="DT_DEBUT" valeurDate="<%= DT_DEBUT %>" valeurNulle="null" format="dd/MM/yyyy" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
-   et le : 
-    <salon:date type="text" name="DT_FIN" valeurDate="<%= DT_FIN %>" valeurNulle="null" format="dd/MM/yyyy" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
+<i18n:message key="label.entreLe" /> :
+    <i18n:message key="format.dateSimpleDefaut" id="formatDate" />
+    <salon:date type="text" name="DT_DEBUT" valeurDate="<%= DT_DEBUT %>" valeurNulle="null" format="<%= formatDate %>" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
+<i18n:message key="label.etLe" /> : 
+    <salon:date type="text" name="DT_FIN" valeurDate="<%= DT_FIN %>" valeurNulle="null" format="<%= formatDate %>" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
 </p>
 </form>
 <hr>
@@ -84,12 +85,12 @@ Vector lstLignes = (Vector) request.getAttribute("Liste");
 <colgroup span="<%= lstTypes.size() %>">
 <colgroup>
 	<tr>
-		<th>Mois</th>
-		<th>Collaborateur</th>
+		<th><i18n:message key="label.mois" /></th>
+		<th><i18n:message key="label.collaborateur" /></th>
 		<% for (int i=0; i< lstTypes.size(); i++) { %>
 		  <th><%= (String) lstTypes.get(i) %></th>
 	        <% } %>
-		<th>CA TTC total<br/>Hors remises</th>
+		<th><i18n:message key="label.caTotalHorsRemise" /></th>
 	</tr>
 	<tbody>
 	<%    
@@ -104,8 +105,8 @@ Vector lstLignes = (Vector) request.getAttribute("Liste");
 	<tr>
 	    <td class="tabDonnees">
 	    <% 
-		  java.text.SimpleDateFormat formatDate  = new java.text.SimpleDateFormat("MMMM yyyy");
-		  String mois = formatDate.format(aCA.getDT_PREST().getTime());
+		  java.text.SimpleDateFormat formatDate2  = new java.text.SimpleDateFormat("MMMM yyyy");
+		  String mois = formatDate2.format(aCA.getDT_PREST().getTime());
 		  Calendar DT_PREST_orig = aCA.getDT_PREST();
           String PRENOM_orig = aCA.getPRENOM();
 	    %>
@@ -165,7 +166,7 @@ Vector lstLignes = (Vector) request.getAttribute("Liste");
 	</tbody>
         <tfoot>
         <tr>
-            <td colspan="2" class="Total">Total</td>
+            <td colspan="2" class="Total"><i18n:message key="label.total" /></td>
             <%
 			for (int j=0; j < lstTypes.size(); j++) {
 			%>

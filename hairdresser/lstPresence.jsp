@@ -38,7 +38,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Présences</title>
+<title><i18n:message key="label.presences" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -48,7 +48,7 @@
 <!--
 function Init() {
    <%
-   // Positionne les liens d'actions
+   // Positionne les liens d actions
    %>
    MM_showHideLayers('NOUVEAU?bottomFrame','','hide');
 }
@@ -63,7 +63,7 @@ function Init() {
 <h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstPresence.gif"></h1>
 <form name="fiche" action="rechPresence.srv" method="post">
 <p>
-Collaborateur :
+<i18n:message key="label.collaborateur" /> :
 <%
         List collabsList = CollabBean.getAllCollabsAsList(mySalon.getMyDBSession());
         String valeurs="";
@@ -87,16 +87,17 @@ Collaborateur :
 %>
 <salon:selection valeur="<%= CD_COLLAB %>" valeurs="<%= valeurs %>" libelle="<%= libelles %>">
    <select name="CD_COLLAB" onChange="document.fiche.submit()">
-      <option value="">( Tous )</option>
+      <option value=""><i18n:message key="label.tousDsListe" /></option>
       %%
    </select>
 </salon:selection>
 </p>
 <p>
-Entre le :
-    <salon:date type="text" name="DT_DEBUT" valeurDate="<%= DT_DEBUT %>" valeurNulle="null" format="dd/MM/yyyy" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
-   et le : 
-    <salon:date type="text" name="DT_FIN" valeurDate="<%= DT_FIN %>" valeurNulle="null" format="dd/MM/yyyy" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
+<i18n:message key="label.entreLe" /> :
+<i18n:message key="format.dateSimpleDefaut" id="formatDate" />
+    <salon:date type="text" name="DT_DEBUT" valeurDate="<%= DT_DEBUT %>" valeurNulle="null" format="<%= formatDate %>" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
+<i18n:message key="label.etLe" /> : 
+    <salon:date type="text" name="DT_FIN" valeurDate="<%= DT_FIN %>" valeurNulle="null" format="<%= formatDate %>" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
 </p>
 </form>
 <hr>
@@ -113,8 +114,8 @@ BigDecimal totaux[] = new BigDecimal[lstTypes.size()];
 <colgroup>
 	<thead>
 	<tr>
-		<th>Semaine du</th>
-		<th>Collaborateur</th>
+		<th><i18n:message key="label.semaineDu" /></th>
+		<th><i18n:message key="label.collaborateur" /></th>
 		<% {
 		     Set keys = lstTypes.keySet();
                      int cnt = 0;
@@ -126,6 +127,7 @@ BigDecimal totaux[] = new BigDecimal[lstTypes.size()];
 	</tr>
 	</thead>
 	<tbody>
+        <i18n:message key="format.dateSimpleDefaut" id="formatDateTableau" />
 	<%    
 	Set keys = lstLignes.keySet();
 	for (Iterator i=keys.iterator(); i.hasNext(); ) {
@@ -133,7 +135,7 @@ BigDecimal totaux[] = new BigDecimal[lstTypes.size()];
 	%>
 	<tr>
 	    <td class="tabDonnees">
-	       <salon:valeur valeurNulle="null" valeur="<%= aPresence.getDebut() %>" format="dd/MM/yyyy">
+	       <salon:valeur valeurNulle="null" valeur="<%= aPresence.getDebut() %>" format="<%= formatDateTableau %>">
 		  %%
 	       </salon:valeur>
 	    </td>

@@ -35,7 +35,7 @@
    Date DT_FIN = (Date) request.getAttribute("DT_FIN");
 %>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<title><i18n:message key="ficReFact.title" /></title>
+<title><i18n:message key="title.ficReFact" /></title>
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
 <body class="donnees" onLoad="document.fiche.DT_DEBUT.focus()">

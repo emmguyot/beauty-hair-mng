@@ -29,7 +29,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Liste des Fournisseurs</title>
+<title><i18n:message key="title.lstFourn" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -37,10 +37,10 @@
 <h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstFourn.gif"></h1>
 <table width="100%" border="1" >
 	<tr>
-		<th>Raison sociale</th>
-		<th>Nom contact</th>
-		<th>Adresse</th>
-		<th>Ville</th>
+		<th><i18n:message key="label.raisSoc" /></th>
+		<th><i18n:message key="label.nomContact" /></th>
+		<th><i18n:message key="label.adresse" /></th>
+		<th><i18n:message key="label.ville" /></th>
 	</tr>
 	<%
 	// Recupère la liste

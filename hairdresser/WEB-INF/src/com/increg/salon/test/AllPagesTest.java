@@ -256,7 +256,7 @@ public class AllPagesTest extends TestCase {
 			String link = (String) iterLink.next();
 			
 			// Ignore les URL externes
-			if ((link.indexOf("http:") != 0) && (link.indexOf("mailto:") != 0)) {
+			if ((link.indexOf("http:") != 0) && (link.indexOf("mailto:") != 0) && (link.indexOf("https:") != 0)) {
 				// Url Absolue ou relative
 				if (link.charAt(0) == '/') {
 			        url = urlBase + link;

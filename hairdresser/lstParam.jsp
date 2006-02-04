@@ -29,7 +29,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Liste des paramètres de l'application</title>
+<title><i18n:message key="title.lstParam" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 <%@ include file="include/commun.js" %>
@@ -37,7 +37,7 @@
 <!--
 function Init() {
    <%
-   // Positionne les liens d'actions
+   // Positionne les liens d actions
    %>
    MM_showHideLayers('NOUVEAU?bottomFrame','','hide');
 }
@@ -48,8 +48,8 @@ function Init() {
 <h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstParam.gif"></h1>
 <table width="100%" border="1" >
 	<tr>
-		<th>Description</th>
-		<th>Valeur</th>
+		<th><i18n:message key="label.description" /></th>
+		<th><i18n:message key="label.valeur" /></th>
 	</tr>
 	<%
 	// Recupère la liste

@@ -35,7 +35,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Fin de journée</title>
+<title><i18n:message key="label.finJournee" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -70,7 +70,7 @@ function Init() {
 <h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstFinJournee.gif"></h1>
 <form name="fiche" action="rechFinJournee.srv" method="post">
 <p>
-Journée du :
+<i18n:message key="label.journeeDu" /> :
    <salon:valeur valeurNulle="null" valeur="<%= DT_JOUR %>" >
       %%
       <input type="hidden" name="DT_JOUR" value="%%">
@@ -84,9 +84,9 @@ Journée du :
 <colgroup span="<%= lstTypeMcaB.size() %>">
 	<tr>
 		<th rowspan=2></th>
-	        <th colspan="<%= lstTypesB.size() %>">Factures</th>
-		<th colspan="<%= lstTypesRemB.size() %>">Remise</th>
-		<th colspan="<%= lstTypeMcaB.size() %>">Encaissements</th>
+	        <th colspan="<%= lstTypesB.size() %>"><i18n:message key="label.factures" /></th>
+		<th colspan="<%= lstTypesRemB.size() %>"><i18n:message key="label.remise" /></th>
+		<th colspan="<%= lstTypeMcaB.size() %>"><i18n:message key="label.encaissement" /></th>
 	</tr>
 	<% if (lstLignesB.size() > 0) { %>
 	<tr>
@@ -124,7 +124,7 @@ Journée du :
 	<tbody>
 	<tr border=5>
 	    <td class="tabDonnees">
-	       CA
+	       <i18n:message key="label.ca" />
 	    </td>
 	    <% Set typesKeys = lstTypesB.keySet();
 	       BigDecimal totalFact = new BigDecimal("0.00");
@@ -170,7 +170,7 @@ Journée du :
 	    <% } %>
 	</tr>
 	<tr>
-	    <td class="tabDonnees">Total</td>
+	    <td class="tabDonnees"><i18n:message key="label.total" /></td>
 	    <td class="tabDonnees" colspan="<%= lstTypesB.size() %>">
 	       <salon:valeur valeurNulle="null" valeur="<%= totalFact %>" >
 		  %%&nbsp;
@@ -249,11 +249,11 @@ Journée du :
 <colgroup span="<%= lstTypesC.size() %>">
 <colgroup>
 	<tr>
-		<th>Collaborateur</th>
+		<th><i18n:message key="label.collaborateur" /></th>
 		<% for (int i=0; i< lstTypesC.size(); i++) { %>
 		  <th><%= (String) lstTypesC.get(i) %></th>
 	        <% } %>
-		<th>CA TTC total<br/>Hors remises</th>
+		<th><i18n:message key="label.caTotalHorsRemise" /></th>
 	</tr>
 	<tbody>
 	<%    
@@ -313,7 +313,7 @@ Journée du :
 	</tbody>
         <tfoot>
         <tr>
-            <td class="Total">Total</td>
+            <td class="Total"><i18n:message key="label.total" /></td>
             <%
 			for (int j=0; j < lstTypesC.size(); j++) {
 			%>
@@ -335,8 +335,8 @@ Journée du :
 <td class="labelBas">
 <table border="1">
     <tr>
-        <th>Caisse</th>
-        <th>Solde</th>
+        <th><i18n:message key="label.caisse" /></th>
+        <th><i18n:message key="label.soldeCaisse" /></th>
     </tr>
     <tbody>
         <%    

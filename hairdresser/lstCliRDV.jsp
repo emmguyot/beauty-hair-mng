@@ -32,7 +32,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Liste des clients pour un RDV</title>
+<title><i18n:message key="lstCliRDV.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -59,17 +59,17 @@
 	<input type="hidden" name="HR_DEBUT" value="<%= HR_DEBUT %>">
 	<input type="hidden" name="NOM" value="<%= NOM %>">
 	<salon:valeur valeurNulle="null" valeur="<%= PRENOM %>" >
-		<input type="hidden" name="PRENOM" value="%%">
-    </salon:valeur>
+            <input type="hidden" name="PRENOM" value="%%">
+        </salon:valeur>
 	<input type="hidden" name="COMM" value="">
 	<input type="hidden" name="DUREE" value="30">
 
 <table width="100%" border="1" >
 	<tr>
 		<th></th>
-		<th>Nom client</th>
-		<th>Adresse</th>
-		<th>Ville</th>
+		<th><i18n:message key="label.nomClient" /></th>
+		<th><i18n:message key="label.adresse" /></th>
+		<th><i18n:message key="label.ville" /></th>
 	</tr>
 	<%
 	    
@@ -79,12 +79,12 @@
 	%>
 	<tr>
 	    <td width=75>
-		    <input type="checkbox" name="CD_CLI" value="<%= aCli.getCD_CLI() %>" onclick="document.fiche.submit()">
-		</td>
+                <input type="checkbox" name="CD_CLI" value="<%= aCli.getCD_CLI() %>" onclick="document.fiche.submit()">
+            </td>
 	    <td><a href="_FicheCli.jsp?Action=Modification&CD_CLI=<%= aCli.getCD_CLI() %>" target="ClientFrame"><%= aCli.toStringListe() %></a></td>
 	    <td>
-			<salon:valeur valeurNulle="0" valeur="<%= aCli.getRUE() %>" expand="true">
-		  		%%
+                <salon:valeur valeurNulle="0" valeur="<%= aCli.getRUE() %>" expand="true">
+                        %%
 	        </salon:valeur>
 	    	&nbsp;</td>
 	    <td><%= aCli.getVILLE() %>&nbsp;</td>
@@ -104,8 +104,8 @@
 <script language="JavaScript">
 function Nouveau()
 {
-	document.fiche.CD_CLI.value = "0";
-	document.fiche.Action.value = "Creation+";
+    document.fiche.CD_CLI.value = "0";
+    document.fiche.Action.value = "Creation+";
     document.fiche.submit();
 }
 

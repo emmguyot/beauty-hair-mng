@@ -30,7 +30,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Liste des statistiques</title>
+<title><i18n:message key="title.lstStat" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -41,9 +41,9 @@
         <salon:autorisation entite="Statistique" action="Modification">
 		<th></th>
         </salon:autorisation>
-		<th>Libellé</th>
-		<th>Axe X</th>
-		<th>Axe Y</th>
+		<th><i18n:message key="label.libelle" /></th>
+		<th><i18n:message key="label.axeX" /></th>
+		<th><i18n:message key="label.axeY" /></th>
 	</tr>
 	<%
 	// Recupère la liste

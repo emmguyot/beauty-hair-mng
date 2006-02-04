@@ -30,7 +30,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Liste des taux de TVA</title>
+<title><i18n:message key="title.lstTxTVA" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 <%@ include file="include/commun.js" %>
@@ -38,7 +38,7 @@
 <!--
 function Init() {
    <%
-   // Positionne les liens d'actions
+   // Positionne les liens d actions
    %>
    MM_showHideLayers('NOUVEAU?bottomFrame','','show');
 }
@@ -46,11 +46,11 @@ function Init() {
 </script>
 </head>
 <body class="donnees">
-<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstParam.gif"><br><span class="ssTitre">Taux de TVA</span></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstParam.gif"><br><span class="ssTitre"><i18n:message key="label.tauxTVA" /></span></h1>
 <table width="100%" border="1" >
 	<tr>
-		<th>Libellé</th>
-		<th>Taux</th>
+		<th><i18n:message key="label.libelle" /></th>
+		<th><i18n:message key="label.taux" /></th>
 	</tr>
 	<%
 	// Recupère la liste

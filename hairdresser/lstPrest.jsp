@@ -33,7 +33,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Liste des Prestations</title>
+<title><i18n:message key="title.lstPrest" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -48,7 +48,7 @@
 %>
 <h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstPrest.gif"></h1>
 <form name="fiche" action="rechPrest.srv" method="post">
-<p>Premi&egrave;re lettre : 
+<p><i18n:message key="label.premiereLettre" /> : 
 <input type="hidden" name="premLettre" value="<%= premLettre %>">
 <%
    String lien = "";
@@ -79,28 +79,28 @@
    <% }
 %>
 </p>
-Type de prestation :
+<i18n:message key="label.typePrest" /> :
 <salon:DBselection valeur="<%= CD_TYP_VENT %>" sql="select CD_TYP_VENT, LIB_TYP_VENT from TYP_VENT order by LIB_TYP_VENT">
    <select name="CD_TYP_VENT" onChange="document.fiche.submit()">
-      <option value="">( Toutes )</option>
+      <option value=""><i18n:message key="label.toutesDsListe" /></option>
       %%
    </select>
 </salon:DBselection>
-Catégorie article :
+<i18n:message key="label.categorieArticle" /> :
 <salon:DBselection valeur="<%= CD_CATEG_PREST %>" sql="select CD_CATEG_PREST, LIB_CATEG_PREST from CATEG_PREST order by LIB_CATEG_PREST">
    <select name="CD_CATEG_PREST" onChange="document.fiche.submit()">
-      <option value="">( Toutes )</option>
+      <option value=""><i18n:message key="label.toutesDsListe" /></option>
       %%
    </select>
 </salon:DBselection>
-Marque :
+<i18n:message key="label.marque" /> :
 <salon:DBselection valeur="<%= CD_MARQUE %>" sql="select CD_MARQUE, LIB_MARQUE from MARQUE order by LIB_MARQUE">
    <select name="CD_MARQUE" onChange="document.fiche.submit()">
-      <option value="">( Toutes )</option>
+      <option value=""><i18n:message key="label.toutesDsListe" /></option>
       %%
    </select>
 </salon:DBselection>
-Affichage périmés :
+<i18n:message key="label.affPerime" /> :
 <input type="checkbox" name="PERIME"
    <% if ((PERIME != null) && (PERIME.equals("on"))) { %>
    checked 
@@ -110,11 +110,11 @@ Affichage périmés :
 <hr>
 <table width="100%" border="1" >
 	<tr>
-		<th>Libellé</th>
-		<th>Type de prestation</th>
-		<th>Catégorie</th>
-		<th>Marque</th>
-		<th>Prix Unitaire</th>
+		<th><i18n:message key="label.libelle" /></th>
+		<th><i18n:message key="label.typePrest" /></th>
+		<th><i18n:message key="label.categorie" /></th>
+		<th><i18n:message key="label.marque" /></th>
+		<th><i18n:message key="label.prixUnitaireTableau" /></th>
 	</tr>
 	<%
 	// Recupère la liste

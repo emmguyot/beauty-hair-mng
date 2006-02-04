@@ -34,7 +34,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Liste des mouvements</title>
+<title><i18n:message key="title.lstMvtStk" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -44,7 +44,7 @@
 <!--
 function Init() {
    <%
-   // Positionne les liens d'actions
+   // Positionne les liens d actions
    %>
    MM_showHideLayers('NOUVEAU?bottomFrame','','hide');
 }
@@ -60,37 +60,38 @@ function Init() {
 <h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstMvtStk.gif"></h1>
 <form name="fiche" action="rechMvt.srv" method="post">
 <p>
-Article :
+<i18n:message key="label.article" />:
 <salon:DBselection valeur="<%= CD_ART %>" sql="select CD_ART, LIB_ART from ART order by LIB_ART">
    <select name="CD_ART" onChange="document.fiche.submit()">
-      <option value="">( Tous )</option>
+      <option value=""><i18n:message key="label.tousDsListe" /></option>
       %%
    </select>
 </salon:DBselection>
-Type de mouvement :
+<i18n:message key="label.typeMouvement" /> :
 <salon:DBselection valeur="<%= CD_TYP_MVT %>" sql="select CD_TYP_MVT, LIB_TYP_MVT from TYP_MVT order by LIB_TYP_MVT">
    <select name="CD_TYP_MVT" onChange="document.fiche.submit()">
-      <option value="">( Tous )</option>
+      <option value=""><i18n:message key="label.tousDsListe" /></option>
       %%
    </select>
 </salon:DBselection>
 </p>
 <p>
-Entre le :
-    <salon:date type="text" name="DT_DEBUT" valeurDate="<%= DT_DEBUT %>" valeurNulle="null" format="dd/MM/yyyy HH:mm:ss" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
-   et le : 
-    <salon:date type="text" name="DT_FIN" valeurDate="<%= DT_FIN %>" valeurNulle="null" format="dd/MM/yyyy HH:mm:ss" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
+<i18n:message key="label.entreLe" /> :
+<i18n:message key="format.dateDefaut" id="formatDate" />
+    <salon:date type="text" name="DT_DEBUT" valeurDate="<%= DT_DEBUT %>" valeurNulle="null" format="<%= formatDate %>" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
+<i18n:message key="label.etLe" /> : 
+    <salon:date type="text" name="DT_FIN" valeurDate="<%= DT_FIN %>" valeurNulle="null" format="<%= formatDate %>" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
 </p>
 </form>
 <hr>
 <table width="100%" border="1" >
 	<tr>
-		<th>Date</th>
-		<th>Type</th>
-		<th>Article</th>
-		<th>Quantité</th>
-		<th>Valeur<br>unitaire<br>mouvement</th>
-		<th>Stock<br>avant</th>
+		<th><i18n:message key="label.date" /></th>
+		<th><i18n:message key="label.type" /></th>
+		<th><i18n:message key="label.article" /></th>
+		<th><i18n:message key="label.qte" /></th>
+		<th><i18n:message key="label.valeurUnitMouvement" /></th>
+		<th><i18n:message key="label.stockAvantTableau" /></th>
 	</tr>
 	<%
 	// Recupère la liste

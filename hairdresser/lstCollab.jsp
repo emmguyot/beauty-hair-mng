@@ -31,7 +31,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Liste des collaborateurs</title>
+<title><i18n:message key="title.lstCollab" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -42,7 +42,7 @@
 %>
 <h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstCollab.gif"></h1>
 <form name="fiche" action="rechCollab.srv" method="post">
-Affiche anciens collaborateurs : 
+<i18n:message key="label.affAncienCollab" /> : 
    <input type="checkbox" name="INDIC_VALID"
    <% if ((INDIC_VALID != null) && (INDIC_VALID.equals("on"))) { %>
    checked 
@@ -52,9 +52,9 @@ Affiche anciens collaborateurs :
 <hr>
 <table width="100%" border="1" >
 	<tr>
-		<th>Collaborateur</th>
-		<th>Ville</th>
-		<th>Fonction</th>
+		<th><i18n:message key="label.collaborateur" /></th>
+		<th><i18n:message key="label.ville" /></th>
+		<th><i18n:message key="label.fonction" /></th>
 	</tr>
 	<%
 	// Recupère la liste

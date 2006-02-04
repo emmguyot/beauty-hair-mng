@@ -29,7 +29,7 @@
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Liste des Fêtes</title>
+<title><i18n:message key="title.lstFete" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -38,8 +38,8 @@
    // Récupération des paramètres
    String premLettre = (String) request.getAttribute("premLettre");
 %>
-<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstParam.gif"><br><span class="ssTitre">Fêtes</span></h1>
-<p>Premi&egrave;re lettre du prénom : 
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstParam.gif"><br><span class="ssTitre"><i18n:message key="label.fetes" /></span></h1>
+<p><i18n:message key="label.premiereLettrePrenom" /> : 
 <%
    // Affiche toutes les lettres avec un lien permettant de filtrer par cette lettre
    for (char c='A'; Character.isUpperCase(c); c++) { 
@@ -59,8 +59,8 @@
 <hr>
 <table width="100%" border="1" >
 	<tr>
-		<th>Prénom</th>
-		<th>Fête</th>
+		<th><i18n:message key="label.prenom" /></th>
+		<th><i18n:message key="label.fete" /></th>
 	</tr>
 	<%
 	// Recupère la liste
