@@ -167,7 +167,7 @@ MM_reloadPage(true);
 </salon:autorisation>
 
 <table cellspacing=0 border=0 width=100%>
-   <tr><td><img src="images/perso/encours.gif" width="127" height="21"></td></tr>
+   <tr><td><img src="images/<%= mySalon.getLangue().getLanguage() %>/encours.gif" width="127" height="21"></td></tr>
 <%
    // Affiche les clients en cours
    Vector listeFact = mySalon.getListeFact();
