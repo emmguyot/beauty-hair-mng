@@ -409,6 +409,7 @@
 				<include name="afaire.html"/>
 				<include name="fr/*"/>
 				<include name="en/*"/>
+				<exclude name="*/histo.html"/>
 			</fileset>
 		</copy>
 		<chmod perm="-w"><fileset refid="Common Files" /></chmod>
