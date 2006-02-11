@@ -81,7 +81,7 @@ function Init() {
                 checked
             <%
             }
-            %> ><i18n:message key="label.paiment" /><br>
+            %> ><i18n:message key="label.paiement" /><br>
         <input type="checkbox" name="Histo_prest" <%
             if (Histo_prest.booleanValue()) { %>
                 checked
