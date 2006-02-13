@@ -39,7 +39,7 @@
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
 <body class="corpsImpr" onLoad="Imprimer()">
-<%@ include file="include/commun.js" %>
+<%@ include file="include/commun.jsp" %>
 <%
    // Récupération des paramètres
    ClientBean aCli = (ClientBean) request.getAttribute("ClientBean");

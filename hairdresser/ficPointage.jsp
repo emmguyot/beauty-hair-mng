@@ -47,7 +47,7 @@
    <% } else { %>
       document.fiche.DT_FIN.focus()
    <% } %> ">
-<%@ include file="include/commun.js" %>
+<%@ include file="include/commun.jsp" %>
 <script language="JavaScript">
 <!--
    var Action="<%=Action%>";

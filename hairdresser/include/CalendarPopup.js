@@ -12,9 +12,10 @@ function CalendarPopup() {
     c.offsetY = 25;
     c.autoHide();
     // Calendar-specific properties
-    c.monthNames = new Array("Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre");
-    c.monthAbbreviations = new Array("Jan","Fev","Mar","Avr","Mai","Juin","Juil","Aout","Sep","Oct","Nov","Déc");
-    c.dayHeaders = new Array("Di","Lu","Ma","Me","Je","Ve","Sa");
+    //c.monthNames = new Array("Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre");
+    c.monthNames = listeMoisEntierComplet();
+    c.monthAbbreviations = listeMoisComplet();
+    c.dayHeaders = listeJourHeaderSemaine();
     c.returnFunction = "CP_tmpReturnFunction";
     c.returnMonthFunction = "CP_tmpReturnMonthFunction";
     c.returnQuarterFunction = "CP_tmpReturnQuarterFunction";
@@ -26,7 +27,7 @@ function CalendarPopup() {
     c.disabledDatesExpression = "";
     c.yearSelectStartOffset = 2;
     c.currentDate = null;
-    c.todayText="Aujourd'hui";
+    c.todayText=aujourdhui();
     c.cssPrefix="";
     c.isShowNavigationDropdowns=false;
     c.isShowYearNavigationInput=false;

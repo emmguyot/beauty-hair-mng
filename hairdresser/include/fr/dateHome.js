@@ -6,12 +6,39 @@ function jourSemaine(day) {
    return x[day];
 }
 
+function listeJourHeaderSemaine() {
+   var x = new Array("Di", "Lu", "Ma");
+   x = x.concat("Me","Je", "Ve");
+   x = x.concat("Sa");
+   return x;
+}
+
+function listeMoisEntierComplet() {
+   var x = new Array("Janvier", "Février", "Mars");
+   x = x.concat("Avril","Mai", "Juin", "Juillet");
+   x = x.concat("Août", "Septembre", "Octobre", "Novembre");
+   x = x.concat("Décembre");
+   return x;
+}
+
+function listeMoisComplet() {
+   var x = new Array("Janv.", "Fév.", "Mars");
+   x = x.concat("Avril","Mai", "Juin", "Juil.");
+   x = x.concat("Août", "Sep.", "Oct.", "Nov.");
+   x = x.concat("Déc.");
+   return x[];
+}
+
 function moisComplet(month) {
    var x = new Array("Janv.", "Fév.", "Mars");
    x = x.concat("Avril","Mai", "Juin", "Juil.");
    x = x.concat("Août", "Sep.", "Oct.", "Nov.");
    x = x.concat("Déc.");
    return x[month];
+}
+
+function aujourdhui() {
+    return "Aujourd'hui";
 }
 
 function clock() {

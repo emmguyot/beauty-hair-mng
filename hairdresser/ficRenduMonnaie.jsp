@@ -37,7 +37,7 @@
 
 </head>
 <body class="donnees" onLoad="javascript:document.fiche.montantRegle.select();">
-<%@ include file="include/commun.js" %>
+<%@ include file="include/commun.jsp" %>
 
 <%
    // Récupération des paramètres

@@ -42,7 +42,7 @@
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
 <body class="donnees">
-<%@ include file="include/commun.js" %>
+<%@ include file="include/commun.jsp" %>
 <%
    // Récupération des paramètres
    String CD_COLLAB = request.getParameter("CD_COLLAB");

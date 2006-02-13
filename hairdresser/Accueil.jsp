@@ -37,7 +37,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
-<%@ include file="include/commun.js" %>
+<%@ include file="include/commun.jsp" %>
 <body class="donnees">
 <i18n:message key="message.fermer" id="msgFermer" />
 <div id="coinHD" style="position:absolute; height=52px; z-index:1; visibility:hidden"><salon:bouton url="javascript:top.close()" imgOn="images/quit2.gif" img="images/quit.gif" alt="<%= msgFermer %>"/></div>
