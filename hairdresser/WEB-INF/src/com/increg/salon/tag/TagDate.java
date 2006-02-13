@@ -5,11 +5,13 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.BodyContent;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
+import com.increg.commun.BasicSession;
 import com.increg.util.ServletUtil;
 import com.increg.util.SimpleDateFormatEG;
 
@@ -32,7 +34,7 @@ public class TagDate extends BodyTagSupport {
     /**
      * Format d'affichage des dates
      */
-    protected String format = "dd/MM/yyyy HH:mm:ss";
+    protected String format = null;
     /**
      * Timezone de référence pour les dates/heures
      */
@@ -58,6 +60,11 @@ public class TagDate extends BodyTagSupport {
      */
     protected String onchange = null;
     
+	public TagDate() {
+		super();
+		reset();
+	}
+
     /**
      * Effet de bord : Positionne l'attribut Longueur à la longueure de la chaine affichée
      * Creation date: (24/07/2001 21:51:05)
@@ -305,16 +312,33 @@ public class TagDate extends BodyTagSupport {
      */
     public int doEndTag() throws JspException {
         // RAZ des attributs
-        valeurNulle = "";
+        reset();
+        return super.doEndTag();
+    }
+
+	/**
+	 * Reset des attributs 
+	 */
+	private void reset() {
+		valeurNulle = "";
         calendrier = false;
-        format = "dd/MM/yyyy HH:mm:ss";
+	    if ((pageContext == null) 
+	    		|| (pageContext.getSession() == null) 
+	    		|| (pageContext.getSession().getAttribute("SalonSession") == null)) {
+	        // Perte de la connexion : valeur par défaut
+	        format = "dd/MM/yyyy HH:mm:ss";
+	    }
+	    else {
+		    HttpSession mySession = pageContext.getSession();
+			BasicSession myBasicSession = (BasicSession) mySession.getAttribute("SalonSession");
+	        format = myBasicSession.getMessage("format.dateDefaut");
+	    }
         timezone = false;
         valeurDate = null;
         heureDec = false;
         name = "";
         type = "text";
-        return super.doEndTag();
-    }
+	}
 
     /**
      * @return Nom du champ
@@ -350,5 +374,4 @@ public class TagDate extends BodyTagSupport {
     public void setOnchange(String string) {
         onchange = string;
     }
-
 }

@@ -1,8 +1,12 @@
 package com.increg.salon.tag;
 
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
-import java.io.*;
+import java.io.IOException;
+
+import javax.servlet.http.HttpSession;
+import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.tagext.TagSupport;
+
+import com.increg.commun.BasicSession;
 
 /**
  * Tag Affichant une information de provenance de l'état (InCrEG) pour publicité
@@ -27,7 +31,17 @@ public class TagMadeBy extends TagSupport {
         JspWriter out = pageContext.getOut();
 
         try {
-            out.println("<p style=\"{font-size:7pt; color: #888888}\">Etat réalisé par InCrEG LibertyLook.</p>");
+    	    if ((pageContext == null) 
+    	    		|| (pageContext.getSession() == null) 
+    	    		|| (pageContext.getSession().getAttribute("SalonSession") == null)) {
+    	        // Perte de la connexion : valeur par défaut
+                out.println("<p style=\"{font-size:7pt; color: #888888}\">Etat réalisé par InCrEG LibertyLook.</p>");
+    	    }
+    	    else {
+    		    HttpSession mySession = pageContext.getSession();
+    			BasicSession myBasicSession = (BasicSession) mySession.getAttribute("SalonSession");
+                out.println("<p style=\"{font-size:7pt; color: #888888}\">" + myBasicSession.getMessage("label.madeBy") + "</p>");
+    	    }
         } catch (IOException e) {
             System.out.println("doStartTag : " + e.toString());
         }

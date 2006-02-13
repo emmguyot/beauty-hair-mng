@@ -1,9 +1,14 @@
 package com.increg.salon.tag;
 
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
-import java.io.*;
-import java.math.*;
+import java.io.IOException;
+import java.math.BigDecimal;
+
+import javax.servlet.http.HttpSession;
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.tagext.TagSupport;
+
+import com.increg.commun.BasicSession;
 /**
  * Tag Affichant un montant à l'envers
  * Creation date: (22/08/2001 22:00:08)
@@ -35,7 +40,15 @@ public class TagInverse extends TagSupport {
         try {
             if (montant != null) {
                 // Ecrit le message de remerciement
-                out.println("<img src=\"images/Merci.gif\" align=\"top\"/>&nbsp;&nbsp;&nbsp;");
+        	    if ((pageContext == null) 
+        	    		|| (pageContext.getSession() == null) 
+        	    		|| (pageContext.getSession().getAttribute("SalonSession") == null)) {
+        	    }
+        	    else {
+        		    HttpSession mySession = pageContext.getSession();
+        			BasicSession myBasicSession = (BasicSession) mySession.getAttribute("SalonSession");
+                    out.println("<img src=\"images/" + myBasicSession.getLangue().getLanguage() + "/Merci.gif\" align=\"top\"/>&nbsp;&nbsp;&nbsp;");
+        	    }
                 // Ecrit le symbole de monnaie
                 // out.println("<img src=\"images/EuroInverse.gif\" align=\"top\">");
                 // Ecrit le montant
