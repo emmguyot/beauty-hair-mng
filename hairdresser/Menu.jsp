@@ -63,7 +63,7 @@ MM_reloadPage(true);
 	<a href="ListeArt.jsp" target="ClientFrame"><i18n:message key="label.article" /></a><br>
 	<a href="_FicheAchat.jsp" target="ClientFrame"><i18n:message key="label.achats" /></a><br>
         <a href="ListeMvtStk.jsp" target="ClientFrame"><i18n:message key="label.mouvements" /></a><br>
-	<a href="ListeRecap.jsp" target="ClientFrame"><i18n:message key="label.recap" /></a><br>
+	<a href="ListeRecap.jsp" target="ClientFrame"><i18n:message key="label.recapStock" /></a><br>
 	<a href="_FicheInventaire.jsp" target="ClientFrame"><i18n:message key="label.inventaire" /></a><br>
 	<a href="ListeFourn.jsp" target="ClientFrame"><i18n:message key="label.fournisseurs" /></a><br>
 	</font><hr>
