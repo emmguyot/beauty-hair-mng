@@ -26,7 +26,7 @@ function listeMoisComplet() {
    x = x.concat("Avril","Mai", "Juin", "Juil.");
    x = x.concat("Août", "Sep.", "Oct.", "Nov.");
    x = x.concat("Déc.");
-   return x[];
+   return x;
 }
 
 function moisComplet(month) {
