@@ -40,7 +40,7 @@ public class TagMadeBy extends TagSupport {
     	    else {
     		    HttpSession mySession = pageContext.getSession();
     			BasicSession myBasicSession = (BasicSession) mySession.getAttribute("SalonSession");
-                out.println("<p style=\"{font-size:7pt; color: #888888}\">" + myBasicSession.getMessage("label.madeBy") + "</p>");
+                out.println("<p style=\"{font-size:7pt; color: #888888}\">" + myBasicSession.getMessagesBundle().getString("label.madeBy") + "</p>");
     	    }
         } catch (IOException e) {
             System.out.println("doStartTag : " + e.toString());

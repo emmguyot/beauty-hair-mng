@@ -331,7 +331,7 @@ public class TagDate extends BodyTagSupport {
 	    else {
 		    HttpSession mySession = pageContext.getSession();
 			BasicSession myBasicSession = (BasicSession) mySession.getAttribute("SalonSession");
-	        format = myBasicSession.getMessage("format.dateDefaut");
+	        format = myBasicSession.getMessagesBundle().getString("format.dateDefaut");
 	    }
         timezone = false;
         valeurDate = null;
