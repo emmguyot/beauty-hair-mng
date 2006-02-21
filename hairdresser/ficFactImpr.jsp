@@ -78,7 +78,7 @@
 		     %%
 		  </salon:valeur><br>
 		  <salon:valeur valeurNulle="null" valeur="<%= mySoc.getTEL() %>" >
-		     Tél : %%
+		     <i18n:message key="label.tel" /> : %%
 		  </salon:valeur>
 	 </td>
 	 </tr>
@@ -108,7 +108,7 @@
 	 	}
 	 %> : <%= collab.toString() %>
 	 </td>
-	 <td>Le :
+	 <td><i18n:message key="label.leDate" /> :
 		  <salon:valeur valeurNulle="null" valeur="<%= aFact.getDT_PREST() %>" >
 		     %%
 		  </salon:valeur>
