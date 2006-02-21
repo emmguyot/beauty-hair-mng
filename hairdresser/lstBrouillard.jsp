@@ -17,7 +17,7 @@
  * 
  */
 %>
-<%@ page import="java.util.TreeMap,java.util.Set,java.util.Iterator,java.math.BigDecimal,java.util.Date" %>
+<%@ page import="java.util.TreeMap,java.util.Set,java.util.Iterator,java.math.BigDecimal,java.util.Calendar" %>
 <%@ page import="com.increg.salon.request.Brouillard
 	       " %>
 <%@ page import="com.increg.salon.bean.SalonSession" %>
@@ -50,8 +50,8 @@ function Init() {
 </script>
 <%
    // Récupération des paramètres
-   Date DT_DEBUT = (Date) request.getAttribute("DT_DEBUT");
-   Date DT_FIN = (Date) request.getAttribute("DT_FIN");
+   Calendar DT_DEBUT = (Calendar) request.getAttribute("DT_DEBUT");
+   Calendar DT_FIN = (Calendar) request.getAttribute("DT_FIN");
    Brouillard brouillardTotal = (Brouillard) request.getAttribute("Total");
 %>
 <h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstBrouillard.gif"></h1>

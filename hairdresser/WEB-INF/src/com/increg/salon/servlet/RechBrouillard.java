@@ -1,14 +1,20 @@
 package com.increg.salon.servlet;
 
-import com.increg.commun.*;
+import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.TreeMap;
 
-import java.text.ParseException;
-import java.util.*;
-import java.sql.*;
-import com.increg.salon.bean.*;
-import com.increg.salon.request.*;
-import javax.servlet.http.*;
-import java.math.*;
+import javax.servlet.http.HttpSession;
+
+import com.increg.commun.DBSession;
+import com.increg.salon.bean.ParamBean;
+import com.increg.salon.bean.SalonSession;
+import com.increg.salon.bean.TypMcaBean;
+import com.increg.salon.request.Brouillard;
+import com.increg.util.ServletUtil;
 /**
  * Recherche/Liste de Brouillards
  * Creation date: (15/10/2001 14:09:47)
@@ -28,31 +34,21 @@ public void performTask(javax.servlet.http.HttpServletRequest request, javax.ser
     HttpSession mySession = request.getSession(false);
     SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
     DBSession myDBSession = mySalon.getMyDBSession();
-	java.text.DateFormat formatDate  = java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT);
+    DateFormat formatDate = new SimpleDateFormat(mySalon.getMessagesBundle().getString("format.dateSimpleDefaut"));
+    DateFormat formatDateDB = DateFormat.getDateInstance(DateFormat.SHORT);
 
-	// Valeurs par défaut
-	if (DT_DEBUT == null) {
-        // J-7
-        Calendar J7 = Calendar.getInstance();
-        J7.add(Calendar.DAY_OF_YEAR, -7);
-        DT_DEBUT = formatDate.format(J7.getTime());
-	}
-	if (DT_FIN == null) {
-		DT_FIN = formatDate.format(Calendar.getInstance().getTime());
-	}
-    try {
-        if ((DT_DEBUT != null) && (DT_DEBUT.length() > 0)) {
-            request.setAttribute("DT_DEBUT", formatDate.parse(DT_DEBUT));
-        }
-        if ((DT_FIN != null) && (DT_FIN.length() > 0)) {
-            request.setAttribute("DT_FIN", formatDate.parse(DT_FIN));
-        }
+    // J-7
+    Calendar J7 = Calendar.getInstance();
+    J7.add(Calendar.DAY_OF_YEAR, -7);
+    Calendar dtDebut = ServletUtil.interpreteDate(DT_DEBUT, formatDate, J7);
+    Calendar dtFin = ServletUtil.interpreteDate(DT_FIN, formatDate, Calendar.getInstance());
+    if (dtFin.before(dtDebut)) {
+        dtFin = dtDebut;
     }
-    catch (ParseException e) {
-        mySalon.setMessage("Erreur", e.toString());
-        e.printStackTrace();
-    }
-
+    request.setAttribute("DT_DEBUT", dtDebut);
+    request.setAttribute("DT_FIN", dtFin);
+    DT_DEBUT = formatDateDB.format(dtDebut.getTime());
+    DT_FIN = formatDateDB.format(dtFin.getTime());
 
     TreeMap lstLignes = new TreeMap();
     TreeMap lstType = new TreeMap();
@@ -61,6 +57,7 @@ public void performTask(javax.servlet.http.HttpServletRequest request, javax.ser
     Brouillard brouillardTotal = new Brouillard();
 
     try {
+    	// TODO : Passage au format date => Attention au null
         rechercheBrouillard(myDBSession, DT_DEBUT, DT_FIN, lstLignes, lstType, lstTypeRem, lstTypeMca, brouillardTotal);
     }
     catch (Exception e) {
