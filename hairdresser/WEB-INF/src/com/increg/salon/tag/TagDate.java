@@ -74,6 +74,21 @@ public class TagDate extends BodyTagSupport {
 
         BodyContent body = getBodyContent();
 
+        if (format == null) {
+    	    if ((pageContext == null) 
+    	    		|| (pageContext.getSession() == null) 
+    	    		|| (pageContext.getSession().getAttribute("SalonSession") == null)) {
+    	        // Perte de la connexion : valeur par défaut
+    	        format = "dd/MM/yyyy HH:mm:ss";
+    	    }
+    	    else {
+    		    HttpSession mySession = pageContext.getSession();
+    			BasicSession myBasicSession = (BasicSession) mySession.getAttribute("SalonSession");
+    	        format = myBasicSession.getMessagesBundle().getString("format.dateDefaut");
+    	    }
+
+        }
+        
         JspWriter out = body.getEnclosingWriter();
         String texte = body.getString();
         String chaineCherchee = "%%";
@@ -322,22 +337,12 @@ public class TagDate extends BodyTagSupport {
 	private void reset() {
 		valeurNulle = "";
         calendrier = false;
-	    if ((pageContext == null) 
-	    		|| (pageContext.getSession() == null) 
-	    		|| (pageContext.getSession().getAttribute("SalonSession") == null)) {
-	        // Perte de la connexion : valeur par défaut
-	        format = "dd/MM/yyyy HH:mm:ss";
-	    }
-	    else {
-		    HttpSession mySession = pageContext.getSession();
-			BasicSession myBasicSession = (BasicSession) mySession.getAttribute("SalonSession");
-	        format = myBasicSession.getMessagesBundle().getString("format.dateDefaut");
-	    }
         timezone = false;
         valeurDate = null;
         heureDec = false;
         name = "";
         type = "text";
+        format = null;
 	}
 
     /**

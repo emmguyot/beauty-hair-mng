@@ -42,7 +42,7 @@ public class TagValeur extends BodyTagSupport {
     /**
      * Format d'affichage des dates
      */
-    protected String format = "dd/MM/yyyy HH:mm:ss";
+    protected String format = null;
     /**
      * Timezone de référence pour les dates/heures
      */
@@ -77,6 +77,20 @@ public class TagValeur extends BodyTagSupport {
     public int doAfterBody() {
 
         BodyContent body = getBodyContent();
+        
+        if (format == null) {
+    		// Par défaut
+    		format = "dd/MM/yyyy HH:mm:ss";
+    		if (pageContext != null) {
+    			HttpSession mySession = pageContext.getSession();
+    			if (mySession != null) {
+    				BasicSession myBasicSession = (BasicSession) mySession.getAttribute("SalonSession");
+    				if (myBasicSession != null) {
+    					format = myBasicSession.getMessagesBundle().getString("format.dateDefaut");
+    				}
+    			}
+    		}
+        }
 
         JspWriter out = body.getEnclosingWriter();
         String texte = body.getString();
@@ -438,17 +452,7 @@ public class TagValeur extends BodyTagSupport {
         timezone = false;
         valeurDate = null;
         heureDec = false;
-		// Par défaut
-		format = "dd/MM/yyyy HH:mm:ss";
-		if (pageContext != null) {
-			HttpSession mySession = pageContext.getSession();
-			if (mySession != null) {
-				BasicSession myBasicSession = (BasicSession) mySession.getAttribute("SalonSession");
-				if (myBasicSession != null) {
-					format = myBasicSession.getMessagesBundle().getString("format.dateDefaut");
-				}
-			}
-		}
+        format = null;
         return super.doEndTag();
     }
 
