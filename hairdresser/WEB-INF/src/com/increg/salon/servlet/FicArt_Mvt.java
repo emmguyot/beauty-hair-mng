@@ -18,6 +18,10 @@
 package com.increg.salon.servlet;
 
 import java.sql.ResultSet;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.TimeZone;
 import java.util.Vector;
 
 import javax.servlet.http.HttpSession;
@@ -27,6 +31,7 @@ import com.increg.commun.DBSession;
 import com.increg.salon.bean.ArtBean;
 import com.increg.salon.bean.MvtStkBean;
 import com.increg.salon.bean.SalonSession;
+import com.increg.util.SimpleDateFormatEG;
 /**
  * Fiche article avec mouvements
  * Creation date: (22/09/2001 19:15:33)
@@ -79,6 +84,8 @@ public class FicArt_Mvt extends ConnectedServlet {
         HttpSession mySession = request.getSession(false);
         SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
         DBSession myDBSession = mySalon.getMyDBSession();
+        DateFormat formatDate = new SimpleDateFormat(mySalon.getMessagesBundle().getString("format.dateDefaut"));
+        DateFormat formatDateTZ = new SimpleDateFormatEG(mySalon.getMessagesBundle().getString("format.dateDefaut"));
 
         ArtBean aArt = null;
 
@@ -201,7 +208,9 @@ public class FicArt_Mvt extends ConnectedServlet {
                         // C'est une nouvelle ligne
                         MvtStkBean aMvt = new MvtStkBean(mySalon.getMessagesBundle());
                         aMvt.setCD_ART(aArt.getCD_ART());
-                        aMvt.setDT_MVT(tab_DT_MVT, mySalon.getLangue());
+                        Calendar dtMvt = Calendar.getInstance();
+                        dtMvt.setTime(formatDate.parse(tab_DT_MVT));
+                        aMvt.setDT_MVT(dtMvt);
                         aMvt.setCD_TYP_MVT(tab_CD_TYP_MVT);
                         aMvt.setQTE(tab_QTE);
                         aMvt.setVAL_MVT_HT(tab_VAL_MVT_HT);
@@ -212,7 +221,10 @@ public class FicArt_Mvt extends ConnectedServlet {
                         aArt = ArtBean.getArtBean(myDBSession, Long.toString(aArt.getCD_ART()), mySalon.getMessagesBundle());
                     }
                     else if (Action.equals("SuppressionLigne")) {
-                        MvtStkBean aMvt = MvtStkBean.getMvtStkBean(myDBSession, Long.toString(aArt.getCD_ART()), tab_DT_MVT_LAST, tab_CD_FACT_LAST, mySalon.getLangue(), mySalon.getMessagesBundle());
+                    	Calendar dtMvt = Calendar.getInstance();
+                    	dtMvt.setTime(formatDateTZ.parse(tab_DT_MVT_LAST));
+                    	dtMvt.setTimeZone(formatDateTZ.getTimeZone());
+                        MvtStkBean aMvt = MvtStkBean.getMvtStkBean(myDBSession, Long.toString(aArt.getCD_ART()), dtMvt, tab_CD_FACT_LAST, mySalon.getLangue(), mySalon.getMessagesBundle());
 
                         if (aMvt != null) {
                             aMvt.delete(myDBSession);

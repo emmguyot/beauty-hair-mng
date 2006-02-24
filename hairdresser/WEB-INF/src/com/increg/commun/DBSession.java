@@ -6,10 +6,14 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Iterator;
 import java.util.ResourceBundle;
 import java.util.Vector;
+
+import com.increg.util.SimpleDateFormatEG;
 
 /**
  * Bean Session pour la Gestion de Salon de Coiffure
@@ -57,7 +61,6 @@ public class DBSession {
      */
     protected int nbImbricTransac = 0;
     
-
     /**
      * SalonSession constructor comment.
      * 
@@ -379,5 +382,30 @@ public class DBSession {
                 instanceIterator.remove();
             }
         }
-    }    
+    }
+
+	/**
+	 * @param cal date à passer en texte
+	 * @return Returns the formatDateAvecTZ.
+	 * Création à chaque fois car non threadsafe
+	 */
+	public String formatDateTimeAvecTZ(Calendar cal) {
+		return new SimpleDateFormatEG("dd/MM/yyyy HH:mm:ss").formatEG(cal.getTime());
+	}
+
+	/**
+	 * @return Returns the formatDateSansTZ.
+	 * Création à chaque fois car non threadsafe
+	 */
+    public DateFormat getFormatDateTimeSansTZ() {
+		return new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+	}    
+
+    /**
+	 * @return Returns the formatDate.
+	 * Création à chaque fois car non threadsafe
+	 */
+    public DateFormat getFormatDate() {
+		return new SimpleDateFormat("dd/MM/yyyy");
+	}    
 }

@@ -17,14 +17,18 @@
  */
 package com.increg.salon.bean;
 
-import java.sql.*;
-import java.text.ParseException;
-import java.util.*;
-import java.util.Date;
-import java.math.*;
-import com.increg.commun.*;
+import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import java.util.Vector;
+
+import com.increg.commun.BasicSession;
+import com.increg.commun.DBSession;
+import com.increg.commun.TimeStampBean;
 import com.increg.commun.exception.FctlException;
-import com.increg.util.*;
 
 /**
  * Mouvement de stock
@@ -191,8 +195,6 @@ public class MvtStkBean extends TimeStampBean {
      */
     public void create(DBSession dbConnect) throws SQLException, com.increg.commun.exception.FctlException {
 
-        com.increg.util.SimpleDateFormatEG formatDate = new SimpleDateFormatEG("dd/MM/yyyy HH:mm:ss");
-
         StringBuffer req = new StringBuffer("insert into MVT_STK ");
         StringBuffer colonne = new StringBuffer("(");
         StringBuffer valeur = new StringBuffer(" values ( ");
@@ -211,7 +213,7 @@ public class MvtStkBean extends TimeStampBean {
 
         if (DT_MVT != null) {
             colonne.append("DT_MVT,");
-            valeur.append(DBSession.quoteWith(formatDate.formatEG(DT_MVT.getTime()), '\''));
+            valeur.append(DBSession.quoteWith(dbConnect.formatDateTimeAvecTZ(DT_MVT), '\''));
             valeur.append(",");
         }
 
@@ -259,13 +261,13 @@ public class MvtStkBean extends TimeStampBean {
 
         if (DT_CREAT != null) {
             colonne.append("DT_CREAT,");
-            valeur.append(DBSession.quoteWith(formatDate.formatEG(DT_CREAT.getTime()), '\''));
+            valeur.append(DBSession.quoteWith(dbConnect.formatDateTimeAvecTZ(DT_CREAT), '\''));
             valeur.append(",");
         }
 
         if (DT_MODIF != null) {
             colonne.append("DT_MODIF,");
-            valeur.append(DBSession.quoteWith(formatDate.formatEG(DT_MODIF.getTime()), '\''));
+            valeur.append(DBSession.quoteWith(dbConnect.formatDateTimeAvecTZ(DT_MODIF), '\''));
             valeur.append(",");
         }
 
@@ -305,10 +307,8 @@ public class MvtStkBean extends TimeStampBean {
      */
     public void delete(DBSession dbConnect) throws SQLException, com.increg.commun.exception.FctlException {
 
-        com.increg.util.SimpleDateFormatEG formatDate = new SimpleDateFormatEG("dd/MM/yyyy HH:mm:ss");
-
         StringBuffer req = new StringBuffer("delete from MVT_STK ");
-        StringBuffer where = new StringBuffer(" where CD_ART=" + CD_ART + " and DT_MVT=" + DBSession.quoteWith(formatDate.formatEG(DT_MVT.getTime()), '\''));
+        StringBuffer where = new StringBuffer(" where CD_ART=" + CD_ART + " and DT_MVT=" + DBSession.quoteWith(dbConnect.formatDateTimeAvecTZ(DT_MVT), '\''));
         if (CD_FACT == 0) {
             where.append(" and CD_FACT is null");
         }
@@ -454,29 +454,12 @@ public class MvtStkBean extends TimeStampBean {
      * @param rb Messages localisés
      * @return Mouvement correspondant à la clé
      */
-    public static MvtStkBean getMvtStkBean(DBSession dbConnect, String CD_ART, String DT_MVT, String CD_FACT, Locale aLocale, ResourceBundle rb) throws Exception {
-
-        java.text.DateFormat formatDate =
-            java.text.DateFormat.getDateTimeInstance(
-                java.text.DateFormat.SHORT,
-                java.text.DateFormat.MEDIUM, aLocale);
-        Date dtMvt = null;
-        try {
-            dtMvt = formatDate.parse(DT_MVT);
-        }
-        catch (ParseException e) {
-            System.out.println("Erreur de conversion : " + e.toString());
-            throw (new Exception(BasicSession.TAG_I18N + "mvtStkBean.formatDateMvt" + BasicSession.TAG_I18N));
-		}
+    public static MvtStkBean getMvtStkBean(DBSession dbConnect, String CD_ART, Calendar DT_MVT, String CD_FACT, Locale aLocale, ResourceBundle rb) throws Exception {
 
         // Passage en GMT +0
-        java.text.DateFormat formatDateStd =
-            java.text.DateFormat.getDateTimeInstance(
-                java.text.DateFormat.SHORT,
-                java.text.DateFormat.MEDIUM);
-        DT_MVT = formatDateStd.format(dtMvt);
+        String DT_MVTstr = dbConnect.formatDateTimeAvecTZ(DT_MVT);
         
-    	String reqSQL = "select * from MVT_STK where CD_ART=" + CD_ART + " and DT_MVT='" + DT_MVT + "'";
+    	String reqSQL = "select * from MVT_STK where CD_ART=" + CD_ART + " and DT_MVT='" + DT_MVTstr + "'";
         if ((CD_FACT == null) || (CD_FACT.equals("")) || (CD_FACT.equals("0"))) {
             reqSQL = reqSQL + " and CD_FACT is null";
         }
@@ -648,11 +631,11 @@ public class MvtStkBean extends TimeStampBean {
         
         int nbEnreg = -1;
         
-        com.increg.util.SimpleDateFormatEG formatDate = new SimpleDateFormatEG("dd/MM/yyyy HH:mm:ss");
-
         String reqSQL[] = new String[1];
-         
-        reqSQL[0] = "delete from MVT_STK where DT_MVT < " + DBSession.quoteWith(formatDate.format(dateLimite), '\'');
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(dateLimite);
+        
+        reqSQL[0] = "delete from MVT_STK where DT_MVT < " + DBSession.quoteWith(dbConnect.getFormatDateTimeSansTZ().format(dateLimite), '\'');
         
         dbConnect.setDansTransactions(true);
 

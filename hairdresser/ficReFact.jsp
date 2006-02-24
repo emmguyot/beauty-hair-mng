@@ -17,7 +17,7 @@
  * 
  */
 %>
-<%@ page import="com.increg.salon.bean.SalonSession,java.util.Date" %>
+<%@ page import="com.increg.salon.bean.SalonSession,java.util.Calendar" %>
 <%
     SalonSession mySalon = (SalonSession) session.getAttribute("SalonSession");
     if (mySalon == null) {
@@ -31,8 +31,8 @@
 <head>
 <%
    // Récupération des paramètres
-   Date DT_DEBUT = (Date) request.getAttribute("DT_DEBUT");
-   Date DT_FIN = (Date) request.getAttribute("DT_FIN");
+   Calendar DT_DEBUT = (Calendar) request.getAttribute("DT_DEBUT");
+   Calendar DT_FIN = (Calendar) request.getAttribute("DT_FIN");
 %>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <title><i18n:message key="title.ficReFact" /></title>

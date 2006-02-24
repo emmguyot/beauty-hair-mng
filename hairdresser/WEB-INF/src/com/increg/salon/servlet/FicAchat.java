@@ -17,10 +17,13 @@
  */
 package com.increg.salon.servlet;
 
+import java.text.DateFormat;
 import java.util.*;
 import java.math.BigDecimal;
 import java.sql.*;
 import com.increg.salon.bean.*;
+import com.increg.util.SimpleDateFormatEG;
+
 import javax.servlet.http.*;
 import com.increg.commun.*;
 /**
@@ -64,6 +67,7 @@ public void performTask(
 	HttpSession mySession = request.getSession(false);
 	SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
 	DBSession myDBSession = mySalon.getMyDBSession();
+    DateFormat formatDateTZ = new SimpleDateFormatEG(mySalon.getMessagesBundle().getString("format.dateDefaut"));
 
     Vector lstLignes = new Vector(); // Mouvements de la commande
     Vector lstMvt = new Vector(); // Mouvement historique d'achat
@@ -131,7 +135,10 @@ public void performTask(
             try {
                 
                 // C'est une nouvelle ligne
-                MvtStkBean aMvt = MvtStkBean.getMvtStkBean(myDBSession, paramSup1, paramSup2, null, mySalon.getLangue(), mySalon.getMessagesBundle());
+            	Calendar dtMvt = Calendar.getInstance();
+            	dtMvt.setTime(formatDateTZ.parse(paramSup2));
+            	dtMvt.setTimeZone(formatDateTZ.getTimeZone());
+                MvtStkBean aMvt = MvtStkBean.getMvtStkBean(myDBSession, paramSup1, dtMvt, null, mySalon.getLangue(), mySalon.getMessagesBundle());
                 if (assertOrError((aMvt != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
