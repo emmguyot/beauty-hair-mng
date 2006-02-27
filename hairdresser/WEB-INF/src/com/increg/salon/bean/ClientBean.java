@@ -33,7 +33,6 @@ import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.TimeStampBean;
 import com.increg.commun.exception.FctlException;
-import com.increg.util.SimpleDateFormatEG;
 
 
 /**
@@ -303,9 +302,6 @@ public class ClientBean extends TimeStampBean implements Comparable {
      */
     public void create(DBSession dbConnect) throws SQLException {
 
-        com.increg.util.SimpleDateFormatEG formatDate =
-            new SimpleDateFormatEG("dd/MM/yyyy HH:mm:ss");
-
         setDefaultCD_TR_AGE(dbConnect);
 
         StringBuffer req = new StringBuffer("insert into CLI ");
@@ -392,7 +388,7 @@ public class ClientBean extends TimeStampBean implements Comparable {
             colonne.append("DT_ANNIV,");
             valeur.append(
                 DBSession.quoteWith(
-                    formatDate.formatEG(DT_ANNIV.getTime()),
+                    dbConnect.getFormatDate().format(DT_ANNIV.getTime()),
                     '\''));
             valeur.append(",");
         }
@@ -443,7 +439,7 @@ public class ClientBean extends TimeStampBean implements Comparable {
             colonne.append("DT_CREAT,");
             valeur.append(
                 DBSession.quoteWith(
-                    formatDate.formatEG(DT_CREAT.getTime()),
+                    dbConnect.formatDateTimeAvecTZ(DT_CREAT),
                     '\''));
             valeur.append(",");
         }
@@ -452,7 +448,7 @@ public class ClientBean extends TimeStampBean implements Comparable {
             colonne.append("DT_MODIF,");
             valeur.append(
                 DBSession.quoteWith(
-                    formatDate.formatEG(DT_MODIF.getTime()),
+                    dbConnect.formatDateTimeAvecTZ(DT_MODIF),
                     '\''));
             valeur.append(",");
         }
@@ -742,9 +738,6 @@ public class ClientBean extends TimeStampBean implements Comparable {
      */
     public void maj(DBSession dbConnect) throws SQLException {
 
-        SimpleDateFormatEG formatDate =
-            new SimpleDateFormatEG("dd/MM/yyyy HH:mm:ss");
-
         setDefaultCD_TR_AGE(dbConnect);
 
         StringBuffer req = new StringBuffer("update CLI set ");
@@ -836,7 +829,7 @@ public class ClientBean extends TimeStampBean implements Comparable {
         if (DT_ANNIV != null) {
             colonne.append(
                 DBSession.quoteWith(
-                    formatDate.formatEG(DT_ANNIV.getTime()),
+                    dbConnect.getFormatDate().format(DT_ANNIV.getTime()),
                     '\''));
         }
         else {
@@ -910,7 +903,7 @@ public class ClientBean extends TimeStampBean implements Comparable {
         colonne.append("DT_MODIF=");
         DT_MODIF = Calendar.getInstance();
         colonne.append(
-            DBSession.quoteWith(formatDate.formatEG(DT_MODIF.getTime()), '\''));
+            DBSession.quoteWith(dbConnect.formatDateTimeAvecTZ(DT_MODIF), '\''));
 
         // Constitue la requete finale
         req.append(colonne);
@@ -965,9 +958,7 @@ public class ClientBean extends TimeStampBean implements Comparable {
         
         int nbEnreg = -1;
         
-        com.increg.util.SimpleDateFormatEG formatDate = new SimpleDateFormatEG("dd/MM/yyyy HH:mm:ss");
-        
-        String selection = "select CD_CLI from CLI where DT_CREAT < " + DBSession.quoteWith(formatDate.format(dateLimite), '\'')
+        String selection = "select CD_CLI from CLI where DT_CREAT < " + DBSession.quoteWith(dbConnect.getFormatDateTimeSansTZ().format(dateLimite), '\'')
                 + " and (select count(*) from HISTO_PREST where CD_CLI = CLI.CD_CLI) = 0"
                 + " and (select count(*) from FACT where CD_CLI = CLI.CD_CLI) = 0"
                 + " and (select count(*) from RDV where CD_CLI = CLI.CD_CLI) = 0"
