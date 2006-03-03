@@ -19,6 +19,8 @@ package com.increg.salon.servlet;
 
 import java.net.HttpURLConnection;
 import java.sql.ResultSet;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Vector;
@@ -68,6 +70,7 @@ public class FicRDV extends ConnectedServlet {
         HttpSession mySession = request.getSession(false);
         SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
         DBSession myDBSession = mySalon.getMyDBSession();
+        DateFormat formatDate = new SimpleDateFormat(mySalon.getMessagesBundle().getString("format.dateHeureSimpleSansSeconde"));
 
         RDVBean aRDV = null;
         Vector dispo = new Vector();
@@ -135,7 +138,10 @@ public class FicRDV extends ConnectedServlet {
 
                     aRDV.setCD_COLLAB(CD_COLLAB);
                     aRDV.setDUREE(DUREE);
-                    aRDV.setDT_DEBUT(DT_DEBUT, mySalon.getLangue());
+                    Calendar dtDebut = Calendar.getInstance();
+                    dtDebut.clear();
+                    dtDebut.setTime(formatDate.parse(DT_DEBUT));
+                    aRDV.setDT_DEBUT(dtDebut);
                     aRDV.setCOMM(COMM);
 
                     aRDV.create(myDBSession);
@@ -156,7 +162,10 @@ public class FicRDV extends ConnectedServlet {
                 // Affichage de la fiche en modification
                 request.setAttribute("Action", "Modification");
 
-                aRDV = RDVBean.getRDVBean(myDBSession, CD_CLI, DT_DEBUT, mySalon.getLangue());
+                Calendar dtDebut = Calendar.getInstance();
+                dtDebut.clear();
+                dtDebut.setTime(formatDate.parse(DT_DEBUT));
+                aRDV = RDVBean.getRDVBean(myDBSession, CD_CLI, dtDebut.getTime());
                 if (assertOrError((aRDV != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
@@ -168,7 +177,10 @@ public class FicRDV extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                aRDV = RDVBean.getRDVBean(myDBSession, CD_CLI, DT_DEBUT, mySalon.getLangue());
+                Calendar dtDebut = Calendar.getInstance();
+                dtDebut.clear();
+                dtDebut.setTime(formatDate.parse(DT_DEBUT));
+                aRDV = RDVBean.getRDVBean(myDBSession, CD_CLI, dtDebut.getTime());
                 if (assertOrError((aRDV != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
@@ -198,7 +210,10 @@ public class FicRDV extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                RDVBean aRDVtoDelete = RDVBean.getRDVBean(myDBSession, CD_CLI, DT_DEBUT, mySalon.getLangue());
+                Calendar dtDebut = Calendar.getInstance();
+                dtDebut.clear();
+                dtDebut.setTime(formatDate.parse(DT_DEBUT));
+                RDVBean aRDVtoDelete = RDVBean.getRDVBean(myDBSession, CD_CLI, dtDebut.getTime());
                 if (!aRDVtoDelete.verifChevauchement(myDBSession, true)) {
                     // Chevauchement
                     mySalon.setMessage("Info", BasicSession.TAG_I18N + "ficRDV.conflitRDV" + BasicSession.TAG_I18N);
@@ -211,7 +226,7 @@ public class FicRDV extends ConnectedServlet {
                     aRDV = new RDVBean();
                     aRDV.setCD_CLI(CD_CLI);
                     aRDV.setCD_COLLAB(CD_COLLAB);
-                    aRDV.setDT_DEBUT(DT_DEBUT, mySalon.getLangue());
+                    aRDV.setDT_DEBUT(dtDebut);
                     aRDV.setDUREE(DUREE);
                     aRDV.setCOMM(COMM);
                     request.setAttribute("Action", "Creation");
@@ -228,7 +243,10 @@ public class FicRDV extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 boolean exist = false;
-                aRDV = RDVBean.getRDVBean(myDBSession, CD_CLI, DT_DEBUT, mySalon.getLangue());
+                Calendar dtDebut = Calendar.getInstance();
+                dtDebut.clear();
+                dtDebut.setTime(formatDate.parse(DT_DEBUT));
+                aRDV = RDVBean.getRDVBean(myDBSession, CD_CLI, dtDebut.getTime());
                 if (aRDV == null) {
                     aRDV = new RDVBean();
                     request.setAttribute("Action", "Creation");
@@ -245,7 +263,7 @@ public class FicRDV extends ConnectedServlet {
                     aRDV.setDUREE(DUREE);
                     aRDV.setCOMM(COMM);
                     // Date en dernier en cas d'erreur de format
-                    aRDV.setDT_DEBUT(DT_DEBUT, mySalon.getLangue());
+                    aRDV.setDT_DEBUT(dtDebut);
 
                     if (!aRDV.verifChevauchement(myDBSession, exist)) {
                         // Chevauchement
