@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TreeMap;
 
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.SalonSession;
 import com.increg.salon.request.Presence;
+import com.increg.util.ServletUtil;
 
 /**
  * Recherche/Liste de Présences
@@ -31,35 +33,25 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
 	String DT_DEBUT = request.getParameter("DT_DEBUT");
 	String DT_FIN = request.getParameter("DT_FIN");
 
-	DateFormat formatDate = DateFormat.getDateInstance(DateFormat.SHORT);
-
     // Récupère la connexion
     HttpSession mySession = request.getSession(false);
     SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
     DBSession myDBSession = mySalon.getMyDBSession();
+    DateFormat formatDate = new SimpleDateFormat(mySalon.getMessagesBundle().getString("format.dateSimpleDefaut"));
 
 	// Valeurs par défaut
-	if (DT_DEBUT == null) {
-		// Début de mois
-		Calendar J7 = Calendar.getInstance();
-		J7.add(Calendar.DAY_OF_YEAR, 1 - J7.get(Calendar.DAY_OF_MONTH));
-		DT_DEBUT = formatDate.format(J7.getTime());
-	}
-	if (DT_FIN == null) {
-		DT_FIN = formatDate.format(Calendar.getInstance().getTime());
-	}
-    try {
-        if ((DT_DEBUT != null) && (DT_DEBUT.length() > 0)) {
-            request.setAttribute("DT_DEBUT", formatDate.parse(DT_DEBUT));
-        }
-        if ((DT_FIN != null) && (DT_FIN.length() > 0)) {
-            request.setAttribute("DT_FIN", formatDate.parse(DT_FIN));
-        }
+	// Début de mois
+	Calendar J7 = Calendar.getInstance();
+	J7.add(Calendar.DAY_OF_YEAR, 1 - J7.get(Calendar.DAY_OF_MONTH));
+    Calendar dtDebut = ServletUtil.interpreteDate(DT_DEBUT, formatDate, J7);
+    Calendar dtFin = ServletUtil.interpreteDate(DT_FIN, formatDate, Calendar.getInstance());
+    if (dtFin.before(dtDebut)) {
+        dtFin = dtDebut;
     }
-    catch (ParseException e) {
-        mySalon.setMessage("Erreur", e.toString());
-        e.printStackTrace();
-    }
+    request.setAttribute("DT_DEBUT", dtDebut);
+    request.setAttribute("DT_FIN", dtFin);
+    DT_DEBUT = myDBSession.getFormatDate().format(dtDebut.getTime());
+    DT_FIN = myDBSession.getFormatDate().format(dtFin.getTime());
 
 	// Constitue les requetes SQL
 	String reqSQL = "select to_char(date_part('year', DT_DEBUT), '9999') || to_char(date_part('week', DT_DEBUT), '99') || ' ' || to_char(COLLAB.CD_COLLAB, '9999') as SEM_COLLAB, min(DT_DEBUT) as DEBUT, "

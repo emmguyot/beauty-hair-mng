@@ -2,6 +2,7 @@ package com.increg.salon.servlet;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Vector;
 
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.FactBean;
 import com.increg.salon.bean.SalonSession;
+import com.increg.util.ServletUtil;
 
 /**
  * Recherche/Liste de la TVA encaissée
@@ -29,35 +31,25 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
 	String DT_DEBUT = request.getParameter("DT_DEBUT");
 	String DT_FIN = request.getParameter("DT_FIN");
 
-	DateFormat formatDate  = DateFormat.getDateInstance(DateFormat.SHORT);
-
     // Récupère la connexion
     HttpSession mySession = request.getSession(false);
     SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
     DBSession myDBSession = mySalon.getMyDBSession();
+    DateFormat formatDate = new SimpleDateFormat(mySalon.getMessagesBundle().getString("format.dateSimpleDefaut"));
 
 	// Valeurs par défaut
-	if (DT_DEBUT == null) {
-		// Début de mois
-		Calendar J7 = Calendar.getInstance();
-		J7.add(Calendar.DAY_OF_YEAR, 1 - J7.get(Calendar.DAY_OF_MONTH));
-		DT_DEBUT = formatDate.format(J7.getTime());
-	}
-	if (DT_FIN == null) {
-		DT_FIN = formatDate.format(Calendar.getInstance().getTime());
-	}
-    try {
-        if ((DT_DEBUT != null) && (DT_DEBUT.length() > 0)) {
-            request.setAttribute("DT_DEBUT", formatDate.parse(DT_DEBUT));
-        }
-        if ((DT_FIN != null) && (DT_FIN.length() > 0)) {
-            request.setAttribute("DT_FIN", formatDate.parse(DT_FIN));
-        }
+	// Début de mois
+	Calendar J7 = Calendar.getInstance();
+	J7.add(Calendar.DAY_OF_YEAR, 1 - J7.get(Calendar.DAY_OF_MONTH));
+    Calendar dtDebut = ServletUtil.interpreteDate(DT_DEBUT, formatDate, J7);
+    Calendar dtFin = ServletUtil.interpreteDate(DT_FIN, formatDate, Calendar.getInstance());
+    if (dtFin.before(dtDebut)) {
+        dtFin = dtDebut;
     }
-    catch (ParseException e) {
-        mySalon.setMessage("Erreur", e.toString());
-        e.printStackTrace();
-    }
+    request.setAttribute("DT_DEBUT", dtDebut);
+    request.setAttribute("DT_FIN", dtFin);
+    DT_DEBUT = myDBSession.getFormatDate().format(dtDebut.getTime());
+    DT_FIN = myDBSession.getFormatDate().format(dtFin.getTime());
 
 	Vector lstLignes = new Vector();
 

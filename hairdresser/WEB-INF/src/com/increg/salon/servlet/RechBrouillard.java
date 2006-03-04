@@ -35,7 +35,6 @@ public void performTask(javax.servlet.http.HttpServletRequest request, javax.ser
     SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
     DBSession myDBSession = mySalon.getMyDBSession();
     DateFormat formatDate = new SimpleDateFormat(mySalon.getMessagesBundle().getString("format.dateSimpleDefaut"));
-    DateFormat formatDateDB = DateFormat.getDateInstance(DateFormat.SHORT);
 
     // J-7
     Calendar J7 = Calendar.getInstance();
@@ -47,8 +46,8 @@ public void performTask(javax.servlet.http.HttpServletRequest request, javax.ser
     }
     request.setAttribute("DT_DEBUT", dtDebut);
     request.setAttribute("DT_FIN", dtFin);
-    DT_DEBUT = formatDateDB.format(dtDebut.getTime());
-    DT_FIN = formatDateDB.format(dtFin.getTime());
+    DT_DEBUT = myDBSession.getFormatDate().format(dtDebut.getTime());
+    DT_FIN = myDBSession.getFormatDate().format(dtFin.getTime());
 
     TreeMap lstLignes = new TreeMap();
     TreeMap lstType = new TreeMap();

@@ -17,7 +17,7 @@
  * 
  */
 %>
-<%@ page import="java.util.Vector,java.util.Date" %>
+<%@ page import="java.util.Vector,java.util.Calendar" %>
 <%@ page import="com.increg.salon.bean.SalonSession,
                 com.increg.salon.bean.DonneeRefBean,
 	        com.increg.salon.bean.MvtCaisseBean,
@@ -49,8 +49,8 @@ function Init() {
 <%
    // Récupération des paramètres
    String CD_MOD_REGL = request.getParameter("CD_MOD_REGL");
-   Date DT_DEBUT = (Date) request.getAttribute("DT_DEBUT");
-   Date DT_FIN = (Date) request.getAttribute("DT_FIN");
+   Calendar DT_DEBUT = (Calendar) request.getAttribute("DT_DEBUT");
+   Calendar DT_FIN = (Calendar) request.getAttribute("DT_FIN");
    String CD_TYP_MCA = request.getParameter("CD_TYP_MCA");
 %>
 <h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstMvtCaisse.gif"></h1>

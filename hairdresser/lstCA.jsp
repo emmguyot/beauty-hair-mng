@@ -17,7 +17,7 @@
  * 
  */
 %>
-<%@ page import="java.util.Vector,java.math.BigDecimal,java.util.Calendar,java.util.Date" %>
+<%@ page import="java.util.Vector,java.math.BigDecimal,java.util.Calendar" %>
 <%@ page import="com.increg.salon.request.CA
 	       " %>
 <%@ page import="com.increg.salon.bean.SalonSession" %>
@@ -51,8 +51,8 @@ function Init() {
 <%
    // Récupération des paramètres
    String CD_COLLAB = request.getParameter("CD_COLLAB");
-   Date DT_DEBUT = (Date) request.getAttribute("DT_DEBUT");
-   Date DT_FIN = (Date) request.getAttribute("DT_FIN");
+   Calendar DT_DEBUT = (Calendar) request.getAttribute("DT_DEBUT");
+   Calendar DT_FIN = (Calendar) request.getAttribute("DT_FIN");
 %>
 <h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstCA.gif"></h1>
 <form name="fiche" action="rechCA.srv" method="post">

@@ -20,7 +20,7 @@
 <%@ page import="java.util.Vector,
 			java.util.List,
 			java.net.URLEncoder,
-			java.util.Date,
+			java.util.Calendar,
 			java.util.Iterator,
 	        com.increg.salon.bean.SalonSession,
             com.increg.salon.bean.CollabBean,
@@ -46,8 +46,8 @@
 <%
    // Récupération des paramètres
    String CD_COLLAB = request.getParameter("CD_COLLAB");
-   Date DT_DEBUT = (Date) request.getAttribute("DT_DEBUT");
-   Date DT_FIN = (Date) request.getAttribute("DT_FIN");
+   Calendar DT_DEBUT = (Calendar) request.getAttribute("DT_DEBUT");
+   Calendar DT_FIN = (Calendar) request.getAttribute("DT_FIN");
    String CD_TYP_POINTAGE = request.getParameter("CD_TYP_POINTAGE");
 %>
 <h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstPointage.gif"></h1>

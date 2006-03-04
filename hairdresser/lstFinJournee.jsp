@@ -17,7 +17,7 @@
  * 
  */
 %>
-<%@ page import="java.util.TreeMap,java.util.Set,java.util.Vector,java.util.Iterator,java.math.BigDecimal" %>
+<%@ page import="java.util.TreeMap,java.util.Set,java.util.Vector,java.util.Iterator,java.math.BigDecimal,java.util.Calendar" %>
 <%@ page import="com.increg.salon.bean.SalonSession,
                 com.increg.salon.request.Brouillard,
 	        com.increg.salon.request.CA,
@@ -53,7 +53,7 @@ function Init() {
 </script>
 <%
     // Récupération des paramètres
-    String DT_JOUR = (String) request.getAttribute("DT_JOUR");
+    Calendar DT_JOUR = (Calendar) request.getAttribute("DT_JOUR");
     // Recupère les listes pour le Brouillard
     Brouillard brouillardTotal = (Brouillard) request.getAttribute("TotalB");
     TreeMap lstTypesB = (TreeMap) request.getAttribute("ListeTypeB");
@@ -71,10 +71,11 @@ function Init() {
 <form name="fiche" action="rechFinJournee.srv" method="post">
 <p>
 <i18n:message key="label.journeeDu" /> :
-   <salon:valeur valeurNulle="null" valeur="<%= DT_JOUR %>" >
+    <i18n:message key="format.dateSimpleDefaut" id="formatDate" />
+    <salon:valeur valeurNulle="null" valeur="<%= DT_JOUR %>" format="<%= formatDate %>">
       %%
       <input type="hidden" name="DT_JOUR" value="%%">
-   </salon:valeur>
+    </salon:valeur>
 </p>
 </form>
 <table width="100%" border="1" rules="groups">

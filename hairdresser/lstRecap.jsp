@@ -17,7 +17,7 @@
  * 
  */
 %>
-<%@ page import="java.util.TreeMap,java.util.Set,java.util.Iterator,java.math.BigDecimal,java.util.Date" %>
+<%@ page import="java.util.TreeMap,java.util.Set,java.util.Iterator,java.math.BigDecimal,java.util.Calendar" %>
 <%@ page import="com.increg.salon.bean.SalonSession,
                 com.increg.salon.request.Recap
 	        " %>
@@ -50,8 +50,8 @@ function Init() {
 </script>
 <%
    // Récupération des paramètres
-   Date DT_DEBUT = (Date) request.getAttribute("DT_DEBUT");
-   Date DT_FIN = (Date) request.getAttribute("DT_FIN");
+   Calendar DT_DEBUT = (Calendar) request.getAttribute("DT_DEBUT");
+   Calendar DT_FIN = (Calendar) request.getAttribute("DT_FIN");
    String valeur = request.getParameter("valeur");
    String[] CD_TYP_MVT_SELECT = request.getParameterValues("CD_TYP_MVT");
    Boolean cocheTout = (Boolean) request.getAttribute("cocheTout");

@@ -17,7 +17,7 @@
  * 
  */
 %>
-<%@ page import="java.util.TreeMap,java.util.Set,java.util.Iterator,java.util.Date" %>
+<%@ page import="java.util.TreeMap,java.util.Set,java.util.Iterator,java.util.Calendar" %>
 <%@ page import="com.increg.salon.bean.ModReglBean,
 	       com.increg.salon.request.Journal
 	       " %>
@@ -52,8 +52,8 @@ function Init() {
 <%
    // Récupération des paramètres
    String CD_MOD_REGL = (String) request.getAttribute("CD_MOD_REGL");
-   Date DT_DEBUT = (Date) request.getAttribute("DT_DEBUT");
-   Date DT_FIN = (Date) request.getAttribute("DT_FIN");
+   Calendar DT_DEBUT = (Calendar) request.getAttribute("DT_DEBUT");
+   Calendar DT_FIN = (Calendar) request.getAttribute("DT_FIN");
 %>
 <h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstJournal.gif"></h1>
 <form name="fiche" action="rechJournal.srv" method="post">

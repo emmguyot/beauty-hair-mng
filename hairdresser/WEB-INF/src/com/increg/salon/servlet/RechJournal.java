@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.TreeMap;
@@ -17,6 +18,7 @@ import com.increg.salon.bean.ModReglBean;
 import com.increg.salon.bean.MvtCaisseBean;
 import com.increg.salon.bean.SalonSession;
 import com.increg.salon.request.Journal;
+import com.increg.util.ServletUtil;
 /**
  * Recherche/Liste de Brouillards
  * Creation date: (15/10/2001 14:09:47)
@@ -37,32 +39,22 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
     HttpSession mySession = request.getSession(false);
     SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
     DBSession myDBSession = mySalon.getMyDBSession();
-
-	DateFormat formatDate  = DateFormat.getDateInstance(DateFormat.SHORT);
+    DateFormat formatDate = new SimpleDateFormat(mySalon.getMessagesBundle().getString("format.dateSimpleDefaut"));
 
 	// Valeurs par défaut
-	if (DT_DEBUT == null) {
-		// Date du jour
-		DT_DEBUT = formatDate.format(Calendar.getInstance().getTime());
-	}
-	if (DT_FIN == null) {
-		DT_FIN = formatDate.format(Calendar.getInstance().getTime());
-	}
+    Calendar dtJour = Calendar.getInstance();
+    Calendar dtDebut = ServletUtil.interpreteDate(DT_DEBUT, formatDate, dtJour);
+    Calendar dtFin = ServletUtil.interpreteDate(DT_FIN, formatDate, dtJour);
+    if (dtFin.before(dtDebut)) {
+        dtFin = dtDebut;
+    }
+    request.setAttribute("DT_DEBUT", dtDebut);
+    request.setAttribute("DT_FIN", dtFin);
+    DT_DEBUT = myDBSession.getFormatDate().format(dtDebut.getTime());
+    DT_FIN = myDBSession.getFormatDate().format(dtFin.getTime());
 	if (CD_MOD_REGL == null) {
 		CD_MOD_REGL = Integer.toString(ModReglBean.MOD_REGL_ESP);
 	}
-    try {
-        if ((DT_DEBUT != null) && (DT_DEBUT.length() > 0)) {
-            request.setAttribute("DT_DEBUT", formatDate.parse(DT_DEBUT));
-        }
-        if ((DT_FIN != null) && (DT_FIN.length() > 0)) {
-            request.setAttribute("DT_FIN", formatDate.parse(DT_FIN));
-        }
-    }
-    catch (ParseException e) {
-        mySalon.setMessage("Erreur", e.toString());
-        e.printStackTrace();
-    }
 	request.setAttribute("CD_MOD_REGL", CD_MOD_REGL);
 
 	// Constitue les requetes SQL
