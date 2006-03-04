@@ -172,7 +172,7 @@ public class TvaBean extends GenericBean {
     public int getCD_TVA() {
         return CD_TVA;
     }
-    /**
+	/**
      * Création d'un Bean Type de Vente à partir de sa clé
      * Creation date: (19/08/2001 21:14:20)
      * @param dbConnect Connexion à la base à utiliser
@@ -305,4 +305,24 @@ public class TvaBean extends GenericBean {
     public java.lang.String toString() {
         return getLIB_TVA();
     }
+
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	public int hashCode() {
+		return getCD_TVA();
+	}
+    /**
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	public boolean equals(Object obj) {
+		if (obj instanceof TvaBean) {
+			TvaBean tva2 = (TvaBean) obj;
+			return (getCD_TVA() == tva2.getCD_TVA());
+		}
+		else {
+			return false;
+		}
+	}
+
 }
