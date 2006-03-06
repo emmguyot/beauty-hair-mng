@@ -423,6 +423,7 @@ public class RDVBean extends TimeStampBean {
             java.text.DateFormat.getDateTimeInstance(
                 java.text.DateFormat.SHORT,
                 java.text.DateFormat.SHORT);
+        formatDateStd.setTimeZone(RDVBean.getTimeZone());
         String dtDebut = formatDateStd.format(DT_DEBUT);
         
         String reqSQL = "select * from RDV where CD_CLI=" + CD_CLI + " and DT_DEBUT='" + dtDebut + "+0'";

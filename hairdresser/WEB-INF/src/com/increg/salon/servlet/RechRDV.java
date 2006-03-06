@@ -58,15 +58,18 @@ public class RechRDV extends ConnectedServlet {
         HttpSession mySession = request.getSession(false);
         SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
         DBSession myDBSession = mySalon.getMyDBSession();
-        DateFormat formatDate = new SimpleDateFormat(mySalon.getMessagesBundle().getString("format.dateHeureSansSeconde"));
+        DateFormat formatDate = new SimpleDateFormat(mySalon.getMessagesBundle().getString("format.dateHeureSimpleSansSeconde"));
         DateFormat formatDateDB = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
         formatDate.setTimeZone(RDVBean.getTimeZone());
+        formatDateDB.setTimeZone(RDVBean.getTimeZone());
 
         Calendar dtDebut = ServletUtil.interpreteDate(DT_DEBUT, formatDate, dtDebutDefaut());
         Calendar dtFin = ServletUtil.interpreteDate(DT_FIN, formatDate, dtFinDefault());
         if (dtFin.before(dtDebut)) {
             dtFin = dtDebut;
         }
+        dtDebut.setTimeZone(RDVBean.getTimeZone());
+        dtFin.setTimeZone(RDVBean.getTimeZone());
         request.setAttribute("DT_DEBUT", dtDebut);
         request.setAttribute("DT_FIN", dtFin);
         DT_DEBUT = formatDateDB.format(dtDebut.getTime());

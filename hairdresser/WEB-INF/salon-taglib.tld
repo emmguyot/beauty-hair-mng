@@ -56,6 +56,10 @@
        <name>includeHTML</name>
        <required>false</required>
     </attribute>
+    <attribute>
+       <name>url</name>
+       <required>false</required>
+    </attribute>
   </tag>       
   <tag>
     <name>selection</name>

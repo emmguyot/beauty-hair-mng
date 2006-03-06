@@ -60,7 +60,7 @@
 </p>
 <p>
 <i18n:message key="label.entreLe" /> :
-<i18n:message key="format.dateHeureSansSeconde" id="formatDate" />
+<i18n:message key="format.dateHeureSimpleSansSeconde" id="formatDate" />
     <salon:date type="text" name="DT_DEBUT" valeurDate="<%= DT_DEBUT %>" valeurNulle="null" format="<%= formatDate %>" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
 <i18n:message key="label.etLe" /> : 
     <salon:date type="text" name="DT_FIN" valeurDate="<%= DT_FIN %>" valeurNulle="null" format="<%= formatDate %>" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
@@ -97,7 +97,9 @@
                     <%
                     if (aRDV != null) {
                     %>
-                        <a href="_FicheRDV.jsp?Action=Modification&CD_CLI=<%= aRDV.getCD_CLI() %>&DT_DEBUT=<%= URLEncoder.encode(SalonSession.dateToString(aRDV.getDT_DEBUT())) %>" target="ClientFrame" title="<%= modifRDV %>"><img src="images/boutonRDV.gif" border="0"></a>
+                        <salon:valeur valeurNulle="null" valeur="<%= aRDV.getDT_DEBUT() %>" url="true">
+                        <a href="_FicheRDV.jsp?Action=Modification&CD_CLI=<%= aRDV.getCD_CLI() %>&DT_DEBUT=%%" target="ClientFrame" title="<%= modifRDV %>"><img src="images/boutonRDV.gif" border="0"></a>
+                        </salon:valeur>
                     <%
                     }
                     if (aFact != null) {

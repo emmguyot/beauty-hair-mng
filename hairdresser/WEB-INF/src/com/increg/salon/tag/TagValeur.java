@@ -1,6 +1,7 @@
 package com.increg.salon.tag;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -60,6 +61,11 @@ public class TagValeur extends BodyTagSupport {
      */
     protected boolean includeHTML = false;
 
+    /**
+     * Indicateur si les informations à afficher font partie d'une URL
+     */
+    protected boolean url = false;
+    
     public TagValeur() {
 		super();
 		// Initialise les attributs par défaut
@@ -144,6 +150,9 @@ public class TagValeur extends BodyTagSupport {
                         }
                     } else if (includeHTML) {
                         aAfficher = valeur;
+                    }
+                    else if (url) {
+                    	aAfficher = URLEncoder.encode(valeur);
                     }
                     else {
                         aAfficher = ServletUtil.htmlEncode(valeur);
@@ -453,7 +462,29 @@ public class TagValeur extends BodyTagSupport {
         valeurDate = null;
         heureDec = false;
         format = null;
+        url = false;
         return super.doEndTag();
+    }
+	/**
+	 * @return Returns the url.
+	 */
+	public boolean isUrl() {
+		return url;
+	}
+	/**
+	 * @param url The url to set.
+	 */
+	public void setUrl(boolean url) {
+		this.url = url;
+	}
+
+    /**
+     * @param s The url to set.
+     */
+    public void setUrl(String s) {
+        if (s != null) {
+            this.url = s.equals("true");
+        }
     }
 
 }
