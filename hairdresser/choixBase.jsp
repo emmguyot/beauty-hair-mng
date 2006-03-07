@@ -19,9 +19,11 @@
 %>
 <%@ page import="com.increg.salon.bean.MultiConfigBean" %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= request.getLocale() %>"/>
 <html>
 <head>
-<title>Choix de la base à utiliser</title>
+<title><i18n:message key="title.choixBase" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 <link rel="shortcut icon" href="images/favivon.ico" >
@@ -44,8 +46,8 @@
                     <tr> 
                         <td height="291" width="469" valign="top" class="action" align="center"> 
                                     <p>&nbsp;</p>
-                                    <p><img src="images/fr/titres/Portail.gif" width="448" height="72" border="0"></p>
-                                    <h1>Choix de la base</h1>
+                                    <p><img src="images/<%= request.getLocale().getLanguage() %>/titres/Portail.gif" width="448" height="72" border="0"></p>
+                                    <h1><i18n:message key="label.choixBase" /></h1>
                                     <p><img src="images/perso/Logo.gif" width="130" height="68" border="0"></p>
                                     <p>&nbsp;</p>
                         </td>
@@ -59,18 +61,19 @@
                                 <tr> 
                                     <td width="469" height="173" valign="top" bordercolor="#000000"> 
                                         <form method="post" action="initPortail.srv" name="base">
-                                            <p class="obligatoire" align="center">Veuillez choisir la base que vous souhaitez utiliser :</p>
+                                            <p class="obligatoire" align="center"><i18n:message key="label.choixBaseAUtiliser" /> :</p>
                                             <p class="obligatoire" align="center">
                                                 <salon:selection valeur="<%= 0 %>" valeurs="<%= aMCBean.base2Map() %>">
                                                     <select name="numBase">
                                                     %%
                                                     </select>
                                                 </salon:selection>		 
-                                            <salon:bouton url="javascript:document.base.submit()" imgOn="images/fr/valider2.gif" img="images/fr/valider.gif" alt="Valider" />
+                                            <i18n:message key="bouton.Valider" id="paramBouton2" />
+                                            <salon:bouton url="javascript:document.base.submit()" imgOn="<%= \"images/\" + request.getLocale().getLanguage() + \"/valider2.gif\" %>" img="<%= \"images/\" + request.getLocale().getLanguage() + \"/valider.gif\" %>" alt="<%= paramBouton2 %>" />
                                             </p>
                                         </form>
-                                        <div align="center"><font size="-1"><a href="fr/histo.html"><%@ include file="include/version.inc" %></a> &copy; 
-                                                2002-2006 Valérie, Alexandre et Emmanuel Guyot<br>Ce logiciel n'offre ABSOLUMENT AUCUNE GARANTIE;<br/> Ce logiciel est gratuit et nous vous encourageons à le redistribuer selon les termes de la <a href="fr/contact.html" target="_new">licence GPL.</a></font></div>
+                                        <div align="center"><font size="-1"><a href="/<%= request.getLocale().getLanguage() %>/histo.html"><%@ include file="include/version.inc" %></a> &copy; 
+                                                <i18n:message key="message.copyrightLicence" /></font></div>
                                     </td>
                                 </tr>
                             </table>

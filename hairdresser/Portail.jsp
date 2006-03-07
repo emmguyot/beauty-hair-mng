@@ -37,7 +37,7 @@
 function checkAndSubmit()
 {
    if (document.cnx.MOT_PASSE.value == "") {
-		alert ("Le mot de passe est obligatoire pour utiliser l'application.");
+		alert ("<i18n:message key="portail.motDePasseManquant" />");
    }
    else {
 		document.cnx.submit();
@@ -76,12 +76,11 @@ function checkAndSubmit()
                                 <tr> 
                                     <td width="469" height="173" valign="top" bordercolor="#000000"> 
                                         <form method="post" action="ident.srv" name="cnx">
-                                            <p class="obligatoire" align="center">Merci de 
-                                                vous identifier pour utiliser l'application.</p>
-                                            <p class="obligatoire" align="center">Mot de 
-                                                passe : 
+                                            <p class="obligatoire" align="center"><i18n:message key="message.identification" /></p>
+                                            <p class="obligatoire" align="center"><i18n:message key="label.motPasse" />: 
                                                 <input type="password" name="MOT_PASSE" maxlength="20">
-                                            <salon:bouton url="javascript:checkAndSubmit()" imgOn="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/valider2.gif\" %>" img="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/valider.gif\" %>" alt="Valider" />
+                                            <i18n:message key="bouton.Valider" id="paramBouton2" />
+                                            <salon:bouton url="javascript:checkAndSubmit()" imgOn="<%= \"images/\" + request.getLocale().getLanguage() + \"/valider2.gif\" %>" img="<%= \"images/\" + request.getLocale().getLanguage() + \"/valider.gif\" %>" alt="<%= paramBouton2 %>" />
                                                 <% if ((mySalon.getMessage("Erreur") != null) 
             && (mySalon.getMessage("Erreur").length() > 0)) { %>
                                             </p>
@@ -90,7 +89,7 @@ function checkAndSubmit()
                                             </p>
                                         </form>
                                         <div align="center"><font size="-1"><a href="histo.html"><%@ include file="include/version.inc" %></a> &copy; 
-                                                2002-2006 Valérie, Alexandre et Emmanuel Guyot<br>Ce logiciel n'offre ABSOLUMENT AUCUNE GARANTIE;<br/> Ce logiciel est gratuit et nous vous encourageons à le redistribuer selon les termes de la <a href="contact.html" target="_new">licence GPL.</a></font></div>
+                                                <i18n:message key="message.copyrightLicence" /></font></div>
                                     </td>
                                 </tr>
                             </table>
