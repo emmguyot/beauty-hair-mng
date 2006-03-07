@@ -1,6 +1,9 @@
 package com.increg.salon.servlet;
 
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -18,6 +21,7 @@ import com.increg.commun.exception.FctlException;
 import com.increg.salon.bean.SalonSession;
 import com.increg.salon.bean.StatBean;
 import com.increg.salon.bean.StatHistoBean;
+import com.increg.util.ServletUtil;
 
 
 /**
@@ -43,9 +47,9 @@ public class FicStat extends ConnectedServlet {
 
         // Récupère la connexion
         HttpSession mySession = request.getSession(false);
-        SalonSession mySalon =
-            (SalonSession) mySession.getAttribute("SalonSession");
+        SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
         DBSession myDBSession = mySalon.getMyDBSession();
+        DateFormat formatDate = new SimpleDateFormat(mySalon.getMessagesBundle().getString("format.dateSimpleDefaut"));
 
         // Resultat
         StatBean aStat = null;
@@ -192,6 +196,11 @@ public class FicStat extends ConnectedServlet {
                 for (int i = 0; i < lstHisto.size(); i++) {
                     StatHistoBean aHisto = (StatHistoBean) lstHisto.get(i);
                     
+                	if (aHisto.getPARAM().indexOf("Date") != -1) {
+                		// C'est une date : Convertion de la date depuis le format BD
+                        Calendar dt = ServletUtil.interpreteDate(aHisto.getVALUE(), myDBSession.getFormatDate(), Calendar.getInstance());
+                        aHisto.setVALUE(formatDate.format(dt.getTime()));
+                	}
                     // Positionne les valeurs par défaut
                     request.setAttribute(aHisto.getPARAM() + "$" + aHisto.getNUM_GRAPH(), aHisto.getVALUE());
                 }
@@ -240,11 +249,17 @@ public class FicStat extends ConnectedServlet {
                                     .equals(Integer.toString(nb)))) {
                                 if (request.getParameter(paramName).length()
                                     > 0) {
+                                	String paramValue = request.getParameter(paramName);
+                                	if (paramName.indexOf("Date") != -1) {
+                                		// C'est une date : Convertion de la date dans le format BD
+                                        Calendar dt = ServletUtil.interpreteDate(paramValue, formatDate, Calendar.getInstance());
+                                        paramValue = myDBSession.getFormatDate().format(dt.getTime());
+                                	}
                                     paramMap.put(
                                         paramName.substring(
                                             0,
                                             paramName.length() - 2),
-                                        request.getParameter(paramName));
+                                        paramValue);
                                 }
                                 else {
                                     // Ce graphe n'est pas demandé

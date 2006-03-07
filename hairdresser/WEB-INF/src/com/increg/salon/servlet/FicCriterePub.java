@@ -1,5 +1,8 @@
 package com.increg.salon.servlet;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +17,7 @@ import com.increg.commun.DBSession;
 import com.increg.commun.exception.FctlException;
 import com.increg.salon.bean.CriterePubBean;
 import com.increg.salon.bean.SalonSession;
+import com.increg.util.ServletUtil;
 
 /**
  * Création d'un critère de publipostage
@@ -36,6 +40,7 @@ public class FicCriterePub extends ConnectedServlet {
         HttpSession mySession = request.getSession(false);
         SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
         DBSession myDBSession = mySalon.getMyDBSession();
+        DateFormat formatDate = new SimpleDateFormat(mySalon.getMessagesBundle().getString("format.dateSimpleDefaut"));
 
         // Resultat
         CriterePubBean aCriterePub = null;
@@ -174,8 +179,14 @@ public class FicCriterePub extends ConnectedServlet {
                         i.hasMoreElements();) {
                     String paramName = (String) i.nextElement();
                     if (request.getParameter(paramName).length() > 0) {
+                    	String paramValue = request.getParameter(paramName);
+                    	if (paramName.indexOf("Date") != -1) {
+                    		// C'est une date : Convertion de la date dans le format BD
+                            Calendar dt = ServletUtil.interpreteDate(paramValue, formatDate, Calendar.getInstance());
+                            paramValue = myDBSession.getFormatDate().format(dt.getTime());
+                    	}
                         paramMap.put(paramName,
-                                    request.getParameter(paramName));
+                                    paramValue);
                     }
                 }
 
