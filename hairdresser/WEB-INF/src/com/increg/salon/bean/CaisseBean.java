@@ -1,10 +1,30 @@
+/*
+ * Bean de gestion d'une caisse (alias un mode de paiement et son solde)
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.bean;
 
-import java.sql.*;
-import java.util.*;
-import java.math.*;
-import com.increg.commun.*;
-import com.increg.util.*;
+import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Calendar;
+
+import com.increg.commun.BasicSession;
+import com.increg.commun.DBSession;
+import com.increg.commun.TimeStampBean;
 /**
  * Gestion d'une facture (entête et pied)
  * Creation date: (17/08/2001 20:08:57)
@@ -65,8 +85,6 @@ public class CaisseBean extends TimeStampBean {
 	 */
 	public void create(DBSession dbConnect) throws SQLException {
 	 
-		com.increg.util.SimpleDateFormatEG formatDate  = new SimpleDateFormatEG("dd/MM/yyyy HH:mm:ss");
-	
 		StringBuffer req = new StringBuffer("insert into CAISSE ");
 		StringBuffer colonne = new StringBuffer("(");
 		StringBuffer valeur = new StringBuffer(" values ( ");
@@ -91,13 +109,13 @@ public class CaisseBean extends TimeStampBean {
 	
 		if (DT_CREAT != null) {
 			colonne.append("DT_CREAT,");
-			valeur.append(DBSession.quoteWith(formatDate.formatEG(DT_CREAT.getTime()), '\''));
+			valeur.append(DBSession.quoteWith(dbConnect.formatDateTimeAvecTZ(DT_CREAT), '\''));
 			valeur.append(",");
 		}
 	
 		if (DT_MODIF != null) {
 			colonne.append("DT_MODIF,");
-			valeur.append(DBSession.quoteWith(formatDate.formatEG(DT_MODIF.getTime()), '\''));
+			valeur.append(DBSession.quoteWith(dbConnect.formatDateTimeAvecTZ(DT_MODIF), '\''));
 			valeur.append(",");
 		}
 	
@@ -118,7 +136,7 @@ public class CaisseBean extends TimeStampBean {
 		nb = dbConnect.doExecuteSQL(reqs);
 	
 		if (nb[0] != 1) {
-			throw (new SQLException("Création non effectuée"));
+			throw (new SQLException(BasicSession.TAG_I18N + "message.creationKo" + BasicSession.TAG_I18N));
 		}	
 	
 	}
@@ -152,7 +170,7 @@ public class CaisseBean extends TimeStampBean {
 		nb = dbConnect.doExecuteSQL(reqs);
 	
 		if (nb[0] != 1) {
-			throw (new SQLException("Suppression non effectuée"));
+			throw (new SQLException(BasicSession.TAG_I18N + "message.suppressionKo" + BasicSession.TAG_I18N));
 		}	
 			
 		
@@ -234,8 +252,6 @@ public class CaisseBean extends TimeStampBean {
 	 */
 	public void maj(DBSession dbConnect) throws SQLException {
 	
-		com.increg.util.SimpleDateFormatEG formatDate  = new SimpleDateFormatEG("dd/MM/yyyy HH:mm:ss");
-	
 		StringBuffer req = new StringBuffer("update CAISSE set ");
 		StringBuffer colonne = new StringBuffer("");
 		StringBuffer where = new StringBuffer(" where CD_MOD_REGL=" + CD_MOD_REGL);
@@ -260,7 +276,7 @@ public class CaisseBean extends TimeStampBean {
 	
 		colonne.append("DT_MODIF=");
 		DT_MODIF = Calendar.getInstance();
-		colonne.append(DBSession.quoteWith(formatDate.formatEG(DT_MODIF.getTime()), '\''));
+		colonne.append(DBSession.quoteWith(dbConnect.formatDateTimeAvecTZ(DT_MODIF), '\''));
 	
 		// Constitue la requete finale
 		req.append(colonne);
@@ -273,7 +289,7 @@ public class CaisseBean extends TimeStampBean {
 		nb = dbConnect.doExecuteSQL(reqs);
 	
 		if (nb[0] != 1) {
-			throw (new SQLException("Mise à jour non effectuée"));
+			throw (new SQLException(BasicSession.TAG_I18N + "message.enregistrementKo" + BasicSession.TAG_I18N));
 		}
 	
 	}

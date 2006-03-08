@@ -71,7 +71,7 @@ public void performTask(
 
 			try {
 	            aFourn.create(myDBSession);
-	            mySalon.setMessage("Info", "Création effectuée.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.creationOk" + BasicSession.TAG_I18N);
 	            request.setAttribute("Action", "Modification");
 			}
 			catch (Exception e) {
@@ -84,6 +84,9 @@ public void performTask(
 			request.setAttribute("Action", "Modification");
 
 			aFourn = FournBean.getFournBean(myDBSession, CD_FOURN);
+            if (assertOrError((aFourn != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 		}
 		else if (Action.equals("Modification")) {
 			// Modification effective de la fiche
@@ -92,6 +95,9 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aFourn = FournBean.getFournBean(myDBSession, CD_FOURN);
+            if (assertOrError((aFourn != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 
 			aFourn.setCD_FOURN(CD_FOURN);
 			aFourn.setRAIS_SOC(RAIS_SOC);
@@ -110,7 +116,7 @@ public void performTask(
 
 			try {
 	            aFourn.maj(myDBSession);
-	            mySalon.setMessage("Info", "Enregistrement effectué.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.enregistrementOk" + BasicSession.TAG_I18N);
 	            request.setAttribute("Action", "Modification");
 			}
 			catch (Exception e) {
@@ -125,10 +131,13 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aFourn = FournBean.getFournBean(myDBSession, CD_FOURN);
+            if (assertOrError((aFourn != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 
 			try {
 	            aFourn.delete(myDBSession);
-	            mySalon.setMessage("Info", "Suppression effectuée.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.suppressionOk" + BasicSession.TAG_I18N);
 	            // Un bean vide
 	            aFourn = new FournBean();
 	            request.setAttribute("Action", "Creation");

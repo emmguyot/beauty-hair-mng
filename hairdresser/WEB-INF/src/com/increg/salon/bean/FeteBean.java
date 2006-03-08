@@ -1,11 +1,31 @@
+/*
+ * Bean gérant les différentes fêtes des prénoms
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.bean;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.Vector;
 
+import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.GenericBean;
 import com.increg.util.SimpleDateFormatEG;
@@ -134,7 +154,7 @@ public class FeteBean extends GenericBean {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Création non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.creationKo" + BasicSession.TAG_I18N));
         }
 
     }
@@ -156,7 +176,7 @@ public class FeteBean extends GenericBean {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Suppression non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.suppressionKo" + BasicSession.TAG_I18N));
         }
     }
     /**
@@ -258,7 +278,7 @@ public class FeteBean extends GenericBean {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Mise à jour non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.enregistrementKo" + BasicSession.TAG_I18N));
         }
 
     }
@@ -346,13 +366,14 @@ public class FeteBean extends GenericBean {
      * Insert the method's description here.
      * Creation date: (19/08/2001 20:52:52)
      * @param newDT_FETE java.lang.String
+     * @param aLocale
      * @throws Exception Si format erroné
      */
-    public void setDT_FETE(String newDT_FETE) throws Exception {
+    public void setDT_FETE(String newDT_FETE, Locale aLocale) throws Exception {
         if (newDT_FETE.length() != 0) {
             DT_FETE = Calendar.getInstance();
 
-            java.text.SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yyyy");
+            DateFormat formatDate = DateFormat.getDateInstance(java.text.DateFormat.SHORT, aLocale);
 
             try {
                 DT_FETE.setTime(formatDate.parse(newDT_FETE + "/2004"));
@@ -360,7 +381,7 @@ public class FeteBean extends GenericBean {
             catch (Exception e) {
                 System.out.println("Erreur de conversion : " + e.toString());
                 DT_FETE = null;
-                throw (new Exception("Erreur de conversion de la date de la fête"));
+                throw (new Exception(BasicSession.TAG_I18N + "feteBean.formatDateFete" + BasicSession.TAG_I18N));
             }
         }
         else {

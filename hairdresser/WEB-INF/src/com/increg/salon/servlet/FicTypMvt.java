@@ -52,7 +52,7 @@ public void performTask(
 
 			try {
 	            aTypMvt.create(myDBSession);
-	            mySalon.setMessage("Info", "Création effectuée.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.creationOk" + BasicSession.TAG_I18N);
 	            request.setAttribute("Action", "Modification");
 			}
 			catch (Exception e) {
@@ -65,6 +65,9 @@ public void performTask(
 			request.setAttribute("Action", "Modification");
 
 			aTypMvt = TypMvtBean.getTypMvtBean(myDBSession, CD_TYP_MVT);
+            if (assertOrError((aTypMvt != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 		}
 		else if (Action.equals("Modification")) {
 			// Modification effective de la fiche
@@ -73,6 +76,9 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aTypMvt = TypMvtBean.getTypMvtBean(myDBSession, CD_TYP_MVT);
+            if (assertOrError((aTypMvt != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 
 			aTypMvt.setCD_TYP_MVT(CD_TYP_MVT);
 			aTypMvt.setLIB_TYP_MVT(LIB_TYP_MVT);
@@ -84,13 +90,13 @@ public void performTask(
                     aTypMvt.setSENS_MVT(SENS_MVT);
                 }
                 else {
-                    mySalon.setMessage("Erreur", "Impossible de modifier le sens du mouvement car ce type de mouvement a déjà été utilisé");
+                    mySalon.setMessage("Erreur", BasicSession.TAG_I18N + "ficTypMvt.typeUtilise" + BasicSession.TAG_I18N);
                 }
             }
 
 			try {
 	            aTypMvt.maj(myDBSession);
-	            mySalon.setMessage("Info", "Enregistrement effectué.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.enregistrementOk" + BasicSession.TAG_I18N);
 	            request.setAttribute("Action", "Modification");
 			}
 			catch (Exception e) {
@@ -105,10 +111,13 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aTypMvt = TypMvtBean.getTypMvtBean(myDBSession, CD_TYP_MVT);
+            if (assertOrError((aTypMvt != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 
 			try {
 	            aTypMvt.delete(myDBSession);
-	            mySalon.setMessage("Info", "Suppression effectuée.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.suppressionOk" + BasicSession.TAG_I18N);
 	            // Un bean vide
 	            aTypMvt = new TypMvtBean();
 	            request.setAttribute("Action", "Creation");
@@ -131,7 +140,7 @@ public void performTask(
 
 			try {
 	            aTypMvt.create(myDBSession);
-	            mySalon.setMessage("Info", "Duplication effectuée. Vous travaillez maintenant sur la copie.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.duplicationOk" + BasicSession.TAG_I18N);
 	            request.setAttribute("Action", "Modification");
 			}
 			catch (Exception e) {

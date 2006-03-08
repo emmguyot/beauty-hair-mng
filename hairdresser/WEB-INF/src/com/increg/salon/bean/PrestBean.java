@@ -1,3 +1,20 @@
+/*
+ * Prestation à la vente au sens large (Services + Catalogue de produits en vente)
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.bean;
 
 import java.math.BigDecimal;
@@ -5,6 +22,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
 
+import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.TimeStampBean;
 import com.increg.commun.exception.FctlException;
@@ -347,7 +365,7 @@ public class PrestBean extends TimeStampBean {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Création non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.creationKo" + BasicSession.TAG_I18N));
         }
 
         // Impact sur prestation fille ?
@@ -379,7 +397,7 @@ public class PrestBean extends TimeStampBean {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Suppression non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.suppressionKo" + BasicSession.TAG_I18N));
         }
     }
 
@@ -526,7 +544,7 @@ public class PrestBean extends TimeStampBean {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Mise à jour non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.enregistrementKo" + BasicSession.TAG_I18N));
         }
 
         // Impact sur prestation fille ?
@@ -568,7 +586,7 @@ public class PrestBean extends TimeStampBean {
         catch (Exception e) {
             System.out.println("Erreur dans Purge des prestations: " + e.toString());
             dbConnect.cleanTransaction();
-            throw new FctlException("Erreur à la purge des prestations.");
+            throw new FctlException(BasicSession.TAG_I18N + "prestBean.purgeKo" + BasicSession.TAG_I18N);
         }
 
         // Fin de cette transaction
@@ -938,7 +956,7 @@ public class PrestBean extends TimeStampBean {
                 TPS_PREST = Integer.parseInt(newTPS_PREST);
             }
             catch (Exception e) {
-                throw (new FctlException("Le temps de la prestation doit être en minutes"));
+                throw (new FctlException(BasicSession.TAG_I18N + "prestBean.formatTemps" + BasicSession.TAG_I18N));
             }
         }
         else {
@@ -978,7 +996,7 @@ public class PrestBean extends TimeStampBean {
                 CPT_ABONNEMENT = Integer.parseInt(newCPT_ABONNEMENT);
             }
             catch (Exception e) {
-                throw (new FctlException("Le nombre pour l'abonnement n'est pas correct"));
+                throw (new FctlException(BasicSession.TAG_I18N + "prestBean.formatCptAbonnement" + BasicSession.TAG_I18N));
             }
         }
         else {
@@ -1010,7 +1028,7 @@ public class PrestBean extends TimeStampBean {
             CD_PREST_ABONNEMENT = newCD_PREST_ABONNEMENT;
         }
         else {
-            throw (new FctlException("La prestation unitaire de l'abonnement ne peut être elle même"));
+            throw (new FctlException(BasicSession.TAG_I18N + "prestBean.memePrestAbonnement" + BasicSession.TAG_I18N));
         }
     }
 
@@ -1025,7 +1043,7 @@ public class PrestBean extends TimeStampBean {
                 setCD_PREST_ABONNEMENT(Long.parseLong(newCD_PREST_ABONNEMENT));
             }
             catch (NumberFormatException e) {
-                throw (new FctlException("Le code abonnement n'est pas correct"));
+                throw (new FctlException(BasicSession.TAG_I18N + "prestBean.formatPrestAbonnement" + BasicSession.TAG_I18N));
             }
         }
         else {

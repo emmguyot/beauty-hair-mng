@@ -1,7 +1,26 @@
+/*
+ * 
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.bean.test;
 
 import java.sql.ResultSet;
 import java.util.Calendar;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.FactBean;
@@ -25,6 +44,10 @@ public class PaiementBeanTest extends TestCase {
      * Connexion à la base de donnée  
      */
     private DBSession aDBSession = new DBSession("config");
+    /**
+     * Messages localisés
+     */
+	private ResourceBundle msg = ResourceBundle.getBundle("messages");
 
     /**
      * Constructor for PaiementBeanTest.
@@ -73,12 +96,12 @@ public class PaiementBeanTest extends TestCase {
             }
             rs.close();
 
-            aFact = new FactBean();
+            aFact = new FactBean(msg);
             aFact.setCD_FACT(numFact);
             aFact.setCD_CLI(cdCli);
             aFact.setCD_COLLAB(1);
             aFact.setCD_TYP_VENT(1);
-            aFact.setDT_PREST("08/07/2002");
+            aFact.setDT_PREST("08/07/2002", Locale.FRENCH);
             aFact.setFACT_HISTO("N");
             aFact.create(aDBSession);
             
@@ -105,10 +128,10 @@ public class PaiementBeanTest extends TestCase {
             aFact.calculTotaux(aDBSession);
             
             // Paiement
-            aPaiement = new PaiementBean();
+            aPaiement = new PaiementBean(msg);
             aPaiement.setCD_MOD_REGL(1);
             aPaiement.setCD_PAIEMENT(numPaiement);
-            aPaiement.setDT_PAIEMENT("08/07/2002");
+            aPaiement.setDT_PAIEMENT("08/07/2002", Locale.getDefault());
             aPaiement.setPRX_TOT_TTC(aFact.getTotPrest());
             aPaiement.create(aDBSession);
             

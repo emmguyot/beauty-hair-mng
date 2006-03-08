@@ -1,3 +1,22 @@
+<%
+/*
+ * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
+%>
 <%@ page import="com.increg.salon.bean.SalonSession,java.util.Vector,java.net.URLEncoder,java.util.Calendar,
 	       com.increg.salon.request.RDVFact,
 	       com.increg.salon.bean.FactBean,
@@ -11,14 +30,16 @@
     }
 %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Liste des rendez-vous</title>
+<title><i18n:message key="title.lstRDV" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
 <body class="donnees">
-<%@ include file="include/commun.js" %>
+<%@ include file="include/commun.jsp" %>
 <%
    // Récupération des paramètres
    String CD_COLLAB = request.getParameter("CD_COLLAB");
@@ -26,22 +47,23 @@
    Calendar DT_FIN = (Calendar) request.getAttribute("DT_FIN");
    boolean peutCreerFacture = mySalon.peutCreerFacture();   
 %>
-<h1><img src="images/titres/ficRDV.gif"></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/ficRDV.gif"></h1>
 <form name="fiche" action="rechRDV.srv" method="post">
 <p>
-Collaborateur :
+<i18n:message key="label.collaborateur" /> :
 <salon:DBselection valeur="<%= CD_COLLAB %>" sql="select CD_COLLAB, PRENOM from COLLAB order by PRENOM, NOM">
    <select name="CD_COLLAB" onChange="document.fiche.submit()">
-      <option value="">( Tous )</option>
+      <option value=""><i18n:message key="label.tousDsListe" /></option>
       %%
    </select>
 </salon:DBselection>
 </p>
 <p>
-Entre le :
-    <salon:date type="text" name="DT_DEBUT" valeurDate="<%= DT_DEBUT %>" valeurNulle="null" format="dd/MM/yyyy HH:mm" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
-   et le : 
-    <salon:date type="text" name="DT_FIN" valeurDate="<%= DT_FIN %>" valeurNulle="null" format="dd/MM/yyyy HH:mm" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
+<i18n:message key="label.entreLe" /> :
+<i18n:message key="format.dateHeureSimpleSansSeconde" id="formatDate" />
+    <salon:date type="text" name="DT_DEBUT" valeurDate="<%= DT_DEBUT %>" valeurNulle="null" format="<%= formatDate %>" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
+<i18n:message key="label.etLe" /> : 
+    <salon:date type="text" name="DT_FIN" valeurDate="<%= DT_FIN %>" valeurNulle="null" format="<%= formatDate %>" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
     <input type="hidden" name="Action" value="refresh">
 </p>
 </form>
@@ -49,11 +71,18 @@ Entre le :
 <table width="100%" border="1" >
 	<tr>
 		<th></th>
-		<th>Début</th>
-                <th>Client</th>
-		<th>Collaborateur</th>
-		<th>Commentaire ou Prestations</th>
+		<th><i18n:message key="label.debut" /></th>
+                <th><i18n:message key="label.client" /></th>
+		<th><i18n:message key="label.collaborateur" /></th>
+		<th><i18n:message key="label.commentairePrestation" /></th>
 	</tr>
+        <i18n:message key="label.modifierRDV" id="modifRDV" />
+        <i18n:message key="label.voirFacture" id="voirFacture" />
+        <i18n:message key="label.dupliquerFacture" id="dupliquerFact" />
+        <i18n:message key="label.accueilClient" id="accueil" />
+        <i18n:message key="erreur.pasCollaborateurPresent" id="pasCollab" />
+        <i18n:message key="label.imprimerFicheTech" id="imprimerFiche" />
+        <i18n:message key="format.dateHeureSansAnnee" id="formatDateTableau" />
 	<%
 	// Recupère la liste
 	Vector lstLignes = (Vector) request.getAttribute("Liste");
@@ -68,36 +97,40 @@ Entre le :
                     <%
                     if (aRDV != null) {
                     %>
-                        <a href="_FicheRDV.jsp?Action=Modification&CD_CLI=<%= aRDV.getCD_CLI() %>&DT_DEBUT=<%= URLEncoder.encode(SalonSession.dateToString(aRDV.getDT_DEBUT())) %>" target="ClientFrame" title="Modifier le rendez-vous"><img src="images/boutonRDV.gif" border="0"></a>
+                        <salon:valeur valeurNulle="null" valeur="<%= aRDV.getDT_DEBUT() %>" url="true">
+                        <a href="_FicheRDV.jsp?Action=Modification&CD_CLI=<%= aRDV.getCD_CLI() %>&DT_DEBUT=%%" target="ClientFrame" title="<%= modifRDV %>"><img src="images/boutonRDV.gif" border="0"></a>
+                        </salon:valeur>
                     <%
                     }
                     if (aFact != null) {
                     %>
-                        <a href="_FicheFact.jsp?Action=Modification&CD_FACT=<%= aFact.getCD_FACT() %>" target="ClientFrame" title="Voir la facture"><img src="images/fact.gif" border="0"></a>
+                        <a href="_FicheFact.jsp?Action=Modification&CD_FACT=<%= aFact.getCD_FACT() %>" target="ClientFrame" title="<%= voirFacture %>"><img src="images/fact.gif" border="0"></a>
                     <%
                     }
                     else {
                         if (peutCreerFacture) { %>
-                            <a href="addCli.srv?CD_CLI=<%= aRDVFact.getClient().getCD_CLI() %>" title="Dupliquer sa facture" target=MenuFrame><img src=images/plus.gif border="0" width="15" height="15"></a>
-                            <a href="addCli.srv?Vide=1&CD_CLI=<%= aRDVFact.getClient().getCD_CLI() %>" title="Accueillir ce client" target=MenuFrame><img src=images/plus2.gif border="0" width="15" height="15"></a>
+                            <a href="addCli.srv?CD_CLI=<%= aRDVFact.getClient().getCD_CLI() %>" title="<%= dupliquerFact %>" target=MenuFrame><img src=images/plus.gif border="0" width="15" height="15"></a>
+                            <a href="addCli.srv?Vide=1&CD_CLI=<%= aRDVFact.getClient().getCD_CLI() %>" title="<%= accueil %>" target=MenuFrame><img src=images/plus2.gif border="0" width="15" height="15"></a>
                     <%
                         } 
                         else { %>
-                            <img src=images/plusNon.gif border="0" width="15" height="15" alt="Action impossible : Pas de collaborateur présent"/>
-                            <img src=images/plus2Non.gif border="0" width="15" height="15" alt="Action impossible : Pas de collaborateur présent"/>
+                            <img src=images/plusNon.gif border="0" width="15" height="15" alt="<%= pasCollab %>"/>
+                            <img src=images/plus2Non.gif border="0" width="15" height="15" alt="<%= pasCollab %>"/>
                     <%
                         }
                     %>
-                        <a href="ficTech.srv?Action=Impression&CD_CLI=<%= aRDVFact.getClient().getCD_CLI() %>" title="Imprimer la fiche technique" target="_blank"><img src=images/Tech.gif border="0" width="15" height="15"></a>
+                        <a href="ficTech.srv?Action=Impression&CD_CLI=<%= aRDVFact.getClient().getCD_CLI() %>" title="<%= imprimerFiche %>" target="_blank"><img src=images/Tech.gif border="0" width="15" height="15"></a>
                     <%
                     } %>
                 </td>
                 <td class="tabDonneesGauche">
-                    <salon:valeur valeur="<%= aRDVFact.getDate() %>" valeurNulle="null" format="dd/MM HH:mm"> %% </salon:valeur>
+                    <salon:valeur valeur="<%= aRDVFact.getDate() %>" valeurNulle="null" format="<%= formatDateTableau %>"> %% </salon:valeur>
                     <%
                     if (aRDV != null) {
                     %>
-                        <salon:valeur valeur="<%= aRDV.getDUREE() %>" valeurNulle="null"> (%% min) </salon:valeur>
+                        <i18n:message key="label.valeurDuree"> 
+                            <i18n:messageArg value="<%= Integer.toString(aRDV.getDUREE()) %>" />
+                        </i18n:message>
                     <%
                     }
                     %>
@@ -141,8 +174,8 @@ Entre le :
 <%
     if (peutCreerFacture) { %>
         <p>
-        <a href="javascript:dupliquerFacture()" title="Dupliquer les factures"><img src=images/plus.gif border="0" width="15" height="15"> Dupliquer les factures de chaque rendez-vous</a><br/>
-        <a href="javascript:accueillirClient()" title="Accueillir les clients"><img src=images/plus2.gif border="0" width="15" height="15"> Accueillir tous les clients des rendez-vous</a>
+        <a href="javascript:dupliquerFacture()" title="<i18n:message key="label.dupliquerFactures" />"><img src=images/plus.gif border="0" width="15" height="15"> <i18n:message key="label.dupliquerFacturesRDV" /></a><br/>
+        <a href="javascript:accueillirClient()" title="<i18n:message key="label.accueilClients" />"><img src=images/plus2.gif border="0" width="15" height="15"> <i18n:message key="label.accueilClientsRDV" /></a>
         </p>
 <%
     } 
@@ -161,7 +194,7 @@ function Nouveau()
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideListe.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideListe.html");
 }
 
 function dupliquerFacture() {

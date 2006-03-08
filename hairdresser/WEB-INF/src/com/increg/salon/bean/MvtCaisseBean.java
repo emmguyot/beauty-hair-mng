@@ -1,19 +1,40 @@
+/*
+ * Bean gérant un mouvement de caisse
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.bean;
 
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Vector;
 
+import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.TimeStampBean;
 import com.increg.commun.exception.FctlException;
 import com.increg.util.SimpleDateFormatEG;
 
 /**
- * Mouvement de caisse Creation date: (25/09/2001 21:09:29)
- * 
+ * Mouvement de caisse 
+ * Creation date: (25/09/2001 21:09:29)
  * @author Emmanuel GUYOT <emmguyot@wanadoo.fr>
  */
 public class MvtCaisseBean extends TimeStampBean {
@@ -225,7 +246,7 @@ public class MvtCaisseBean extends TimeStampBean {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Création non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.creationKo" + BasicSession.TAG_I18N));
         }
 
         // Fin de la transaction
@@ -263,7 +284,7 @@ public class MvtCaisseBean extends TimeStampBean {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Suppression non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.suppressionKo" + BasicSession.TAG_I18N));
         }
 
         // Fin de la transaction
@@ -345,18 +366,37 @@ public class MvtCaisseBean extends TimeStampBean {
      * Création d'un Bean Mouvement de caisse à partir de sa clé Creation date:
      * (19/08/2001 21:14:20)
      * 
-     * @param dbConnect
-     *            com.increg.salon.bean.DBSession
-     * @param CD_MOD_REGL
-     *            java.lang.String
-     * @param CD_PAIEMENT
-     *            Paiement associé
-     * @param DT_MVT
-     *            Date du mouvement
+     * @param dbConnect com.increg.salon.bean.DBSession
+     * @param CD_MOD_REGL java.lang.String
+     * @param CD_PAIEMENT Paiement associé
+     * @param DT_MVT Date du mouvement
+     * @param aLocale Configuration pour parser la date
+     * @throws Exception Si le format est incorrect
      * @return Mouvement associé
      */
-    public static MvtCaisseBean getMvtCaisseBean(DBSession dbConnect, String CD_MOD_REGL, String DT_MVT, String CD_PAIEMENT) {
-        String reqSQL = "select * from MVT_CAISSE where CD_MOD_REGL=" + CD_MOD_REGL + " and DT_MVT='" + DT_MVT + "'";
+    public static MvtCaisseBean getMvtCaisseBean(DBSession dbConnect, String CD_MOD_REGL, String DT_MVT, String CD_PAIEMENT, Locale aLocale) throws Exception {
+
+        java.text.DateFormat formatDate =
+            java.text.DateFormat.getDateTimeInstance(
+                java.text.DateFormat.SHORT,
+                java.text.DateFormat.MEDIUM, aLocale);
+        Date dtMvt = null;
+        try {
+            dtMvt = formatDate.parse(DT_MVT);
+        }
+        catch (ParseException e) {
+            System.out.println("Erreur de conversion : " + e.toString());
+            throw (new Exception(BasicSession.TAG_I18N + "mvtCaisseBean.formatDateMvt" + BasicSession.TAG_I18N));
+		}
+
+        // Passage en GMT +0
+        java.text.DateFormat formatDateStd =
+            java.text.DateFormat.getDateTimeInstance(
+                java.text.DateFormat.SHORT,
+                java.text.DateFormat.MEDIUM);
+        DT_MVT = formatDateStd.format(dtMvt);
+        
+    	String reqSQL = "select * from MVT_CAISSE where CD_MOD_REGL=" + CD_MOD_REGL + " and DT_MVT='" + DT_MVT + "'";
         if ((CD_PAIEMENT == null) || (CD_PAIEMENT.equals("")) || (CD_PAIEMENT.equals("0"))) {
             reqSQL = reqSQL + " and CD_PAIEMENT is null";
         } else {
@@ -382,16 +422,36 @@ public class MvtCaisseBean extends TimeStampBean {
      * Création d'un Bean Mouvement de caisse à partir d'une date : Le dernier
      * avant la date Creation date: 8 juil. 02
      * 
-     * @param dbConnect
-     *            com.increg.salon.bean.DBSession
-     * @param CD_MOD_REGL
-     *            java.lang.String
-     * @param DT_MVT
-     *            Date du mouvement
+     * @param dbConnect com.increg.salon.bean.DBSession
+     * @param CD_MOD_REGL java.lang.String
+     * @param DT_MVT Date du mouvement
+     * @param aLocale Configuration pour parser la date
+     * @throws Exception Si le format est incorrect
      * @return Mouvement associé
      */
-    public static MvtCaisseBean getLastMvtCaisseBean(DBSession dbConnect, String CD_MOD_REGL, String DT_MVT) {
-        String reqSQL = "select * from MVT_CAISSE where CD_MOD_REGL=" + CD_MOD_REGL + " and DT_MVT <= '" + DT_MVT + "' order by DT_MVT desc LIMIT 1";
+    public static MvtCaisseBean getLastMvtCaisseBean(DBSession dbConnect, String CD_MOD_REGL, String DT_MVT, Locale aLocale) throws Exception {
+
+        java.text.DateFormat formatDate =
+            java.text.DateFormat.getDateTimeInstance(
+                java.text.DateFormat.SHORT,
+                java.text.DateFormat.MEDIUM, aLocale);
+        Date dtMvt = null;
+        try {
+            dtMvt = formatDate.parse(DT_MVT);
+        }
+        catch (ParseException e) {
+            System.out.println("Erreur de conversion : " + e.toString());
+            throw (new Exception(BasicSession.TAG_I18N + "mvtCaisseBean.formatDateMvt" + BasicSession.TAG_I18N));
+		}
+
+        // Passage en GMT +0
+        java.text.DateFormat formatDateStd =
+            java.text.DateFormat.getDateTimeInstance(
+                java.text.DateFormat.SHORT,
+                java.text.DateFormat.MEDIUM);
+        DT_MVT = formatDateStd.format(dtMvt);
+        
+    	String reqSQL = "select * from MVT_CAISSE where CD_MOD_REGL=" + CD_MOD_REGL + " and DT_MVT <= '" + DT_MVT + "' order by DT_MVT desc LIMIT 1";
         MvtCaisseBean res = null;
 
         // Interroge la Base
@@ -530,7 +590,7 @@ public class MvtCaisseBean extends TimeStampBean {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Mise à jour non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.enregistrementKo" + BasicSession.TAG_I18N));
         }
     }
 
@@ -692,26 +752,24 @@ public class MvtCaisseBean extends TimeStampBean {
     }
 
     /**
-     * Insert the method's description here. Creation date: (16/09/2001
-     * 19:31:27)
-     * 
-     * @param newDT_MVT
-     *            String
-     * @throws Exception
-     *             En cas d'erreur de format
+     * Insert the method's description here. 
+     * Creation date: (16/09/2001 19:31:27)
+     * @param newDT_MVT String
+     * @param aLocale Configuration pour parser la date
+     * @throws Exception En cas d'erreur de format
      */
-    public void setDT_MVT(String newDT_MVT) throws Exception {
+    public void setDT_MVT(String newDT_MVT, Locale aLocale) throws Exception {
 
         if ((newDT_MVT != null) && (newDT_MVT.length() != 0)) {
             DT_MVT = Calendar.getInstance();
 
-            java.text.DateFormat formatDate = java.text.DateFormat.getDateTimeInstance(java.text.DateFormat.SHORT, java.text.DateFormat.MEDIUM);
+            java.text.DateFormat formatDate = java.text.DateFormat.getDateTimeInstance(java.text.DateFormat.SHORT, java.text.DateFormat.MEDIUM, aLocale);
             try {
                 DT_MVT.setTime(formatDate.parse(newDT_MVT));
             } catch (Exception e) {
                 System.out.println("Erreur de conversion : " + e.toString());
                 DT_MVT = null;
-                throw (new Exception("Erreur de conversion de la date du mouvement"));
+                throw (new Exception(BasicSession.TAG_I18N + "mvtCaisseBean.formatDateMvt" + BasicSession.TAG_I18N));
             }
         } else {
             DT_MVT = null;
@@ -793,18 +851,36 @@ public class MvtCaisseBean extends TimeStampBean {
     /**
      * Mise à jour des soldes avant et vérification du solde final d'une caisse
      * 
-     * @param dbConnect
-     *            Connexion à la base à utiliser
-     * @param CD_MOD_REGL
-     *            Mode de règlement indiquant la caisse concernée
-     * @param DT_DEBUT
-     *            Date de début de vérification
+     * @param dbConnect Connexion à la base à utiliser
+     * @param CD_MOD_REGL Mode de règlement indiquant la caisse concernée
+     * @param DT_DEBUT Date de début de vérification
+     * @param aLocale Configuration pour parser la date
      * @return Indicateur si la caisse était correcte ou pas
-     * @throws SQLException
-     *             En cas d'erreur à la mise à jour
+     * @throws Exception Si le format est incorrect
+     * @throws SQLException En cas d'erreur à la mise à jour
      */
-    public static boolean checkAndFix(DBSession dbConnect, String CD_MOD_REGL, String DT_DEBUT) throws SQLException {
+    public static boolean checkAndFix(DBSession dbConnect, String CD_MOD_REGL, String DT_DEBUT, Locale aLocale) throws SQLException, Exception {
 
+        java.text.DateFormat formatDate =
+            java.text.DateFormat.getDateTimeInstance(
+                java.text.DateFormat.SHORT,
+                java.text.DateFormat.MEDIUM, aLocale);
+        Date dtDebut = null;
+        try {
+            dtDebut = formatDate.parse(DT_DEBUT);
+        }
+        catch (ParseException e) {
+            System.out.println("Erreur de conversion : " + e.toString());
+            throw (new Exception(BasicSession.TAG_I18N + "mvtCaisseBean.formatDateMvt" + BasicSession.TAG_I18N));
+		}
+
+        // Passage en GMT +0
+        java.text.DateFormat formatDateStd =
+            java.text.DateFormat.getDateTimeInstance(
+                java.text.DateFormat.SHORT,
+                java.text.DateFormat.MEDIUM);
+        DT_DEBUT = formatDateStd.format(dtDebut);
+        
         String modReglSup = "";
 
         if (Long.parseLong(CD_MOD_REGL) == ModReglBean.MOD_REGL_ESP) {
@@ -870,7 +946,7 @@ public class MvtCaisseBean extends TimeStampBean {
      *                En cas d'erreur durant la mise à jour
      * @return Nombre d'enregistrements purgés : -1 En cas d'erreur
      */
-    public static int purge(DBSession dbConnect, java.util.Date dateLimite) throws FctlException {
+    public static int purge(DBSession dbConnect, Date dateLimite) throws FctlException {
 
         int nbEnreg = -1;
 
@@ -902,7 +978,7 @@ public class MvtCaisseBean extends TimeStampBean {
         } catch (SQLException e) {
             System.out.println("Erreur dans mise à jour solde initial de la caisse : " + e.toString());
             dbConnect.cleanTransaction();
-            throw new FctlException("Erreur à la purge des mouvements de caisse.");
+            throw new FctlException(BasicSession.TAG_I18N + "mvtCaisseBean.purgeKo" + BasicSession.TAG_I18N);
         }
 
         String[] reqSQL = new String[1];
@@ -918,7 +994,7 @@ public class MvtCaisseBean extends TimeStampBean {
         } catch (Exception e) {
             System.out.println("Erreur dans Purge des mouvements de caisse : " + e.toString());
             dbConnect.cleanTransaction();
-            throw new FctlException("Erreur à la purge des mouvements de caisse.");
+            throw new FctlException(BasicSession.TAG_I18N + "mvtCaisseBean.purgeKo" + BasicSession.TAG_I18N);
         }
 
         // Fin de cette transaction

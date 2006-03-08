@@ -1,7 +1,26 @@
+<%
+/*
+ * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
+%>
 <%@ page import="java.util.Vector,
 			java.util.List,
 			java.net.URLEncoder,
-			java.util.Date,
+			java.util.Calendar,
 			java.util.Iterator,
 	        com.increg.salon.bean.SalonSession,
             com.increg.salon.bean.CollabBean,
@@ -14,25 +33,27 @@
     }
 %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Liste des pointages</title>
+<title><i18n:message key="title.lstPointage" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
 <body class="donnees">
-<%@ include file="include/commun.js" %>
+<%@ include file="include/commun.jsp" %>
 <%
    // Récupération des paramètres
    String CD_COLLAB = request.getParameter("CD_COLLAB");
-   Date DT_DEBUT = (Date) request.getAttribute("DT_DEBUT");
-   Date DT_FIN = (Date) request.getAttribute("DT_FIN");
+   Calendar DT_DEBUT = (Calendar) request.getAttribute("DT_DEBUT");
+   Calendar DT_FIN = (Calendar) request.getAttribute("DT_FIN");
    String CD_TYP_POINTAGE = request.getParameter("CD_TYP_POINTAGE");
 %>
-<h1><img src="images/titres/lstPointage.gif"></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstPointage.gif"></h1>
 <form name="fiche" action="rechPointage.srv" method="post">
 <p>
-Collaborateur :
+<i18n:message key="label.collaborateur" /> :
 <%
         List collabsList = CollabBean.getAllCollabsAsList(mySalon.getMyDBSession());
         String valeurs="";
@@ -56,32 +77,33 @@ Collaborateur :
 %>
 <salon:selection valeur="<%= CD_COLLAB %>" valeurs="<%= valeurs %>" libelle="<%= libelles %>">
    <select name="CD_COLLAB" onChange="document.fiche.submit()">
-      <option value="">( Tous )</option>
+      <option value=""><i18n:message key="label.tousDsListe" /></option>
       %%
    </select>
 </salon:selection>
-Type de pointage :
+<i18n:message key="label.typePointage" /> :
 <salon:DBselection valeur="<%= CD_TYP_POINTAGE %>" sql="select CD_TYP_POINTAGE, LIB_TYP_POINTAGE from TYP_POINTAGE order by LIB_TYP_POINTAGE">
    <select name="CD_TYP_POINTAGE" onChange="document.fiche.submit()">
-      <option value="">( Tous )</option>
+      <option value=""><i18n:message key="label.tousDsListe" /></option>
       %%
    </select>
 </salon:DBselection>
 </p>
 <p>
-Entre le :
-    <salon:date type="text" name="DT_DEBUT" valeurDate="<%= DT_DEBUT %>" valeurNulle="null" format="dd/MM/yyyy HH:mm:ss" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
-   et le : 
-    <salon:date type="text" name="DT_FIN" valeurDate="<%= DT_FIN %>" valeurNulle="null" format="dd/MM/yyyy HH:mm:ss" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
+<i18n:message key="label.entreLe" /> :
+<i18n:message key="format.dateDefaut" id="formatDate" />
+    <salon:date type="text" name="DT_DEBUT" valeurDate="<%= DT_DEBUT %>" valeurNulle="null" format="<%= formatDate %>" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
+<i18n:message key="label.etLe" /> : 
+    <salon:date type="text" name="DT_FIN" valeurDate="<%= DT_FIN %>" valeurNulle="null" format="<%= formatDate %>" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
 </p>
 </form>
 <hr>
 <table width="100%" border="1" >
 	<tr>
-		<th>Collaborateur</th>
-		<th>Début</th>
-		<th>Fin</th>
-		<th>Type de pointage</th>
+		<th><i18n:message key="label.collaborateur" /></th>
+		<th><i18n:message key="label.debut" /></th>
+		<th><i18n:message key="label.fin" /></th>
+		<th><i18n:message key="label.typePointage" /></th>
 	</tr>
 	<%
 	// Recupère la liste
@@ -119,7 +141,7 @@ function Nouveau()
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideListe.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideListe.html");
 }
 
 </script>

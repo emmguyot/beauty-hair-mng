@@ -1,4 +1,23 @@
-<%@ page import="java.util.TreeMap,java.util.Set,java.util.Iterator,java.math.BigDecimal,java.util.Date" %>
+<%
+/*
+ * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
+%>
+<%@ page import="java.util.TreeMap,java.util.Set,java.util.Iterator,java.math.BigDecimal,java.util.Calendar" %>
 <%@ page import="com.increg.salon.bean.SalonSession,
                 com.increg.salon.request.Recap
 	        " %>
@@ -9,19 +28,21 @@
     }
 %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Récap des stocks</title>
+<title><i18n:message key="label.recapStock" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
 <body class="donnees">
-<%@ include file="include/commun.js" %>
+<%@ include file="include/commun.jsp" %>
 <script language="JavaScript">
 <!--
 function Init() {
    <%
-   // Positionne les liens d'actions
+   // Positionne les liens d actions
    %>
    MM_showHideLayers('NOUVEAU?bottomFrame','','hide');
 }
@@ -29,21 +50,22 @@ function Init() {
 </script>
 <%
    // Récupération des paramètres
-   Date DT_DEBUT = (Date) request.getAttribute("DT_DEBUT");
-   Date DT_FIN = (Date) request.getAttribute("DT_FIN");
+   Calendar DT_DEBUT = (Calendar) request.getAttribute("DT_DEBUT");
+   Calendar DT_FIN = (Calendar) request.getAttribute("DT_FIN");
    String valeur = request.getParameter("valeur");
    String[] CD_TYP_MVT_SELECT = request.getParameterValues("CD_TYP_MVT");
    Boolean cocheTout = (Boolean) request.getAttribute("cocheTout");
 %>
-<h1><img src="images/titres/lstRecap.gif"></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstRecap.gif"></h1>
 <form name="fiche" action="rechRecap.srv" method="post">
 <p>
-Entre le :
-    <salon:date type="text" name="DT_DEBUT" valeurDate="<%= DT_DEBUT %>" valeurNulle="null" format="dd/MM/yyyy" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
-   et le : 
-    <salon:date type="text" name="DT_FIN" valeurDate="<%= DT_FIN %>" valeurNulle="null" format="dd/MM/yyyy" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
+<i18n:message key="label.entreLe" /> :
+<i18n:message key="format.dateSimpleDefaut" id="formatDate" />
+    <salon:date type="text" name="DT_DEBUT" valeurDate="<%= DT_DEBUT %>" valeurNulle="null" format="<%= formatDate %>" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
+<i18n:message key="label.etLe" /> : 
+    <salon:date type="text" name="DT_FIN" valeurDate="<%= DT_FIN %>" valeurNulle="null" format="<%= formatDate %>" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
 </p>
-<table><tr><td>Type&nbsp;de&nbsp;mouvement&nbsp;:</td><td>
+<table><tr><td><i18n:message key="label.typeMouvement" />:</td><td>
 	<salon:DBcheckbox nom = "CD_TYP_MVT" tabValeur = "<%=(String[]) CD_TYP_MVT_SELECT%>" 
 	                  action="document.fiche.submit()" cocheTout = "<%= cocheTout %>"
 	                  sql="select CD_TYP_MVT, LIB_TYP_MVT from TYP_MVT order by CD_TYP_MVT">
@@ -61,7 +83,7 @@ TreeMap lstLignes = (TreeMap) request.getAttribute("Liste");
 <colgroup>
 <colgroup span="<%= lstTypes.size() %>">
     <tr>
-        <th rowspan=2>Article</th>
+        <th rowspan=2><i18n:message key="label.article" /></th>
         <% 
         {
             Set keys = lstTypes.keySet();
@@ -168,7 +190,7 @@ TreeMap lstLignes = (TreeMap) request.getAttribute("Liste");
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideListe.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideListe.html");
 }
 
 //-->

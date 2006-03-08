@@ -1,3 +1,22 @@
+<%
+/*
+ * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
+%>
 <%@ page import="java.util.Vector" %>
 <%@ page import="com.increg.salon.bean.SalonSession,
 	       com.increg.salon.bean.PrestBean,
@@ -10,9 +29,11 @@
     }
 %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Liste des Prestations</title>
+<title><i18n:message key="title.lstPrest" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -25,9 +46,9 @@
    String CD_MARQUE = request.getParameter("CD_MARQUE");
    String PERIME = request.getParameter("PERIME");
 %>
-<h1><img src="images/titres/lstPrest.gif"></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstPrest.gif"></h1>
 <form name="fiche" action="rechPrest.srv" method="post">
-<p>Premi&egrave;re lettre : 
+<p><i18n:message key="label.premiereLettre" /> : 
 <input type="hidden" name="premLettre" value="<%= premLettre %>">
 <%
    String lien = "";
@@ -58,28 +79,28 @@
    <% }
 %>
 </p>
-Type de prestation :
+<i18n:message key="label.typePrest" /> :
 <salon:DBselection valeur="<%= CD_TYP_VENT %>" sql="select CD_TYP_VENT, LIB_TYP_VENT from TYP_VENT order by LIB_TYP_VENT">
    <select name="CD_TYP_VENT" onChange="document.fiche.submit()">
-      <option value="">( Toutes )</option>
+      <option value=""><i18n:message key="label.toutesDsListe" /></option>
       %%
    </select>
 </salon:DBselection>
-Catégorie article :
+<i18n:message key="label.categorieArticle" /> :
 <salon:DBselection valeur="<%= CD_CATEG_PREST %>" sql="select CD_CATEG_PREST, LIB_CATEG_PREST from CATEG_PREST order by LIB_CATEG_PREST">
    <select name="CD_CATEG_PREST" onChange="document.fiche.submit()">
-      <option value="">( Toutes )</option>
+      <option value=""><i18n:message key="label.toutesDsListe" /></option>
       %%
    </select>
 </salon:DBselection>
-Marque :
+<i18n:message key="label.marque" /> :
 <salon:DBselection valeur="<%= CD_MARQUE %>" sql="select CD_MARQUE, LIB_MARQUE from MARQUE order by LIB_MARQUE">
    <select name="CD_MARQUE" onChange="document.fiche.submit()">
-      <option value="">( Toutes )</option>
+      <option value=""><i18n:message key="label.toutesDsListe" /></option>
       %%
    </select>
 </salon:DBselection>
-Affichage périmés :
+<i18n:message key="label.affPerime" /> :
 <input type="checkbox" name="PERIME"
    <% if ((PERIME != null) && (PERIME.equals("on"))) { %>
    checked 
@@ -89,11 +110,11 @@ Affichage périmés :
 <hr>
 <table width="100%" border="1" >
 	<tr>
-		<th>Libellé</th>
-		<th>Type de prestation</th>
-		<th>Catégorie</th>
-		<th>Marque</th>
-		<th>Prix Unitaire</th>
+		<th><i18n:message key="label.libelle" /></th>
+		<th><i18n:message key="label.typePrest" /></th>
+		<th><i18n:message key="label.categorie" /></th>
+		<th><i18n:message key="label.marque" /></th>
+		<th><i18n:message key="label.prixUnitaireTableau" /></th>
 	</tr>
 	<%
 	// Recupère la liste
@@ -143,7 +164,7 @@ function Nouveau()
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideListe.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideListe.html");
 }
 
 </script>

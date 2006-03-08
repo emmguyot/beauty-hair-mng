@@ -16,6 +16,7 @@ import org.xml.sax.SAXException;
 import com.meterware.httpunit.GetMethodWebRequest;
 import com.meterware.httpunit.HttpUnitOptions;
 import com.meterware.httpunit.WebConversation;
+import com.meterware.httpunit.WebForm;
 import com.meterware.httpunit.WebLink;
 import com.meterware.httpunit.WebRequest;
 import com.meterware.httpunit.WebResponse;
@@ -30,6 +31,11 @@ import junit.framework.TestCase;
  */
 public class PerformanceTest extends TestCase {
 
+	/**
+	 * URL de base pour accéder à l'application
+	 */
+	public static final String urlBase = "http://localhost:8181/salon";
+	
     /**
      * Ratio entre des milli secondes et des secondes 
      */
@@ -65,12 +71,18 @@ public class PerformanceTest extends TestCase {
         WebResponse respons;
         
         // Initialisation et contrôle de la base
-        String url = "http://localhost/salon/initPortail.srv";
+        String url = urlBase + "/initPortail.srv";
         respons = lectureURL(url);
         session = respons.getNewCookieValue("JSESSIONID");
         
+        // Choix de la base ?
+        WebForm form = respons.getFormWithName("base");
+        if (form != null) {
+        	respons = form.submit();
+        }
+        
         // Connexion
-        url = "http://localhost/salon/ident.srv?MOT_PASSE=MDP";
+        url = urlBase + "/ident.srv?MOT_PASSE=MDP";
         respons = lectureURL(url);
     }
 
@@ -121,9 +133,11 @@ public class PerformanceTest extends TestCase {
      */
     public void testPerformance() {
         
+        System.out.println("Ne pas lancer en debug, à lancer 2 fois ? ");
         Calendar fin = Calendar.getInstance();
         long elapsed = fin.getTime().getTime() - debut.getTime().getTime();
         System.out.println("Etape intermédiaire 1 (s) : " + elapsed / RATION_MS_S);
+        assertTrue(elapsed < 3000);
 
         // La connexion doit être faite
         assertNotNull(session);
@@ -131,24 +145,25 @@ public class PerformanceTest extends TestCase {
         WebResponse respons;
         
         // Initialisation et contrôle de la base
-        String url = "http://localhost/salon/ListeCli.jsp";
+        String url = urlBase + "/ListeCli.jsp";
         respons = lectureURL(url);
         
         for (char c = 'B'; c <= 'Z'; c++) {
-            url = "http://localhost/salon/rechCli.srv?premLettre=" + c;
+            url = urlBase + "/rechCli.srv?premLettre=" + c;
             respons = lectureURL(url);
         }
         
         fin = Calendar.getInstance();
         elapsed = fin.getTime().getTime() - debut.getTime().getTime();
         System.out.println("Etape intermédiaire 2 (s) : " + elapsed / RATION_MS_S);
+        assertTrue(elapsed < 10000);
 
-        url = "http://localhost/salon/addCli.srv?CD_CLI=652";
+        url = urlBase + "/addCli.srv?CD_CLI=652";
         respons = lectureURL(url);
         
         WebLink lienFacture = null;
         try {
-            lienFacture = respons.getLinkWith("Mle Beaulieu");
+            lienFacture = respons.getLinkWith("Mlle Beaulieu");
         }
         catch (SAXException e) {
             fail("Menu illisible : " + e.toString());
@@ -157,16 +172,18 @@ public class PerformanceTest extends TestCase {
         fin = Calendar.getInstance();
         elapsed = fin.getTime().getTime() - debut.getTime().getTime();
         System.out.println("Etape intermédiaire 3 (s) : " + elapsed / RATION_MS_S);
+        assertTrue(elapsed < 10000);
 
         assertNotNull(lienFacture);
-        url = "http://localhost/salon/" + lienFacture.getURLString();
+        url = urlBase + "/" + lienFacture.getURLString();
         respons = lectureURL(url);
         
         fin = Calendar.getInstance();
         elapsed = fin.getTime().getTime() - debut.getTime().getTime();
         System.out.println("Etape intermédiaire 4 (s) : " + elapsed / RATION_MS_S);
+        assertTrue(elapsed < 11000);
 
-        url = "http://localhost/salon/addCli.srv?CD_CLI=93";
+        url = urlBase + "/addCli.srv?CD_CLI=93";
         respons = lectureURL(url);
         
         lienFacture = null;
@@ -180,14 +197,16 @@ public class PerformanceTest extends TestCase {
         fin = Calendar.getInstance();
         elapsed = fin.getTime().getTime() - debut.getTime().getTime();
         System.out.println("Etape intermédiaire 5 (s) : " + elapsed / RATION_MS_S);
+        assertTrue(elapsed < 16000);
 
         assertNotNull(lienFacture);
-        url = "http://localhost/salon/" + lienFacture.getURLString();
+        url = urlBase + "/" + lienFacture.getURLString();
         respons = lectureURL(url);
 
         fin = Calendar.getInstance();
         elapsed = fin.getTime().getTime() - debut.getTime().getTime();
         System.out.println("Résultat test de performance (s) : " + elapsed / RATION_MS_S);
+        assertTrue(elapsed < 20000);
     }
 
 }

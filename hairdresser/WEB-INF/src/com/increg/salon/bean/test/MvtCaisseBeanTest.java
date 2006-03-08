@@ -1,8 +1,27 @@
+/*
+ * Test des mouvements de caisse 
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.bean.test;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Vector;
 
 import com.increg.commun.DBSession;
@@ -45,7 +64,7 @@ public class MvtCaisseBeanTest extends TestCase {
        
         long cdPaiement = 999999;
 
-        PaiementBean aPaiement = new PaiementBean();
+        PaiementBean aPaiement = new PaiementBean(ResourceBundle.getBundle("messages"));
         MvtCaisseBean aMvt1 = new MvtCaisseBean();        
         MvtCaisseBean aMvt2 = new MvtCaisseBean();        
         MvtCaisseBean aMvt3 = new MvtCaisseBean();        
@@ -53,11 +72,11 @@ public class MvtCaisseBeanTest extends TestCase {
             // Creation du Paiement
             aPaiement.setCD_MOD_REGL(ModReglBean.MOD_REGL_ESP);
             aPaiement.setCD_PAIEMENT(cdPaiement);
-            aPaiement.setDT_PAIEMENT("06/07/2002");
+            aPaiement.setDT_PAIEMENT("06/07/2002", Locale.getDefault());
             aPaiement.setPRX_TOT_TTC("1001.02");
             aPaiement.create(aDBSession);
             
-            aMvt1.setDT_MVT("06/07/2002 12:12:12");
+            aMvt1.setDT_MVT("06/07/2002 12:12:12", Locale.getDefault());
             aMvt1.setCD_PAIEMENT(cdPaiement);
             aMvt1.setCD_MOD_REGL(ModReglBean.MOD_REGL_ESP);
             aMvt1.setCD_TYP_MCA(1); // Encaissement
@@ -66,7 +85,7 @@ public class MvtCaisseBeanTest extends TestCase {
             aMvt1.setCOMM("Blabla");
             aMvt1.create(aDBSession);
     
-            aMvt2.setDT_MVT("01/07/2002 12:12:13");
+            aMvt2.setDT_MVT("01/07/2002 12:12:13", Locale.getDefault());
             aMvt2.setCD_PAIEMENT(cdPaiement);
             aMvt2.setCD_MOD_REGL(ModReglBean.MOD_REGL_ESP);
             aMvt2.setCD_TYP_MCA(1); // Encaissement
@@ -75,7 +94,7 @@ public class MvtCaisseBeanTest extends TestCase {
             aMvt2.setCOMM("Blabla");
             aMvt2.create(aDBSession);
     
-            aMvt3.setDT_MVT("01/07/2002 12:12:12");
+            aMvt3.setDT_MVT("01/07/2002 12:12:12", Locale.getDefault());
             aMvt3.setCD_PAIEMENT(cdPaiement);
             aMvt3.setCD_MOD_REGL(ModReglBean.MOD_REGL_ESP);
             aMvt3.setCD_TYP_MCA(1); // Encaissement
@@ -162,7 +181,7 @@ public class MvtCaisseBeanTest extends TestCase {
     public void testCheckAndFix() throws Exception {
         
         // Par défaut une caisse est bonne
-        Assert.assertTrue(MvtCaisseBean.checkAndFix(aDBSession, Long.toString(ModReglBean.MOD_REGL_ESP), "01/01/2002 12:12:12"));
+        Assert.assertTrue(MvtCaisseBean.checkAndFix(aDBSession, Long.toString(ModReglBean.MOD_REGL_ESP), "01/01/2002 12:12:12", Locale.getDefault()));
         
         // Insertion d'une incohérence dans la caisse : Le solde final est bon, mais des mises à jour sont nécessaires
         MvtCaisseBean aMvt = new MvtCaisseBean();
@@ -176,7 +195,7 @@ public class MvtCaisseBeanTest extends TestCase {
         aMvt.setCOMM("Incohérence ajoutée pour test");
         aMvt.create(aDBSession);
         
-        Assert.assertTrue(MvtCaisseBean.checkAndFix(aDBSession, Long.toString(ModReglBean.MOD_REGL_ESP), "01/01/2002 12:12:12"));
+        Assert.assertTrue(MvtCaisseBean.checkAndFix(aDBSession, Long.toString(ModReglBean.MOD_REGL_ESP), "01/01/2002 12:12:12", Locale.getDefault()));
 
         aMvt.delete(aDBSession);
 
@@ -195,7 +214,7 @@ public class MvtCaisseBeanTest extends TestCase {
         aMvt.setMONTANT("20");
         aMvt.maj(aDBSession);  // Mise à jour : Ne modifie pas la caisse => Incohérence finale
         
-        Assert.assertTrue(!MvtCaisseBean.checkAndFix(aDBSession, Long.toString(ModReglBean.MOD_REGL_ESP), "01/01/2002 12:12:12"));
+        Assert.assertTrue(!MvtCaisseBean.checkAndFix(aDBSession, Long.toString(ModReglBean.MOD_REGL_ESP), "01/01/2002 12:12:12", Locale.getDefault()));
 
         aMvt.delete(aDBSession);
     }
@@ -235,7 +254,7 @@ public class MvtCaisseBeanTest extends TestCase {
             
             // Création d'un vieux mouvement
             aMvt = new MvtCaisseBean();
-            aMvt.setDT_MVT("01/01/1998 00:00:00");
+            aMvt.setDT_MVT("01/01/1998 00:00:00", Locale.getDefault());
             aMvt.setCD_PAIEMENT(0);
             aMvt.setDEVISE("EUR");
             aMvt.setCD_MOD_REGL(10);

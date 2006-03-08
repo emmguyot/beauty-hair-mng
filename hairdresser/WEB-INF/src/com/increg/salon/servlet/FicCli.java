@@ -1,3 +1,20 @@
+/*
+ * Bean Session incluant les données d'une session LibertyLook
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge>
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.servlet;
 
 import java.sql.ResultSet;
@@ -7,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.ClientBean;
 import com.increg.salon.bean.FactBean;
@@ -65,7 +83,7 @@ public class FicCli extends ConnectedServlet {
                 // Première phase de création
                 request.setAttribute("Action", "Creation");
                 // Un bean vide
-                ClientBean aCli = new ClientBean();
+                ClientBean aCli = new ClientBean(mySalon.getMessagesBundle());
                 request.setAttribute("ClientBean", aCli);
             } else if (Action.equals("Creation")) {
                 // Crée réellement le client
@@ -73,7 +91,7 @@ public class FicCli extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                ClientBean aCli = new ClientBean();
+                ClientBean aCli = new ClientBean(mySalon.getMessagesBundle());
                 aCli.setCD_CLI(CD_CLI);
                 aCli.setCIVILITE(CIVILITE);
                 aCli.setNOM(NOM);
@@ -93,12 +111,12 @@ public class FicCli extends ConnectedServlet {
                 aCli.setINDIC_VALID(INDIC_VALID);
 
                 try {
-                    aCli.setDT_ANNIV(DT_ANNIV);
+                    aCli.setDT_ANNIV(DT_ANNIV, mySalon.getLangue());
                     aCli.create(myDBSession);
-                    mySalon.setMessage("Info", "Création effectuée.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.creationOk" + BasicSession.TAG_I18N);
                     request.setAttribute("Action", "Modification");
                 } catch (Exception e) {
-                    mySalon.setMessage("Erreur", e.toString());
+                    mySalon.setMessage("Erreur", e);
                     request.setAttribute("Action", Action);
                 }
                 request.setAttribute("ClientBean", aCli);
@@ -107,7 +125,10 @@ public class FicCli extends ConnectedServlet {
                 // Affichage de la fiche en modification
                 request.setAttribute("Action", "Modification");
 
-                ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI);
+                ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI, mySalon.getMessagesBundle());
+                if (assertOrError((aCli != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
                 request.setAttribute("ClientBean", aCli);
 
             } else if (Action.equals("Modification")) {
@@ -116,7 +137,10 @@ public class FicCli extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI);
+                ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI, mySalon.getMessagesBundle());
+                if (assertOrError((aCli != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 
                 aCli.setCD_CLI(CD_CLI);
                 aCli.setCIVILITE(CIVILITE);
@@ -137,12 +161,12 @@ public class FicCli extends ConnectedServlet {
                 aCli.setINDIC_VALID(INDIC_VALID);
 
                 try {
-                    aCli.setDT_ANNIV(DT_ANNIV);
+                    aCli.setDT_ANNIV(DT_ANNIV, mySalon.getLangue());
                     aCli.maj(myDBSession);
-                    mySalon.setMessage("Info", "Enregistrement effectué.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.enregistrementOk" + BasicSession.TAG_I18N);
                     request.setAttribute("Action", "Modification");
                 } catch (Exception e) {
-                    mySalon.setMessage("Erreur", e.toString());
+                    mySalon.setMessage("Erreur", e);
                     request.setAttribute("Action", Action);
                 }
                 request.setAttribute("ClientBean", aCli);
@@ -152,16 +176,19 @@ public class FicCli extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI);
+                ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI, mySalon.getMessagesBundle());
+                if (assertOrError((aCli != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 
                 try {
                     aCli.delete(myDBSession);
-                    mySalon.setMessage("Info", "Suppression effectuée.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.suppressionOk" + BasicSession.TAG_I18N);
                     // Un bean vide
-                    aCli = new ClientBean();
+                    aCli = new ClientBean(mySalon.getMessagesBundle());
                     request.setAttribute("Action", "Creation");
                 } catch (Exception e) {
-                    mySalon.setMessage("Erreur", e.toString());
+                    mySalon.setMessage("Erreur", e);
                     request.setAttribute("Action", "Modification");
                 }
                 request.setAttribute("ClientBean", aCli);
@@ -169,7 +196,7 @@ public class FicCli extends ConnectedServlet {
                 // Affichage de la fiche en modification
                 request.setAttribute("Action", "Modification");
 
-                ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI);
+                ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI, mySalon.getMessagesBundle());
                 request.setAttribute("ClientBean", aCli);
                 NbPrest = Long.toString(Long.MAX_VALUE);
             } else if (Action.equals("Commentaire")) {
@@ -186,20 +213,20 @@ public class FicCli extends ConnectedServlet {
 
                 try {
                     aHistoPrest.maj(myDBSession);
-                    mySalon.setMessage("Info", "Enregistrement effectué.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.enregistrementOk" + BasicSession.TAG_I18N);
                 } catch (Exception e) {
-                    mySalon.setMessage("Erreur", e.toString());
+                    mySalon.setMessage("Erreur", e);
                 }
 
                 request.setAttribute("Action", "Modification");
 
-                ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI);
+                ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI, mySalon.getMessagesBundle());
                 request.setAttribute("ClientBean", aCli);
             } else {
                 System.out.println("Action non codée : " + Action);
             }
         } catch (Exception e) {
-            mySalon.setMessage("Erreur", e.toString());
+            mySalon.setMessage("Erreur", e);
             System.out.println("Note : " + e.toString());
         }
 
@@ -225,7 +252,7 @@ public class FicCli extends ConnectedServlet {
                     /**
                      * Création du bean de consultation
                      */
-                    FactBean aFact = new FactBean(aRS);
+                    FactBean aFact = new FactBean(aRS, mySalon.getMessagesBundle());
                     Vector lignes = aFact.getLignes(myDBSession);
 
                     /**

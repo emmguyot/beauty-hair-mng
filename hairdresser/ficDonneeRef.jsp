@@ -1,3 +1,22 @@
+<%
+/*
+ * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
+%>
 <%@ page import="java.net.URLEncoder, com.increg.salon.bean.SalonSession,
 	       com.increg.salon.bean.DonneeRefBean" %>
 <%
@@ -7,6 +26,8 @@
     }
 %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
 <%
@@ -16,19 +37,21 @@
    String Action = (String) request.getAttribute("Action");
    DonneeRefBean aDonneeRef = (DonneeRefBean) request.getAttribute("DonneeRefBean");
 %>
-<title>Fiche <%= chaineTable %></title>
+<title><i18n:message key="ficDonneeRef.title" >
+    <i18n:messageArg value="<%= chaineTable %>" />
+</i18n:message></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
 <body class="donnees" onLoad="Init();document.fiche.LIB.focus()">
-<%@ include file="include/commun.js" %>
+<%@ include file="include/commun.jsp" %>
 <script language="JavaScript">
 <!--
    var Action="<%=Action%>";
 
 function Init() {
    <%
-   // Positionne les liens d'actions
+   // Positionne les liens d actions
    if (! Action.equals("Creation")) {
       %>
       MM_showHideLayers('SUPPRIMER?bottomFrame','','show');
@@ -47,7 +70,7 @@ function Init() {
 }
 //-->
 </script>
-<h1><img src="images/titres/ficParam.gif"><br><span class="ssTitre"><%= chaineTable %></span></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/ficParam.gif"><br><span class="ssTitre"><%= chaineTable %></span></h1>
 <salon:message salonSession="<%= mySalon %>" />
 <form method="post" action="ficDonneeRef.srv" name="fiche">
 	<p> 
@@ -57,7 +80,7 @@ function Init() {
 		<input type="hidden" name="Action" value="<%=Action%>">
 		<input type="hidden" name="nomTable" value="<%=nomTable%>">
 		<input type="hidden" name="chaineTable" value="<%=chaineTable%>">
-		<span class="obligatoire">Libellé :</span> 
+		<span class="obligatoire"><i18n:message key="label.libelle" /> :</span> 
 		<salon:valeur valeurNulle="null" valeur="<%= aDonneeRef.getLIB() %>" >
 		  <input type="text" name="LIB" value="%%" size=40>
 	        </salon:valeur>
@@ -71,7 +94,7 @@ function Enregistrer()
 {
    // Verification des données obligatoires
    if (document.fiche.LIB.value == "") {
-      alert ("Le libellé doit être saisi. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="ficDonneeRef.libelleManquant" />");
       return;
    }
    document.fiche.submit();
@@ -81,7 +104,7 @@ function Enregistrer()
 function Supprimer()
 {
     if ((document.fiche.CD.value != "0") && (document.fiche.CD.value != "")) {
-        if (confirm ("Cette suppression est définitive. Confirmez-vous cette action ?")) {
+        if (confirm ("<i18n:message key="message.suppressionDefinitiveConfirm" />")) {
             document.fiche.Action.value = "Suppression";
             document.fiche.submit();
         }
@@ -98,7 +121,7 @@ function Dupliquer()
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideFiche.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideFiche.html");
 }
 
 function RetourListe()

@@ -670,4 +670,9 @@
 	 	/WEB-INF/salon-taglib.tld
       </taglib-location>
    </taglib>
+   <taglib>
+	  <taglib-uri>http://jakarta.apache.org/taglibs/i18n-1.0</taglib-uri>
+	  <taglib-location>/WEB-INF/taglibs-i18n.tld</taglib-location>
+   </taglib>
+
 </web-app>

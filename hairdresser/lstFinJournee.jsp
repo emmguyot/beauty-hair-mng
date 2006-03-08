@@ -1,4 +1,23 @@
-<%@ page import="java.util.TreeMap,java.util.Set,java.util.Vector,java.util.Iterator,java.math.BigDecimal" %>
+<%
+/*
+ * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
+%>
+<%@ page import="java.util.TreeMap,java.util.Set,java.util.Vector,java.util.Iterator,java.math.BigDecimal,java.util.Calendar" %>
 <%@ page import="com.increg.salon.bean.SalonSession,
                 com.increg.salon.request.Brouillard,
 	        com.increg.salon.request.CA,
@@ -12,19 +31,21 @@
     }
 %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Fin de journée</title>
+<title><i18n:message key="label.finJournee" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
 <body class="donnees">
-<%@ include file="include/commun.js" %>
+<%@ include file="include/commun.jsp" %>
 <script language="JavaScript">
 <!--
 function Init() {
    <%
-   // Positionne les liens d'actions
+   // Positionne les liens d actions
    %>
    MM_showHideLayers('NOUVEAU?bottomFrame','','hide');
 }
@@ -32,7 +53,7 @@ function Init() {
 </script>
 <%
     // Récupération des paramètres
-    String DT_JOUR = (String) request.getAttribute("DT_JOUR");
+    Calendar DT_JOUR = (Calendar) request.getAttribute("DT_JOUR");
     // Recupère les listes pour le Brouillard
     Brouillard brouillardTotal = (Brouillard) request.getAttribute("TotalB");
     TreeMap lstTypesB = (TreeMap) request.getAttribute("ListeTypeB");
@@ -46,14 +67,15 @@ function Init() {
     Vector listeCaisse = (Vector) request.getAttribute("ListeCaisse");
     
 %>
-<h1><img src="images/titres/lstFinJournee.gif"></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstFinJournee.gif"></h1>
 <form name="fiche" action="rechFinJournee.srv" method="post">
 <p>
-Journée du :
-   <salon:valeur valeurNulle="null" valeur="<%= DT_JOUR %>" >
+<i18n:message key="label.journeeDu" /> :
+    <i18n:message key="format.dateSimpleDefaut" id="formatDate" />
+    <salon:valeur valeurNulle="null" valeur="<%= DT_JOUR %>" format="<%= formatDate %>">
       %%
       <input type="hidden" name="DT_JOUR" value="%%">
-   </salon:valeur>
+    </salon:valeur>
 </p>
 </form>
 <table width="100%" border="1" rules="groups">
@@ -63,9 +85,9 @@ Journée du :
 <colgroup span="<%= lstTypeMcaB.size() %>">
 	<tr>
 		<th rowspan=2></th>
-	        <th colspan="<%= lstTypesB.size() %>">Factures</th>
-		<th colspan="<%= lstTypesRemB.size() %>">Remise</th>
-		<th colspan="<%= lstTypeMcaB.size() %>">Encaissements</th>
+	        <th colspan="<%= lstTypesB.size() %>"><i18n:message key="label.factures" /></th>
+		<th colspan="<%= lstTypesRemB.size() %>"><i18n:message key="label.remise" /></th>
+		<th colspan="<%= lstTypeMcaB.size() %>"><i18n:message key="label.encaissement" /></th>
 	</tr>
 	<% if (lstLignesB.size() > 0) { %>
 	<tr>
@@ -103,7 +125,7 @@ Journée du :
 	<tbody>
 	<tr border=5>
 	    <td class="tabDonnees">
-	       CA
+	       <i18n:message key="label.ca" />
 	    </td>
 	    <% Set typesKeys = lstTypesB.keySet();
 	       BigDecimal totalFact = new BigDecimal("0.00");
@@ -149,7 +171,7 @@ Journée du :
 	    <% } %>
 	</tr>
 	<tr>
-	    <td class="tabDonnees">Total</td>
+	    <td class="tabDonnees"><i18n:message key="label.total" /></td>
 	    <td class="tabDonnees" colspan="<%= lstTypesB.size() %>">
 	       <salon:valeur valeurNulle="null" valeur="<%= totalFact %>" >
 		  %%&nbsp;
@@ -228,11 +250,11 @@ Journée du :
 <colgroup span="<%= lstTypesC.size() %>">
 <colgroup>
 	<tr>
-		<th>Collaborateur</th>
+		<th><i18n:message key="label.collaborateur" /></th>
 		<% for (int i=0; i< lstTypesC.size(); i++) { %>
 		  <th><%= (String) lstTypesC.get(i) %></th>
 	        <% } %>
-		<th>CA TTC total<br/>Hors remises</th>
+		<th><i18n:message key="label.caTotalHorsRemise" /></th>
 	</tr>
 	<tbody>
 	<%    
@@ -292,7 +314,7 @@ Journée du :
 	</tbody>
         <tfoot>
         <tr>
-            <td class="Total">Total</td>
+            <td class="Total"><i18n:message key="label.total" /></td>
             <%
 			for (int j=0; j < lstTypesC.size(); j++) {
 			%>
@@ -314,8 +336,8 @@ Journée du :
 <td class="labelBas">
 <table border="1">
     <tr>
-        <th>Caisse</th>
-        <th>Solde</th>
+        <th><i18n:message key="label.caisse" /></th>
+        <th><i18n:message key="label.soldeCaisse" /></th>
     </tr>
     <tbody>
         <%    
@@ -343,7 +365,7 @@ Journée du :
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideListeFinJournee.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideListeFinJournee.html");
 }
 
 //-->

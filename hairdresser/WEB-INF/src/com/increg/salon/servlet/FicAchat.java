@@ -1,9 +1,29 @@
+/*
+ * Fiche de création des achats (séries de mouvements d'approvisionnements)
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.servlet;
 
+import java.text.DateFormat;
 import java.util.*;
 import java.math.BigDecimal;
 import java.sql.*;
 import com.increg.salon.bean.*;
+import com.increg.util.SimpleDateFormatEG;
+
 import javax.servlet.http.*;
 import com.increg.commun.*;
 /**
@@ -47,6 +67,7 @@ public void performTask(
 	HttpSession mySession = request.getSession(false);
 	SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
 	DBSession myDBSession = mySalon.getMyDBSession();
+    DateFormat formatDateTZ = new SimpleDateFormatEG(mySalon.getMessagesBundle().getString("format.dateDefaut"));
 
     Vector lstLignes = new Vector(); // Mouvements de la commande
     Vector lstMvt = new Vector(); // Mouvement historique d'achat
@@ -66,14 +87,17 @@ public void performTask(
 			// Rechargement pour compléter la ligne
             if (Action.equals("Rechargement+")) {
                 // Positionne la valeur par défaut du mouvement
-                ArtBean aArt = ArtBean.getArtBean(myDBSession, CD_ART);
+                ArtBean aArt = ArtBean.getArtBean(myDBSession, CD_ART, mySalon.getMessagesBundle());
+                if (assertOrError((aArt != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
                 bdQTE = new BigDecimal("1");
                 bdVAL_MVT_HT = aArt.getVAL_STK_HT();
                 // et les valeurs de l'article
                 bdQTE_STK = aArt.getQTE_STK();
                 // TODO Utilisation du prix tarif
                 bdVAL_STK_HT = aArt.getVAL_STK_HT();
-                MvtStkBean aMvt = getPreviousMvt(myDBSession, CD_CMD_FOURN, CD_TYP_MVT, aArt.getCD_ART());
+                MvtStkBean aMvt = getPreviousMvt(myDBSession, CD_CMD_FOURN, CD_TYP_MVT, aArt.getCD_ART(), mySalon.getMessagesBundle());
                 if (aMvt != null) {
                     DT_MVT = aMvt.getDT_MVT();
                 }
@@ -99,7 +123,7 @@ public void performTask(
                 aMvt.setVAL_MVT_HT(VAL_MVT_HT);
                 aMvt.setCD_CMD_FOURN(CD_CMD_FOURN);
                 aMvt.create(myDBSession);
-                mySalon.setMessage("Info", "Enregistrement effectué.");
+                mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.enregistrementOk" + BasicSession.TAG_I18N);
             }
             catch (Exception e) {
                 mySalon.setMessage("Erreur", e.toString());
@@ -111,9 +135,15 @@ public void performTask(
             try {
                 
                 // C'est une nouvelle ligne
-                MvtStkBean aMvt = MvtStkBean.getMvtStkBean(myDBSession, paramSup1, paramSup2, null);
+            	Calendar dtMvt = Calendar.getInstance();
+            	dtMvt.setTime(formatDateTZ.parse(paramSup2));
+            	dtMvt.setTimeZone(formatDateTZ.getTimeZone());
+                MvtStkBean aMvt = MvtStkBean.getMvtStkBean(myDBSession, paramSup1, dtMvt, null, mySalon.getLangue(), mySalon.getMessagesBundle());
+                if (assertOrError((aMvt != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
                 aMvt.delete(myDBSession);
-                mySalon.setMessage("Info", "Suppression effectuée.");
+                mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.suppressionOk" + BasicSession.TAG_I18N);
             }
             catch (Exception e) {
                 mySalon.setMessage("Erreur", e.toString());
@@ -150,14 +180,14 @@ public void performTask(
                 /**
                  * Création du bean de consultation
                  */
-                MvtStkBean aMvt = new MvtStkBean(aRS);
+                MvtStkBean aMvt = new MvtStkBean(aRS, mySalon.getMessagesBundle());
                 lstLignes.add(aMvt);
                 
                 /**
                  * Recherche les anciens mouvements d'achat
                  */
                 if (CD_TYP_MVT != null) {
-                    lstMvt.add(getPreviousMvt(myDBSession, CD_CMD_FOURN, CD_TYP_MVT, aMvt.getCD_ART()));
+                    lstMvt.add(getPreviousMvt(myDBSession, CD_CMD_FOURN, CD_TYP_MVT, aMvt.getCD_ART(), mySalon.getMessagesBundle()));
                 }
                 else {
                     lstMvt.add(null);
@@ -205,9 +235,10 @@ public void performTask(
  * @param CD_CMD_FOURN N° de commande en cours de saisie pour exclusion
  * @param CD_TYP_MVT Type de mouvement concerné
  * @param CD_ART Article concerné
+ * @param message Messages localisés
  * @return Mouvement chargé (éventuellement NULL)
  */
-protected MvtStkBean getPreviousMvt (DBSession myDBSession, String CD_CMD_FOURN, String CD_TYP_MVT, long CD_ART) {
+protected MvtStkBean getPreviousMvt (DBSession myDBSession, String CD_CMD_FOURN, String CD_TYP_MVT, long CD_ART, ResourceBundle message) {
 
     String reqSQLmvt = "select * from MVT_STK "
                 + " where (CD_CMD_FOURN is null or CD_CMD_FOURN<>" + DBSession.quoteWith(CD_CMD_FOURN, '\'') + ")"
@@ -223,7 +254,7 @@ protected MvtStkBean getPreviousMvt (DBSession myDBSession, String CD_CMD_FOURN,
             /**
              * Création du bean de consultation
              */
-            anOldMvt = new MvtStkBean(aRSmvt);
+            anOldMvt = new MvtStkBean(aRSmvt, message);
         }
         aRSmvt.close();
 

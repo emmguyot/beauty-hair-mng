@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.SalonSession;
 import com.increg.salon.bean.SocieteBean;
@@ -81,7 +82,7 @@ public class FicSoc extends ConnectedServlet {
                 try {
                     if (mySalon.checkLicence(aSoc)) {
                         aSoc.maj(myDBSession);
-                        mySalon.setMessage("Info", "Enregistrement effectué.");
+                        mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.enregistrementOk" + BasicSession.TAG_I18N);
                         // Maj du Bean session
                         mySalon.getMySociete().setRAIS_SOC(RAIS_SOC);
                         mySalon.getMySociete().setCIVILITE_GER(CIVILITE_GER);

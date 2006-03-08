@@ -80,7 +80,7 @@ public void performTask(
 			// Première phase de création
 			request.setAttribute("Action", "Creation");
 			// Un bean vide
-			aArt = new ArtBean();
+			aArt = new ArtBean(mySalon.getMessagesBundle());
 		}
 		else if (Action.equals("Creation")) {
 			// Crée réellement l'article
@@ -88,7 +88,7 @@ public void performTask(
 			/**
 			 * Création du bean et enregistrement
 			 */
-			aArt = new ArtBean();
+			aArt = new ArtBean(mySalon.getMessagesBundle());
 			aArt.setCD_ART(CD_ART);
 			aArt.setCD_CATEG_ART(CD_CATEG_ART);
 			aArt.setCD_TYP_ART(CD_TYP_ART);
@@ -104,11 +104,11 @@ public void performTask(
 			try {
 	            aArt.create(myDBSession);
 
-	            mySalon.setMessage("Info", "Création effectuée.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.creationOk" + BasicSession.TAG_I18N);
 				if (CD_TYP_ART.equals("1")) {
 		            // Création automatique de la prestation
 		            aArt.creationPrestation(myDBSession);
-		            mySalon.setMessage("Info", "Création effectuée. La prestation associée a également été créée.");
+		            mySalon.setMessage("Info", BasicSession.TAG_I18N + "ficArt.creationOk" + BasicSession.TAG_I18N);
 				}
 	            request.setAttribute("Action", "Modification");
 			}
@@ -121,7 +121,10 @@ public void performTask(
 			// Affichage de la fiche en modification
 			request.setAttribute("Action", "Modification");
 
-			aArt = ArtBean.getArtBean(myDBSession, CD_ART);
+			aArt = ArtBean.getArtBean(myDBSession, CD_ART, mySalon.getMessagesBundle());
+            if (assertOrError((aArt != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 		}
 		else if ((Action.equals ("Modification")) 
 				|| (Action.equals ("AjoutLigne"))
@@ -139,11 +142,14 @@ public void performTask(
 			 */
             if ((CD_ART == null) || (CD_ART.length() == 0) || (CD_ART.equals("0"))) {
 				// On est en création : le Bean est créé de zero
-				aArt = new ArtBean();
+				aArt = new ArtBean(mySalon.getMessagesBundle());
 			}
 			else {
 				// Recharge à partir de la base
-	            aArt = ArtBean.getArtBean(myDBSession, CD_ART);
+	            aArt = ArtBean.getArtBean(myDBSession, CD_ART, mySalon.getMessagesBundle());
+                if (assertOrError((aArt != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 			}
 
 			aArt.setCD_ART(CD_ART);
@@ -164,7 +170,7 @@ public void performTask(
 					if (CD_TYP_ART.equals(Integer.toString(ArtBean.TYP_ART_VENT_DETAIL))) {
 			            // Création automatique de la prestation
                         aArt.creationPrestation(myDBSession);
-			            mySalon.setMessage("Info", "Création effectuée. La prestation associée a également été créée.");
+			            mySalon.setMessage("Info", BasicSession.TAG_I18N + "ficArt.creationOk" + BasicSession.TAG_I18N);
 					}
 				}
 				else {
@@ -209,7 +215,7 @@ public void performTask(
 					aFourn.create(myDBSession);
 				}
 
-				mySalon.setMessage("Info", "Enregistrement effectué.");
+				mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.enregistrementOk" + BasicSession.TAG_I18N);
 	            request.setAttribute("Action", "Modification");
 			}
 			catch (Exception e) {
@@ -223,7 +229,7 @@ public void performTask(
 			/**
 			 * Création du bean et enregistrement
 			 */
-			aArt = new ArtBean();
+			aArt = new ArtBean(mySalon.getMessagesBundle());
 
 			aArt.setLIB_ART(LIB_ART);
 			aArt.setCD_CATEG_ART(CD_CATEG_ART);
@@ -260,7 +266,7 @@ public void performTask(
 		            aArt.creationPrestation(myDBSession);
 				}
 
-				mySalon.setMessage("Info", "Duplication effectuée. Vous travaillez maintenant sur la copie.");
+				mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.duplicationOk" + BasicSession.TAG_I18N);
 	            request.setAttribute("Action", "Modification");
 			}
 			catch (Exception e) {
@@ -274,14 +280,17 @@ public void performTask(
 			/**
 			 * Création du bean et enregistrement
 			 */
-			aArt = ArtBean.getArtBean(myDBSession, CD_ART);
+			aArt = ArtBean.getArtBean(myDBSession, CD_ART, mySalon.getMessagesBundle());
+            if (assertOrError((aArt != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 
 			try {
 				// Suppression des lignes Fournisseurs en même temps
 	            aArt.delete(myDBSession);
-	            mySalon.setMessage("Info", "Suppression effectuée.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.suppressionOk" + BasicSession.TAG_I18N);
 	            // Un bean vide
-	            aArt = new ArtBean();
+	            aArt = new ArtBean(mySalon.getMessagesBundle());
 	            request.setAttribute("Action", "Creation");
 	        }	
 			catch (Exception e) {

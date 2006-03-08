@@ -56,7 +56,7 @@ public void performTask(
             if ((MOT_PASSE2 != null) && (MOT_PASSE != null) && (MOT_PASSE.equals(MOT_PASSE2))) {
     			try {
     				aIdent.create(myDBSession);
-    	            mySalon.setMessage("Info", "Création effectuée.");
+    	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.creationOk" + BasicSession.TAG_I18N);
     	            request.setAttribute("Action", "Modification");
     			}
     			catch (Exception e) {
@@ -65,7 +65,7 @@ public void performTask(
     			}
             }
             else {
-                mySalon.setMessage("Erreur", "Les deux mots de passe ne sont pas identiques");
+                mySalon.setMessage("Erreur", BasicSession.TAG_I18N + "ficIdent.motDePasseDifferent" + BasicSession.TAG_I18N);
                 request.setAttribute("Action", Action);
             }
             request.setAttribute("IdentBean", aIdent);
@@ -76,6 +76,9 @@ public void performTask(
 			request.setAttribute("Action", "Modification");
 
 			aIdent = IdentBean.getIdentBean(myDBSession, CD_IDENT);
+            if (assertOrError((aIdent != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 			request.setAttribute("IdentBean", aIdent);
 
 		}
@@ -86,6 +89,9 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aIdent = IdentBean.getIdentBean(myDBSession, CD_IDENT);
+            if (assertOrError((aIdent != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 
             aIdent.setLIB_IDENT(LIB_IDENT);
             aIdent.setMOT_PASSE(MOT_PASSE);
@@ -95,7 +101,7 @@ public void performTask(
             if ((MOT_PASSE2 != null) && (MOT_PASSE != null) && (MOT_PASSE.equals(MOT_PASSE2))) {
     			try {
     	            aIdent.maj(myDBSession);
-    	            mySalon.setMessage("Info", "Enregistrement effectué.");
+    	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.enregistrementOk" + BasicSession.TAG_I18N);
     	            request.setAttribute("Action", "Modification");
     			}
     			catch (Exception e) {
@@ -104,7 +110,7 @@ public void performTask(
     			}
             }
             else {
-                mySalon.setMessage("Erreur", "Les deux mots de passe ne sont pas identiques");
+                mySalon.setMessage("Erreur", BasicSession.TAG_I18N + "ficIdent.motDePasseDifferent" + BasicSession.TAG_I18N);
                 request.setAttribute("Action", Action);
             }
 			request.setAttribute("IdentBean", aIdent);
@@ -116,10 +122,13 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aIdent = IdentBean.getIdentBean(myDBSession, CD_IDENT);
+            if (assertOrError((aIdent != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 
 			try {
 	            aIdent.delete(myDBSession);
-	            mySalon.setMessage("Info", "Suppression effectuée.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.suppressionOk" + BasicSession.TAG_I18N);
 	            // Un bean vide
 	            aIdent = new IdentBean();
 	            request.setAttribute("Action", "Creation");

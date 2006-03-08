@@ -1,8 +1,25 @@
+/*
+ * Réédition de factures
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.servlet;
 
 import java.sql.ResultSet;
 import java.text.DateFormat;
-import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Vector;
 
@@ -11,10 +28,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.increg.commun.DBSession;
+import com.increg.commun.exception.NoImplementationException;
 import com.increg.salon.bean.FactBean;
 import com.increg.salon.bean.PaiementBean;
 import com.increg.salon.bean.SalonSession;
 import com.increg.salon.request.EditionFacture;
+import com.increg.util.ServletUtil;
 /**
  * Réédition de factures
  * Creation date: (03/11/2001 22:57:04)
@@ -35,51 +54,42 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
 	HttpSession mySession = request.getSession(false);
 	SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
 	DBSession myDBSession = mySalon.getMyDBSession();
+    DateFormat formatDate = new SimpleDateFormat(mySalon.getMessagesBundle().getString("format.dateSimpleDefaut"));
+    DateFormat formatDateDB = DateFormat.getDateInstance(DateFormat.SHORT);
 
 	if (format == null) {
 		// Initialise les valeurs par défaut
-		DateFormat formatDate  = DateFormat.getDateInstance(DateFormat.SHORT);
-
-		if (DT_DEBUT == null) {
-			// Début de mois
-			Calendar J7 = Calendar.getInstance();
-			J7.add(Calendar.DAY_OF_YEAR, 1 - J7.get(Calendar.DAY_OF_MONTH));
-			DT_DEBUT = formatDate.format(J7.getTime());
-		}
-		if (DT_FIN == null) {
-			DT_FIN = formatDate.format(Calendar.getInstance().getTime());
-		}
-        try {
-            if ((DT_DEBUT != null) && (DT_DEBUT.length() > 0)) {
-                request.setAttribute("DT_DEBUT", formatDate.parse(DT_DEBUT));
-            }
-            if ((DT_FIN != null) && (DT_FIN.length() > 0)) {
-                request.setAttribute("DT_FIN", formatDate.parse(DT_FIN));
-            }
-        }
-        catch (ParseException e) {
-            mySalon.setMessage("Erreur", e.toString());
-            e.printStackTrace();
-        }
+		// Début de mois
+		Calendar J7 = Calendar.getInstance();
+		J7.add(Calendar.DAY_OF_YEAR, 1 - J7.get(Calendar.DAY_OF_MONTH));
+	    Calendar dtDebut = ServletUtil.interpreteDate(DT_DEBUT, formatDate, J7);
+	    Calendar dtFin = ServletUtil.interpreteDate(DT_FIN, formatDate, Calendar.getInstance());
+	    if (dtFin.before(dtDebut)) {
+	        dtFin = dtDebut;
+	    }
+	    request.setAttribute("DT_DEBUT", dtDebut);
+	    request.setAttribute("DT_FIN", dtFin);
+	    DT_DEBUT = formatDateDB.format(dtDebut.getTime());
+	    DT_FIN = formatDateDB.format(dtFin.getTime());
 	}
 	else if ((format.equals("L")) || (format.equals("F"))) {
 		// Recherche des factures concernées
 		String reqSQL = "select * from PAIEMENT where 1=1 ";
 
-		if ((DT_DEBUT != null) && (DT_DEBUT.length() > 0)) {
-			reqSQL = reqSQL + " and DT_PAIEMENT >= '" + DT_DEBUT + "'";
-		}
-		if ((DT_FIN != null) && (DT_FIN.length() > 0)) {
-			reqSQL = reqSQL + " and DT_PAIEMENT < '" + DT_FIN + "'::date + 1";
-		}
-		reqSQL = reqSQL + " order by DT_PAIEMENT, DT_CREAT";
-
 		Vector liste = new Vector();
 		try {
-	        ResultSet aRS = myDBSession.doRequest(reqSQL);
+			if ((DT_DEBUT != null) && (DT_DEBUT.length() > 0)) {
+				reqSQL = reqSQL + " and DT_PAIEMENT >= '" + formatDateDB.format(formatDate.parse(DT_DEBUT)) + "'";
+			}
+			if ((DT_FIN != null) && (DT_FIN.length() > 0)) {
+				reqSQL = reqSQL + " and DT_PAIEMENT < '" + formatDateDB.format(formatDate.parse(DT_FIN)) + "'::date + 1";
+			}
+			reqSQL = reqSQL + " order by DT_PAIEMENT, DT_CREAT";
+
+			ResultSet aRS = myDBSession.doRequest(reqSQL);
 
 	        while (aRS.next()) {
-		        PaiementBean aPaiement = new PaiementBean(aRS);
+		        PaiementBean aPaiement = new PaiementBean(aRS, mySalon.getMessagesBundle());
 	        
 				// Recherche les factures associées
 		        Vector listeFact = aPaiement.getFact(myDBSession);
@@ -115,7 +125,7 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
 		request.setAttribute("listeEdition", liste);
 	}
 	else {
-		mySalon.setMessage("Erreur", "Format non implémenté.");
+		mySalon.setMessage("Erreur", new NoImplementationException());
 	}
 
 	try {

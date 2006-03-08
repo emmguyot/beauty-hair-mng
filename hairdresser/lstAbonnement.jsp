@@ -1,3 +1,22 @@
+<%
+/*
+ * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
+%>
 <%@ page import="com.increg.salon.bean.SalonSession,
 				java.util.HashMap,
 				java.util.Set,
@@ -14,19 +33,21 @@
     }
 %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Liste des abonnements du clients</title>
+<title><i18n:message key="lstAbonnement.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
 <body class="donnees">
-<%@ include file="include/commun.js" %>
+<%@ include file="include/commun.jsp" %>
 <script language="JavaScript">
 <!--
 function Init() {
    <%
-   // Positionne les liens d'actions
+   // Positionne les liens d actions
    %>
    MM_showHideLayers('NOUVEAU?bottomFrame','','hide');
 }
@@ -39,17 +60,17 @@ function Init() {
     // Recupère la liste
     HashMap lstLignes = aCli.getAbonnements();
 %>
-<h1><img src="images/titres/lstAbonnement.gif"></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstAbonnement.gif"></h1>
 
 <p>
-	<span class="obligatoire">Client</span> :
+	<span class="obligatoire"><i18n:message key="label.client" /></span> :
 	<span class="readonly"><a href="_FicheCli.jsp?Action=Modification&CD_CLI=<%= aCli.getCD_CLI() %>" target="ClientFrame"><%= aCli.toString() %></a></span> 
 </p>
 
 <table border="1">
 	<tr>
-		<th>Prestation</th>
-		<th>Nombre restant</th>
+		<th><i18n:message key="label.prestation" /></th>
+		<th><i18n:message key="label.nbRestant" /></th>
 	</tr>
 	<%
 	Set prestSet = lstLignes.keySet();
@@ -79,18 +100,20 @@ function Init() {
 <table border="0" cellspacing="0" width="100%">
     <tr>
         <td>
-            <%=NbPrest%> derni&egrave;res prestations liées à un abonnement :
-                    &nbsp;&nbsp;<a href="javascript:toutesPrest()">Toutes les prestations abonnements</a> 
+            <i18n:message key="lstAbonnement.dernieresPrestations">
+                <i18n:messageArg value="<%= NbPrest %>" />
+            </i18n:message> :
+            &nbsp;&nbsp;<a href="javascript:toutesPrest()"><i18n:message key="lstAbonnement.toutesPrestations" /></a> 
         </td>
     </tr>
 </table>
 
 <table border="0" width="100%">
     <tr>
-        <th>Date</th>
-        <th>Prestation</th>
-        <th>Collaborateur</th>
-        <th>Commentaire</th>
+        <th><i18n:message key="label.date" /></th>
+        <th><i18n:message key="label.prestation" /></th>
+        <th><i18n:message key="label.collaborateur" /></th>
+        <th><i18n:message key="label.commentaire" /></th>
     </tr>
 <%
         // Recupère la liste
@@ -126,7 +149,7 @@ function Init() {
         </td>
         <td>
             <salon:valeur expand="true" valeurNulle="null" valeur="<%= aPrest.getCOMM() %>" >
-				%%
+                %%
 <%
             if (((Integer) request.getAttribute("Longueur")).intValue() == 0) { %>
                 &nbsp;
@@ -158,7 +181,7 @@ function toutesPrest()
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideFicheCli.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideFicheCli.html");
 }
 
 </script>

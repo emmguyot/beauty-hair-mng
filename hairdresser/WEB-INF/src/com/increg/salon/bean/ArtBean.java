@@ -1,3 +1,20 @@
+/*
+ * Bean de gestion des articles
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.bean;
 
 import java.sql.*;
@@ -71,9 +88,10 @@ public class ArtBean extends TimeStampBean {
     
 	/**
 	 * ArtBean constructor comment.
+	 * @param rb Messages à utiliser
 	 */
-	public ArtBean() {
-		super();
+	public ArtBean(ResourceBundle rb) {
+		super(rb);
         INDIC_MIXTE = "N";
         INDIC_PERIM = "N";
         LIB_ART_orig = "";
@@ -81,9 +99,10 @@ public class ArtBean extends TimeStampBean {
 	/**
 	 * ArtBean constructor comment.
 	 * @param rs java.sql.ResultSet
+	 * @param rb Messages à utiliser
 	 */
-	public ArtBean(ResultSet rs) {
-		super(rs);
+	public ArtBean(ResultSet rs, ResourceBundle rb) {
+		super(rs, rb);
 		try {
 			CD_ART = rs.getLong("CD_ART");
 		}
@@ -311,7 +330,7 @@ public class ArtBean extends TimeStampBean {
 		nb = dbConnect.doExecuteSQL(reqs);
 	
 		if (nb[0] != 1) {
-			throw (new SQLException("Création non effectuée"));
+			throw (new SQLException(BasicSession.TAG_I18N + "message.creationKo" + BasicSession.TAG_I18N));
 		}	
 	
 	}
@@ -339,7 +358,7 @@ public class ArtBean extends TimeStampBean {
 		nb = dbConnect.doExecuteSQL(reqs);
 	
 		if (nb[1] != 1) {
-			throw (new SQLException("Suppression non effectuée"));
+			throw (new SQLException(BasicSession.TAG_I18N + "message.suppressionKo" + BasicSession.TAG_I18N));
 		}	
 	}
 	/**
@@ -383,9 +402,10 @@ public class ArtBean extends TimeStampBean {
 	 * Creation date: (19/08/2001 21:14:20)
 	 * @param dbConnect com.increg.salon.bean.DBSession
 	 * @param CD_ART java.lang.String
+	 * @param rb Messages localisés
 	 * @return Article Correspondant
 	 */
-	public static ArtBean getArtBean(DBSession dbConnect, String CD_ART) {
+	public static ArtBean getArtBean(DBSession dbConnect, String CD_ART, ResourceBundle rb) {
 		String reqSQL = "select * from ART where CD_ART=" + CD_ART;
 		ArtBean res = null;
 	
@@ -394,7 +414,7 @@ public class ArtBean extends TimeStampBean {
 			ResultSet aRS = dbConnect.doRequest(reqSQL);
 	
 			while (aRS.next()) {
-				res = new ArtBean(aRS);
+				res = new ArtBean(aRS, rb);
 			}
 			aRS.close();
 		}
@@ -530,7 +550,7 @@ public class ArtBean extends TimeStampBean {
 		nb = dbConnect.doExecuteSQL(reqs);
 	
 		if (nb[0] != 1) {
-			throw (new SQLException("Mise à jour non effectuée"));
+			throw (new SQLException(BasicSession.TAG_I18N + "message.enregistrementKo" + BasicSession.TAG_I18N));
 		}
 	
 	}
@@ -815,7 +835,9 @@ public class ArtBean extends TimeStampBean {
         aPrest.setCD_UNIT_MES(CD_UNIT_MES);
         aPrest.setCD_ART(CD_ART);
         aPrest.setINDIC_PERIM(INDIC_PERIM);
-        aPrest.setCOMM("Créé automatiquement avec l'article");
+		if (message != null) {
+			aPrest.setCOMM(message.getString("artBean.commentaireDuplication"));
+		}
     
         aPrest.create(myDBSession);
     }
@@ -876,7 +898,7 @@ public class ArtBean extends TimeStampBean {
         catch (Exception e) {
             System.out.println("Erreur dans Purge des articles: " + e.toString());
             dbConnect.cleanTransaction();
-            throw new FctlException("Erreur à la purge des articles.");
+            throw new FctlException(BasicSession.TAG_I18N + "artBean.purgeKo" + BasicSession.TAG_I18N);
         }
         
         // Fin de cette transaction

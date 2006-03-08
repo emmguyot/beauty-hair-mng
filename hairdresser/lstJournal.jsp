@@ -1,21 +1,49 @@
-<%@ page import="java.util.TreeMap,java.util.Set,java.util.Iterator,java.util.Date" %>
+<%
+/*
+ * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
+%>
+<%@ page import="java.util.TreeMap,java.util.Set,java.util.Iterator,java.util.Calendar" %>
 <%@ page import="com.increg.salon.bean.ModReglBean,
 	       com.increg.salon.request.Journal
 	       " %>
+<%@ page import="com.increg.salon.bean.SalonSession" %>
+<%
+    SalonSession mySalon = (SalonSession) session.getAttribute("SalonSession");
+    if (mySalon == null) {
+        getServletConfig().getServletContext().getRequestDispatcher("/reconnect.html").forward(request, response);
+    }
+%>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Journal</title>
+<title><i18n:message key="label.journal" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
 <body class="donnees">
-<%@ include file="include/commun.js" %>
+<%@ include file="include/commun.jsp" %>
 <script language="JavaScript">
 <!--
 function Init() {
    <%
-   // Positionne les liens d'actions
+   // Positionne les liens d actions
    %>
    MM_showHideLayers('NOUVEAU?bottomFrame','','hide');
 }
@@ -24,13 +52,13 @@ function Init() {
 <%
    // Récupération des paramètres
    String CD_MOD_REGL = (String) request.getAttribute("CD_MOD_REGL");
-   Date DT_DEBUT = (Date) request.getAttribute("DT_DEBUT");
-   Date DT_FIN = (Date) request.getAttribute("DT_FIN");
+   Calendar DT_DEBUT = (Calendar) request.getAttribute("DT_DEBUT");
+   Calendar DT_FIN = (Calendar) request.getAttribute("DT_FIN");
 %>
-<h1><img src="images/titres/lstJournal.gif"></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstJournal.gif"></h1>
 <form name="fiche" action="rechJournal.srv" method="post">
 <p>
-Mode de paiement :
+<i18n:message key="label.modePaiement" /> :
 <salon:DBselection valeur="<%= CD_MOD_REGL %>" sql='<%= "select CD_MOD_REGL, LIB_MOD_REGL from MOD_REGL where CD_MOD_REGL not in (" + Integer.toString(ModReglBean.MOD_REGL_ESP_FRF) + "," + Integer.toString(ModReglBean.MOD_REGL_CHQ_FRF) + ") order by LIB_MOD_REGL" %>'>
    <select name="CD_MOD_REGL" onChange="document.fiche.submit()">
       %%
@@ -38,10 +66,11 @@ Mode de paiement :
 </salon:DBselection>
 </p>
 <p>
-Entre le :
-    <salon:date type="text" name="DT_DEBUT" valeurDate="<%= DT_DEBUT %>" valeurNulle="null" format="dd/MM/yyyy" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
-   et le : 
-    <salon:date type="text" name="DT_FIN" valeurDate="<%= DT_FIN %>" valeurNulle="null" format="dd/MM/yyyy" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
+<i18n:message key="label.entreLe" /> :
+<i18n:message key="format.dateSimpleDefaut" id="formatDate" />
+    <salon:date type="text" name="DT_DEBUT" valeurDate="<%= DT_DEBUT %>" valeurNulle="null" format="<%= formatDate %>" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
+<i18n:message key="label.etLe" /> : 
+    <salon:date type="text" name="DT_FIN" valeurDate="<%= DT_FIN %>" valeurNulle="null" format="<%= formatDate %>" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
 </p>
 </form>
 <hr>
@@ -58,15 +87,15 @@ Journal total = (Journal) request.getAttribute("Total");
 <colgroup>
 	<thead>
 	<tr>
-		<th>Date</th>
-		<th>Fond de caisse</th>
+		<th><i18n:message key="label.date" /></th>
+		<th><i18n:message key="label.fondCaisse" /></th>
 		<% {
 		     Set keys = lstTypes.keySet();
 		     for (Iterator i= keys.iterator(); i.hasNext(); ) { %>
 			<th><%= (String) lstTypes.get(i.next()) %></th>
 		  <% }
 		  } %>
-		<th>Nouveau fond<br><i>calculé</i></th>
+		<th><i18n:message key="label.nouveauFond" /></th>
 	</tr>
 	</thead>
 	<tbody>
@@ -106,7 +135,7 @@ Journal total = (Journal) request.getAttribute("Total");
 	</tbody>
 	<tfoot>
 	<tr>
-	    <td class="Nombre" colspan="2">Totaux :</td>
+	    <td class="Nombre" colspan="2"><i18n:message key="label.totaux" /> :</td>
 	    <% Set typesKeys = lstTypes.keySet();
 	       for (Iterator j=typesKeys.iterator(); j.hasNext(); ) { %>
 	       <td class="Nombre">
@@ -126,7 +155,7 @@ Journal total = (Journal) request.getAttribute("Total");
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideListe.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideListe.html");
 }
 
 //-->

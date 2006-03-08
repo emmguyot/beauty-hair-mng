@@ -1,3 +1,20 @@
+/*
+ * Gestion d'un rendez-vous de client
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.bean;
 
 import java.sql.ResultSet;
@@ -6,10 +23,13 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.SimpleTimeZone;
 import java.util.TimeZone;
 import java.util.Vector;
 
+import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.TimeStampBean;
 import com.increg.commun.exception.FctlException;
@@ -185,7 +205,7 @@ public class RDVBean extends TimeStampBean {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Création non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.creationKo" + BasicSession.TAG_I18N));
         }
 
         // Fin de la transaction
@@ -238,7 +258,7 @@ public class RDVBean extends TimeStampBean {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Mise à jour non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.enregistrementKo" + BasicSession.TAG_I18N));
         }
     }
 
@@ -266,7 +286,7 @@ public class RDVBean extends TimeStampBean {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Suppression non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.suppressionKo" + BasicSession.TAG_I18N));
         }
 
         // Fin de la transaction
@@ -359,6 +379,35 @@ public class RDVBean extends TimeStampBean {
         fin.add(Calendar.MINUTE, DUREE);
         return fin;
     }
+
+    /**
+     * Création d'un Bean RDV à partir de sa clé
+     * Creation date: (19/08/2001 21:14:20)
+     * @param dbConnect com.increg.salon.bean.DBSession
+     * @param CD_CLI java.lang.String
+     * @param DT_DEBUT Date du mouvement
+     * @param aLocale Configuration pour parser la date
+     * @throws Exception Si le format est incorrect
+     * @return RDV correspondant à la clé
+     */
+    public static RDVBean getRDVBean(DBSession dbConnect, String CD_CLI, String DT_DEBUT, Locale aLocale) throws Exception {
+
+        java.text.DateFormat formatDate =
+            java.text.DateFormat.getDateTimeInstance(
+                java.text.DateFormat.SHORT,
+                java.text.DateFormat.SHORT, aLocale);
+        Date dtDebut = null;
+        try {
+            dtDebut = formatDate.parse(DT_DEBUT);
+        }
+        catch (ParseException e) {
+            System.out.println("Erreur de conversion : " + e.toString());
+            throw (new Exception(BasicSession.TAG_I18N + "rdvBean.formatDate" + BasicSession.TAG_I18N));
+		}
+
+        return getRDVBean(dbConnect, CD_CLI, dtDebut);
+    }
+
     /**
      * Création d'un Bean RDV à partir de sa clé
      * Creation date: (19/08/2001 21:14:20)
@@ -367,12 +416,17 @@ public class RDVBean extends TimeStampBean {
      * @param DT_DEBUT Date du mouvement
      * @return RDV correspondant à la clé
      */
-    public static RDVBean getRDVBean(DBSession dbConnect, String CD_CLI, String DT_DEBUT) {
-        // Force à GMT si ce n'est déjà fait
-        if (DT_DEBUT.indexOf('+') == -1) {
-            DT_DEBUT += "+0";
-        }
-        String reqSQL = "select * from RDV where CD_CLI=" + CD_CLI + " and DT_DEBUT='" + DT_DEBUT + "'";
+    public static RDVBean getRDVBean(DBSession dbConnect, String CD_CLI, Date DT_DEBUT) {
+
+        // Passage en GMT +0
+        java.text.DateFormat formatDateStd =
+            java.text.DateFormat.getDateTimeInstance(
+                java.text.DateFormat.SHORT,
+                java.text.DateFormat.SHORT);
+        formatDateStd.setTimeZone(RDVBean.getTimeZone());
+        String dtDebut = formatDateStd.format(DT_DEBUT);
+        
+        String reqSQL = "select * from RDV where CD_CLI=" + CD_CLI + " and DT_DEBUT='" + dtDebut + "+0'";
         RDVBean res = null;
 
         // Interroge la Base
@@ -389,6 +443,7 @@ public class RDVBean extends TimeStampBean {
         }
         return res;
     }
+
     /**
      * Création d'un Bean RDV à partir de sa clé
      * Creation date: 3 nov. 2002
@@ -396,7 +451,7 @@ public class RDVBean extends TimeStampBean {
      * @param CD_COLLAB Collab dont on veut la liste des RDV
      * @return liste des RDV du collab
      */
-    public static Vector getRDVBeanFromCmd(DBSession dbConnect, String CD_COLLAB) {
+    public static Vector getRDVBeanFromCollab(DBSession dbConnect, String CD_COLLAB) {
         String reqSQL = "select * from RDV where CD_COLLAB=" + CD_COLLAB + " order by DT_DEBUT";
         Vector lstMvt = new Vector();
 
@@ -449,15 +504,16 @@ public class RDVBean extends TimeStampBean {
      * Insert the method's description here.
      * Creation date: (16/09/2001 19:31:27)
      * @param newDT_DEBUT String
+     * @param aLocale Configuration pour parser la date
      * @exception Exception en cas d'erreur de format de date
      */
-    public void setDT_DEBUT(String newDT_DEBUT) throws Exception {
+    public void setDT_DEBUT(String newDT_DEBUT, Locale aLocale) throws Exception {
 
         if ((newDT_DEBUT != null) && (newDT_DEBUT.length() != 0)) {
             DT_DEBUT = Calendar.getInstance();
             DT_DEBUT.setTimeZone(getTimeZone());
 
-            DateFormat formatDate = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+            DateFormat formatDate = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, aLocale);
             formatDate.setTimeZone(getTimeZone());
             try {
                 DT_DEBUT.setTime(formatDate.parse(newDT_DEBUT));
@@ -467,7 +523,7 @@ public class RDVBean extends TimeStampBean {
             catch (Exception e) {
                 System.out.println("Erreur de conversion : " + e.toString());
                 DT_DEBUT = null;
-                throw (new Exception("Erreur de conversion de la date de début"));
+                throw (new Exception(BasicSession.TAG_I18N + "rdvBean.formatDate" + BasicSession.TAG_I18N));
             }
         }
         else {
@@ -533,7 +589,7 @@ public class RDVBean extends TimeStampBean {
         catch (Exception e) {
             System.out.println("Erreur dans Purge des RDV : " + e.toString());
             dbConnect.cleanTransaction();
-            throw new FctlException("Erreur à la purge des RDV.");
+            throw new FctlException(BasicSession.TAG_I18N + "rdvBean.purgeKo" + BasicSession.TAG_I18N);
         }
         
         // Fin de cette transaction

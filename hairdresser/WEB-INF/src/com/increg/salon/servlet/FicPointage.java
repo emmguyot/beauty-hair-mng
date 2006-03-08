@@ -1,8 +1,15 @@
 package com.increg.salon.servlet;
 
-import com.increg.salon.bean.*;
-import javax.servlet.http.*;
-import com.increg.commun.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+import javax.servlet.http.HttpSession;
+
+import com.increg.commun.BasicSession;
+import com.increg.commun.DBSession;
+import com.increg.salon.bean.PointageBean;
+import com.increg.salon.bean.SalonSession;
 
 /**
  * Création d'un pointage
@@ -41,6 +48,7 @@ public void performTask(
 	HttpSession mySession = request.getSession(false);
 	SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
 	DBSession myDBSession = mySalon.getMyDBSession();
+    DateFormat formatDate = new SimpleDateFormat(mySalon.getMessagesBundle().getString("format.dateHeureSimpleSansSeconde"));
 
 	PointageBean aPointage = null;
 	
@@ -61,13 +69,19 @@ public void performTask(
 
 			try {
 	            aPointage.setCD_COLLAB(CD_COLLAB);
-	            aPointage.setDT_FIN(DT_FIN);
-	            aPointage.setDT_DEBUT(DT_DEBUT);
+                Calendar dtFin = Calendar.getInstance();
+                dtFin.clear();
+                dtFin.setTime(formatDate.parse(DT_FIN));
+	            aPointage.setDT_FIN(dtFin);
+                Calendar dtDebut = Calendar.getInstance();
+                dtDebut.clear();
+                dtDebut.setTime(formatDate.parse(DT_DEBUT));
+	            aPointage.setDT_DEBUT(dtDebut);
 	            aPointage.setCD_TYP_POINTAGE(CD_TYP_POINTAGE);
 	            aPointage.setCOMM(COMM);
 
 	            aPointage.create(myDBSession);
-	            mySalon.setMessage("Info", "Création effectuée.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.creationOk" + BasicSession.TAG_I18N);
 	            request.setAttribute("Action", "Modification");
 			}
 			catch (Exception e) {
@@ -79,7 +93,13 @@ public void performTask(
 			// Affichage de la fiche en modification
 			request.setAttribute("Action", "Modification");
 
-			aPointage = PointageBean.getPointageBean(myDBSession, CD_COLLAB, DT_DEBUT);
+            Calendar dtDebut = Calendar.getInstance();
+            dtDebut.clear();
+            dtDebut.setTime(formatDate.parse(DT_DEBUT));
+			aPointage = PointageBean.getPointageBean(myDBSession, CD_COLLAB, dtDebut.getTime());
+            if (assertOrError((aPointage != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 			request.setAttribute("PointageBean", aPointage);
 
 		}
@@ -89,17 +109,26 @@ public void performTask(
 			/**
 			 * Création du bean et enregistrement
 			 */
-			aPointage = PointageBean.getPointageBean(myDBSession, CD_COLLAB, DT_DEBUT);
+            Calendar dtDebut = Calendar.getInstance();
+            dtDebut.clear();
+            dtDebut.setTime(formatDate.parse(DT_DEBUT));
+			aPointage = PointageBean.getPointageBean(myDBSession, CD_COLLAB, dtDebut.getTime());
+            if (assertOrError((aPointage != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 
 			try {
 	            //aPointage.setCD_COLLAB(CD_COLLAB);
-	            aPointage.setDT_FIN(DT_FIN);
+                Calendar dtFin = Calendar.getInstance();
+                dtFin.clear();
+                dtFin.setTime(formatDate.parse(DT_FIN));
+	            aPointage.setDT_FIN(dtFin);
 	            //aPointage.setDT_DEBUT(DT_DEBUT);
 	            aPointage.setCD_TYP_POINTAGE(CD_TYP_POINTAGE);
 	            aPointage.setCOMM(COMM);
 
 	            aPointage.maj(myDBSession);
-	            mySalon.setMessage("Info", "Enregistrement effectué.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.enregistrementOk" + BasicSession.TAG_I18N);
 	            request.setAttribute("Action", "Modification");
 			}
 			catch (Exception e) {
@@ -113,11 +142,17 @@ public void performTask(
 			/**
 			 * Création du bean et enregistrement
 			 */
-			aPointage = PointageBean.getPointageBean(myDBSession, CD_COLLAB, DT_DEBUT);
+            Calendar dtDebut = Calendar.getInstance();
+            dtDebut.clear();
+            dtDebut.setTime(formatDate.parse(DT_DEBUT));
+			aPointage = PointageBean.getPointageBean(myDBSession, CD_COLLAB, dtDebut.getTime());
+            if (assertOrError((aPointage != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 
 			try {
 	            aPointage.delete(myDBSession);
-	            mySalon.setMessage("Info", "Suppression effectuée.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.suppressionOk" + BasicSession.TAG_I18N);
 	            // Un bean vide
 	            aPointage = new PointageBean();
 	            request.setAttribute("Action", "Creation");

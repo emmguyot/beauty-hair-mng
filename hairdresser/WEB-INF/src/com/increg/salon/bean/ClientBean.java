@@ -1,3 +1,21 @@
+/*
+ * Bean de gestion de client
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
+
 package com.increg.salon.bean;
 
 import java.sql.ResultSet;
@@ -7,12 +25,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Set;
 
+import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.TimeStampBean;
 import com.increg.commun.exception.FctlException;
-import com.increg.util.SimpleDateFormatEG;
 
 
 /**
@@ -100,18 +120,20 @@ public class ClientBean extends TimeStampBean implements Comparable {
     
     /**
      * ClientBean constructor comment.
+     * @param rb Messages à utiliser
      */
-    public ClientBean() {
-        super();
+    public ClientBean(ResourceBundle rb) {
+        super(rb);
         INDIC_VALID = "O";
         abonnements = new HashMap();
     }
     /**
      * ClientBean à partir d'un RecordSet.
      * @param rs ResultSet dans lequel piocher les données
+     * @param rb Messages à utiliser
      */
-    public ClientBean(ResultSet rs) {
-        super(rs);
+    public ClientBean(ResultSet rs, ResourceBundle rb) {
+        super(rs, rb);
         try {
             CD_CATEG_CLI = rs.getInt("CD_CATEG_CLI");
         }
@@ -280,9 +302,6 @@ public class ClientBean extends TimeStampBean implements Comparable {
      */
     public void create(DBSession dbConnect) throws SQLException {
 
-        com.increg.util.SimpleDateFormatEG formatDate =
-            new SimpleDateFormatEG("dd/MM/yyyy HH:mm:ss");
-
         setDefaultCD_TR_AGE(dbConnect);
 
         StringBuffer req = new StringBuffer("insert into CLI ");
@@ -369,7 +388,7 @@ public class ClientBean extends TimeStampBean implements Comparable {
             colonne.append("DT_ANNIV,");
             valeur.append(
                 DBSession.quoteWith(
-                    formatDate.formatEG(DT_ANNIV.getTime()),
+                    dbConnect.getFormatDate().format(DT_ANNIV.getTime()),
                     '\''));
             valeur.append(",");
         }
@@ -420,7 +439,7 @@ public class ClientBean extends TimeStampBean implements Comparable {
             colonne.append("DT_CREAT,");
             valeur.append(
                 DBSession.quoteWith(
-                    formatDate.formatEG(DT_CREAT.getTime()),
+                    dbConnect.formatDateTimeAvecTZ(DT_CREAT),
                     '\''));
             valeur.append(",");
         }
@@ -429,7 +448,7 @@ public class ClientBean extends TimeStampBean implements Comparable {
             colonne.append("DT_MODIF,");
             valeur.append(
                 DBSession.quoteWith(
-                    formatDate.formatEG(DT_MODIF.getTime()),
+                    dbConnect.formatDateTimeAvecTZ(DT_MODIF),
                     '\''));
             valeur.append(",");
         }
@@ -464,7 +483,7 @@ public class ClientBean extends TimeStampBean implements Comparable {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Création non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.creationKo" + BasicSession.TAG_I18N));
         }
 
     }
@@ -491,7 +510,7 @@ public class ClientBean extends TimeStampBean implements Comparable {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Suppression non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.suppressionKo" + BasicSession.TAG_I18N));
         }
 
     }
@@ -574,11 +593,10 @@ public class ClientBean extends TimeStampBean implements Comparable {
      * Creation date: (18/08/2001 17:05:45)
      * @param dbConnect com.increg.salon.bean.DBSession
      * @param CD_CLI java.lang.String
+     * @param rb Messages à utiliser
      * @return Bean créée
      */
-    public static ClientBean getClientBean(
-        DBSession dbConnect,
-        String CD_CLI) {
+    public static ClientBean getClientBean(DBSession dbConnect, String CD_CLI, ResourceBundle rb) {
         String reqSQL = "select * from CLI where CD_CLI=" + CD_CLI;
         ClientBean res = null;
 
@@ -587,7 +605,7 @@ public class ClientBean extends TimeStampBean implements Comparable {
             ResultSet aRS = dbConnect.doRequest(reqSQL);
 
             while (aRS.next()) {
-                res = new ClientBean(aRS);
+                res = new ClientBean(aRS, rb);
             }
             aRS.close();
         }
@@ -720,9 +738,6 @@ public class ClientBean extends TimeStampBean implements Comparable {
      */
     public void maj(DBSession dbConnect) throws SQLException {
 
-        SimpleDateFormatEG formatDate =
-            new SimpleDateFormatEG("dd/MM/yyyy HH:mm:ss");
-
         setDefaultCD_TR_AGE(dbConnect);
 
         StringBuffer req = new StringBuffer("update CLI set ");
@@ -814,7 +829,7 @@ public class ClientBean extends TimeStampBean implements Comparable {
         if (DT_ANNIV != null) {
             colonne.append(
                 DBSession.quoteWith(
-                    formatDate.formatEG(DT_ANNIV.getTime()),
+                    dbConnect.getFormatDate().format(DT_ANNIV.getTime()),
                     '\''));
         }
         else {
@@ -888,7 +903,7 @@ public class ClientBean extends TimeStampBean implements Comparable {
         colonne.append("DT_MODIF=");
         DT_MODIF = Calendar.getInstance();
         colonne.append(
-            DBSession.quoteWith(formatDate.formatEG(DT_MODIF.getTime()), '\''));
+            DBSession.quoteWith(dbConnect.formatDateTimeAvecTZ(DT_MODIF), '\''));
 
         // Constitue la requete finale
         req.append(colonne);
@@ -914,7 +929,7 @@ public class ClientBean extends TimeStampBean implements Comparable {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Mise à jour non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.enregistrementKo" + BasicSession.TAG_I18N));
         }
 
     }
@@ -943,9 +958,7 @@ public class ClientBean extends TimeStampBean implements Comparable {
         
         int nbEnreg = -1;
         
-        com.increg.util.SimpleDateFormatEG formatDate = new SimpleDateFormatEG("dd/MM/yyyy HH:mm:ss");
-        
-        String selection = "select CD_CLI from CLI where DT_CREAT < " + DBSession.quoteWith(formatDate.format(dateLimite), '\'')
+        String selection = "select CD_CLI from CLI where DT_CREAT < " + DBSession.quoteWith(dbConnect.getFormatDateTimeSansTZ().format(dateLimite), '\'')
                 + " and (select count(*) from HISTO_PREST where CD_CLI = CLI.CD_CLI) = 0"
                 + " and (select count(*) from FACT where CD_CLI = CLI.CD_CLI) = 0"
                 + " and (select count(*) from RDV where CD_CLI = CLI.CD_CLI) = 0"
@@ -976,7 +989,7 @@ public class ClientBean extends TimeStampBean implements Comparable {
         catch (Exception e) {
             System.out.println("Erreur dans Purge des clients: " + e.toString());
             dbConnect.cleanTransaction();
-            throw new FctlException("Erreur à la purge des clients.");
+            throw new FctlException(BasicSession.TAG_I18N + "clientBean.purgeKo" + BasicSession.TAG_I18N);
         }
         
         // Fin de cette transaction
@@ -1172,22 +1185,22 @@ public class ClientBean extends TimeStampBean implements Comparable {
      * Insert the method's description here.
      * Creation date: (18/07/2001 22:49:19)
      * @param newDT_ANNIV java.util.Calendar
+     * @param aLocale Configuration pour parser la date
      * @throws Exception En cas d'erreur de conversion
      */
-    public void setDT_ANNIV(String newDT_ANNIV) throws Exception {
+    public void setDT_ANNIV(String newDT_ANNIV, Locale aLocale) throws Exception {
         if (newDT_ANNIV.length() != 0) {
             DT_ANNIV = Calendar.getInstance();
 
             DateFormat formatDate =
-                DateFormat.getDateInstance(DateFormat.SHORT);
+                DateFormat.getDateInstance(DateFormat.SHORT, aLocale);
             try {
                 DT_ANNIV.setTime(formatDate.parse(newDT_ANNIV));
             }
             catch (Exception e) {
                 System.out.println("Erreur de conversion : " + e.toString());
                 DT_ANNIV = null;
-                throw (
-                    new Exception("Erreur de conversion de la date d'anniversaire"));
+	            throw new Exception(BasicSession.TAG_I18N + "clientBean.formatDateAnniversaire" + BasicSession.TAG_I18N);
             }
         }
         else {
@@ -1276,7 +1289,11 @@ public class ClientBean extends TimeStampBean implements Comparable {
      * @see com.increg.salon.bean.TimeStampBean
      */
     public String toString() {
-        return getCIVILITE() + " " + getNOM() + " " + getPRENOM();
+    	String labelCivilite = "";
+    	if (getCIVILITE().length() > 0) {
+    		labelCivilite = message.getString("label." + getCIVILITE().replace(' ', '_'));
+    	}
+        return labelCivilite + " " + getNOM() + " " + getPRENOM();
     }
 
     /**
@@ -1286,7 +1303,8 @@ public class ClientBean extends TimeStampBean implements Comparable {
     public String toStringListe() {
         String res = getNOM() + " " + getPRENOM();
         if (getCIVILITE().length() > 0) {
-            res = res + " (" + getCIVILITE() + ")";
+        	String labelCivilite = message.getString("label." + getCIVILITE().replace(' ', '_'));
+            res = res + " (" + labelCivilite + ")";
         }
         return res;
     }

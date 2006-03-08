@@ -40,10 +40,11 @@ public class ResultSetTest extends TestCase {
         DBSession dbConnect = new DBSession();
         ResultSet rs = dbConnect.doRequest(sql);
         while (rs.next()) {
-            BigDecimal dec = rs.getBigDecimal(1);
+        	// -1 car bug sur pilote JDBC 
+            BigDecimal dec = rs.getBigDecimal(1, -1);
             BigDecimal dec2 = rs.getBigDecimal(1, 2);
             
-            assertEquals(dec, dec2);
+            assertEquals(dec.setScale(2, BigDecimal.ROUND_HALF_UP), dec2);
         }
     }
 

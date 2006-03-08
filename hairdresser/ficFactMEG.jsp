@@ -1,3 +1,22 @@
+<%
+/*
+ * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
+%>
 <%@ page import="java.util.Vector,
 	       java.util.List" %>
 <%@ page import="com.increg.salon.bean.SalonSession,
@@ -13,14 +32,16 @@
     }
 %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Fiche Facture : Mise en Garde</title>
+<title><i18n:message key="ficFactMEG.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
 <body class="donnees" onLoad="Init()">
-<%@ include file="include/commun.js" %>
+<%@ include file="include/commun.jsp" %>
 <script language="JavaScript">
 <!--
 <%
@@ -43,7 +64,7 @@ function Init() {
 }
 //-->
 </script>
-<h1><img src="images/titres/ficFact.gif" alt=<salon:TimeStamp bean="<%= aFact %>" />></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/ficFact.gif" alt=<salon:TimeStamp bean="<%= aFact %>" />></h1>
 <salon:message salonSession="<%= mySalon %>" />
 
 <form method="post" action="ficFact.srv" name="fiche">
@@ -57,14 +78,14 @@ function Init() {
 
     <table width="100%"> 
         <tr>
-            <td class="label">Client : </td>
+            <td class="label"><i18n:message key="label.client" /> : </td>
             <td> 
             <%
-                ClientBean aCli = ClientBean.getClientBean(mySalon.getMyDBSession(), Long.toString(aFact.getCD_CLI()));
+                ClientBean aCli = ClientBean.getClientBean(mySalon.getMyDBSession(), Long.toString(aFact.getCD_CLI()), mySalon.getMessagesBundle());
             %>
                 <span class="readonly"><a href="_FicheCli.jsp?Action=Modification&CD_CLI=<%= aFact.getCD_CLI() %>" target="ClientFrame"><%= aCli.toString() %></a></span> 
             </td>
-            <td class="label">Date de la prestation : </td>
+            <td class="label"><i18n:message key="label.dtPrest" /> : </td>
             <td>
                 <salon:valeur valeurNulle="null" valeur="<%= aFact.getDT_PREST() %>" >
                     <span class="readonly">%%</span>
@@ -72,7 +93,7 @@ function Init() {
             </td>
         </tr>
         <tr>
-            <td class="label"><h2>Total à payer : </h2></td>
+            <td class="label"><h2><i18n:message key="ficFact.totalPayer" /> : </h2></td>
             <td><h2><salon:valeur valeurNulle="null" valeur="<%= aFact.getPRX_TOT_TTC() %>" >
                         <span class="readonly">%% <%= mySalon.getDevise().toString() %></span>
                     </salon:valeur>
@@ -88,7 +109,7 @@ function Init() {
                     } // for 
                     %>
             </h2></td>
-            <td class="label">dont TVA : </td>
+            <td class="label"><i18n:message key="ficFact.dontTVA" /> : </td>
             <td class="tabDonneesGauche">
                 <salon:valeur valeurNulle="null" valeur="<%= aFact.getTVA() %>" > 
                     <span class="readonly">%% <%= mySalon.getDevise().toString() %></span>
@@ -96,7 +117,7 @@ function Init() {
             </td>
 	</tr>
 	<tr>
-	<td class="label">Mode de paiement : </td>
+	<td class="label"><i18n:message key="label.modePaiement" /> : </td>
 	<td>
 	    <salon:valeur valeurNulle="0" valeur="<%= aPaiement.getCD_PAIEMENT() %>" >
 	       <input type="hidden" name="CD_PAIEMENT" value="%%" >
@@ -113,7 +134,7 @@ function Init() {
                     <a href="_FichePaiement.jsp?Action=Modification&CD_PAIEMENT=<%= aPaiement.getCD_PAIEMENT() %>" target="ClientFrame">Paiements regroupés</a> 
             <% } %>
         </td>
-	<td class="label">Date de paiement : </td>
+	<td class="label"><i18n:message key="ficFact.dtPaiement" /> : </td>
 	<td>
             <salon:valeur valeurNulle="null" valeur="<%= aPaiement.getDT_PAIEMENT() %>" > 
                 <input type="hidden" name="DT_PAIEMENT" value="%%">
@@ -124,9 +145,9 @@ function Init() {
 	</table>
         
     <hr>
-   <p class="warning"><span class="big">Vous allez supprimer une facture réglée.</span></p>
-   <p class="big">Ceci est une opération exceptionnelle et requiert un mot de passe pour exécuter cette opération. En effet, une erreur de manipulation engendrerait une erreur dans les mouvements de caisse, le solde de la caisse et éventuellement dans les mouvements de stocks et la quantité en stock de vos articles.</p>
-   <p class="big">Si cette opération est nécessaire, vous pouvez, <b>en connaissance de cause et sous votre seule responsabilité</b>, valider cette action en saisissant le mot de passe des opérations exceptionnelles :
+   <p class="warning"><span class="big"><i18n:message key="ficFactMEG.sousTitre" /></span></p>
+   <p class="big"><i18n:message key="ficFactMEG.texte" /></p>
+   <p class="big"><i18n:message key="ficFactMEG.texte2" /> :
    
    <input type="password" name="MOT_PASSE"></p>
 </form>
@@ -142,7 +163,7 @@ function Valider()
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideFicheFact.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideFicheFact.html");
 }
 
 </script>

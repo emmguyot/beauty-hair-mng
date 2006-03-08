@@ -1,25 +1,46 @@
+<%
+/*
+ * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
+%>
 <%@ page import="java.util.Vector,
 			com.increg.salon.bean.TypVentBean,
 			com.increg.salon.bean.TvaBean,
 			com.increg.salon.bean.SalonSession" %>
-<%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
 <%
     SalonSession mySalon = (SalonSession) session.getAttribute("SalonSession");
     if (mySalon == null) {
         getServletConfig().getServletContext().getRequestDispatcher("/reconnect.html").forward(request, response);
     }
 %>
+<%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Liste des types de prestations</title>
+<title><i18n:message key="title.lstTypVent" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
-<%@ include file="include/commun.js" %>
+<%@ include file="include/commun.jsp" %>
 <script language="JavaScript">
 <!--
 function Init() {
    <%
-   // Positionne les liens d'actions
+   // Positionne les liens d actions
    %>
    MM_showHideLayers('NOUVEAU?bottomFrame','','show');
 }
@@ -27,13 +48,13 @@ function Init() {
 </script>
 </head>
 <body class="donnees">
-<h1><img src="images/titres/lstParam.gif"><br><span class="ssTitre">Types de prestations</span></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstParam.gif"><br><span class="ssTitre"><i18n:message key="label.typesPrest" /></span></h1>
 <table width="100%" border="1" >
 	<tr>
-		<th>Libellé</th>
-		<th>Article associé</th>
-		<th>Civilités associées</th>
-		<th>TVA applicable</th>
+		<th><i18n:message key="label.libelle" /></th>
+		<th><i18n:message key="label.articleAssocie" /></th>
+		<th><i18n:message key="label.civiliteAssocie" /></th>
+		<th><i18n:message key="label.TVAapplicable" /></th>
 	</tr>
 	<%
 	// Recupère la liste
@@ -76,7 +97,7 @@ function Nouveau()
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideListe.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideListe.html");
 }
 
 //-->

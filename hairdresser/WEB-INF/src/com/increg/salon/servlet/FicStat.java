@@ -1,6 +1,9 @@
 package com.increg.salon.servlet;
 
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -12,11 +15,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.exception.FctlException;
 import com.increg.salon.bean.SalonSession;
 import com.increg.salon.bean.StatBean;
 import com.increg.salon.bean.StatHistoBean;
+import com.increg.util.ServletUtil;
 
 
 /**
@@ -42,9 +47,9 @@ public class FicStat extends ConnectedServlet {
 
         // Récupère la connexion
         HttpSession mySession = request.getSession(false);
-        SalonSession mySalon =
-            (SalonSession) mySession.getAttribute("SalonSession");
+        SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
         DBSession myDBSession = mySalon.getMyDBSession();
+        DateFormat formatDate = new SimpleDateFormat(mySalon.getMessagesBundle().getString("format.dateSimpleDefaut"));
 
         // Resultat
         StatBean aStat = null;
@@ -54,7 +59,7 @@ public class FicStat extends ConnectedServlet {
                 // Première phase de création
                 request.setAttribute("Action", "Creation");
                 // Un bean vide
-                aStat = new StatBean();
+                aStat = new StatBean(mySalon.getMessagesBundle());
             }
             else if (Action.equals("Creation")) {
                 // Crée réellement la stat
@@ -62,7 +67,7 @@ public class FicStat extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                aStat = new StatBean();
+                aStat = new StatBean(mySalon.getMessagesBundle());
                 aStat.setLIB_STAT(LIB_STAT);
                 aStat.setREQ_SQL(REQ_SQL);
                 aStat.setLABEL_X(LABEL_X);
@@ -70,7 +75,7 @@ public class FicStat extends ConnectedServlet {
 
                 try {
                     aStat.create(myDBSession);
-                    mySalon.setMessage("Info", "Création effectuée.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.creationOk" + BasicSession.TAG_I18N);
                     request.setAttribute("Action", "Modification");
                 }
                 catch (Exception e) {
@@ -82,7 +87,10 @@ public class FicStat extends ConnectedServlet {
                 // Affichage de la fiche en modification
                 request.setAttribute("Action", "Modification");
 
-                aStat = StatBean.getStatBean(myDBSession, CD_STAT);
+                aStat = StatBean.getStatBean(myDBSession, CD_STAT, mySalon.getMessagesBundle());
+                if (assertOrError((aStat != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
             }
             else if (Action.equals("Modification")) {
                 // Modification effective de la fiche
@@ -90,7 +98,10 @@ public class FicStat extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                aStat = StatBean.getStatBean(myDBSession, CD_STAT);
+                aStat = StatBean.getStatBean(myDBSession, CD_STAT, mySalon.getMessagesBundle());
+                if (assertOrError((aStat != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 
                 aStat.setCD_STAT(CD_STAT);
                 aStat.setLIB_STAT(LIB_STAT);
@@ -100,7 +111,7 @@ public class FicStat extends ConnectedServlet {
 
                 try {
                     aStat.maj(myDBSession);
-                    mySalon.setMessage("Info", "Enregistrement effectué.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.enregistrementOk" + BasicSession.TAG_I18N);
                     request.setAttribute("Action", "Modification");
                 }
                 catch (Exception e) {
@@ -114,7 +125,7 @@ public class FicStat extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                aStat = new StatBean();
+                aStat = new StatBean(mySalon.getMessagesBundle());
 
                 aStat.setLIB_STAT(LIB_STAT);
                 aStat.setREQ_SQL(REQ_SQL);
@@ -126,7 +137,7 @@ public class FicStat extends ConnectedServlet {
 
                     mySalon.setMessage(
                         "Info",
-                        "Duplication effectuée. Vous travaillez maintenant sur la copie.");
+                        BasicSession.TAG_I18N + "message.duplicationOk" + BasicSession.TAG_I18N);
                     request.setAttribute("Action", "Modification");
                 }
                 catch (Exception e) {
@@ -140,7 +151,10 @@ public class FicStat extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                aStat = StatBean.getStatBean(myDBSession, CD_STAT);
+                aStat = StatBean.getStatBean(myDBSession, CD_STAT, mySalon.getMessagesBundle());
+                if (assertOrError((aStat != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 
                 // Récup des historiques associés
                 Vector lstHisto = StatHistoBean.getStatHistoBean(myDBSession, CD_STAT);
@@ -152,9 +166,9 @@ public class FicStat extends ConnectedServlet {
                     }
                     // Suppression de la stat
                     aStat.delete(myDBSession);
-                    mySalon.setMessage("Info", "Suppression effectuée.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.suppressionOk" + BasicSession.TAG_I18N);
                     // Un bean vide
-                    aStat = new StatBean();
+                    aStat = new StatBean(mySalon.getMessagesBundle());
                     request.setAttribute("Action", "Creation");
                 }
                 catch (Exception e) {
@@ -164,7 +178,10 @@ public class FicStat extends ConnectedServlet {
             }
             else if (Action.equals("Construction")) {
                 // Définition du graphe de stat et de ses paramètres
-                aStat = StatBean.getStatBean(myDBSession, CD_STAT);
+                aStat = StatBean.getStatBean(myDBSession, CD_STAT, mySalon.getMessagesBundle());
+                if (assertOrError((aStat != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 
                 // Par défaut
                 request.setAttribute("Couleur$0", "0x6e04f2");
@@ -179,6 +196,11 @@ public class FicStat extends ConnectedServlet {
                 for (int i = 0; i < lstHisto.size(); i++) {
                     StatHistoBean aHisto = (StatHistoBean) lstHisto.get(i);
                     
+                	if (aHisto.getPARAM().indexOf("Date") != -1) {
+                		// C'est une date : Convertion de la date depuis le format BD
+                        Calendar dt = ServletUtil.interpreteDate(aHisto.getVALUE(), myDBSession.getFormatDate(), Calendar.getInstance());
+                        aHisto.setVALUE(formatDate.format(dt.getTime()));
+                	}
                     // Positionne les valeurs par défaut
                     request.setAttribute(aHisto.getPARAM() + "$" + aHisto.getNUM_GRAPH(), aHisto.getVALUE());
                 }
@@ -190,7 +212,10 @@ public class FicStat extends ConnectedServlet {
             }
             else if (Action.equals("Graphe")) {
                 // Affichage du graphe
-                aStat = StatBean.getStatBean(myDBSession, CD_STAT);
+                aStat = StatBean.getStatBean(myDBSession, CD_STAT, mySalon.getMessagesBundle());
+                if (assertOrError((aStat != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 
                 Vector lstJeuValeur = new Vector();
                 Vector lstCouleur = new Vector();
@@ -224,11 +249,17 @@ public class FicStat extends ConnectedServlet {
                                     .equals(Integer.toString(nb)))) {
                                 if (request.getParameter(paramName).length()
                                     > 0) {
+                                	String paramValue = request.getParameter(paramName);
+                                	if (paramName.indexOf("Date") != -1) {
+                                		// C'est une date : Convertion de la date dans le format BD
+                                        Calendar dt = ServletUtil.interpreteDate(paramValue, formatDate, Calendar.getInstance());
+                                        paramValue = myDBSession.getFormatDate().format(dt.getTime());
+                                	}
                                     paramMap.put(
                                         paramName.substring(
                                             0,
                                             paramName.length() - 2),
-                                        request.getParameter(paramName));
+                                        paramValue);
                                 }
                                 else {
                                     // Ce graphe n'est pas demandé

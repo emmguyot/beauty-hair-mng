@@ -1,3 +1,22 @@
+<%
+/*
+ * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
+%>
 <%@ page import="java.util.Vector, java.math.BigDecimal" %>
 <%@ page import="com.increg.salon.bean.SalonSession,
 	       com.increg.salon.bean.ArtBean,
@@ -10,9 +29,11 @@
     }
 %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Liste des articles</title>
+<title><i18n:message key="title.lstArt" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -25,9 +46,9 @@
    String RUPTURE = request.getParameter("RUPTURE");
    String PERIME = request.getParameter("PERIME");
 %>
-<h1><img src="images/titres/lstArt.gif"></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstArt.gif"></h1>
 <form name="fiche" action="rechArt.srv" method="post">
-<p>Premi&egrave;re lettre : 
+<p><i18n:message key="label.premiereLettre" /> : 
 <input type="hidden" name="premLettre" value="<%= premLettre %>">
 <%
    String lien = "";
@@ -58,27 +79,27 @@
    <% }
 %>
 </p>
-Type d'article :
+<i18n:message key="label.typeArticle" /> :
 <salon:DBselection valeur="<%= CD_TYP_ART %>" sql="select CD_TYP_ART, LIB_TYP_ART from TYP_ART order by LIB_TYP_ART">
    <select name="CD_TYP_ART" onChange="document.fiche.submit()">
       <option value="">( Tous )</option>
       %%
    </select>
 </salon:DBselection>
-Catégorie article :
+<i18n:message key="label.categorieArticle" /> :
 <salon:DBselection valeur="<%= CD_CATEG_ART %>" sql="select CD_CATEG_ART, LIB_CATEG_ART from CATEG_ART order by LIB_CATEG_ART">
    <select name="CD_CATEG_ART" onChange="document.fiche.submit()">
-      <option value="">( Toutes )</option>
+      <option value=""><i18n:message key="label.toutes" /></option>
       %%
    </select>
 </salon:DBselection>
-En rupture :
+<i18n:message key="label.enRupture" /> :
 <input type="checkbox" name="RUPTURE"
    <% if ((RUPTURE != null) && (RUPTURE.equals("on"))) { %>
    checked 
    <% } %>
    onClick="document.fiche.submit()" >
-Affichage périmés :
+<i18n:message key="label.affPerime" /> :
 <input type="checkbox" name="PERIME"
    <% if ((PERIME != null) && (PERIME.equals("on"))) { %>
    checked 
@@ -88,13 +109,13 @@ Affichage périmés :
 <hr>
 <table width="100%" border="1" >
 	<tr>
-		<th>Libellé</th>
-		<th>Type<br>d'article</th>
-		<th>Catégorie</th>
-		<th>Qté<br>en<br>stock</th>
-		<th>Valeur<br>unitaire<br>stock</th>
-		<th>Valeur<br>globale<br>stock</th>
-		<th>Date dernier<br>mouvement</th>
+		<th><i18n:message key="label.libelle" /></th>
+		<th><i18n:message key="label.typeArticleListe" /></th>
+		<th><i18n:message key="label.categorie" /></th>
+		<th><i18n:message key="label.qteStockTableau" /></th>
+		<th><i18n:message key="label.valeurStockUnitTableau" /></th>
+		<th><i18n:message key="label.valeurStockGlobal" /></th>
+		<th><i18n:message key="label.dernierMouvement" /></th>
 	</tr>
 	<%
 	// Recupère la liste
@@ -114,7 +135,7 @@ Affichage périmés :
 							       Integer.toString(aArt.getCD_TYP_ART())).toString(); %>
 	    <salon:valeur valeur="<%= LIB_TYP_ART %>" valeurNulle="null"> %% </salon:valeur>
             <% if (aArt.getINDIC_MIXTE().equals("O")) { %>
-                - Mixte
+                - <i18n:message key="label.articleMixte" />
             <% } %>
 	    </td>
 	    <td>
@@ -135,7 +156,8 @@ Affichage périmés :
 	       }
 	    %>
 	    <td class="Nombre"><salon:valeur valeur="<%= valeurGlobale %>" valeurNulle="null">%%</salon:valeur></td>
-	    <td><salon:valeur valeur="<%= aMvt.getDT_MVT() %>" valeurNulle="null" format="dd/MM/yyyy"><a href="_FicheArt_Mvt.jsp?Action=Modification&CD_ART=<%= aArt.getCD_ART() %>" target="ClientFrame">%%</a>&nbsp;</salon:valeur></td>
+            <i18n:message key="format.dateSimpleDefaut" id="formatDate" />
+	    <td><salon:valeur valeur="<%= aMvt.getDT_MVT() %>" valeurNulle="null" format="<%= formatDate %>"><a href="_FicheArt_Mvt.jsp?Action=Modification&CD_ART=<%= aArt.getCD_ART() %>" target="ClientFrame">%%</a>&nbsp;</salon:valeur></td>
 	</tr>
 	<%
 	}
@@ -162,7 +184,7 @@ function Nouveau()
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideListeArt.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideListeArt.html");
 }
 
 </script>

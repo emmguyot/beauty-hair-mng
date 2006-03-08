@@ -1,3 +1,20 @@
+/*
+ * Création/Modification/Suppression d'une Facture / Historique
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.servlet;
 
 import java.util.List;
@@ -7,6 +24,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.exception.FctlException;
 import com.increg.salon.bean.CollabBean;
@@ -18,8 +36,8 @@ import com.increg.salon.bean.SalonSession;
 import com.increg.salon.request.EditionFacture;
 
 /**
- * Création/Modification/Suppression d'une Facture / Historique Creation date:
- * (17/08/2001 22:51:52)
+ * Création/Modification/Suppression d'une Facture / Historique
+ * Creation date: (17/08/2001 22:51:52)
  * 
  * @author Emmanuel GUYOT <emmguyot@wanadoo.fr>
  */
@@ -118,12 +136,12 @@ public class FicFact extends ConnectedServlet {
                 // Première phase de création
                 request.setAttribute("Action", "Creation");
                 // Un bean vide
-                aFact = new FactBean();
+                aFact = new FactBean(mySalon.getMessagesBundle());
                 // Place le code client si connu
                 aFact.setCD_CLI(CD_CLI);
                 aFact.setFACT_HISTO(FACT_HISTO);
 
-                aPaiement = new PaiementBean();
+                aPaiement = new PaiementBean(mySalon.getMessagesBundle());
             }
             // *****************************************************************************************
             else if (Action.equals("Creation")) {
@@ -132,14 +150,14 @@ public class FicFact extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                aFact = new FactBean();
-                aPaiement = new PaiementBean();
+                aFact = new FactBean(mySalon.getMessagesBundle());
+                aPaiement = new PaiementBean(mySalon.getMessagesBundle());
 
                 try {
                     aFact.setCD_CLI(CD_CLI);
                     aFact.setCD_COLLAB(CD_COLLAB);
                     aFact.setCD_TYP_VENT(CD_TYP_VENT);
-                    aFact.setDT_PREST(DT_PREST);
+                    aFact.setDT_PREST(DT_PREST, mySalon.getLangue());
                     aFact.setFACT_HISTO(FACT_HISTO);
                     aFact.setREMISE_FIXE(REMISE_FIXE);
                     aFact.setREMISE_PRC(REMISE_PRC);
@@ -149,7 +167,7 @@ public class FicFact extends ConnectedServlet {
                     // Déjà le mode de paiement ==> Pas normal. On refuse
                     if ((CD_MOD_REGL != null) && (CD_MOD_REGL.length() > 0)) {
                         mySalon.setMessage("Erreur",
-                                "Le paiement d'une facture vide est interdit");
+                                BasicSession.TAG_I18N + "ficFact.factureVide" + BasicSession.TAG_I18N);
                     }
 
                     aFact.create(myDBSession);
@@ -161,7 +179,7 @@ public class FicFact extends ConnectedServlet {
                         mySalon.addFact(Long.toString(aFact.getCD_FACT()));
                     }
 
-                    mySalon.setMessage("Info", "Création effectuée.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.creationOk" + BasicSession.TAG_I18N);
                     request.setAttribute("Action", "Modification");
                 } catch (Exception e) {
                     mySalon.setMessage("Erreur", e.toString());
@@ -174,19 +192,19 @@ public class FicFact extends ConnectedServlet {
                 // Affichage de la fiche en modification
                 request.setAttribute("Action", "Modification");
 
-                aFact = FactBean.getFactBean(myDBSession, CD_FACT);
+                aFact = FactBean.getFactBean(myDBSession, CD_FACT, mySalon.getMessagesBundle());
                 if (aFact == null) {
-                    mySalon.setMessage("Erreur", "La facture n'existe plus.");
+                    mySalon.setMessage("Erreur", BasicSession.TAG_I18N + "ficFact.noFacture" + BasicSession.TAG_I18N);
                     mySalon.removeClient(CD_FACT);
                     allCorrect = false;
-                    aFact = new FactBean();
+                    aFact = new FactBean(mySalon.getMessagesBundle());
                 }
 
                 if (aFact.getCD_PAIEMENT() > 0) {
                     aPaiement = PaiementBean.getPaiementBean(myDBSession, Long
-                            .toString(aFact.getCD_PAIEMENT()));
+                            .toString(aFact.getCD_PAIEMENT()), mySalon.getMessagesBundle());
                 } else {
-                    aPaiement = new PaiementBean();
+                    aPaiement = new PaiementBean(mySalon.getMessagesBundle());
                 }
 
             }
@@ -215,21 +233,24 @@ public class FicFact extends ConnectedServlet {
                 if ((CD_FACT == null) || (CD_FACT.length() == 0)
                         || (CD_FACT.equals("0"))) {
                     // On est en création : le Bean est créé de zero
-                    aFact = new FactBean();
+                    aFact = new FactBean(mySalon.getMessagesBundle());
                 } else {
                     // Recharge à partir de la base
-                    aFact = FactBean.getFactBean(myDBSession, CD_FACT);
+                    aFact = FactBean.getFactBean(myDBSession, CD_FACT, mySalon.getMessagesBundle());
+                    if (assertOrError((aFact != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                    	return;
+                    }
                 }
 
                 // Initialisation par défaut
-                aPaiement = new PaiementBean();
+                aPaiement = new PaiementBean(mySalon.getMessagesBundle());
                 try {
                     myDBSession.setDansTransactions(true);
 
                     aFact.setCD_CLI(CD_CLI);
                     aFact.setCD_COLLAB(CD_COLLAB);
                     aFact.setCD_TYP_VENT(CD_TYP_VENT);
-                    aFact.setDT_PREST(DT_PREST);
+                    aFact.setDT_PREST(DT_PREST, mySalon.getLangue());
                     aFact.setFACT_HISTO(FACT_HISTO);
                     aFact.setREMISE_FIXE(REMISE_FIXE);
                     aFact.setREMISE_PRC(REMISE_PRC);
@@ -246,15 +267,15 @@ public class FicFact extends ConnectedServlet {
                         if ((CD_PAIEMENT != null) && (CD_PAIEMENT.length() > 0)
                                 && (!CD_PAIEMENT.equals("0"))) {
                             aPaiement = PaiementBean.getPaiementBean(
-                                    myDBSession, CD_PAIEMENT);
+                                    myDBSession, CD_PAIEMENT, mySalon.getMessagesBundle());
                         } else {
                             // Nouveau Paiement
-                            aPaiement = new PaiementBean();
+                            aPaiement = new PaiementBean(mySalon.getMessagesBundle());
                         }
 
                         if ((nbPrest > 0) || (Action.equals("AjoutLigne"))) {
                             aPaiement.setCD_MOD_REGL(CD_MOD_REGL);
-                            aPaiement.setDT_PAIEMENT(DT_PAIEMENT);
+                            aPaiement.setDT_PAIEMENT(DT_PAIEMENT, mySalon.getLangue());
 
                             if ((CD_PAIEMENT != null)
                                     && (CD_PAIEMENT.length() > 0)
@@ -271,9 +292,7 @@ public class FicFact extends ConnectedServlet {
                                         .getCD_FACT()));
                             }
                         } else {
-                            mySalon
-                                    .setMessage("Erreur",
-                                            "Le paiement d'une facture vide est interdit");
+                            mySalon.setMessage("Erreur", BasicSession.TAG_I18N + "ficFact.factureVide" + BasicSession.TAG_I18N);
                         }
                     } else if ((CD_PAIEMENT != null)
                             && (CD_PAIEMENT.length() > 0)
@@ -284,13 +303,12 @@ public class FicFact extends ConnectedServlet {
 
                         // Faut-il supprimer le paiement ?
                         aPaiement = PaiementBean.getPaiementBean(myDBSession,
-                                CD_PAIEMENT);
+                                CD_PAIEMENT, mySalon.getMessagesBundle());
                         Vector listeFact = aPaiement.getFact(myDBSession);
                         if (listeFact.size() == 1) {
                             paiementASuppr = true;
                         } else {
-                            throw new FctlException(
-                                    "Suppression du paiement impossible : D'autres factures y sont attachées.");
+                            throw new FctlException(BasicSession.TAG_I18N + "ficFact.multiFacture" + BasicSession.TAG_I18N);
                         }
                     }
 
@@ -309,7 +327,7 @@ public class FicFact extends ConnectedServlet {
 
                     if (paiementASuppr) {
                         aPaiement.delete(myDBSession);
-                        aPaiement = new PaiementBean();
+                        aPaiement = new PaiementBean(mySalon.getMessagesBundle());
                     }
 
                     // Nouvelle facture ? Ajout au encours si ce n'est pas un
@@ -329,7 +347,7 @@ public class FicFact extends ConnectedServlet {
 
                         aPrest.setCD_CLI(CD_CLI);
                         aPrest.setCOMM(tab_COMM[i]);
-                        aPrest.setDT_PREST(DT_PREST);
+                        aPrest.setDT_PREST(DT_PREST, mySalon.getLangue());
                         aPrest.setNIV_SATISF(tab_NIV_SATISF[i]);
                         aPrest.setPRX_UNIT_TTC(tab_PRX_UNIT_TTC[i]);
                         aPrest.setQTE(tab_QTE[i]);
@@ -353,7 +371,7 @@ public class FicFact extends ConnectedServlet {
                         aPrest.setCD_PREST(tab_CD_PREST[paramSup]);
                         aPrest.setCD_CLI(CD_CLI);
                         aPrest.setCOMM(tab_COMM[paramSup]);
-                        aPrest.setDT_PREST(DT_PREST);
+                        aPrest.setDT_PREST(DT_PREST, mySalon.getLangue());
                         aPrest.setNIV_SATISF(tab_NIV_SATISF[paramSup]);
                         aPrest.setPRX_UNIT_TTC(tab_PRX_UNIT_TTC[paramSup]);
                         aPrest.setQTE(tab_QTE[paramSup]);
@@ -370,7 +388,7 @@ public class FicFact extends ConnectedServlet {
                     myDBSession.endTransaction();
 
                     // Informe de l'enregistrement
-                    mySalon.setMessage("Info", "Enregistrement effectué.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.enregistrementOk" + BasicSession.TAG_I18N);
 
                     request.setAttribute("Action", "Modification");
                 } catch (Exception e) {
@@ -381,7 +399,7 @@ public class FicFact extends ConnectedServlet {
                         // Reset du paiement au cas ou la création du paiement a
                         // déjà été faite
                         aFact.setCD_PAIEMENT(0);
-                        aPaiement = new PaiementBean();
+                        aPaiement = new PaiementBean(mySalon.getMessagesBundle());
                     }
                     if ((CD_FACT == null) || (CD_FACT.length() == 0)
                             || (CD_FACT.equals("0"))) {
@@ -405,11 +423,8 @@ public class FicFact extends ConnectedServlet {
                                     tab_CD_MARQUE[nbPrest],
                                     tab_CD_CATEG_PREST[nbPrest], null);
                     if (lastPrest != null) {
-                        request.setAttribute("CD_PREST_SELECT", Long
-                                .toString(lastPrest.getCD_PREST()));
-                        request
-                                .setAttribute("COMM_SELECT", lastPrest
-                                        .getCOMM());
+                        request.setAttribute("CD_PREST_SELECT", Long.toString(lastPrest.getCD_PREST()));
+                        request.setAttribute("COMM_SELECT", lastPrest.getCOMM());
                     }
 
                 } else if (Action.equals("Rechargement++")) {
@@ -422,12 +437,9 @@ public class FicFact extends ConnectedServlet {
                     // Recherche la dernière prestation du client dans cette
                     // Marque / Catégorie
                     HistoPrestBean lastPrest = HistoPrestBean
-                            .getLastHistoPrest(myDBSession, CD_CLI, null, null,
-                                    tab_CD_PREST[nbPrest]);
+                            .getLastHistoPrest(myDBSession, CD_CLI, null, null, tab_CD_PREST[nbPrest]);
                     if (lastPrest != null) {
-                        request
-                                .setAttribute("COMM_SELECT", lastPrest
-                                        .getCOMM());
+                        request.setAttribute("COMM_SELECT", lastPrest.getCOMM());
                     }
                 } else if (Action.equals("Impression")) {
                     // Crée le Bean spécifique pour l'édition
@@ -452,17 +464,20 @@ public class FicFact extends ConnectedServlet {
                     if (!paramMDP.getVAL_PARAM().equals(MOT_PASSE)) {
                         // Mot de passe incorrect
                         Action = "Suppression";
-                        mySalon.setMessage("Erreur", "Mot de passe incorrect");
+                        mySalon.setMessage("Erreur", BasicSession.TAG_I18N + "ficFact.motDePasseKo" + BasicSession.TAG_I18N);
                     }
                 }
 
                 /**
                  * Création du bean et enregistrement
                  */
-                aFact = FactBean.getFactBean(myDBSession, CD_FACT);
+                aFact = FactBean.getFactBean(myDBSession, CD_FACT, mySalon.getMessagesBundle());
+                if (assertOrError((aFact != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 
                 // Initialisation par défaut
-                aPaiement = new PaiementBean();
+                aPaiement = new PaiementBean(mySalon.getMessagesBundle());
 
                 try {
                     // Vérification si paiement regroupé ou mouvements de stock
@@ -470,8 +485,7 @@ public class FicFact extends ConnectedServlet {
                     Vector lstLignes = aFact.getLignes(myDBSession);
 
                     for (int i = 0; i < lstLignes.size(); i++) {
-                        HistoPrestBean aHistoPrest = (HistoPrestBean) lstLignes
-                                .get(i);
+                        HistoPrestBean aHistoPrest = (HistoPrestBean) lstLignes.get(i);
 
                         if (aHistoPrest.hasMvtStk(myDBSession)) {
                             // Correspond à un mouvement : La facture n'est pas
@@ -487,15 +501,14 @@ public class FicFact extends ConnectedServlet {
                         // Le forçage n'est possible que si le paiement n'est
                         // pas regroupé
                         aPaiement = PaiementBean.getPaiementBean(myDBSession,
-                                CD_PAIEMENT);
+                                CD_PAIEMENT, mySalon.getMessagesBundle());
                         if (supprimable
                                 && (aPaiement.getFact(myDBSession).size() == 1)
-                                && (mySalon.getMyIdent().getDroit("Facture",
-                                        "Forçage"))) {
+                                && (mySalon.getMyIdent().getDroit("Facture", "Forçage"))) {
                             forcage = true;
                         } else {
                             throw new FctlException(
-                                    "Suppression de la facture impossible : La facture est réglée.");
+                                    BasicSession.TAG_I18N + "ficFact.factureReglee" + BasicSession.TAG_I18N);
                         }
                     } else {
 
@@ -508,7 +521,7 @@ public class FicFact extends ConnectedServlet {
                             aFact.delete(myDBSession);
 
                             aPaiement = PaiementBean.getPaiementBean(
-                                    myDBSession, CD_PAIEMENT);
+                                    myDBSession, CD_PAIEMENT, mySalon.getMessagesBundle());
                             aPaiement.deletePur(myDBSession);
 
                             myDBSession.endTransaction();
@@ -523,15 +536,15 @@ public class FicFact extends ConnectedServlet {
                                     .getCD_FACT()));
                         }
 
-                        mySalon.setMessage("Info", "Suppression effectuée.");
+                        mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.suppressionOk" + BasicSession.TAG_I18N);
 
                         // Un bean vide
-                        aFact = new FactBean();
+                        aFact = new FactBean(mySalon.getMessagesBundle());
                         // Place le code client si connu
                         aFact.setCD_CLI(CD_CLI);
                         aFact.setFACT_HISTO("N");
 
-                        aPaiement = new PaiementBean();
+                        aPaiement = new PaiementBean(mySalon.getMessagesBundle());
 
                         request.setAttribute("Action", "Creation");
                     }

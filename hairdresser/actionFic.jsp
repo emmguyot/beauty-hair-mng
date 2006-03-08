@@ -1,7 +1,34 @@
+<%
+/*
+ * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
+%>
+<%@ page import="com.increg.salon.bean.SalonSession" %>
+<%
+    SalonSession mySalon = (SalonSession) session.getAttribute("SalonSession");
+    if (mySalon == null) {
+        getServletConfig().getServletContext().getRequestDispatcher("/reconnect.html").forward(request, response);
+    }
+%>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Untitled Document</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 <script language="JavaScript">
@@ -44,27 +71,59 @@ function Imprimer() {
 
 <body class="action">
 <span id="ENREGISTRER" style="position:absolute; width:146px; height:31px; z-index:1; left: 15px; top: 11px; visibility: hidden">
-   <salon:bouton url="javascript:parent.mainFrame.Enregistrer()" imgOn="images/enregistrer2.gif" img="images/enregistrer.gif" alt="Enregistrer"/>
+   <i18n:message key="bouton.Enregistrer" id="paramBouton1" />
+   <salon:bouton url="javascript:parent.mainFrame.Enregistrer()" 
+                imgOn="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/enregistrer2.gif\" %>"
+                img="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/enregistrer.gif\" %>"
+                alt="<%= paramBouton1 %>"/>
 </span>
 <span id="VALIDER" style="position:absolute; width:146px; height:31px; z-index:1; left: 15px; top: 11px; visibility: hidden">
-   <salon:bouton url="javascript:parent.mainFrame.Valider()" imgOn="images/valider2.gif" img="images/valider.gif" alt="Valider" /></span>
+   <i18n:message key="bouton.Valider" id="paramBouton2" />
+   <salon:bouton url="javascript:parent.mainFrame.Valider()"
+                imgOn="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/valider2.gif\" %>"
+                img="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/valider.gif\" %>"
+                alt="<%= paramBouton2 %>" /></span>
 <span id="DUPLIQUER" style="position:absolute; width:146px; height:31px; z-index:1; top: 11px; left: 145px; visibility: hidden">
-   <salon:bouton url="javascript:parent.mainFrame.Dupliquer()" imgOn="images/dupliquer2.gif" img="images/dupliquer.gif" alt="Dupliquer" />
+   <i18n:message key="bouton.Dupliquer" id="paramBouton3" />
+   <salon:bouton url="javascript:parent.mainFrame.Dupliquer()" 
+                imgOn="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/dupliquer2.gif\" %>" 
+                img="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/dupliquer.gif\" %>" 
+                alt="<%= paramBouton3 %>"/>
 </span> 
 <span id="NOUVEAU" style="position:absolute; width:146px; height:31px; z-index:1; top: 11px; left: 145px; visibility: hidden">
-   <salon:bouton url="javascript:parent.mainFrame.Nouveau()" imgOn="images/nouveau2.gif" img="images/nouveau.gif" alt="Nouveau"/>
+   <i18n:message key="bouton.Nouveau" id="paramBouton4" />
+   <salon:bouton url="javascript:parent.mainFrame.Nouveau()" 
+                imgOn="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/nouveau2.gif\" %>" 
+                img="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/nouveau.gif\" %>" 
+                alt="<%= paramBouton4 %>"/>
 </span> 
 <span id="IMPRIMER" style="position:absolute; left:275px; top:11px; width:146px; height:31px; z-index:1; visibility: visible" > 
-   <salon:bouton url="javascript:Imprimer()" imgOn="images/imprimer2.gif" img="images/imprimer.gif" alt="Imprimer"/>
+   <i18n:message key="bouton.Imprimer" id="paramBouton5" />
+   <salon:bouton url="javascript:Imprimer()" 
+                imgOn="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/imprimer2.gif\" %>" 
+                img="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/imprimer.gif\" %>" 
+                alt="<%= paramBouton5 %>"/>
 </span>
 <span id="SUPPRIMER" style="position:absolute; left:405px; top:11px; width:146px; height:31px; z-index:1; visibility: hidden" > 
-   <salon:bouton url="javascript:parent.mainFrame.Supprimer()" imgOn="images/supprimer2.gif" img="images/supprimer.gif" alt="Supprimer"/>
+   <i18n:message key="bouton.Supprimer" id="paramBouton6" />
+   <salon:bouton url="javascript:parent.mainFrame.Supprimer()" 
+                imgOn="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/supprimer2.gif\" %>" 
+                img="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/supprimer.gif\" %>" 
+                alt="<%= paramBouton6 %>"/>
 </span>
 <span id="RETOUR_LISTE" style="position:absolute; left:535px; top:11px; width:146px; height:31px; z-index:1; visibility: hidden" > 
-   <salon:bouton url="javascript:parent.mainFrame.RetourListe()" imgOn="images/liste2.gif" img="images/liste.gif" alt="Liste"/>
+   <i18n:message key="bouton.Liste" id="paramBouton7" />
+   <salon:bouton url="javascript:parent.mainFrame.RetourListe()" 
+                imgOn="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/liste2.gif\" %>" 
+                img="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/liste.gif\" %>" 
+                alt="<%= paramBouton7 %>"/>
 </span>
 <span id="AIDE" style="position:absolute; width:146px; height:31px; z-index:1; top: 11px; left: 665px; visibility: visible">
-   <salon:bouton url="javascript:parent.mainFrame.Aide()" imgOn="images/aide2.gif" img="images/aide.gif" alt="Aide"/>
+   <i18n:message key="bouton.Aide" id="paramBouton8" />
+   <salon:bouton url="javascript:parent.mainFrame.Aide()" 
+                imgOn="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/aide2.gif\" %>" 
+                img="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/aide.gif\" %>" 
+                alt="<%= paramBouton8 %>"/>
 </span> 
 <div id="coinHD" style="position:absolute; height=20px; z-index:1; visibility:hidden"><img src="images/perso/coin_hd.gif"></div>
 <div id="coinBD" style="position:absolute; height=20px; z-index:1; visibility:hidden"><img src="images/perso/coin_bd.gif"></div>

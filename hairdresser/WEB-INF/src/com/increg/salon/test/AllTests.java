@@ -5,6 +5,7 @@ import com.increg.salon.bean.test.MvtCaisseBeanTest;
 import com.increg.salon.bean.test.MvtStkBeanTest;
 import com.increg.salon.bean.test.PaiementBeanTest;
 import com.increg.salon.bean.test.RDVBeanTest;
+import com.increg.salon.bean.test.ResultSetTest;
 import com.increg.util.test.MontantTest;
 
 import junit.framework.Test;
@@ -33,6 +34,9 @@ public class AllTests {
         suite.addTest(new TestSuite(MontantTest.class));
         suite.addTest(new TestSuite(RDVBeanTest.class));
         suite.addTest(new TestSuite(FactBeanTest.class));
+        suite.addTest(new TestSuite(ResultSetTest.class));
+        suite.addTest(new TestSuite(PerformanceTest.class));
+        suite.addTest(new TestSuite(AllPagesTest.class));
         //$JUnit-END$
         return suite;
     }

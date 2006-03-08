@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import com.increg.commun.BasicSession;
 import com.increg.commun.exception.FctlException;
 import com.increg.commun.exception.NoImplementationException;
 
@@ -162,7 +163,7 @@ public class GraphHisto extends AbstractGraph {
                 echelleX = 0;
                 echelleY = 0;
                 throw new com.increg.commun.exception.FctlException(
-                    "Trop de valeurs à représenter");
+                    BasicSession.TAG_I18N + "graphHisto.tropDonnees" + BasicSession.TAG_I18N);
             }
 
             /**

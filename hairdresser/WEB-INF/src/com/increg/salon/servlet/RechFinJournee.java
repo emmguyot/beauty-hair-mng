@@ -1,6 +1,9 @@
 package com.increg.salon.servlet;
 
 import com.increg.commun.*;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import com.increg.salon.bean.*;
 import com.increg.salon.request.*;
@@ -17,21 +20,15 @@ public class RechFinJournee extends ConnectedServlet {
  */
 public void performTask(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) {
 
-	// Récupération des paramètres
-	String DT_JOUR = request.getParameter("DT_JOUR");
+    // Récupère la connexion
+    HttpSession mySession = request.getSession(false);
+    SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
+    DBSession myDBSession = mySalon.getMyDBSession();
 
-	java.text.DateFormat formatDate  = java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT);
-
-	// Valeurs par défaut
-	if (DT_JOUR == null) {
-		// Date du jour
-		DT_JOUR  = formatDate.format(Calendar.getInstance().getTime());
-	}
-	request.setAttribute("DT_JOUR", DT_JOUR);
-
-	// Récupère la connexion
-	HttpSession mySession = request.getSession(false);
-	DBSession myDBSession = ((SalonSession) mySession.getAttribute("SalonSession")).getMyDBSession();
+	// Date du jour
+	Calendar dtJour = Calendar.getInstance(); 
+	request.setAttribute("DT_JOUR", dtJour);
+	String DT_JOUR  = myDBSession.getFormatDate().format(dtJour.getTime());
 
     TreeMap lstLignesB = new TreeMap();
     TreeMap lstTypeB = new TreeMap();

@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.SalonSession;
 import com.increg.salon.bean.TrAgeBean;
@@ -58,7 +59,7 @@ public void performTask(
 
 	            aTrAge.create(myDBSession);
 
-		        mySalon.setMessage("Info", "Création effectuée.");
+		        mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.creationOk" + BasicSession.TAG_I18N);
 	            request.setAttribute("Action", "Modification");
 			}
 			catch (Exception e) {
@@ -71,6 +72,9 @@ public void performTask(
 			request.setAttribute("Action", "Modification");
 
 			aTrAge = TrAgeBean.getTrAgeBean(myDBSession, CD_TR_AGE);
+            if (assertOrError((aTrAge != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 		}
 		else if (Action.equals("Modification")) {
 			// Modification effective de la fiche
@@ -79,6 +83,9 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aTrAge = TrAgeBean.getTrAgeBean(myDBSession, CD_TR_AGE);
+            if (assertOrError((aTrAge != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 
 			aTrAge.setCD_TR_AGE(CD_TR_AGE);
 			aTrAge.setLIB_TR_AGE(LIB_TR_AGE);
@@ -87,7 +94,7 @@ public void performTask(
 
 			try {
 	            aTrAge.maj(myDBSession);
-	            mySalon.setMessage("Info", "Enregistrement effectué.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.enregistrementOk" + BasicSession.TAG_I18N);
 	            request.setAttribute("Action", "Modification");
 			}
 			catch (Exception e) {
@@ -102,10 +109,13 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aTrAge = TrAgeBean.getTrAgeBean(myDBSession, CD_TR_AGE);
+            if (assertOrError((aTrAge != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 
 			try {
 	            aTrAge.delete(myDBSession);
-	            mySalon.setMessage("Info", "Suppression effectuée.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.suppressionOk" + BasicSession.TAG_I18N);
 	            // Un bean vide
 	            aTrAge = new TrAgeBean();
 	            request.setAttribute("Action", "Creation");
@@ -130,7 +140,7 @@ public void performTask(
 
                 aTrAge.create(myDBSession);
 
-                mySalon.setMessage("Info", "Duplication effectuée. Vous travaillez maintenant sur la copie.");
+                mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.duplicationOk" + BasicSession.TAG_I18N);
                 request.setAttribute("Action", "Modification");
             }
             catch (Exception e) {

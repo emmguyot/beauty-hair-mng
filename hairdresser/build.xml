@@ -107,6 +107,7 @@
 				<include name="**/*.html" />
 				<include name="*.class" />
 				<include name="WEB-INF/web.xml" />
+				<include name="WEB-INF/classes/messages*.properties" />
 
 				<exclude name="WEB-INF/classes/com/increg/serveur/**" />
 				<exclude name="**/light/**" />
@@ -143,6 +144,7 @@
 				<pathelement location="${tomcat}/lib/common/jasper-runtime.jar" />
 				<pathelement location="${java.home}/lib/rt.jar" />
 				<pathelement location="${tmpProdWar}/WEB-INF/classes" />
+				<pathelement location="${tmpProdWar}/WEB-INF/lib/taglibs-i18n.jar" />
 				<pathelement location="${java.class.path}" />
 			</classpath>
 		</javac>

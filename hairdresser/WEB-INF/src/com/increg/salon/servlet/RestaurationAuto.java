@@ -1,7 +1,10 @@
 package com.increg.salon.servlet;
 
+import java.text.MessageFormat;
+
 import javax.servlet.http.*;
 
+import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.SalonSessionImpl;
 
@@ -40,7 +43,11 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
 	// Liste des fichiers
     boolean error = false;
 	
-	try {
+    // Initialise une session light de traduction
+    BasicSession myBasicSession = new BasicSession();
+    myBasicSession.setLangue(request.getLocale());
+
+    try {
         /**
          * Hypothèses :
          *  La base est lancée, dont ipc-daemon aussi
@@ -67,7 +74,8 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
         // Test sur le code retour 
         if (aProc.waitFor() != 0) {
             // Impossible d'arrêter la base
-            request.setAttribute("Erreur", "La base n'a pas pu être arrêtée. La restauration n'a pas été faite.");
+        	myBasicSession.setMessage("Erreur", BasicSession.TAG_I18N + "restaurationAuto.erreurArretBase" + BasicSession.TAG_I18N);
+            request.setAttribute("Erreur", myBasicSession.getMessage("Erreur"));
             error = true;
         }
         
@@ -82,7 +90,8 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
             // Test sur le code retour 
             if (aProc.waitFor() != 0) {
                 // Impossible de supprimer la base
-                request.setAttribute("Erreur", "La base n'a pas pu être supprimée. La restauration n'a pas été faite.");
+            	myBasicSession.setMessage("Erreur", BasicSession.TAG_I18N + "restaurationAuto.erreurSupprBase" + BasicSession.TAG_I18N);
+                request.setAttribute("Erreur", myBasicSession.getMessage("Erreur"));
                 error = true;
             }
         }
@@ -97,14 +106,16 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
             // Test sur le code retour 
             if (aProc.waitFor() != 0) {
                 // Impossible 
-                request.setAttribute("Erreur", "Le processus ipc n'a pu être réinitialisé. La restauration n'a pas été faite.");
+            	myBasicSession.setMessage("Erreur", BasicSession.TAG_I18N + "restaurationAuto.erreurKillIPC" + BasicSession.TAG_I18N);
+                request.setAttribute("Erreur", myBasicSession.getMessage("Erreur"));
                 error = true;
             }
         }
 	}
 	catch (Exception e) {
 		System.out.println("Note : " + e.toString());
-        request.setAttribute("Erreur", "Erreur durant la restauration automatique." + e.toString());
+		String msg = MessageFormat.format(myBasicSession.getMessagesBundle().getString("restaurationAuto.erreur"), new Object[] { e.toString() });
+        request.setAttribute("Erreur", msg);
 	}
 
 	try {

@@ -1,20 +1,48 @@
-<%@ page import="java.util.TreeMap,java.util.Set,java.util.Iterator,java.math.BigDecimal,java.util.Date" %>
+<%
+/*
+ * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
+%>
+<%@ page import="java.util.TreeMap,java.util.Set,java.util.Iterator,java.math.BigDecimal,java.util.Calendar" %>
 <%@ page import="com.increg.salon.request.Brouillard
 	       " %>
+<%@ page import="com.increg.salon.bean.SalonSession" %>
+<%
+    SalonSession mySalon = (SalonSession) session.getAttribute("SalonSession");
+    if (mySalon == null) {
+        getServletConfig().getServletContext().getRequestDispatcher("/reconnect.html").forward(request, response);
+    }
+%>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Brouillard</title>
+<title><i18n:message key="label.brouillard" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
 <body class="donnees">
-<%@ include file="include/commun.js" %>
+<%@ include file="include/commun.jsp" %>
 <script language="JavaScript">
 <!--
 function Init() {
    <%
-   // Positionne les liens d'actions
+   // Positionne les liens d actions
    %>
    MM_showHideLayers('NOUVEAU?bottomFrame','','hide');
 }
@@ -22,17 +50,18 @@ function Init() {
 </script>
 <%
    // Récupération des paramètres
-   Date DT_DEBUT = (Date) request.getAttribute("DT_DEBUT");
-   Date DT_FIN = (Date) request.getAttribute("DT_FIN");
+   Calendar DT_DEBUT = (Calendar) request.getAttribute("DT_DEBUT");
+   Calendar DT_FIN = (Calendar) request.getAttribute("DT_FIN");
    Brouillard brouillardTotal = (Brouillard) request.getAttribute("Total");
 %>
-<h1><img src="images/titres/lstBrouillard.gif"></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstBrouillard.gif"></h1>
 <form name="fiche" action="rechBrouillard.srv" method="post">
 <p>
-Entre le :
-    <salon:date type="text" name="DT_DEBUT" valeurDate="<%= DT_DEBUT %>" valeurNulle="null" format="dd/MM/yyyy" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
-   et le : 
-    <salon:date type="text" name="DT_FIN" valeurDate="<%= DT_FIN %>" valeurNulle="null" format="dd/MM/yyyy" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
+<i18n:message key="label.entreLe" /> :
+    <i18n:message key="format.dateSimpleDefaut" id="formatDate" />
+    <salon:date type="text" name="DT_DEBUT" valeurDate="<%= DT_DEBUT %>" valeurNulle="null" format="<%= formatDate %>" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
+<i18n:message key="label.etLe" /> : 
+    <salon:date type="text" name="DT_FIN" valeurDate="<%= DT_FIN %>" valeurNulle="null" format="<%= formatDate %>" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
 </p>
 </form>
 <hr>
@@ -49,10 +78,10 @@ TreeMap lstLignes = (TreeMap) request.getAttribute("Liste");
 <colgroup span="<%= lstTypesRem.size() %>">
 <colgroup span="<%= lstTypeMca.size() %>">
 	<tr>
-		<th rowspan=2>Date</th>
-	        <th colspan="<%= lstTypes.size() %>">Factures</th>
-		<th colspan="<%= lstTypesRem.size() %>">Remise</th>
-		<th colspan="<%= lstTypeMca.size() %>">Encaissements</th>
+		<th rowspan=2><i18n:message key="label.date" /></th>
+	        <th colspan="<%= lstTypes.size() %>"><i18n:message key="label.factures" /></th>
+		<th colspan="<%= lstTypesRem.size() %>"><i18n:message key="label.remise" /></th>
+		<th colspan="<%= lstTypeMca.size() %>"><i18n:message key="label.encaissement" /></th>
 	</tr>
 	<% if (lstLignes.size() > 0) { %>
 	<tr>
@@ -266,7 +295,7 @@ TreeMap lstLignes = (TreeMap) request.getAttribute("Liste");
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideListeBrouillard.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideListeBrouillard.html");
 }
 
 //-->

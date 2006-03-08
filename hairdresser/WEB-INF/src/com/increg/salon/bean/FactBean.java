@@ -1,3 +1,20 @@
+/*
+ * Bean gérant les factures des clients
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.bean;
 
 import java.math.BigDecimal;
@@ -5,9 +22,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.Vector;
 
+import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.TimeStampBean;
 import com.increg.commun.exception.FctlException;
@@ -93,9 +113,10 @@ public class FactBean extends TimeStampBean {
     
     /**
      * FactBean constructor comment.
+     * @param rb Messages localisés
      */
-    public FactBean() {
-        super();
+    public FactBean(ResourceBundle rb) {
+        super(rb);
 
         // Place la date du jour en date de prestation
         DT_PREST = Calendar.getInstance();
@@ -111,9 +132,10 @@ public class FactBean extends TimeStampBean {
     /**
      * FactBean constructor comment.
      * @param rs java.sql.ResultSet
+     * @param rb Messages localisés
      */
-    public FactBean(ResultSet rs) {
-        super(rs);
+    public FactBean(ResultSet rs, ResourceBundle rb) {
+        super(rs, rb);
         try {
             CD_CLI = rs.getLong("CD_CLI");
         } catch (SQLException e) {
@@ -343,7 +365,7 @@ public class FactBean extends TimeStampBean {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Création non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.creationKo" + BasicSession.TAG_I18N));
         }
 
         // Fin de la transaction
@@ -393,7 +415,7 @@ public class FactBean extends TimeStampBean {
             nb = dbConnect.doExecuteSQL(reqs);
 
             if (nb[1] != 1) {
-                throw (new SQLException("Suppression non effectuée"));
+                throw (new SQLException(BasicSession.TAG_I18N + "message.suppressionKo" + BasicSession.TAG_I18N));
             }
         } catch (Exception e) {
             // Fin de la transaction
@@ -564,7 +586,7 @@ public class FactBean extends TimeStampBean {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Mise à jour non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.enregistrementKo" + BasicSession.TAG_I18N));
         }
 
         // Fin de la transaction
@@ -597,7 +619,7 @@ public class FactBean extends TimeStampBean {
         } catch (Exception e) {
             System.out.println("Erreur dans Purge des factures : " + e.toString());
             dbConnect.cleanTransaction();
-            throw new FctlException("Erreur à la purge des factures.");
+            throw new FctlException(BasicSession.TAG_I18N + "factBean.purgeKo" + BasicSession.TAG_I18N);
         }
 
         // Fin de cette transaction
@@ -747,7 +769,7 @@ public class FactBean extends TimeStampBean {
 
             // Maj du paiement si besoin
             if (getCD_PAIEMENT() != 0) {
-                PaiementBean myPaiement = PaiementBean.getPaiementBean(dbConnect, Long.toString(getCD_PAIEMENT()));
+                PaiementBean myPaiement = PaiementBean.getPaiementBean(dbConnect, Long.toString(getCD_PAIEMENT()), message);
                 myPaiement.calculTotaux(dbConnect);
             }
         } catch (Exception e) {
@@ -864,7 +886,7 @@ public class FactBean extends TimeStampBean {
 
             // Maj du paiement si besoin
             if (getCD_PAIEMENT() != 0) {
-                PaiementBean myPaiement = PaiementBean.getPaiementBean(dbConnect, Long.toString(getCD_PAIEMENT()));
+                PaiementBean myPaiement = PaiementBean.getPaiementBean(dbConnect, Long.toString(getCD_PAIEMENT()), message);
                 myPaiement.calculTotaux(dbConnect);
             }
         } catch (Exception e) {
@@ -881,7 +903,7 @@ public class FactBean extends TimeStampBean {
      */
     public Object clone(DBSession dbConnect) {
 
-        FactBean newFact = new FactBean();
+        FactBean newFact = new FactBean(message);
 
         // Copie du corps
         newFact.setCD_CLI(CD_CLI);
@@ -968,9 +990,10 @@ public class FactBean extends TimeStampBean {
      * Creation date: (18/08/2001 17:05:45)
      * @param dbConnect com.increg.salon.bean.DBSession
      * @param CD_FACT java.lang.String
+     * @param rb Messages localisés
      * @return Facture correspondante au code
      */
-    public static FactBean getFactBean(DBSession dbConnect, String CD_FACT) {
+    public static FactBean getFactBean(DBSession dbConnect, String CD_FACT, ResourceBundle rb) {
         String reqSQL = "select * from FACT where CD_FACT=" + CD_FACT;
         FactBean res = null;
 
@@ -979,7 +1002,7 @@ public class FactBean extends TimeStampBean {
             ResultSet aRS = dbConnect.doRequest(reqSQL);
 
             while (aRS.next()) {
-                res = new FactBean(aRS);
+                res = new FactBean(aRS, rb);
             }
             aRS.close();
         } catch (Exception e) {
@@ -1151,7 +1174,7 @@ public class FactBean extends TimeStampBean {
             ResultSet aRS = dbConnect.doRequest(reqSQL);
 
             while (aRS.next()) {
-                res = new FactBean(aRS);
+                res = new FactBean(aRS, message);
 
                 // Fusion proprement dite
                 if (lignes == null) {
@@ -1244,8 +1267,8 @@ public class FactBean extends TimeStampBean {
 
                 if (aHisto.hasMvtStk(dbConnect)) {
                     // Cette ligne implique un mouvement
-                    ArtBean aArt = ArtBean.getArtBean(dbConnect, Long.toString(aPrest.getCD_ART()));
-                    MvtStkBean aMvt = new MvtStkBean();
+                    ArtBean aArt = ArtBean.getArtBean(dbConnect, Long.toString(aPrest.getCD_ART()), message);
+                    MvtStkBean aMvt = new MvtStkBean(message);
 
                     aMvt.setCD_ART(aPrest.getCD_ART());
                     aMvt.setCD_FACT(CD_FACT);
@@ -1265,19 +1288,19 @@ public class FactBean extends TimeStampBean {
                     aMvt.create(dbConnect);
                 } else if (aPrest.isConsommationAbonnement()) {
                     // Consommation d'un abonnements du client
-                    ClientBean aCli = ClientBean.getClientBean(dbConnect, Long.toString(CD_CLI));
+                    ClientBean aCli = ClientBean.getClientBean(dbConnect, Long.toString(CD_CLI), message);
                     if (!aCli.consommeAbonnement(aPrest.getCD_PREST(), aHisto.getQTE().intValue(), undo || (CD_PAIEMENT == 0))) {
                         // Le client n'a pas l'abonnement
-                        throw new FctlException("Le client n'a pas d'abonnement correspondant");
+                        throw new FctlException(BasicSession.TAG_I18N + "factBean.abonnementManquant" + BasicSession.TAG_I18N);
                     } else {
                         aCli.maj(dbConnect);
                     }
                 } else if (aPrest.isAbonnement()) {
                     // Impacte le client avec l'achat de l'abonnement
-                    ClientBean aCli = ClientBean.getClientBean(dbConnect, Long.toString(CD_CLI));
+                    ClientBean aCli = ClientBean.getClientBean(dbConnect, Long.toString(CD_CLI), message);
                     if (!aCli.consommeAbonnement(aPrest.getCD_PREST_ABONNEMENT(), aHisto.getQTE().multiply(new BigDecimal(aPrest.getCPT_ABONNEMENT())).negate().intValue(), undo || (CD_PAIEMENT == 0))) {
                         // Problème...
-                        throw new FctlException("Impossible d'affecter l'abonnement au client");
+                        throw new FctlException(BasicSession.TAG_I18N + "factBean.abonnementErreur" + BasicSession.TAG_I18N);
                     } else {
                         aCli.maj(dbConnect);
                     }
@@ -1353,7 +1376,7 @@ public class FactBean extends TimeStampBean {
             if ((FACT_HISTO == null) || (FACT_HISTO.equals("N"))) {
                 CD_PAIEMENT = Long.parseLong(newCD_PAIEMENT);
             } else {
-                throw new com.increg.commun.exception.FctlException("<br>Impossible d'affecter un paiement à une facture Historique");
+                throw new FctlException(BasicSession.TAG_I18N + "factBean.paiementHistorique" + BasicSession.TAG_I18N);
             }
         } else {
             CD_PAIEMENT = 0;
@@ -1386,20 +1409,21 @@ public class FactBean extends TimeStampBean {
      * Insert the method's description here.
      * Creation date: (17/08/2001 21:21:11)
      * @param newDT_PREST String
+     * @param aLocale Configuration pour parser la date
      * @throws Exception En cas de format erroné
      */
-    public void setDT_PREST(String newDT_PREST) throws Exception {
+    public void setDT_PREST(String newDT_PREST, Locale aLocale) throws Exception {
 
         if ((newDT_PREST != null) && (newDT_PREST.length() != 0)) {
             DT_PREST = Calendar.getInstance();
 
-            java.text.DateFormat formatDate = java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT);
+            java.text.DateFormat formatDate = java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT, aLocale);
             try {
                 DT_PREST.setTime(formatDate.parse(newDT_PREST));
             } catch (Exception e) {
                 System.out.println("Erreur de conversion : " + e.toString());
                 DT_PREST = null;
-                throw (new Exception("Erreur de conversion de la date de prestation"));
+                throw (new Exception(BasicSession.TAG_I18N + "factBean.formatDatePrestation" + BasicSession.TAG_I18N));
             }
         } else {
             DT_PREST = null;
@@ -1625,7 +1649,7 @@ public class FactBean extends TimeStampBean {
             reqSQL = reqSQL + " and PAIEMENT.DT_PAIEMENT < '" + DT_FIN + "'::date + 1";
         }
                 
-        reqSQL = reqSQL + "group by PREST.CD_PREST";
+        reqSQL = reqSQL + " group by PREST.CD_PREST";
         
         // Interroge la Base
         ResultSet aRS = myDBSession.doRequest(reqSQL);

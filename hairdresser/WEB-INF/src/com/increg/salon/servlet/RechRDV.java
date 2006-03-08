@@ -1,8 +1,25 @@
+/*
+ * Recherche/Liste des RDV 
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.servlet;
 
 import java.sql.ResultSet;
 import java.text.DateFormat;
-import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
@@ -18,6 +35,7 @@ import com.increg.salon.bean.FactBean;
 import com.increg.salon.bean.RDVBean;
 import com.increg.salon.bean.SalonSession;
 import com.increg.salon.request.RDVFact;
+import com.increg.util.ServletUtil;
 
 /**
  * Recherche/Liste des RDV
@@ -36,41 +54,26 @@ public class RechRDV extends ConnectedServlet {
         String DT_DEBUT = request.getParameter("DT_DEBUT");
         String DT_FIN = request.getParameter("DT_FIN");
 
-        DateFormat formatDate = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+        // Récupère la connexion
+        HttpSession mySession = request.getSession(false);
+        SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
+        DBSession myDBSession = mySalon.getMyDBSession();
+        DateFormat formatDate = new SimpleDateFormat(mySalon.getMessagesBundle().getString("format.dateHeureSimpleSansSeconde"));
+        DateFormat formatDateDB = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
         formatDate.setTimeZone(RDVBean.getTimeZone());
+        formatDateDB.setTimeZone(RDVBean.getTimeZone());
 
-        // Valeurs par défaut
-        Calendar dtDebut = null;
-        Calendar dtFin = null;
-        if (DT_DEBUT == null) {
-            dtDebut = dtDebutDefaut();
+        Calendar dtDebut = ServletUtil.interpreteDate(DT_DEBUT, formatDate, dtDebutDefaut());
+        Calendar dtFin = ServletUtil.interpreteDate(DT_FIN, formatDate, dtFinDefault());
+        if (dtFin.before(dtDebut)) {
+            dtFin = dtDebut;
         }
-        if (DT_FIN == null) {
-            dtFin = dtFinDefault();
-        }
-        try {
-            if (dtDebut == null) {
-                dtDebut = Calendar.getInstance(RDVBean.getTimeZone());
-                dtDebut.setTime(formatDate.parse(DT_DEBUT));
-            } 
-            if (dtFin == null) {
-                dtFin = Calendar.getInstance(RDVBean.getTimeZone());
-                dtFin.setTime(formatDate.parse(DT_FIN));
-            }
-            if (dtFin.before(dtDebut)) {
-                dtFin = Calendar.getInstance(RDVBean.getTimeZone());
-                dtFin.setTime(formatDate.parse(DT_FIN));
-            }
-        }
-        catch (ParseException e1) {
-            // Valeurs par défaut
-            dtDebut = dtDebutDefaut();
-            dtFin = dtFinDefault();
-        }
+        dtDebut.setTimeZone(RDVBean.getTimeZone());
+        dtFin.setTimeZone(RDVBean.getTimeZone());
         request.setAttribute("DT_DEBUT", dtDebut);
         request.setAttribute("DT_FIN", dtFin);
-        DT_DEBUT = formatDate.format(dtDebut.getTime());
-        DT_FIN = formatDate.format(dtFin.getTime());
+        DT_DEBUT = formatDateDB.format(dtDebut.getTime());
+        DT_FIN = formatDateDB.format(dtFin.getTime());
 
         // Constitue la requete SQL
         String reqSQL = "select * from RDV ";
@@ -92,10 +95,6 @@ public class RechRDV extends ConnectedServlet {
         reqSQL = reqSQL + " order by DT_DEBUT desc, CD_COLLAB";
         reqSQLreel = reqSQLreel + " order by DT_PREST desc, CD_COLLAB";
 
-        // Récupère la connexion
-        HttpSession mySession = request.getSession(false);
-        SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
-        DBSession myDBSession = mySalon.getMyDBSession();
 
         // Interroge la Base
         try {
@@ -104,13 +103,13 @@ public class RechRDV extends ConnectedServlet {
 
             while (aRS.next()) {
                 RDVBean aRDV = new RDVBean(aRS);
-                lstLignes.add(new RDVFact(myDBSession, aRDV));
+                lstLignes.add(new RDVFact(myDBSession, aRDV, mySalon.getMessagesBundle()));
             }
             aRS.close();
 
             aRS = myDBSession.doRequest(reqSQLreel);
             while (aRS.next()) {
-                FactBean aFact = new FactBean(aRS);
+                FactBean aFact = new FactBean(aRS, mySalon.getMessagesBundle());
                 aFact.getLignes(myDBSession);
                 
                 boolean affectationOk = false;
@@ -123,7 +122,7 @@ public class RechRDV extends ConnectedServlet {
                     }
                 }
                 if (!affectationOk) {
-                    RDVFact aRDVFact = new RDVFact(myDBSession, aFact);
+                    RDVFact aRDVFact = new RDVFact(myDBSession, aFact, mySalon.getMessagesBundle());
                     if (aRDVFact.getDate().getTime().after(dtDebut.getTime())
                         && aRDVFact.getDate().getTime().before(dtFin.getTime())) {
                             
@@ -172,6 +171,7 @@ public class RechRDV extends ConnectedServlet {
             }
         }
     }
+	
     /**
      * Valeur par défaut de la date de fin
      * @param jour Jour de référence

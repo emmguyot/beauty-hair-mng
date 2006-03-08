@@ -1,8 +1,19 @@
 /*
- * Created on 17 sept. 2003
- *
- * To change the template for this generated file go to
- * Window>Preferences>Java>Code Generation>Code and Comments
+ * Bean Session incluant les données d'une session LibertyLook
+ * Copyright (C) 2003-2006 Emmanuel Guyot <See emmguyot on SourceForge>
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
  */
 package com.increg.salon.bean;
 
@@ -93,7 +104,13 @@ public abstract class SalonSession extends BasicSession {
      * Indicateur si la connection est automatique
      */
     protected boolean autoConnect;
+    
+    /**
+     * Indicateur si la base est optimisée
+     */
+    protected boolean optimizeDB;
 
+	
     /**
      * SalonSession constructor comment.
      * Constructeur utilisé en cas de perte de session
@@ -111,12 +128,13 @@ public abstract class SalonSession extends BasicSession {
      */
     public SalonSession(String configName) throws Exception {
         super();
+        ResourceBundle resconfig = null;
         try {
             // Vérification du fichier de config
             config = configName;
-            ResourceBundle resconfig = ResourceBundle.getBundle(configName);
+            resconfig = ResourceBundle.getBundle(configName);
             if (resconfig == null) {
-                throw new MissingResourceException("Fichier de licence introuvable", "config.properties", "");
+                throw new MissingResourceException(BasicSession.TAG_I18N + "salonSession.noBundle" + BasicSession.TAG_I18N, "config.properties", "");
             }
         } catch (MissingResourceException e) {
             // Fichier de configuration invalide ou introuvable
@@ -130,20 +148,34 @@ public abstract class SalonSession extends BasicSession {
                  * Mise à jour éventuelle de l'appli
                  * <b>A mettre à jour à chaque changement de version</b>
                  */
-                majBase = new UpdateBeanV33(myDBSession);
+                majBase = new UpdateBeanV33(myDBSession, messagesBundle);
             } catch (Exception e) {
                 System.out.println("Mise à jour de la base en erreur :");
                 e.printStackTrace();
                 // Il faut proposer la restauration de la base
                 myDBSession = null;
                 mySociete = null;
-                throw new ReloadNeededException("Mise à jour de la base en erreur :" + e.toString()); 
+                throw new ReloadNeededException(BasicSession.TAG_I18N + "salonSession.majBaseKo" + BasicSession.TAG_I18N + e.toString()); 
             }
 
+            optimizeDB = false;
+            try {
+                if ((resconfig.getString("optimize") != null) && (resconfig.getString("optimize").equals("1"))) {
+                	optimizeDB = true;
+                }
+            } catch (Exception ignored) {
+                // ignore the exception
+            	optimizeDB = false;
+            }
+
+            if (optimizeDB) {
+            	majBase.optimizeDatabase(myDBSession);
+            }
+            
             // Vérification de la base
             if (!majBase.checkDatabase(myDBSession)) {
                 System.out.println("La base de données n'est pas cohérente");
-                throw new ReloadNeededException("La base de données n'est pas cohérente");
+                throw new ReloadNeededException(BasicSession.TAG_I18N + "salonSession.baseCorrupt" + BasicSession.TAG_I18N);
             }
                         
             // Initialisation de la société
@@ -151,13 +183,13 @@ public abstract class SalonSession extends BasicSession {
 
             // Chargement de la liste des factures en attente de paiement
             String reqSQL =
-                "select * from FACT where (CD_PAIEMENT=0 or CD_PAIEMENT is null) and FACT_HISTO='N' order by DT_PREST";
+                "select * from FACT where (CD_PAIEMENT=0 or CD_PAIEMENT is null) and FACT_HISTO='N' order by CD_FACT";
 
             ResultSet aRS = myDBSession.doRequest(reqSQL);
 
             while (aRS.next()) {
                 try {
-                    FactBean aFact = new FactBean(aRS);
+                    FactBean aFact = new FactBean(aRS, messagesBundle);
                     listeFact.add(aFact);
                 } catch (Exception e) {
                     System.out.println("Erreur à la lecture d'une facture pour l'en cours :");
@@ -165,11 +197,6 @@ public abstract class SalonSession extends BasicSession {
                 }
             }
             aRS.close();
-
-            // Récupération du chemin de sauvegarde     
-            java.util.ResourceBundle resconfig =
-                java.util.ResourceBundle.getBundle(configName);
-            //$NON-NLS-1$
 
             remoteEnable = false;
             try {
@@ -204,7 +231,7 @@ public abstract class SalonSession extends BasicSession {
             e.printStackTrace();
             myDBSession = null;
             mySociete = null;
-            throw (new Exception("Démarrage impossible"));
+            throw (new Exception(BasicSession.TAG_I18N + "salonSession.startKo" + BasicSession.TAG_I18N + e.toString()));
         }
         
     }
@@ -244,7 +271,7 @@ public abstract class SalonSession extends BasicSession {
 
                 if (aRS.next()) {
                     // Prend le premier
-                    FactBean oldFact = FactBean.getFactBean(myDBSession, Long.toString(aRS.getLong("CD_FACT")));
+                    FactBean oldFact = FactBean.getFactBean(myDBSession, Long.toString(aRS.getLong("CD_FACT")), messagesBundle);
 
                     // Duplique la facture
                     aFact = (FactBean) oldFact.clone(myDBSession);
@@ -309,7 +336,7 @@ public abstract class SalonSession extends BasicSession {
 
                 if (aRS.next()) {
                     // Prend le premier
-                    FactBean oldFact = FactBean.getFactBean(myDBSession, Long.toString(aRS.getLong("CD_FACT")));
+                    FactBean oldFact = FactBean.getFactBean(myDBSession, Long.toString(aRS.getLong("CD_FACT")), messagesBundle);
 
                     // Duplique la facture
                     aFact = (FactBean) oldFact.clone(myDBSession);
@@ -354,7 +381,7 @@ public abstract class SalonSession extends BasicSession {
         if (!doublon) {
             // Création du Bean facture
             try {
-                FactBean aFact = new FactBean();
+                FactBean aFact = new FactBean(messagesBundle);
                 aFact.setCD_CLI(CD_CLI);
                 aFact.setFACT_HISTO("N");
                 aFact.create(myDBSession);
@@ -424,7 +451,7 @@ public abstract class SalonSession extends BasicSession {
 
         if (!trouve) {
             // Il faut l'ajouter
-            listeFact.add(FactBean.getFactBean(myDBSession, CD_FACT));
+            listeFact.add(FactBean.getFactBean(myDBSession, CD_FACT, messagesBundle));
         }
     }
 

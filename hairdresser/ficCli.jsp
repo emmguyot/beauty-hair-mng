@@ -1,3 +1,22 @@
+<%
+/*
+ * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
+%>
 <%@ page import="java.util.Vector" %>
 <%@ page import="com.increg.salon.bean.SalonSession,
 	       com.increg.salon.bean.ClientBean,
@@ -11,14 +30,16 @@
     }
 %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Fiche client</title>
+<title><i18n:message key="ficCli.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
 <body class="donnees" onLoad="document.fiche.NOM.focus()">
-<%@ include file="include/commun.js" %>
+<%@ include file="include/commun.jsp" %>
 <script language="JavaScript">
 <!--
 <%
@@ -50,7 +71,7 @@ function Init() {
 }
 //-->
 </script>
-<h1><img src="images/titres/ficCli.gif" alt=<salon:TimeStamp bean="<%= aCli %>" />></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/ficCli.gif" alt=<salon:TimeStamp bean="<%= aCli %>" />></h1>
 <salon:message salonSession="<%= mySalon %>" />
 <form method="post" action="ficCli.srv" name="fiche">
     <p> 
@@ -59,21 +80,22 @@ function Init() {
         </salon:valeur>
         <input type="hidden" name="Action" value="<%=Action%>">
         <input type="hidden" name="NbPrest" value="<%=NbPrest%>">
-        <span class="facultatif">Civilit&eacute; :</span> 
-        <salon:selection valeur="<%= aCli.getCIVILITE() %>" valeurs='<%= "|Mle|Mme|M. " %>'>
+        <span class="facultatif"><i18n:message key="label.civilite" /> :</span> 
+        <i18n:message key="valeur.civilite" id="valeurCivilite" />
+        <salon:selection valeur="<%= aCli.getCIVILITE() %>" valeurs='<%= "|Mle|Mme|M. " %>' libelle='<%= valeurCivilite %>'>
             <select name="CIVILITE">
                 %%
             </select>
         </salon:selection>
-        <span class="obligatoire">Nom :</span> 
+        <span class="obligatoire"><i18n:message key="label.nom" /> :</span> 
         <salon:valeur valeurNulle="null" valeur="<%= aCli.getNOM() %>" >
             <input class="readonly" type="text" name="NOM" value="%%" >
         </salon:valeur>
-        <span class="facultatif">Pr&eacute;nom :</span> 
+        <span class="facultatif"><i18n:message key="label.prenom" /> :</span> 
         <salon:valeur valeurNulle="null" valeur="<%= aCli.getPRENOM() %>" >
             <input class="readonly" type="text" name="PRENOM" value="%%" >
         </salon:valeur>
-        <span class="facultatif">Date anniversaire :</span> 
+        <span class="facultatif"><i18n:message key="label.dtAnniversaire" /> :</span> 
         <salon:valeur valeurNulle="null" valeur="<%= aCli.getDT_ANNIV() %>" >
             <input type="text" name="DT_ANNIV" size="10" maxlength="10" value="%%" onchange="FormateDate(this)">
         </salon:valeur>
@@ -82,31 +104,31 @@ function Init() {
 	<table border="0" cellspacing="0">
             <tr> 
                 <td> 
-                    <p><span class="facultatif">Adresse :</span> 
+                    <p><span class="facultatif"><i18n:message key="label.adresse" /> :</span> 
                         <salon:valeur valeurNulle="null" valeur="<%= aCli.getRUE() %>" >
                             <textarea name="RUE" rows="2" cols="40">%%</textarea>
                         </salon:valeur>
                     </p>
-                    <p><span class="facultatif">Code postal :</span> 
+                    <p><span class="facultatif"><i18n:message key="label.cdPostal" /> :</span> 
                         <salon:valeur valeurNulle="null" valeur="<%= aCli.getCD_POSTAL() %>" >
                             <input type="text" name="CD_POSTAL" size="6" maxlength="5" value="%%">
                         </salon:valeur>
-                        <span class="facultatif">Ville :</span> 
+                        <span class="facultatif"><i18n:message key="label.ville" /> :</span> 
                         <salon:valeur valeurNulle="null" valeur="<%= aCli.getVILLE() %>" >
                             <input type="text" name="VILLE" value="%%">
                         </salon:valeur>
                     </p>
                 </td>
                 <td> 
-                    <p align="right"><span class="facultatif">T&eacute;l&eacute;phone :</span></p>
-                    <p align="right"><span class="facultatif">Email :</span></p>
+                    <p align="right"><span class="facultatif"><i18n:message key="label.telephone" /> :</span></p>
+                    <p align="right"><span class="facultatif"><i18n:message key="label.email" /> :</span></p>
                 </td>
                 <td>
                     <p>
                         <salon:valeur valeurNulle="null" valeur="<%= aCli.getTEL() %>" >
                             <input type="text" name="TEL" value="%%" size=14>
                         </salon:valeur>
-                        <span class="facultatif">Portable&nbsp;:&nbsp;</span>
+                        <span class="facultatif"><i18n:message key="label.portable" />&nbsp;:&nbsp;</span>
                         <salon:valeur valeurNulle="null" valeur="<%= aCli.getPORTABLE() %>" >
                             <input type="text" name="PORTABLE" value="%%" size=14>
                         </salon:valeur>
@@ -125,9 +147,9 @@ function Init() {
                 <tr>
                     <td>
 					<% if (mySalon.getMySociete().isSalon()) { %>
-                        <span class="facultatif">Type de cheveux :</span> <br>
+                        <span class="facultatif"><i18n:message key="label.typeCheveux" /> :</span> <br>
 					<% } %>
-                        <span class="facultatif">Tranche d'&acirc;ge :</span> 
+                        <span class="facultatif"><i18n:message key="label.trancheAge" /> :</span> 
                     </td>
                     <td>
 					<% if (mySalon.getMySociete().isSalon()) { %>
@@ -147,9 +169,9 @@ function Init() {
                     </td>
                     <td>
 			    	<% if (mySalon.getMySociete().isInstitut()) { %>
-                        <span class="facultatif">Type de peau :</span> <br>
+                        <span class="facultatif"><i18n:message key="label.typePeau" /> :</span> <br>
 					<% } %>
-                        <span class="facultatif">Origine :</span> 
+                        <span class="facultatif"><i18n:message key="label.origine" /> :</span> 
                     </td>
                     <td>
 			    	<% if (mySalon.getMySociete().isInstitut()) { %>
@@ -168,8 +190,8 @@ function Init() {
                         </salon:DBselection>
                     </td>
                     <td>
-                        <span class="facultatif">Cat&eacute;gorie client :</span> <br>
-                        <span class="obligatoire">Client actuel :</span> 
+                        <span class="facultatif"><i18n:message key="label.categorieClient" /> :</span> <br>
+                        <span class="obligatoire"><i18n:message key="label.clientActuel" /> :</span> 
                     </td>
                     <td>
                         <salon:DBselection valeur="<%= aCli.getCD_CATEG_CLI() %>" sql="select CD_CATEG_CLI, LIB_CATEG_CLI from CATEG_CLI order by LIB_CATEG_CLI">
@@ -178,7 +200,8 @@ function Init() {
                             %%
                         </select><br>
                         </salon:DBselection> 
-                        <salon:selection valeur="<%= aCli.getINDIC_VALID() %>" valeurs='<%= "O|N" %>' libelle="Oui|Non">
+                    	<i18n:message key="valeur.ouiNon" id="valeurOuiNon" />
+                        <salon:selection valeur="<%= aCli.getINDIC_VALID() %>" valeurs='<%= "O|N" %>' libelle="<%= valeurOuiNon %>">
                             <select name="INDIC_VALID">
                                 %%
                             </select>
@@ -190,7 +213,7 @@ function Init() {
 	<table border="0" cellspacing="0">
             <tr>
                 <td>
-                    <span class="facultatif">Commentaire :</span> 
+                    <span class="facultatif"><i18n:message key="label.commentaire" /> :</span> 
                     <salon:valeur valeurNulle="null" valeur="<%= aCli.getCOMM() %>" >
                         <textarea name="COMM" cols="40" rows="2">%%</textarea>
                     </salon:valeur>
@@ -203,20 +226,43 @@ function Init() {
         <table border="0" cellspacing="0" width="100%">
             <tr>
                 <td>
-                    <%=NbPrest%> derni&egrave;res prestations :
-                    &nbsp;&nbsp;<a href="javascript:toutesPrest()">Toutes les prestations</a> 
+                    <i18n:message key="ficCli.dernieresPrestations">
+                    	<i18n:messageArg value="<%= NbPrest %>" />
+                    </i18n:message> :
+                    &nbsp;&nbsp;<a href="javascript:toutesPrest()"><i18n:message key="ficCli.toutesPrestations" /></a> 
                 </td>
    				<td align="right">
                     <span class="souslien">
-                    	<salon:bouton url="<%= \"_FicheRDV.jsp?Action=Creation&CD_CLI=\" + aCli.getCD_CLI() %>" alt="Nouveau rendez-vous" target="ClientFrame" img="images/priseRDV.gif" />&nbsp;&nbsp;
-                    	<salon:bouton url="<%= \"_FicheTech.jsp?CD_CLI=\" + aCli.getCD_CLI() %>" target="ClientFrame" alt="Fiches techniques" img="images/imprFicTech.gif" />&nbsp;&nbsp; 
-                        <salon:bouton url="<%= \"ListeAbonnement.jsp?CD_CLI=\" + aCli.getCD_CLI() %>" target="ClientFrame" alt="Abonnements" img="images/Abonnement.gif" />&nbsp;&nbsp; 
+                    	<i18n:message key="ficCli.nouveauRDV" id="paramBouton1" />
+                    	<salon:bouton url="<%= \"_FicheRDV.jsp?Action=Creation&CD_CLI=\" + aCli.getCD_CLI() %>" 
+                                    alt="<%= paramBouton1 %>" 
+                                    target="ClientFrame" 
+                                    img="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/priseRDV.gif\" %>" />&nbsp;&nbsp;
+                    	<i18n:message key="ficCli.fichesTechs" id="paramBouton2" />
+                    	<salon:bouton url="<%= \"_FicheTech.jsp?CD_CLI=\" + aCli.getCD_CLI() %>" 
+                                    alt="<%= paramBouton2 %>" 
+                                    target="ClientFrame" 
+                                    img="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/imprFicTech.gif\" %>" />&nbsp;&nbsp; 
+                    	<i18n:message key="ficCli.abonnements" id="paramBouton3" />
+                        <salon:bouton url="<%= \"ListeAbonnement.jsp?CD_CLI=\" + aCli.getCD_CLI() %>" 
+                                    alt="<%= paramBouton3 %>" 
+                                    target="ClientFrame" 
+                                    img="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/Abonnement.gif\" %>" />&nbsp;&nbsp; 
                         <%
                         if (peutCreerFacture) { %>
-                            <salon:bouton url="<%= \"_FicheFact.jsp?FACT_HISTO=N&CD_CLI=\" + aCli.getCD_CLI() %>" target="ClientFrame" alt="Nouvelle facture" img="images/accueilClient.gif" imgOn="images/accueilClient2.gif"/>&nbsp;&nbsp;
+                    		<i18n:message key="ficCli.nouvelleFacture" id="paramBouton4" />
+                                <salon:bouton url="<%= \"_FicheFact.jsp?FACT_HISTO=N&CD_CLI=\" + aCli.getCD_CLI() %>" 
+                                            alt="<%= paramBouton4 %>" 
+                                            target="ClientFrame" 
+                                            img="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/accueilClient.gif\" %>" 
+                                            imgOn="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/accueilClient2.gif\" %>"/>&nbsp;&nbsp;
                         <%
                         } %>
-                        <salon:bouton url="<%= \"_FicheFact.jsp?FACT_HISTO=O&CD_CLI=\" + aCli.getCD_CLI() %>" target="ClientFrame" alt="Nouvel historique" img="images/nouvHisto.gif" />
+                        <i18n:message key="ficCli.nouvelHisto" id="paramBouton5" />
+                        <salon:bouton url="<%= \"_FicheFact.jsp?FACT_HISTO=O&CD_CLI=\" + aCli.getCD_CLI() %>" 
+                                    alt="<%= paramBouton5 %>" 
+                                    target="ClientFrame" 
+                                    img="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/nouvHisto.gif\" %>" />
                     </span>
                 </td>
             </tr>
@@ -226,26 +272,26 @@ function Init() {
                 <th>
 <%		       
                 if (peutCreerFacture) { %>
-                    <a href="addCli.srv?Vide=1&CD_CLI=<%=aCli.getCD_CLI()%>" title="Accueillir ce client" target=MenuFrame><img src=images/plus2.gif border="0" width="15" height="15"></a>
+					<a href="addCli.srv?Vide=1&CD_CLI=<%=aCli.getCD_CLI()%>" title="<i18n:message key="label.accueilClient" />" target=MenuFrame><img src=images/plus2.gif border="0" width="15" height="15"></a>
 <%
                 }
                 else { %>
-                    <img src=images/plusNon.gif border="0" width="15" height="15" alt="Action impossible : Pas de collaborateur présent"/>
+                    <img src=images/plusNon.gif border="0" width="15" height="15" alt="<i18n:message key="erreur.pasCollaborateurPresent" />"/>
 <%
                 }
 %>
                 </th>
-                <th>Date</th>
-                <th>Prestation : 
+                <th><i18n:message key="label.date" /></th>
+                <th><i18n:message key="label.prestation" /> : 
                     <salon:DBselection valeur="<%= CD_TYP_VENT %>" sql="select CD_TYP_VENT, LIB_TYP_VENT from TYP_VENT order by LIB_TYP_VENT">
                         <select name="CD_TYP_VENT" onChange="toutesPrest()">
-                            <option value="">( Toutes )</option>
+                            <option value=""><i18n:message key="label.toutes" /></option>
                             %%
                         </select>
                     </salon:DBselection>
                 </th>
-                <th>Collaborateur</th>
-                <th>Commentaire</th>
+                <th><i18n:message key="label.collaborateur" /></th>
+                <th><i18n:message key="label.commentaire" /></th>
             </tr>
 <%
         // Recupère la liste
@@ -270,11 +316,11 @@ function Init() {
                 // On autorise la duplication de la facture uniquement si on a un collab
 		       
                 if (peutCreerFacture) { %>
-                    <a href="addCli.srv?CD_CLI=<%=aCli.getCD_CLI()%>&CD_FACT=<%= aPrest.getCD_FACT()%>" title="Dupliquer sa facture" target=MenuFrame><img src=images/plus.gif border="0" width="15" height="15"></a>		      
+                    <a href="addCli.srv?CD_CLI=<%=aCli.getCD_CLI()%>&CD_FACT=<%= aPrest.getCD_FACT()%>" title="<i18n:message key="label.dupliquerFacture" />" target="MenuFrame"><img src="images/plus.gif" border="0" width="15" height="15"></a>		      
 <%
                 }
                 else { %>
-                    <img src=images/plusNon.gif border="0" width="15" height="15" alt="Action impossible : Pas de collaborateur présent"/>
+                    <img src="images/plusNon.gif" border="0" width="15" height="15" alt="<i18n:message key="erreur.pasCollaborateurPresent" />"/>
 <%
                 }
             }
@@ -306,7 +352,7 @@ function Init() {
                         <a href="javascript:SaisieCommentaire(<%= i %>, <%= aPrest.getCD_FACT() %>, <%= aPrest.getNUM_LIG_FACT() %>)">%%
 <%
             if (((Integer) request.getAttribute("Longueur")).intValue() == 0) { %>
-                        <img src="images/vide.gif" border="0" width="11" height="13" alt="Commentaire">
+                        <img src="images/vide.gif" border="0" width="11" height="13" alt="<i18n:message key="label.commentaire" />">
 <%
             } %>
                         </a>
@@ -324,17 +370,17 @@ function Init() {
             <table>
                 <tr>
                     <td valign="top">
-                        <span class="facultatif">Commentaire :</span>
+                        <span class="facultatif"><i18n:message key="label.commentaire" /> :</span>
                     </td>
                     <td>
                         <textarea name="COMM" cols="50" rows="4" align="middle">
                         </textarea>
                         <input type="hidden" name="CD_FACT">
                         <input type="hidden" name="NUM_LIG_FACT">
-                        <input type="hidden" name="Action" value="Commentaire">
+                        <input type="hidden" name="Action" value="<i18n:message key="label.commentaire" />">
                     </td>
                     <td valign="top">
-                        <a href="javascript:FinSaisieCommentaire()">Valider ce<br>commentaire</a>
+                        <a href="javascript:FinSaisieCommentaire()"><i18n:message key="label.validerCommentaire" /></a>
                     </td>
                 </tr>
             </table>
@@ -373,7 +419,7 @@ function Enregistrer()
 {
    // Verification des données obligatoires
    if (document.fiche.NOM.value == "") {
-      alert ("Le nom du client doit être saisi. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="ficCli.nomClientManquant" />");
       return;
    }
    document.fiche.submit();
@@ -389,7 +435,7 @@ function Nouveau()
 function Supprimer()
 {
     if ((document.fiche.CD_CLI.value != "0") && (document.fiche.CD_CLI.value != "")) {
-        if (confirm ("Cette suppression est définitive. Confirmez-vous cette action ?")) {
+        if (confirm ("<i18n:message key="message.suppressionDefinitiveConfirm" />")) {
             document.fiche.Action.value = "Suppression";
             document.fiche.submit();
         }
@@ -409,7 +455,7 @@ function RetourListe()
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideFicheCli.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideFicheCli.html");
 }
 
 </script>

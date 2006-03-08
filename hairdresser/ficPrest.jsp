@@ -1,3 +1,22 @@
+<%
+/*
+ * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
+%>
 <%@ page import="java.util.Vector" %>
 <%@ page import="com.increg.salon.bean.SalonSession,
 	       com.increg.salon.bean.PrestBean,
@@ -9,14 +28,16 @@
     }
 %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Fiche prestation</title>
+<title><i18n:message key="ficPrest.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
 <body class="donnees" onLoad="Init();document.fiche.CD_TYP_VENT.focus()">
-<%@ include file="include/commun.js" %>
+<%@ include file="include/commun.jsp" %>
 <script language="JavaScript">
 <!--
 <%
@@ -47,7 +68,7 @@ function Init() {
 }
 //-->
 </script>
-<h1><img src="images/titres/ficPrest.gif" alt=<salon:TimeStamp bean="<%= aPrest %>" />></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/ficPrest.gif" alt=<salon:TimeStamp bean="<%= aPrest %>" />></h1>
 <salon:message salonSession="<%= mySalon %>" />
 <form method="post" action="ficPrest.srv" name="fiche">
 	<p> 
@@ -55,7 +76,7 @@ function Init() {
 		  <input type="hidden" name="CD_PREST" value="%%" >
 	        </salon:valeur>
 		<input type="hidden" name="Action" value="<%=Action%>">
-		<span class="obligatoire">Type de prestation :</span> 
+		<span class="obligatoire"><i18n:message key="label.typePrest" /> :</span> 
 		<salon:DBselection valeur="<%= aPrest.getCD_TYP_VENT() %>" sql="select CD_TYP_VENT, LIB_TYP_VENT from TYP_VENT order by LIB_TYP_VENT">
 		  <select name="CD_TYP_VENT" onChange="Recharge()">
 		     %%
@@ -69,7 +90,7 @@ function Init() {
 					     CD_TYP_VENT;
 	        %>
 		<span id="CATEGORIE" style="position:absolute; visibility:visible">
-		<span class="obligatoire">Catégorie :</span> 
+		<span class="obligatoire"><i18n:message key="label.categorie" /> :</span> 
 		<salon:DBselection valeur="<%= aPrest.getCD_CATEG_PREST() %>" sql="select CD_CATEG_PREST, LIB_CATEG_PREST from CATEG_PREST order by LIB_CATEG_PREST">
 		  <select name="CD_CATEG_PREST">
 		     <option value=""></option>
@@ -78,7 +99,7 @@ function Init() {
 		</salon:DBselection>
 		</span>
 		<span id="MARQUE" style="position:absolute; visibility:visible">
-		<span class="obligatoire">Marque :</span> 
+		<span class="obligatoire"><i18n:message key="label.marque" /> :</span> 
 		<salon:DBselection valeur="<%= aPrest.getCD_MARQUE() %>" sql="select CD_MARQUE, LIB_MARQUE from MARQUE order by LIB_MARQUE">
 		  <select name="CD_MARQUE">
 		     <option value=""></option>
@@ -88,49 +109,50 @@ function Init() {
 		</span>
 	 </p>
 	 <p>
-		<span class="obligatoire">Libellé :</span> 
+		<span class="obligatoire"><i18n:message key="label.libelle" /> :</span> 
 		<salon:valeur valeurNulle="null" valeur="<%= aPrest.getLIB_PREST() %>" > 
 		<input type="text" name="LIB_PREST" value="%%" size="40">
 	        </salon:valeur>
-		<span class="obligatoire">Prix de vente unitaire TTC :</span> 
+		<span class="obligatoire"><i18n:message key="label.prixUnitaireTTC" /> :</span> 
 		<salon:valeur valeurNulle="null" valeur="<%= aPrest.getPRX_UNIT_TTC() %>" >
 		  <input type="text" name="PRX_UNIT_TTC" value="%%" class="Nombre" size="6">
 	        </salon:valeur>
 		<span class="obligatoire"><%= mySalon.getDevise().toString() %></span>
                 &nbsp;&nbsp;
-		<span class="obligatoire">Prestation périmée :</span> 
-                <salon:selection valeur='<%= aPrest.getINDIC_PERIM() %>' valeurs='<%= "N|O" %>' libelle="Non|Oui">
+		<span class="obligatoire"><i18n:message key="label.prestationPerime" /> :</span> 
+                <i18n:message key="valeur.nonOui" id="paramNonOui" />
+                <salon:selection valeur='<%= aPrest.getINDIC_PERIM() %>' valeurs='<%= "N|O" %>' libelle="<%= paramNonOui %>">
                     <select name="INDIC_PERIM">
                         %%
                     </select>
                 </salon:selection>
 	</p>
-    <p><span class="facultatif">Commentaire :</span> 
+    <p><span class="facultatif"><i18n:message key="label.commentaire" /> :</span> 
 	    <salon:valeur valeurNulle="null" valeur="<%= aPrest.getCOMM() %>" >
 		<textarea name="COMM" cols="40" rows="2">%%</textarea>
 	    </salon:valeur>
 	</p>
 	<span id="TPS" style="position:absolute; visibility:visible">
 		<p>
-			<span class="facultatif">Temps moyen :</span> 
+			<span class="facultatif"><i18n:message key="label.tpsMoyen" /> :</span> 
 			<salon:valeur valeurNulle="0" valeur="<%= aPrest.getTPS_PREST() %>" > 
 			  <input type="text" name="TPS_PREST" value="%%" size="5">
 	        </salon:valeur>
 	     </p>
 	     <p>
-	        <span class="important">Abonnement</span> :
+	        <span class="important"><i18n:message key="label.abonnement" /></span> :
 	     </p>
 	     <blockquote>
 			<p>
-				<span class="obligatoire">Prestation élémentaire d'un abonnement :</span> 
-                <salon:selection valeur='<%= aPrest.getINDIC_ABONNEMENT() %>' valeurs='<%= "N|O" %>' libelle="Non|Oui">
+				<span class="obligatoire"><i18n:message key="label.eltAbonnement" /> :</span> 
+                <salon:selection valeur='<%= aPrest.getINDIC_ABONNEMENT() %>' valeurs='<%= "N|O" %>' libelle="<%= paramNonOui %>">
                     <select name="INDIC_ABONNEMENT" onchange="switchAbonnement()">
                         %%
                     </select>
                 </salon:selection>
 			</p>
 		    <p><span id="ABON" style="position:relative; visibility:visible">
-				<span class="facultatif">Prestation élémentaire :</span> 
+				<span class="facultatif"><i18n:message key="label.prestationElt" /> :</span> 
 				<salon:DBselection valeur="<%= aPrest.getCD_PREST_ABONNEMENT() %>" sql='<%= "select CD_PREST, LIB_PREST from PREST where INDIC_ABONNEMENT = \'O\' and CD_TYP_VENT=" + CD_TYP_VENT + " order by LIB_PREST" %>'>
 				  <select name="CD_PREST_ABONNEMENT">
 				     <option value=""></option>
@@ -144,7 +166,7 @@ function Init() {
 	          	<%
 	            	}
 	          	%>
-				<span class="facultatif">Nombre de prestations :</span> 
+				<span class="facultatif"><i18n:message key="label.nbPrestation" /> :</span> 
 				<salon:valeur valeurNulle="0" valeur="<%= aPrest.getCPT_ABONNEMENT() %>" > 
 				  <input type="text" name="CPT_ABONNEMENT" value="%%" size="4">
 		        </salon:valeur>
@@ -153,7 +175,7 @@ function Init() {
 		</p>
 	</span>
 	<span id="ARTICLE" style="position:absolute; visibility:visible"><p>
-		<span class="obligatoire">Article stocké :</span>
+		<span class="obligatoire"><i18n:message key="label.articleStock" /> :</span>
 		<salon:DBselection valeur="<%= aPrest.getCD_ART() %>" sql="select CD_ART, LIB_ART from ART where CD_TYP_ART=1 order by LIB_ART">
 		  <select name="CD_ART">
 		     <option value=""></option>
@@ -242,7 +264,7 @@ function Enregistrer()
 	 || ((Partie == 1) && (document.fiche.CD_MARQUE.options[0].selected))
 	 || ((Partie == 1) && (document.fiche.CD_ART.options[0].selected))
 	 || ((Partie == 2) && (document.fiche.CD_CATEG_PREST.options[0].selected))) {
-      alert ("Les données obligatoires ne sont pas toutes saisies. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="ficPrest.donneesManquante" />");
       return;
    }
    document.fiche.submit();
@@ -266,7 +288,7 @@ function Dupliquer()
 	 || ((Partie == 1) && (document.fiche.CD_MARQUE.options[0].selected))
 	 || ((Partie == 1) && (document.fiche.CD_ART.options[0].selected))
 	 || ((Partie == 2) && (document.fiche.CD_CATEG_PREST.options[0].selected))) {
-      alert ("Les données obligatoires ne sont pas toutes saisies. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="ficPrest.donneesManquante" />");
       return;
    }
    document.fiche.Action.value = "Duplication";
@@ -286,7 +308,7 @@ function RetourListe()
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideFiche.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideFiche.html");
 }
 
 </script>

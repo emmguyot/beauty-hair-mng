@@ -1,3 +1,22 @@
+<%
+/*
+ * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
+%>
 <%@ page import="com.increg.salon.bean.SalonSession
 	       " %>
 <%
@@ -7,6 +26,8 @@
     }
 %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
 <%
@@ -15,12 +36,12 @@
    String Fichier = (String) request.getAttribute("Fichier");
    String Type = request.getParameter("Type");
 %>
-<title>Sauvegarde</title>
+<title><i18n:message key="ficSauv.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
 <body class="donnees" onLoad="document.fiche.Type.focus()">
-<%@ include file="include/commun.js" %>
+<%@ include file="include/commun.jsp" %>
 <script language="JavaScript">
 <!--
    var Action="<%=Action%>";
@@ -33,18 +54,19 @@ function Init() {
 }
 //-->
 </script>
-<h1><img src="images/titres/ficSauv.gif"></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/ficSauv.gif"></h1>
 <salon:message salonSession="<%= mySalon %>" />
 <form method="post" action="sauvegarde.srv" name="fiche">
 	<p> 
 		<input type="hidden" name="Action" value="Sauvegarde">
 		<input type="hidden" name="lock" value="">
-		<span class="obligatoire">Nom de la sauvegarde :</span> 
+		<span class="obligatoire"><i18n:message key="label.nomSauvegarde" /> :</span> 
 		<salon:valeur valeurNulle="null" valeur="<%= Fichier %>" >
 		  <input type="text" name="Fichier" value="%%" size=40>
 	        </salon:valeur>
-		<span class="obligatoire">Type de sauvegarde :</span> 
-		<salon:selection valeur="<%= Type %>" valeurs='<%= "D|M|I" %>' libelle="Disque dur (tous les jours)|Média amovible (une fois par semaine)|Internet (une fois par semaine)">
+		<span class="obligatoire"><i18n:message key="label.typeSauvegarde" /> :</span> 
+                <i18n:message key="valeur.typeSauvegarde" id="valeurType" />
+		<salon:selection valeur="<%= Type %>" valeurs='<%= "D|M|I" %>' libelle="<%= valeurType %>">
 		  <select name="Type">
 		     %%
 		  </select>
@@ -52,7 +74,7 @@ function Init() {
 	</p>
 </form>
 <span id="AttenteSpan" style="visibility: hidden">
-<p class="Warning"><img name="Attente" src="images/attente.gif" width="231" height="10" alt="Opération en cours..."></p>
+<p class="Warning"><img name="Attente" src="images/attente.gif" width="231" height="10" alt="<i18n:message key="message.patience" />"></p>
 </span>
 <salon:include file="include/salonNews.inc" />
 <script language="JavaScript">
@@ -64,7 +86,7 @@ function Valider()
     if (document.fiche.lock.value == "") {
         // Verification des données obligatoires
         if (document.fiche.Fichier.value == "") {
-            alert ("Le nom de la sauvegarde doit être saisi. La sauvegarde ne peut avoir lieu.");
+            alert ("<i18n:message key="ficSauv.nomManquant" />");
             return;
         }
         MM_showHideLayers('AttenteSpan','','show');
@@ -76,7 +98,7 @@ function Valider()
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideFicheRest.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideFicheRest.html");
 }
 
 </script>

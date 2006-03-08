@@ -1,4 +1,23 @@
-<%@ page import="java.util.Vector, java.math.BigDecimal,java.util.Date" %>
+<%
+/*
+ * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
+%>
+<%@ page import="java.util.Vector, java.math.BigDecimal,java.util.Calendar" %>
 <%@ page import="com.increg.salon.bean.SalonSession,
                 com.increg.salon.request.RecapVente,
 	        com.increg.salon.bean.TypVentBean
@@ -10,19 +29,21 @@
     }
 %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Récap des ventes</title>
+<title><i18n:message key="label.recapVentes" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
 <body class="donnees" onLoad="document.fiche.DT_DEBUT.focus()">
-<%@ include file="include/commun.js" %>
+<%@ include file="include/commun.jsp" %>
 <script language="JavaScript">
 <!--
 function Init() {
    <%
-   // Positionne les liens d'actions
+   // Positionne les liens d actions
    %>
    MM_showHideLayers('NOUVEAU?bottomFrame','','hide');
 }
@@ -30,26 +51,27 @@ function Init() {
 </script>
 <%
    // Récupération des paramètres
-   Date DT_DEBUT = (Date) request.getAttribute("DT_DEBUT");
-   Date DT_FIN = (Date) request.getAttribute("DT_FIN");
+   Calendar DT_DEBUT = (Calendar) request.getAttribute("DT_DEBUT");
+   Calendar DT_FIN = (Calendar) request.getAttribute("DT_FIN");
 %>
-<h1><img src="images/titres/lstRecapVentes.gif"></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstRecapVentes.gif"></h1>
 <form name="fiche" action="rechVente.srv" method="post">
 <p>
-Entre le :
-    <salon:date type="text" name="DT_DEBUT" valeurDate="<%= DT_DEBUT %>" valeurNulle="null" format="dd/MM/yyyy" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
-   et le : 
-    <salon:date type="text" name="DT_FIN" valeurDate="<%= DT_FIN %>" valeurNulle="null" format="dd/MM/yyyy" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
+<i18n:message key="label.entreLe" /> :
+<i18n:message key="format.dateSimpleDefaut" id="formatDate" />
+    <salon:date type="text" name="DT_DEBUT" valeurDate="<%= DT_DEBUT %>" valeurNulle="null" format="<%= formatDate %>" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
+<i18n:message key="label.etLe" /> : 
+    <salon:date type="text" name="DT_FIN" valeurDate="<%= DT_FIN %>" valeurNulle="null" format="<%= formatDate %>" calendrier="true" onchange="document.fiche.submit()">%%</salon:date>
 </p>
 </form>
 <hr>
 <table width="100%" border="1" >
 	<tr>
-		<th>Prestation</th>
-		<th>Quantité</th>
-		<th>HT</th>
-		<th>TVA</th>
-		<th>TTC</th>
+		<th><i18n:message key="label.prestation" /></th>
+		<th><i18n:message key="label.qte" /></th>
+		<th><i18n:message key="label.HT" /></th>
+		<th><i18n:message key="label.TVA" /></th>
+		<th><i18n:message key="label.TTC" /></th>
 	</tr>
 	<%
 	// Recupère la liste
@@ -84,7 +106,7 @@ Entre le :
 	%>
         <tfoot>
         <tr>
-            <td class="Total">Total</td>
+            <td class="Total"><i18n:message key="label.total" /></td>
             <td class="Nombre">&nbsp;</td>
             <td class="Nombre">
                 <salon:valeur valeur="<%= fullTotalHT %>" valeurNulle="null"> %% </salon:valeur>
@@ -98,7 +120,7 @@ Entre le :
         </tr>
         </tfoot>
 </table>
-Le calcul de ces chiffres comprend des arrondis : Les centimes sont donc donnés uniquement à titre indicatif.
+<i18n:message key="message.chiffresArrondis" />
 <salon:madeBy />
 <script language="JavaScript">
 <!--
@@ -106,7 +128,7 @@ Le calcul de ces chiffres comprend des arrondis : Les centimes sont donc donnés 
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideListeTVA.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideListeTVA.html");
 }
 
 //-->

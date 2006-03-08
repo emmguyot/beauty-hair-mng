@@ -1,3 +1,22 @@
+<%
+/*
+ * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
+%>
 <%@ page import="com.increg.salon.bean.SalonSession,
                 com.increg.salon.bean.CollabBean,
 	        com.increg.salon.bean.PointageBean
@@ -9,6 +28,8 @@
     }
 %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
 <%
@@ -16,7 +37,7 @@
    String Action = (String) request.getAttribute("Action");
    PointageBean aPointage = (PointageBean) request.getAttribute("PointageBean");
 %>
-<title>Fiche Pointage</title>
+<title><i18n:message key="ficPointage.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -26,7 +47,7 @@
    <% } else { %>
       document.fiche.DT_FIN.focus()
    <% } %> ">
-<%@ include file="include/commun.js" %>
+<%@ include file="include/commun.jsp" %>
 <script language="JavaScript">
 <!--
    var Action="<%=Action%>";
@@ -51,10 +72,10 @@ function Init() {
 }
 //-->
 </script>
-<h1><img src="images/titres/ficPointage.gif" alt=<salon:TimeStamp bean="<%= aPointage %>" />></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/ficPointage.gif" alt=<salon:TimeStamp bean="<%= aPointage %>" />></h1>
 <salon:message salonSession="<%= mySalon %>" />
 <form method="post" action="ficPointage.srv" name="fiche">
-	 <p><span class="obligatoire">Collaborateur :</span> 
+	 <p><span class="obligatoire"><i18n:message key="label.collaborateur" /> :</span> 
 	    <% if (Action.equals("Creation")) { %>
 		<salon:DBselection valeur="<%= aPointage.getCD_COLLAB() %>" sql="select CD_COLLAB, PRENOM from COLLAB order by PRENOM, NOM">
 		  <select name="CD_COLLAB">
@@ -73,23 +94,25 @@ function Init() {
 	    <% } %>
 		<input type="hidden" name="Action" value="<%=Action%>">
 	 </p>
-	 <p><span class="obligatoire">Début :</span> 
-       	<%
+	 <p><span class="obligatoire"><i18n:message key="label.debut" /> :</span> 
+            <i18n:message key="format.dateSimpleDefaut" id="formatDate" />
+            <i18n:message key="format.heureSimpleDefaut" id="formatHeure" />
+        <%
 		if (Action.equals("Creation")) { %>
-			<salon:date type="text" name="DT_DEBUT" valeurDate="<%= aPointage.getDT_DEBUT() %>" valeurNulle="null" format="dd/MM/yyyy" calendrier="true" onchange="synchroDates()">%%</salon:date>
-			<salon:date type="text" name="HR_DEBUT" valeurNulle="null" valeurDate="<%= aPointage.getDT_DEBUT() %>" format="HH:mm">%%</salon:date>
+			<salon:date type="text" name="DT_DEBUT" valeurDate="<%= aPointage.getDT_DEBUT() %>" valeurNulle="null" format="<%= formatDate %>" calendrier="true" onchange="synchroDates()">%%</salon:date>
+			<salon:date type="text" name="HR_DEBUT" valeurNulle="null" valeurDate="<%= aPointage.getDT_DEBUT() %>" format="<%= formatHeure %>">%%</salon:date>
        	<%
        	} 
 	  	else { %>
-            <salon:date type="readonly" name="DT_DEBUT" valeurDate="<%= aPointage.getDT_DEBUT() %>" valeurNulle="null" format="dd/MM/yyyy">%%</salon:date>
-            <salon:date type="readonly" name="HR_DEBUT" valeurNulle="null" valeurDate="<%= aPointage.getDT_DEBUT() %>" format="HH:mm:ss">%%</salon:date>
+            <salon:date type="readonly" name="DT_DEBUT" valeurDate="<%= aPointage.getDT_DEBUT() %>" valeurNulle="null" format="<%= formatDate %>">%%</salon:date>
+            <salon:date type="readonly" name="HR_DEBUT" valeurNulle="null" valeurDate="<%= aPointage.getDT_DEBUT() %>" format="<%= formatHeure %>">%%</salon:date>
        	<%
        	} %>
-	    <span class="facultatif">Fin :</span> 
-        <salon:date type="text" name="DT_FIN" valeurDate="<%= aPointage.getDT_FIN() %>" valeurNulle="null" format="dd/MM/yyyy" calendrier="true">%%</salon:date>
-        <salon:date type="text" name="HR_FIN" valeurDate="<%= aPointage.getDT_FIN() %>" valeurNulle="null" format="HH:mm">%%</salon:date>
+	    <span class="facultatif"><i18n:message key="label.fin" /> :</span> 
+        <salon:date type="text" name="DT_FIN" valeurDate="<%= aPointage.getDT_FIN() %>" valeurNulle="null" format="<%= formatDate %>" calendrier="true">%%</salon:date>
+        <salon:date type="text" name="HR_FIN" valeurDate="<%= aPointage.getDT_FIN() %>" valeurNulle="null" format="<%= formatHeure %>">%%</salon:date>
 	 </p>
-	 <p><span class="obligatoire">Type de pointage :</span> 
+	 <p><span class="obligatoire"><i18n:message key="label.typePointage" /> :</span> 
 		<salon:DBselection valeur="<%= aPointage.getCD_TYP_POINTAGE() %>" sql="select CD_TYP_POINTAGE, LIB_TYP_POINTAGE from TYP_POINTAGE order by LIB_TYP_POINTAGE">
 		  <select name="CD_TYP_POINTAGE">
 		     %%
@@ -97,7 +120,7 @@ function Init() {
 	        </salon:DBselection>
 	</p>
 	<p>
-	<span class="facultatif">Commentaire :</span> 
+	<span class="facultatif"><i18n:message key="label.commentaire" /> :</span> 
 	    <salon:valeur valeurNulle="null" valeur="<%= aPointage.getCOMM() %>" >
 		<textarea name="COMM" cols="40" rows="2">%%</textarea>
 	    </salon:valeur>
@@ -117,7 +140,7 @@ function Enregistrer()
 {
    // Verification des données obligatoires
    if ((document.fiche.DT_DEBUT.value == "") || (document.fiche.HR_DEBUT.value == "")) {
-      alert ("La date de début du pointage doit être saisie");
+      alert ("<i18n:message key="ficPointage.dateDebutManquant" />");
       return;
    }
    document.fiche.submit();
@@ -133,7 +156,7 @@ function Nouveau()
 function Supprimer()
 {
     if (document.fiche.DT_DEBUT.value != "") {
-        if (confirm ("Cette suppression est définitive. Confirmez-vous cette action ?")) {
+        if (confirm ("<i18n:message key="message.suppressionDefinitiveConfirm" />")) {
             document.fiche.Action.value = "Suppression";
             document.fiche.submit();
         }
@@ -143,7 +166,7 @@ function Supprimer()
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideFiche.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideFiche.html");
 }
 
 function RetourListe()

@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.SalonSession;
 import com.increg.salon.bean.TypVentBean;
@@ -68,7 +69,7 @@ public class FicTypVent extends ConnectedServlet {
                     aTypVent.setCD_TVA(CD_TVA);
 
                     aTypVent.create(myDBSession);
-                    mySalon.setMessage("Info", "Création effectuée.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.creationOk" + BasicSession.TAG_I18N);
                     request.setAttribute("Action", "Modification");
                 } catch (Exception e) {
                     mySalon.setMessage("Erreur", e.toString());
@@ -80,6 +81,9 @@ public class FicTypVent extends ConnectedServlet {
                 request.setAttribute("Action", "Modification");
 
                 aTypVent = TypVentBean.getTypVentBean(myDBSession, CD_TYP_VENT);
+                if (assertOrError((aTypVent != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
             } else if (Action.equals("Modification")) {
                 // Modification effective de la fiche
 
@@ -87,6 +91,9 @@ public class FicTypVent extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 aTypVent = TypVentBean.getTypVentBean(myDBSession, CD_TYP_VENT);
+                if (assertOrError((aTypVent != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 
                 aTypVent.setCD_TYP_VENT(CD_TYP_VENT);
                 aTypVent.setLIB_TYP_VENT(LIB_TYP_VENT);
@@ -96,7 +103,7 @@ public class FicTypVent extends ConnectedServlet {
                 try {
                     aTypVent.setCD_TVA(CD_TVA);
                     aTypVent.maj(myDBSession);
-                    mySalon.setMessage("Info", "Enregistrement effectué.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.enregistrementOk" + BasicSession.TAG_I18N);
                 } catch (Exception e) {
                     mySalon.setMessage("Erreur", e.toString());
                 }
@@ -109,10 +116,13 @@ public class FicTypVent extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 aTypVent = TypVentBean.getTypVentBean(myDBSession, CD_TYP_VENT);
+                if (assertOrError((aTypVent != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 
                 try {
                     aTypVent.delete(myDBSession);
-                    mySalon.setMessage("Info", "Suppression effectuée.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.suppressionOk" + BasicSession.TAG_I18N);
                     // Un bean vide
                     aTypVent = new TypVentBean();
                     request.setAttribute("Action", "Creation");
@@ -136,7 +146,7 @@ public class FicTypVent extends ConnectedServlet {
                     aTypVent.setCD_TVA(CD_TVA);
 
                     aTypVent.create(myDBSession);
-                    mySalon.setMessage("Info", "Duplication effectuée. Vous travaillez maintenant sur la copie.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.duplicationOk" + BasicSession.TAG_I18N);
                     request.setAttribute("Action", "Modification");
                 } catch (Exception e) {
                     mySalon.setMessage("Erreur", e.toString());

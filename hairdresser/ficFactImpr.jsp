@@ -1,3 +1,22 @@
+<%
+/*
+ * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
+%>
 <%@ page import="java.util.Vector,
 			java.util.Set,
 			java.util.Iterator,
@@ -21,14 +40,16 @@
     }
 %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Fiche Facture</title>
+<title><i18n:message key="ficFact.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
 <body class="corpsImpr" onLoad="Imprimer()">
-<%@ include file="include/commun.js" %>
+<%@ include file="include/commun.jsp" %>
 <%
    // Récupération des paramètres
    Vector listeEdition = (Vector) request.getAttribute("listeEdition");
@@ -57,7 +78,7 @@
 		     %%
 		  </salon:valeur><br>
 		  <salon:valeur valeurNulle="null" valeur="<%= mySoc.getTEL() %>" >
-		     Tél : %%
+		     <i18n:message key="label.tel" /> : %%
 		  </salon:valeur>
 	 </td>
 	 </tr>
@@ -66,26 +87,36 @@
 	 <%
 	 	CollabBean collab = CollabBean.getCollabBean(mySalon.getMyDBSession(), Integer.toString(aFact.getCD_COLLAB()));
 	 	if (collab.getCIVILITE().equals("M. ")) {
-	 %>
-	 		Coiffeur
-	 <%
+                    if (mySalon.getMySociete().isInstitut()) { %>
+	 		<i18n:message key="label.estheticien" />
+            <%
+                    }
+                    else {
+            %>
+	 		<i18n:message key="label.coiffeur" />
+	 <%         }
 	 	}
 	 	else {
-	 %>
-	 		Coiffeuse
-	 <%
+                    if (mySalon.getMySociete().isInstitut()) { %>
+	 		<i18n:message key="label.estheticienne" />
+            <%
+                    }
+                    else {
+            %>
+	 		<i18n:message key="label.coiffeuse" />
+	 <%         }
 	 	}
 	 %> : <%= collab.toString() %>
 	 </td>
-	 <td>Le :
+	 <td><i18n:message key="label.leDate" /> :
 		  <salon:valeur valeurNulle="null" valeur="<%= aFact.getDT_PREST() %>" >
 		     %%
 		  </salon:valeur>
 	 </td></tr>
 	 <tr>
-	 <td colspan="2">Client :
+	 <td colspan="2"><i18n:message key="label.client" /> :
 	 <%
-	       ClientBean aCli = ClientBean.getClientBean(mySalon.getMyDBSession(), Long.toString(aFact.getCD_CLI()));
+	       ClientBean aCli = ClientBean.getClientBean(mySalon.getMyDBSession(), Long.toString(aFact.getCD_CLI()), mySalon.getMessagesBundle());
 	 %>
 	       <%= aCli.toString() %>
 	 </td>
@@ -131,7 +162,7 @@
 	 <% if (((aFact.getREMISE_PRC() != null) && (aFact.getREMISE_PRC().compareTo(new BigDecimal(0)) == 1))
 		  || ((aFact.getREMISE_FIXE() != null) && (aFact.getREMISE_FIXE().compareTo(new BigDecimal(0)) == 1))) { %>
 	 <tr>
-	 <td>Total prestations : </td>
+	 <td><i18n:message key="ficFact.totalPrest" /> : </td>
 	 <td class="Nombre"><salon:valeur valeurNulle="null" valeur="<%= totPrest%>" >
 		  %%
 	       </salon:valeur>
@@ -142,7 +173,7 @@
 	 </tr>
 	 <% if ((aFact.getREMISE_PRC() != null) && (aFact.getREMISE_PRC().compareTo(new BigDecimal(0)) == 1)) { %>
 	 <tr>
-	 <td>Remise en % : </td>
+	 <td><i18n:message key="ficFact.remisePrc" /> : </td>
 	 <td class="Nombre">
 	       <% if (aFact.getCD_FACT() == 0) { 
 		  // Facture regroupée : Remise approximative %>
@@ -156,7 +187,7 @@
 	 <% } %>
 	 <% if ((aFact.getREMISE_FIXE() != null) && (aFact.getREMISE_FIXE().compareTo(new BigDecimal(0)) == 1)) { %>
 	 <tr>
-	 <td>Remise fixe : </td>
+	 <td><i18n:message key="ficFact.remiseFixe" /> : </td>
 	 <td class="Nombre"><salon:valeur valeurNulle="null" valeur="<%= aFact.getREMISE_FIXE() %>" >
 		  %%
 	       </salon:valeur>
@@ -168,7 +199,7 @@
 	 <% }
 	 } %>
 	 <tr>
-	 <td>Total à payer : </td>
+	 <td><i18n:message key="ficFact.totalPayer" /> : </td>
 	 <td class="Nombre"><salon:valeur valeurNulle="null" valeur="<%= aFact.getPRX_TOT_TTC() %>" >
 		  <span class="readonly">%%</span>
 	       </salon:valeur>
@@ -203,7 +234,7 @@
         
 	 %>
 		 <tr>
-		 <td><font size=-2>dont TVA <%= aTva.getTX_TVA() %>% : </font></td>
+		 <td><font size=-2><i18n:message key="ficFact.dontTVA" /> <%= aTva.getTX_TVA() %>% : </font></td>
 		 <td class="Nombre">
 	       <font size=-2>
 	       <salon:valeur valeurNulle="null" valeur="<%= aFact.getTVA(aTva) %>" > 
@@ -221,12 +252,12 @@
 	 }
 	 %>
 	 <tr>
-	 <td><font size=-2>Taxe et service 15% compris</font></td>
+	 <td><font size=-2><i18n:message key="ficFactImpr.taxeComprise" /></font></td>
 	 </tr>
 	 </table>
 	 <table width="100%">
 	 <tr>
-	 <td>Mode de paiement : 
+	 <td><i18n:message key="label.modePaiement" /> : 
 		     <salon:valeur valeur='<%= DonneeRefBean.getDonneeRefBean(mySalon.getMyDBSession(), "MOD_REGL", Integer.toString(aPaiement.getCD_MOD_REGL())).toString() %>' valeurNulle="null">
 			%%
 		     </salon:valeur>

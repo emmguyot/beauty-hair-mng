@@ -9,6 +9,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ResourceBundle;
 
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.ParamBean;
@@ -25,8 +26,8 @@ public class UpdateBeanV25 extends UpdateBeanV24 {
 	 * @param dbConnect .
 	 * @throws Exception .
 	 */
-	public UpdateBeanV25(DBSession dbConnect) throws Exception {
-		super(dbConnect);
+	public UpdateBeanV25(DBSession dbConnect, ResourceBundle rb) throws Exception {
+		super(dbConnect, rb);
 	}
 
     /**

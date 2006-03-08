@@ -50,7 +50,7 @@ public void performTask(
 
 			try {
 	            aTypMca.create(myDBSession);
-	            mySalon.setMessage("Info", "Création effectuée.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.creationOk" + BasicSession.TAG_I18N);
 	            request.setAttribute("Action", "Modification");
 			}
 			catch (Exception e) {
@@ -63,6 +63,9 @@ public void performTask(
 			request.setAttribute("Action", "Modification");
 
 			aTypMca = TypMcaBean.getTypMcaBean(myDBSession, CD_TYP_MCA);
+            if (assertOrError((aTypMca != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 		}
 		else if (Action.equals("Modification")) {
 			// Modification effective de la fiche
@@ -71,6 +74,9 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aTypMca = TypMcaBean.getTypMcaBean(myDBSession, CD_TYP_MCA);
+            if (assertOrError((aTypMca != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 
 			aTypMca.setCD_TYP_MCA(CD_TYP_MCA);
 			aTypMca.setLIB_TYP_MCA(LIB_TYP_MCA);
@@ -80,13 +86,13 @@ public void performTask(
                     aTypMca.setSENS_MCA(SENS_MCA);
                 }
                 else {
-                    mySalon.setMessage("Erreur", "Impossible de modifier le sens du mouvement car ce type de mouvement a déjà été utilisé");
+                    mySalon.setMessage("Erreur", BasicSession.TAG_I18N + "ficTypMvt.typeUtilise" + BasicSession.TAG_I18N);
                 }
             }
 
 			try {
 	            aTypMca.maj(myDBSession);
-	            mySalon.setMessage("Info", "Enregistrement effectué.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.enregistrementOk" + BasicSession.TAG_I18N);
 	            request.setAttribute("Action", "Modification");
 			}
 			catch (Exception e) {
@@ -101,10 +107,13 @@ public void performTask(
 			 * Création du bean et enregistrement
 			 */
 			aTypMca = TypMcaBean.getTypMcaBean(myDBSession, CD_TYP_MCA);
+            if (assertOrError((aTypMca != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+            	return;
+            }
 
 			try {
 	            aTypMca.delete(myDBSession);
-	            mySalon.setMessage("Info", "Suppression effectuée.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.suppressionOk" + BasicSession.TAG_I18N);
 	            // Un bean vide
 	            aTypMca = new TypMcaBean();
 	            request.setAttribute("Action", "Creation");
@@ -126,7 +135,7 @@ public void performTask(
 
 			try {
 	            aTypMca.create(myDBSession);
-	            mySalon.setMessage("Info", "Duplication effectuée. Vous travaillez maintenant sur la copie.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.duplicationOk" + BasicSession.TAG_I18N);
 	            request.setAttribute("Action", "Modification");
 			}
 			catch (Exception e) {

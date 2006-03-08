@@ -1,10 +1,33 @@
+/*
+ * Tag affichant le TimeStamp d'un Bean
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge>
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.tag;
 
+import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.*;
 import javax.servlet.jsp.tagext.*;
+
+import com.increg.commun.BasicSession;
+
 import java.io.*;
+import java.text.MessageFormat;
 /**
  * Tag Affichant les infos de date d'un Objet Bean
+ * Prérequis : Une session est créée (Salon), la locale est positionnée et un bundle contient le message
  * Creation date: (22/08/2001 22:00:08)
  * @author Emmanuel GUYOT <emmguyot@wanadoo.fr>
  */
@@ -31,12 +54,17 @@ public class TagTimeStamp extends TagSupport {
         JspWriter out = pageContext.getOut();
 
         try {
-            java.text.DateFormat formatDate = java.text.DateFormat.getDateTimeInstance(java.text.DateFormat.SHORT, java.text.DateFormat.MEDIUM);
-            String dtCreat = formatDate.format(bean.getDT_CREAT().getTime());
-            String dtModif = formatDate.format(bean.getDT_MODIF().getTime());
+	        HttpSession mySession = pageContext.getSession();
+			BasicSession myBasicSession = (BasicSession) mySession.getAttribute("SalonSession");
 
-            // Ecrit le début
-            out.println("\"Cr&eacute;&eacute; le " + dtCreat + "\n\rModifi&eacute; le " + dtModif + "\"");
+			// Ecrit le début
+			String messageTimeStamp = myBasicSession.getMessagesBundle().getString("message.timestamp");
+			MessageFormat msgFormat = new MessageFormat(messageTimeStamp);
+			msgFormat.setLocale(myBasicSession.getLangue());
+			
+            out.print("\"" + msgFormat.format(new Object[] {
+					bean.getDT_CREAT().getTime(), 
+					bean.getDT_MODIF().getTime()}) + "\"");
         } catch (IOException e) {
             System.out.println("doStartTag : " + e.toString());
         }

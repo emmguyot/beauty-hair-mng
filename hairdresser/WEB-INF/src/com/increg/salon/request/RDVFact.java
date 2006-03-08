@@ -7,6 +7,7 @@
 package com.increg.salon.request;
 
 import java.util.Calendar;
+import java.util.ResourceBundle;
 import java.util.SimpleTimeZone;
 
 import com.increg.commun.DBSession;
@@ -47,10 +48,11 @@ public class RDVFact implements Comparable {
      * Constructeur du couple
      * @param dbConnect Connexion base à utiliser
      * @param aRDV RDV initial du couple
+     * @param rb Messages à utiliser
      */
-    public RDVFact(DBSession dbConnect, RDVBean aRDV) {
+    public RDVFact(DBSession dbConnect, RDVBean aRDV, ResourceBundle rb) {
         rdv = aRDV;
-        client = ClientBean.getClientBean(dbConnect, Long.toString(rdv.getCD_CLI()));
+        client = ClientBean.getClientBean(dbConnect, Long.toString(rdv.getCD_CLI()), rb);
         collab = CollabBean.getCollabBean(dbConnect, Long.toString(rdv.getCD_COLLAB()));
         date = rdv.getDT_DEBUT();
     }
@@ -59,10 +61,11 @@ public class RDVFact implements Comparable {
      * Constructeur du couple
      * @param dbConnect Connexion base à utiliser
      * @param aFact Facture initiale du couple
+     * @param rb Messages à utiliser
      */
-    public RDVFact(DBSession dbConnect, FactBean aFact) {
+    public RDVFact(DBSession dbConnect, FactBean aFact, ResourceBundle rb) {
         fact = aFact;
-        client = ClientBean.getClientBean(dbConnect, Long.toString(fact.getCD_CLI()));
+        client = ClientBean.getClientBean(dbConnect, Long.toString(fact.getCD_CLI()), rb);
         collab = CollabBean.getCollabBean(dbConnect, Long.toString(fact.getCD_COLLAB()));
 
         // Reconstitution de la date : Jour de DT_PREST, Heure de DT Début

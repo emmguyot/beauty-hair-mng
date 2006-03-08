@@ -12,6 +12,7 @@ import java.util.TreeSet;
 
 import javax.servlet.http.HttpSession;
 
+import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.ParamBean;
 import com.increg.salon.bean.SalonSessionImpl;
@@ -91,7 +92,7 @@ public class MiseAJour extends ConnectedServlet {
                     }
                     if (aCon == null) {
                         // Connexion impossible
-                        throw (new Exception("Impossible de se connecter au serveur."));
+                        throw (new Exception(BasicSession.TAG_I18N + "message.serverKo" + BasicSession.TAG_I18N));
                     }
 
                     aCon.setUseCaches(false);
@@ -230,11 +231,11 @@ public class MiseAJour extends ConnectedServlet {
                         /**
                          * Messages dans les attributs car plus de bean session
                          */
-                        request.setAttribute("Erreur", "La mise à jour ne s'est pas bien déroulée.");
+                        request.setAttribute("Erreur", BasicSession.TAG_I18N + "miseAJour.erreur" + BasicSession.TAG_I18N);
                         //response.getWriter().println("<html><body><h1>Erreur durant la mise à jour.<br>Merci de prendre contact avec l'assistance InCrEG pour débloquer la situation.</h1></body></html>");
                     }
                     else {
-                        request.setAttribute("Info", "La mise à jour est terminée.");
+                        request.setAttribute("Info", BasicSession.TAG_I18N + "miseAJour.succes" + BasicSession.TAG_I18N);
                         // Informe du résultat
                         //response.getWriter().println("<html><body><h1>La mise à jour est terminée.<br>Vous devez arrêter le logiciel et le redémarrer pour que cette mise à jour soit prise en compte.</h1></body></html>");
                     }

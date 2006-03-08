@@ -1,8 +1,19 @@
 /*
- * Created on 14 avr. 2004
- *
- * To change the template for this generated file go to
- * Window>Preferences>Java>Code Generation>Code and Comments
+ * 
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
  */
 package com.increg.salon.bean.test;
 
@@ -11,6 +22,8 @@ import java.sql.ResultSet;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Iterator;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Vector;
 
 import com.increg.commun.DBSession;
@@ -36,6 +49,10 @@ public class FactBeanTest extends TestCase {
       *  Connexion à la base de donnée  
       */
     private DBSession aDBSession = new DBSession("config");
+    /**
+     * Messages localisés
+     */
+	private ResourceBundle msg = ResourceBundle.getBundle("messages");
 
     /**
      * Code client à utiliser
@@ -73,8 +90,8 @@ public class FactBeanTest extends TestCase {
      */
     public void testCalculTVARepartie1() throws Exception {
         
-        FactBean aFact = new FactBean();
-        PaiementBean aPaiement = new PaiementBean();
+        FactBean aFact = new FactBean(msg);
+        PaiementBean aPaiement = new PaiementBean(msg);
         try {
             DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
             Calendar dateJUnit = Calendar.getInstance();
@@ -86,7 +103,7 @@ public class FactBeanTest extends TestCase {
             aFact.setCD_CLI(CD_CLI);
             aFact.setCD_COLLAB(CD_COLLAB);
             aFact.setCD_TYP_VENT(1);
-            aFact.setDT_PREST(df.format(dateJUnit.getTime()));
+            aFact.setDT_PREST(df.format(dateJUnit.getTime()), Locale.getDefault());
             aFact.setFACT_HISTO("N");
             aFact.create(aDBSession);
 
@@ -110,6 +127,7 @@ public class FactBeanTest extends TestCase {
             /**
              * Ligne 2
              */
+            aLigne = new HistoPrestBean();
             aPrest = PrestBean.getPrestBean(aDBSession, Integer.toString(CD_PREST2));
             aLigne.setCD_FACT(aFact.getCD_FACT());
             aLigne.setCD_CLI(CD_CLI);
@@ -124,6 +142,7 @@ public class FactBeanTest extends TestCase {
             /**
              * Ligne 3
              */
+            aLigne = new HistoPrestBean();
             aPrest = PrestBean.getPrestBean(aDBSession, Integer.toString(CD_PREST3));
             aLigne.setCD_FACT(aFact.getCD_FACT());
             aLigne.setCD_CLI(CD_CLI);
@@ -185,6 +204,8 @@ public class FactBeanTest extends TestCase {
                 assertTrue(almostEquals(ht.multiply(txTva.divide(new BigDecimal(100), 4, BigDecimal.ROUND_HALF_UP)), tva));
             }
         } finally {
+        	// Attente pour éviter les duplicate keys
+        	Thread.sleep(1000);
             aFact.delete(aDBSession);
             aPaiement.delete(aDBSession);
         }
@@ -196,9 +217,35 @@ public class FactBeanTest extends TestCase {
      * @throws Exception .
      */
     public void testCalculTVARepartie2() throws Exception {
-    
+
         Vector listeTVA = FactBean.calculTVARepartie(aDBSession, "", "");
-    
+        
+        // Vérifications....
+        assertNotNull(listeTVA);
+        assertTrue(listeTVA.size() > 0);
+
+        boolean recalcul = false;
+        for (Iterator tvaIter = listeTVA.iterator(); tvaIter.hasNext();) {
+            TVA aTVA = (TVA) tvaIter.next();
+            recalcul |= (aTVA.getTotalHT() == null);
+            recalcul |= (aTVA.getTotal() == null);
+        }
+        
+        if (recalcul) {
+	    	// Recalcule les TVA (pour les vieilles bases)
+	        String sqlTVA = "select * from FACT where FACT_HISTO = 'N' and PRX_TOT_TTC <> 0";
+	        ResultSet rs = aDBSession.doRequest(sqlTVA);
+	        
+	        while (rs.next()) {
+	            FactBean aFact = new FactBean(rs, msg);
+	            
+	            aFact.calculTotaux(aDBSession);
+	        }
+	        rs.close();
+        }
+        
+        listeTVA = FactBean.calculTVARepartie(aDBSession, "", "");
+        
         // Vérifications....
         assertNotNull(listeTVA);
         assertTrue(listeTVA.size() > 0);
@@ -221,14 +268,14 @@ public class FactBeanTest extends TestCase {
         assertTrue(almostEquals(new BigDecimal(0), totTtc));
         assertTrue(almostEquals(new BigDecimal(0), totHt));
     
-        BigDecimal txTva = TvaBean.getTvaBean(aDBSession, "1").getTX_TVA();
         for (Iterator tvaIter = listeTVA.iterator(); tvaIter.hasNext();) {
             TVA aTVA = (TVA) tvaIter.next();
             BigDecimal tva = aTVA.getTotal();
             BigDecimal ht = aTVA.getTotalHT();
             BigDecimal ttc = aTVA.getTotalTTC();
             assertTrue(almostEquals(ht.add(tva), ttc));
-            assertTrue(almostEquals(ht.multiply(txTva.divide(new BigDecimal(100), 4, BigDecimal.ROUND_HALF_UP)), tva));
+            // Le test suivant n'est plus vrai : Du fait des arrondis, les écarts peuvent être importants
+            //assertTrue(almostEquals(ht.multiply(txTva.divide(new BigDecimal(100), 4, BigDecimal.ROUND_HALF_UP)), tva));
         }
     }
 

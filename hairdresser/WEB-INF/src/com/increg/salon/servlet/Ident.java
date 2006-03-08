@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.increg.commun.BasicSession;
 import com.increg.salon.bean.IdentBean;
 import com.increg.salon.bean.SalonSession;
 
@@ -85,8 +86,8 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
             catch (Exception e2) {
                 // Ignore : Il n'y a plus rien à faire
             }
-            return;
         }
+        return;
 	}
 
 	// Récupère le paramètre
@@ -98,17 +99,17 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
 	    if (aIdent.getETAT_CPT().equals(IdentBean.ETAT_ACTIF)) {
 			// Identification correcte : On sauvegarde et enchaine
 			mySalon.setMyIdent(aIdent);
-   			mySalon.setMessage ("Erreur", null);
+   			mySalon.setMessage ("Erreur", (String) null);
 	        getServletConfig().getServletContext().getRequestDispatcher("/main.srv").forward(request, response);
 	    }
 	    else {
-			mySalon.setMessage ("Erreur", "Ce compte est bloqué. Vous ne pouvez plus utiliser l'application. Si cela vous semble anormal, contacter le salon.");
+			mySalon.setMessage ("Erreur", BasicSession.TAG_I18N + "ident.compteBloque" + BasicSession.TAG_I18N);
 			// Retour au portail
 		    getServletConfig().getServletContext().getRequestDispatcher("/Portail.jsp").forward(request, response);
 	    }
 	}
 	catch (Exception e) {
-		mySalon.setMessage ("Erreur", "Votre mot de passe est erroné.");
+		mySalon.setMessage ("Erreur", BasicSession.TAG_I18N + "ident.motDePasseKo" + BasicSession.TAG_I18N);
 		try {
 			// Retour au portail
 		    if (getServletConfig().getServletContext().getRequestDispatcher("/Portail.jsp") == null) {

@@ -1,3 +1,22 @@
+<%
+/*
+ * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
+%>
 <%@ page import="java.util.Vector,
 	       java.util.List" %>
 <%@ page import="com.increg.salon.bean.SalonSession,
@@ -18,14 +37,16 @@
     }
 %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Fiche Facture</title>
+<title><i18n:message key="ficFact.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
 <body class="donnees" onLoad="Init();document.fiche.CD_COLLAB.focus()">
-<%@ include file="include/commun.js" %>
+<%@ include file="include/commun.jsp" %>
 <script language="JavaScript">
 <!--
 <%
@@ -63,7 +84,7 @@ function Init() {
 }
 //-->
 </script>
-<h1><img src="images/titres/ficFact.gif" alt=<salon:TimeStamp bean="<%= aFact %>" />></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/ficFact.gif" alt=<salon:TimeStamp bean="<%= aFact %>" />></h1>
 <salon:message salonSession="<%= mySalon %>" />
 
 <form method="post" action="ficFact.srv" name="fiche">
@@ -79,19 +100,20 @@ function Init() {
 
    <table width="100%"> 
       <tr>
-	 <td class="label"><span class="obligatoire">Client</span> : </td>
+	 <td class="label"><span class="obligatoire"><i18n:message key="label.client" /></span> : </td>
 	 <td> 
 	 <%
-	    ClientBean aCli = ClientBean.getClientBean(mySalon.getMyDBSession(), Long.toString(aFact.getCD_CLI()));
+	    ClientBean aCli = ClientBean.getClientBean(mySalon.getMyDBSession(), Long.toString(aFact.getCD_CLI()), mySalon.getMessagesBundle());
 	 %>
 	    <span class="readonly"><a href="_FicheCli.jsp?Action=Modification&CD_CLI=<%= aFact.getCD_CLI() %>" target="ClientFrame"><%= aCli.toString() %></a></span> 
 	 </td>
-	 <td class="label"><span class="facultatif">Date de la prestation</span> : </td>
+	 <td class="label"><span class="facultatif"><i18n:message key="label.dtPrest" /></span> : </td>
 	 <td>
-	    <salon:date type="text" name="DT_PREST" valeurDate="<%= aFact.getDT_PREST() %>" valeurNulle="null" format="dd/MM/yyyy" calendrier="true">%%</salon:date>
+            <i18n:message key="format.dateSimpleDefaut" id="formatSimple" />
+	    <salon:date type="text" name="DT_PREST" valeurDate="<%= aFact.getDT_PREST() %>" valeurNulle="null" format="<%= formatSimple %>" calendrier="true">%%</salon:date>
 	 </td>
       </tr><tr>
-	 <td class="label"><span class="obligatoire">Collaborateur</span> : </td>
+	 <td class="label"><span class="obligatoire"><i18n:message key="label.collaborateur" /></span> : </td>
 	 <td>
 	    <salon:selection valeur="<%= aFact.getCD_COLLAB() %>" valeurs="<%= collabs %>">
 	       <select name="CD_COLLAB">
@@ -100,7 +122,7 @@ function Init() {
 	    </salon:selection>
 	 </td>
 	 
-	 <td class="label"><span class="obligatoire">Type de prestation</span> : </td>
+	 <td class="label"><span class="obligatoire"><i18n:message key="label.typePrest" /></span> : </td>
 	 <td>
 	    <salon:DBselection valeur="<%= aFact.getCD_TYP_VENT() %>" sql='<%= "select CD_TYP_VENT, LIB_TYP_VENT from TYP_VENT where CIVILITE like \'%" + aCli.getCIVILITE() + "%\' or CIVILITE is null order by LIB_TYP_VENT" %>' >
 	       <select name="CD_TYP_VENT">
@@ -116,7 +138,7 @@ function Init() {
 					     CD_TYP_VENT_SELECT;
 	    %>
 	 </td>
-	 <td class="label"><span class="obligatoire">Historique</span> : </td>
+	 <td class="label"><span class="obligatoire"><i18n:message key="label.historique" /></span> : </td>
 	 <td>
 	    <salon:valeur valeurNulle="null" valeur="<%= aFact.getFACT_HISTO() %>" >
 	       <input type="hidden" name="FACT_HISTO" value="%%">
@@ -129,14 +151,14 @@ function Init() {
    <hr>
    <table border="0" cellspacing="0" width="100%">
       <tr> 
-	 <th><span class="obligatoire">Type de<br>prestation</span></th>
-	 <th><span class="obligatoire">Catégorie<br>ou Marque</span></th>
-	 <th><span class="obligatoire">Prestation</span></th>
-	 <th><span class="obligatoire">Collaborateur</span></th>
-	 <th><span class="obligatoire">Qté</span></th>
-	 <th><span class="obligatoire">Prix<br>Unitaire</span></th>
-	 <th><span class="facultatif">C</span></th>
-	 <th><span class="facultatif">Sat</span></th>
+	 <th><span class="obligatoire"><i18n:message key="ficFact.tabTypePrest" /></span></th>
+	 <th><span class="obligatoire"><i18n:message key="ficFact.tabCategMarque" /></span></th>
+	 <th><span class="obligatoire"><i18n:message key="label.prestation" /></span></th>
+	 <th><span class="obligatoire"><i18n:message key="label.collaborateur" /></span></th>
+	 <th><span class="obligatoire"><i18n:message key="ficFact.tabQte" /></span></th>
+	 <th><span class="obligatoire"><i18n:message key="ficFact.tabPrxUnit" /></span></th>
+	 <th><span class="facultatif"><i18n:message key="ficFact.tabComment" /></span></th>
+	 <th><span class="facultatif"><i18n:message key="ficFact.satisfication" /></span></th>
 	 <th>&nbsp;</th>
       </tr>
       <% 
@@ -228,7 +250,7 @@ function Init() {
 		  <salon:valeur valeurNulle="null" valeur="<%= aPrest.getCOMM() %>" > 
 		     <input type="hidden" name="COMM<%= i %>" value="%%">
 		  </salon:valeur>
-		  <a href="javascript:SaisieCommentaire(<%= i %>)"><img src=<%= (((Integer) request.getAttribute("Longueur")).intValue() > 0) ? "images/plein.gif" : "images/vide.gif"%> border="0" width="11" height="13" alt="Commentaire"></a>
+		  <a href="javascript:SaisieCommentaire(<%= i %>)"><img src=<%= (((Integer) request.getAttribute("Longueur")).intValue() > 0) ? "images/plein.gif" : "images/vide.gif"%> border="0" width="11" height="13" alt="<i18n:message key="label.commentaire" />"></a>
 		</td>
 		<td class="tabDonnees">
 		  <salon:selection valeur="<%= aPrest.getNIV_SATISF() %>" valeurs='<%= "|1|2|3|4|5" %>'>
@@ -239,7 +261,7 @@ function Init() {
 		</td>
 		<td class="tabDonnees">
 		  <% if (aFact.getCD_PAIEMENT() == 0) { %>
-		  <a href="javascript:SupprimerLigne(<%= i %>)"><img src=images/moins.gif width="15" height="15" border="0" alt="Supprimer la ligne"></a>
+		  <a href="javascript:SupprimerLigne(<%= i %>)"><img src=images/moins.gif width="15" height="15" border="0" alt="<i18n:message key="label.supprimerLigne" />"></a>
 		  <% } %>
 		</td>
 		</tr>
@@ -328,7 +350,7 @@ function Init() {
 		  <salon:valeur valeurNulle="null" valeur="<%= COMM_SELECT %>" > 
 		     <input type="hidden" name="COMM<%= i %>" value="%%">
 		  </salon:valeur>
-		  <a href="javascript:SaisieCommentaire(<%= i %>)"><img src=<%= (((Integer) request.getAttribute("Longueur")).intValue() > 0) ? "images/plein.gif" : "images/vide.gif"%> border="0" width="11" height="13" alt="Commentaire"></a>
+		  <a href="javascript:SaisieCommentaire(<%= i %>)"><img src=<%= (((Integer) request.getAttribute("Longueur")).intValue() > 0) ? "images/plein.gif" : "images/vide.gif"%> border="0" width="11" height="13" alt="<i18n:message key="label.commentaire" />"></a>
 		</td>
 		<td class="tabDonnees">
 		  <salon:selection valeur="<%= 0 %>" valeurs='<%= "|1|2|3|4|5" %>'>
@@ -338,7 +360,7 @@ function Init() {
 		  </salon:selection>
 		</td>
 	       <td class="tabDonnees">
-		  <a href="javascript:AjouterLigne(<%= i %>)"><img src=images/plus.gif width="15" height="15" border="0" alt="Ajouter la ligne"></a>
+		  <a href="javascript:AjouterLigne(<%= i %>)"><img src=images/plus.gif width="15" height="15" border="0" alt="<i18n:message key="label.ajouterLigne" />"></a>
 	       </td>
 	       </tr>
 	       <% } %>
@@ -346,12 +368,12 @@ function Init() {
 	<hr>
 	<table width="100%">
 	<tr>
-	<td class="label"><span class="obligatoire">Total prestations</span> : </td>
+	<td class="label"><span class="obligatoire"><i18n:message key="ficFact.totalPrest" /></span> : </td>
 	<td><salon:valeur valeurNulle="null" valeur="<%= totPrest%>" >
 	       <span class="readonly">%% <%= mySalon.getDevise().toString() %></span>
 	    </salon:valeur>
 	</td>
-	<td class="label"><span class="facultatif">Remise en %</span> : </td>
+	<td class="label"><span class="facultatif"><i18n:message key="ficFact.remisePrc" /></span> : </td>
 	<td>
 	    <% if (aFact.getCD_PAIEMENT() == 0) { %>
 	    <salon:valeur valeurNulle="null" valeur="<%= aFact.getREMISE_PRC() %>" >
@@ -365,7 +387,7 @@ function Init() {
 	    </salon:valeur>
 	    <% } %>
         </td>
-	<td class="label"><span class="facultatif">Remise fixe</span> : </td>
+	<td class="label"><span class="facultatif"><i18n:message key="ficFact.remiseFixe" /></span> : </td>
 	<td>
 	    <% if (aFact.getCD_PAIEMENT() == 0) { %>
 	    <salon:valeur valeurNulle="null" valeur="<%= aFact.getREMISE_FIXE() %>" >
@@ -382,7 +404,7 @@ function Init() {
         </td>
 	</tr>
 	<tr>
-	<td class="label"><h2><span class="obligatoire">Total à payer</span> : </h2></td>
+	<td class="label"><h2><span class="obligatoire"><i18n:message key="ficFact.totalPayer" /></span> : </h2></td>
 	<td><h2><salon:valeur valeurNulle="null" valeur="<%= aFact.getPRX_TOT_TTC() %>" >
 	       <span class="readonly">%% <%= mySalon.getDevise().toString() %></span>
 	    </salon:valeur>
@@ -398,7 +420,7 @@ function Init() {
                 } // for 
                 %>
         </h2></td>
-	<td class="label"><span class="obligatoire">dont TVA</span> : </td>
+	<td class="label"><span class="obligatoire"><i18n:message key="ficFact.dontTVA" /></span> : </td>
 	<td class="tabDonneesGauche">
 	    <salon:valeur valeurNulle="null" valeur="<%= aFact.getTVA() %>" > 
 	       <span class="readonly">%% <%= mySalon.getDevise().toString() %></span>
@@ -409,7 +431,7 @@ function Init() {
 	<span ID="PAIEMENT" style="position:absolute; visibility:visible">
 	<table width="100%">
 	<tr>
-	<td class="label"><span class="obligatoire">Mode de paiement</span> : </td>
+	<td class="label"><span class="obligatoire"><i18n:message key="label.modePaiement" /></span> : </td>
 	<td>
 	    <salon:valeur valeurNulle="0" valeur="<%= aPaiement.getCD_PAIEMENT() %>" >
 	       <input type="hidden" name="CD_PAIEMENT" value="%%" >
@@ -434,23 +456,23 @@ function Init() {
                 </salon:DBselection> 
             <% } 
 	       if (nbFact == 0) { %>
-                    <a href="_FichePaiement.jsp" target="ClientFrame">Paiements regroupés</a> 
+                    <a href="_FichePaiement.jsp" target="ClientFrame"><i18n:message key="ficFact.paiementRegroupe" /></a> 
             <% }
 	       else if (nbFact > 1) { %>
-                    <a href="_FichePaiement.jsp?Action=Modification&CD_PAIEMENT=<%= aPaiement.getCD_PAIEMENT() %>" target="ClientFrame">Paiements regroupés</a> 
+                    <a href="_FichePaiement.jsp?Action=Modification&CD_PAIEMENT=<%= aPaiement.getCD_PAIEMENT() %>" target="ClientFrame"><i18n:message key="ficFact.paiementRegroupe" /></a> 
             <% } 
                else { 
                     // 1 mode de règlement 
                     ModReglBean aModRegl = ModReglBean.getModReglBean(mySalon.getMyDBSession(), Integer.toString(aPaiement.getCD_MOD_REGL()));
                     if (aModRegl.getIMP_CHEQUE().equals("O")) { %>
-                        <a href="ficChqImpr.jsp?montant=<%= aFact.getPRX_TOT_TTC() %>" target="_blank">Impression du chèque</a>
+                        <a href="ficChqImpr.jsp?montant=<%= aFact.getPRX_TOT_TTC() %>" target="_blank"><i18n:message key="ficFact.impressionCheque" /></a>
                  <% } else if (aModRegl.getRENDU_MONNAIE().equals("O")) {%>                
-                        <a href="javascript:calculRendu(<%= aFact.getPRX_TOT_TTC() %>)">Rendu de monnaie</a>
+                        <a href="javascript:calculRendu(<%= aFact.getPRX_TOT_TTC() %>)"><i18n:message key="ficFact.renduMonnaie" /></a>
                  <% }
 
               } %>
         </td>
-	<td class="label"><span class="obligatoire">Date de paiement</span> : </td>
+	<td class="label"><span class="obligatoire"><i18n:message key="ficFact.dtPaiement" /></span> : </td>
 	<td width="100">
             <salon:valeur valeurNulle="null" valeur="<%= aPaiement.getDT_PAIEMENT() %>" > 
                 <input type="hidden" name="DT_PAIEMENT" value="%%">
@@ -468,7 +490,7 @@ function Init() {
    <table>
    <tr>
    <td valign="top">
-      <span class="facultatif">Commentaire :</span>
+      <span class="facultatif"><i18n:message key="label.commentaire" /> :</span>
    </td>
    <td>
       <textarea name="Comm" cols="50" rows="4" align="middle">
@@ -476,7 +498,7 @@ function Init() {
       <input type="hidden" name="Num">
    </td>
    <td valign="top">
-      <a href="javascript:FinSaisieCommentaire()">Valider ce<br>commentaire</a>
+      <a href="javascript:FinSaisieCommentaire()"><i18n:message key="label.validerCommentaire" /></a>
    </td>
    </tr>
    </table>
@@ -533,11 +555,11 @@ function ControleEnreg ()
 {
    // Verification des données obligatoires
    if (document.fiche.DT_PREST.value == "") {
-      alert ("La date de prestation doit être saisie. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="ficFact.datePrestManquant" />");
       return false;
    }
    if (parseInt(document.fiche.REMISE_PRC.value) >= 100) {
-      alert ("Le pourcentage de remise est trop important. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="ficFact.prcTropGros" />");
       return false;
    }
    return true;
@@ -602,7 +624,7 @@ function Enregistrer()
 function Supprimer()
 {
     if ((document.fiche.CD_FACT.value != "0") && (document.fiche.CD_FACT.value != "")) {
-        if (confirm ("Cette suppression est définitive. Confirmez-vous cette action ?")) {
+        if (confirm ("<i18n:message key="message.suppressionDefinitiveConfirm" />")) {
             document.fiche.Action.value = "Suppression";
             document.fiche.submit();
         }
@@ -614,7 +636,7 @@ function Imprimer()
 {
    // Verification des données obligatoires
    if ((document.fiche.DT_PAIEMENT.value == "") || (document.fiche.CD_MOD_REGL.selected == 1)) {
-      alert ("La facture doit être réglée pour pouvoir l'imprimer.");
+      alert ("<i18n:message key="ficFact.reglementPourImp" />");
       return;
    }
    document.fiche.Action.value = "Impression";
@@ -627,7 +649,7 @@ function Imprimer()
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideFicheFact.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideFicheFact.html");
 }
 
 //Ouverture du calcul de rendu

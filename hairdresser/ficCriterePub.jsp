@@ -1,3 +1,22 @@
+<%
+/*
+ * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
+%>
 <%@ page import="com.increg.salon.bean.SalonSession,
 	       com.increg.salon.bean.CriterePubBean" %>
 <%
@@ -7,14 +26,16 @@
     }
 %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Fiche Critères de Publipostage</title>
+<title><i18n:message key="ficCriterePub.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
 <body class="donnees" onLoad="Init();document.fiche.LIB_CRITERE_PUB.focus()">
-<%@ include file="include/commun.js" %>
+<%@ include file="include/commun.jsp" %>
 <script language="JavaScript">
 <!--
 <%
@@ -45,7 +66,7 @@ function Init() {
 }
 //-->
 </script>
-<h1><img src="images/titres/ficPub.gif" alt=<salon:TimeStamp bean="<%= aCriterePub %>" />></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/ficPub.gif" alt=<salon:TimeStamp bean="<%= aCriterePub %>" />></h1>
 <salon:message salonSession="<%= mySalon %>" />
 <form method="post" action="ficCriterePub.srv" name="fiche">
 	<p> 
@@ -53,13 +74,13 @@ function Init() {
 		  <input type="hidden" name="CD_CRITERE_PUB" value="%%" >
 	        </salon:valeur>
 		<input type="hidden" name="Action" value="<%=Action%>">
-		<span class="obligatoire">Libellé :</span> 
+		<span class="obligatoire"><i18n:message key="label.libelle" /> :</span> 
 		<salon:valeur valeurNulle="null" valeur="<%= aCriterePub.getLIB_CRITERE_PUB() %>" >
 		  <input type="text" name="LIB_CRITERE_PUB" value="%%" size=80>
 	        </salon:valeur>
        </p>
 	 <p>
-	        <span class="obligatoire">Clause :</span> 
+	        <span class="obligatoire"><i18n:message key="label.clause" /> :</span> 
 	        <salon:valeur valeurNulle="null" valeur="<%= aCriterePub.getCLAUSE() %>" >
 		  <textarea name="CLAUSE" rows="5" cols="80">%%</textarea>
 	        </salon:valeur>
@@ -82,7 +103,7 @@ function Enregistrer()
 {
    // Verification des données obligatoires
    if ((document.fiche.LIB_CRITERE_PUB.value == "") || (document.fiche.CLAUSE.value == "")) {
-      alert ("Le libellé du critère et la clause doivent être saisis. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="ficCriterePub.libelleClauseManquant" />");
       return;
    }
    if ((document.fiche.Action.value != "Creation") && (document.fiche.Action.value != "Modification")) {
@@ -95,7 +116,7 @@ function Enregistrer()
 function Supprimer()
 {
     if ((document.fiche.CD_CRITERE_PUB.value != "0") && (document.fiche.CD_CRITERE_PUB.value != "")) {
-        if (confirm ("Cette suppression est définitive. Confirmez-vous cette action ?")) {
+        if (confirm ("<i18n:message key="message.suppressionDefinitiveConfirm" />")) {
             document.fiche.Action.value = "Suppression";
             document.fiche.submit();
         }
@@ -117,7 +138,7 @@ function RetourListe()
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideFiche.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideFiche.html");
 }
 
 </script>

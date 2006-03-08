@@ -1,14 +1,37 @@
+/*
+ * Fiche article avec les mouvements de stock
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.servlet;
 
 import java.sql.ResultSet;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.TimeZone;
 import java.util.Vector;
 
 import javax.servlet.http.HttpSession;
 
+import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.ArtBean;
 import com.increg.salon.bean.MvtStkBean;
 import com.increg.salon.bean.SalonSession;
+import com.increg.util.SimpleDateFormatEG;
 /**
  * Fiche article avec mouvements
  * Creation date: (22/09/2001 19:15:33)
@@ -61,6 +84,8 @@ public class FicArt_Mvt extends ConnectedServlet {
         HttpSession mySession = request.getSession(false);
         SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
         DBSession myDBSession = mySalon.getMyDBSession();
+        DateFormat formatDate = new SimpleDateFormat(mySalon.getMessagesBundle().getString("format.dateDefaut"));
+        DateFormat formatDateTZ = new SimpleDateFormatEG(mySalon.getMessagesBundle().getString("format.dateDefaut"));
 
         ArtBean aArt = null;
 
@@ -69,7 +94,7 @@ public class FicArt_Mvt extends ConnectedServlet {
                 // Première phase de création
                 request.setAttribute("Action", "Creation");
                 // Un bean vide
-                aArt = new ArtBean();
+                aArt = new ArtBean(mySalon.getMessagesBundle());
             }
             else if (Action.equals("Creation")) {
                 // Crée réellement l'article
@@ -77,7 +102,7 @@ public class FicArt_Mvt extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                aArt = new ArtBean();
+                aArt = new ArtBean(mySalon.getMessagesBundle());
                 aArt.setCD_ART(CD_ART);
                 aArt.setCD_CATEG_ART(CD_CATEG_ART);
                 aArt.setCD_TYP_ART(CD_TYP_ART);
@@ -93,11 +118,11 @@ public class FicArt_Mvt extends ConnectedServlet {
                 try {
                     aArt.create(myDBSession);
 
-                    mySalon.setMessage("Info", "Création effectuée.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.creationOk" + BasicSession.TAG_I18N);
                     if (CD_TYP_ART.equals("1")) {
                         // Création automatique de la prestation
                         aArt.creationPrestation(myDBSession);
-                        mySalon.setMessage("Info", "Création effectuée. La prestation associée a également été créée.");
+                        mySalon.setMessage("Info", BasicSession.TAG_I18N + "ficArt" + BasicSession.TAG_I18N);
                     }
                     request.setAttribute("Action", "Modification");
                 }
@@ -110,7 +135,10 @@ public class FicArt_Mvt extends ConnectedServlet {
                 // Affichage de la fiche en modification
                 request.setAttribute("Action", "Modification");
 
-                aArt = ArtBean.getArtBean(myDBSession, CD_ART);
+                aArt = ArtBean.getArtBean(myDBSession, CD_ART, mySalon.getMessagesBundle());
+                if (assertOrError((aArt != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
             }
             else if (
                 (Action != null)
@@ -136,11 +164,14 @@ public class FicArt_Mvt extends ConnectedServlet {
                  */
                 if ((CD_ART == null) || (CD_ART.length() == 0) || (CD_ART.equals("0"))) {
                     // On est en création : le Bean est créé de zero
-                    aArt = new ArtBean();
+                    aArt = new ArtBean(mySalon.getMessagesBundle());
                 }
                 else {
                     // Recharge à partir de la base
-                    aArt = ArtBean.getArtBean(myDBSession, CD_ART);
+                    aArt = ArtBean.getArtBean(myDBSession, CD_ART, mySalon.getMessagesBundle());
+                    if (assertOrError((aArt != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                    	return;
+                    }
                 }
 
                 aArt.setCD_ART(CD_ART);
@@ -161,7 +192,7 @@ public class FicArt_Mvt extends ConnectedServlet {
                         if (CD_TYP_ART.equals(Integer.toString(ArtBean.TYP_ART_VENT_DETAIL))) {
                             // Création automatique de la prestation
                             aArt.creationPrestation(myDBSession);
-                            mySalon.setMessage("Info", "Création effectuée. La prestation associée a également été créée.");
+                            mySalon.setMessage("Info", BasicSession.TAG_I18N + "ficArt.creationOk" + BasicSession.TAG_I18N);
                         }
                     }
                     else {
@@ -175,9 +206,11 @@ public class FicArt_Mvt extends ConnectedServlet {
                     // Cas particulier de l'ajout d'une ligne
                     if (Action.equals("AjoutLigne")) {
                         // C'est une nouvelle ligne
-                        MvtStkBean aMvt = new MvtStkBean();
+                        MvtStkBean aMvt = new MvtStkBean(mySalon.getMessagesBundle());
                         aMvt.setCD_ART(aArt.getCD_ART());
-                        aMvt.setDT_MVT(tab_DT_MVT);
+                        Calendar dtMvt = Calendar.getInstance();
+                        dtMvt.setTime(formatDate.parse(tab_DT_MVT));
+                        aMvt.setDT_MVT(dtMvt);
                         aMvt.setCD_TYP_MVT(tab_CD_TYP_MVT);
                         aMvt.setQTE(tab_QTE);
                         aMvt.setVAL_MVT_HT(tab_VAL_MVT_HT);
@@ -185,19 +218,22 @@ public class FicArt_Mvt extends ConnectedServlet {
                         aMvt.setVAL_STK_AVANT(aArt.getVAL_STK_HT());
                         aMvt.create(myDBSession);
                         // Recharge l'article pour être à jour
-                        aArt = ArtBean.getArtBean(myDBSession, Long.toString(aArt.getCD_ART()));
+                        aArt = ArtBean.getArtBean(myDBSession, Long.toString(aArt.getCD_ART()), mySalon.getMessagesBundle());
                     }
                     else if (Action.equals("SuppressionLigne")) {
-                        MvtStkBean aMvt = MvtStkBean.getMvtStkBean(myDBSession, Long.toString(aArt.getCD_ART()), tab_DT_MVT_LAST, tab_CD_FACT_LAST);
+                    	Calendar dtMvt = Calendar.getInstance();
+                    	dtMvt.setTime(formatDateTZ.parse(tab_DT_MVT_LAST));
+                    	dtMvt.setTimeZone(formatDateTZ.getTimeZone());
+                        MvtStkBean aMvt = MvtStkBean.getMvtStkBean(myDBSession, Long.toString(aArt.getCD_ART()), dtMvt, tab_CD_FACT_LAST, mySalon.getLangue(), mySalon.getMessagesBundle());
 
                         if (aMvt != null) {
                             aMvt.delete(myDBSession);
                             // Recharge l'article pour être à jour
-                            aArt = ArtBean.getArtBean(myDBSession, Long.toString(aArt.getCD_ART()));
+                            aArt = ArtBean.getArtBean(myDBSession, Long.toString(aArt.getCD_ART()), mySalon.getMessagesBundle());
                         }
                     }
 
-                    mySalon.setMessage("Info", "Enregistrement effectué.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.enregistrementOk" + BasicSession.TAG_I18N);
                     request.setAttribute("Action", "Modification");
                 }
                 catch (Exception e) {
@@ -211,7 +247,7 @@ public class FicArt_Mvt extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                aArt = new ArtBean();
+                aArt = new ArtBean(mySalon.getMessagesBundle());
 
                 aArt.setLIB_ART(LIB_ART);
                 aArt.setCD_CATEG_ART(CD_CATEG_ART);
@@ -232,7 +268,7 @@ public class FicArt_Mvt extends ConnectedServlet {
                         aArt.creationPrestation(myDBSession);
                     }
 
-                    mySalon.setMessage("Info", "Duplication effectuée. Vous travaillez maintenant sur la copie.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.duplicationOk" + BasicSession.TAG_I18N);
                     request.setAttribute("Action", "Modification");
                 }
                 catch (Exception e) {
@@ -246,14 +282,17 @@ public class FicArt_Mvt extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                aArt = ArtBean.getArtBean(myDBSession, CD_ART);
+                aArt = ArtBean.getArtBean(myDBSession, CD_ART, mySalon.getMessagesBundle());
+                if (assertOrError((aArt != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 
                 try {
                     // Suppression des lignes Fournisseurs en même temps
                     aArt.delete(myDBSession);
-                    mySalon.setMessage("Info", "Suppression effectuée.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.suppressionOk" + BasicSession.TAG_I18N);
                     // Un bean vide
-                    aArt = new ArtBean();
+                    aArt = new ArtBean(mySalon.getMessagesBundle());
                     request.setAttribute("Action", "Creation");
                 }
                 catch (Exception e) {
@@ -293,7 +332,7 @@ public class FicArt_Mvt extends ConnectedServlet {
                         /**
                          * Création du bean de consultation
                          */
-                        MvtStkBean aMvt = new MvtStkBean(aRS);
+                        MvtStkBean aMvt = new MvtStkBean(aRS, mySalon.getMessagesBundle());
                         listeMvt.add(aMvt);
                         vide = false;
                     }

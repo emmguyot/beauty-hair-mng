@@ -42,6 +42,7 @@
     <attribute>
        <name>format</name>
        <required>false</required>
+       <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
        <name>timezone</name>
@@ -53,6 +54,10 @@
     </attribute>
     <attribute>
        <name>includeHTML</name>
+       <required>false</required>
+    </attribute>
+    <attribute>
+       <name>url</name>
        <required>false</required>
     </attribute>
   </tag>       
@@ -261,6 +266,7 @@
     <attribute>
         <name>format</name>
         <required>false</required>
+        <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
         <name>timezone</name>
@@ -290,17 +296,17 @@
     <attribute>
        <name>img</name>
        <required>true</required>
-       <rtexprvalue>false</rtexprvalue>
+       <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
        <name>imgOn</name>
        <required>false</required>
-       <rtexprvalue>false</rtexprvalue>
+       <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
        <name>alt</name>
        <required>true</required>
-       <rtexprvalue>false</rtexprvalue>
+       <rtexprvalue>true</rtexprvalue>
     </attribute>
     <attribute>
        <name>url</name>

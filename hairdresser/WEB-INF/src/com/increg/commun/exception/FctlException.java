@@ -6,11 +6,17 @@ package com.increg.commun.exception;
  * @author Emmanuel GUYOT <emmguyot@wanadoo.fr>
  */
 public class FctlException extends Exception {
+	/**
+	 * Paramètre du message pour substitution
+	 */
+	protected Object[] paramMessage;
+	
     /**
      * FctlException constructor comment.
      */
     public FctlException() {
         super();
+		paramMessage = null;
     }
     /**
      * FctlException constructor comment.
@@ -18,5 +24,22 @@ public class FctlException extends Exception {
      */
     public FctlException(String s) {
         super(s);
+		paramMessage = null;
     }
+
+	/**
+     * FctlException constructor comment.
+     * @param s java.lang.String
+     * @param params paramètre à utiliser dans le message
+     */
+    public FctlException(String s, Object[] params) {
+        super(s);
+		paramMessage = params;
+    }
+	/**
+	 * @return Returns the paramMessage.
+	 */
+	public Object[] getParamMessage() {
+		return paramMessage;
+	}
 }

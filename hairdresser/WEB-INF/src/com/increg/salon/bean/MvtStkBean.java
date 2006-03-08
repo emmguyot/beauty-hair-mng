@@ -1,11 +1,34 @@
+/*
+ * Bean de gestion d'un mouvement de stock
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.bean;
 
-import java.sql.*;
-import java.util.*;
-import java.math.*;
-import com.increg.commun.*;
+import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import java.util.Vector;
+
+import com.increg.commun.BasicSession;
+import com.increg.commun.DBSession;
+import com.increg.commun.TimeStampBean;
 import com.increg.commun.exception.FctlException;
-import com.increg.util.*;
 
 /**
  * Mouvement de stock
@@ -56,16 +79,18 @@ public class MvtStkBean extends TimeStampBean {
 
     /**
      * FactBean constructor comment.
+     * @param rb Messages localisés
      */
-    public MvtStkBean() {
-        super();
+    public MvtStkBean(ResourceBundle rb) {
+        super(rb);
     }
     /**
      * MvtStkBean constructor comment.
      * @param rs java.sql.ResultSet
+     * @param rb Messages localisés
      */
-    public MvtStkBean(ResultSet rs) {
-        super(rs);
+    public MvtStkBean(ResultSet rs, ResourceBundle rb) {
+        super(rs, rb);
         try {
             CD_ART = rs.getLong("CD_ART");
         }
@@ -156,7 +181,7 @@ public class MvtStkBean extends TimeStampBean {
      */
     public MvtStkBean(DBSession dbConnect, String CD_ART) {
         super();
-        ArtBean aArt = ArtBean.getArtBean(dbConnect, CD_ART);
+        ArtBean aArt = ArtBean.getArtBean(dbConnect, CD_ART, message);
         setCD_ART(CD_ART);
         setSTK_AVANT(aArt.getQTE_STK());
         setVAL_STK_AVANT(aArt.getVAL_STK_HT());
@@ -169,8 +194,6 @@ public class MvtStkBean extends TimeStampBean {
      * @see com.increg.salon.bean.TimeStampBean
      */
     public void create(DBSession dbConnect) throws SQLException, com.increg.commun.exception.FctlException {
-
-        com.increg.util.SimpleDateFormatEG formatDate = new SimpleDateFormatEG("dd/MM/yyyy HH:mm:ss");
 
         StringBuffer req = new StringBuffer("insert into MVT_STK ");
         StringBuffer colonne = new StringBuffer("(");
@@ -190,7 +213,7 @@ public class MvtStkBean extends TimeStampBean {
 
         if (DT_MVT != null) {
             colonne.append("DT_MVT,");
-            valeur.append(DBSession.quoteWith(formatDate.formatEG(DT_MVT.getTime()), '\''));
+            valeur.append(DBSession.quoteWith(dbConnect.formatDateTimeAvecTZ(DT_MVT), '\''));
             valeur.append(",");
         }
 
@@ -238,13 +261,13 @@ public class MvtStkBean extends TimeStampBean {
 
         if (DT_CREAT != null) {
             colonne.append("DT_CREAT,");
-            valeur.append(DBSession.quoteWith(formatDate.formatEG(DT_CREAT.getTime()), '\''));
+            valeur.append(DBSession.quoteWith(dbConnect.formatDateTimeAvecTZ(DT_CREAT), '\''));
             valeur.append(",");
         }
 
         if (DT_MODIF != null) {
             colonne.append("DT_MODIF,");
-            valeur.append(DBSession.quoteWith(formatDate.formatEG(DT_MODIF.getTime()), '\''));
+            valeur.append(DBSession.quoteWith(dbConnect.formatDateTimeAvecTZ(DT_MODIF), '\''));
             valeur.append(",");
         }
 
@@ -273,7 +296,7 @@ public class MvtStkBean extends TimeStampBean {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Création non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.creationKo" + BasicSession.TAG_I18N));
         }
 
         // Fin de la transaction
@@ -284,10 +307,8 @@ public class MvtStkBean extends TimeStampBean {
      */
     public void delete(DBSession dbConnect) throws SQLException, com.increg.commun.exception.FctlException {
 
-        com.increg.util.SimpleDateFormatEG formatDate = new SimpleDateFormatEG("dd/MM/yyyy HH:mm:ss");
-
         StringBuffer req = new StringBuffer("delete from MVT_STK ");
-        StringBuffer where = new StringBuffer(" where CD_ART=" + CD_ART + " and DT_MVT=" + DBSession.quoteWith(formatDate.formatEG(DT_MVT.getTime()), '\''));
+        StringBuffer where = new StringBuffer(" where CD_ART=" + CD_ART + " and DT_MVT=" + DBSession.quoteWith(dbConnect.formatDateTimeAvecTZ(DT_MVT), '\''));
         if (CD_FACT == 0) {
             where.append(" and CD_FACT is null");
         }
@@ -307,7 +328,7 @@ public class MvtStkBean extends TimeStampBean {
         while (aRS.next()) {
             java.util.Date lastDT_MVT = aRS.getTimestamp(1);
             if (lastDT_MVT.compareTo(DT_MVT.getTime()) != 0) {
-                throw (new FctlException("Vous ne pouvez pas supprimer ce mouvement. Supprimez d'abord les plus récents."));
+                throw (new FctlException(BasicSession.TAG_I18N + "mvtStkBean.deleteKo" + BasicSession.TAG_I18N));
             }
         }
         aRS.close();
@@ -322,7 +343,7 @@ public class MvtStkBean extends TimeStampBean {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Suppression non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.suppressionOk" + BasicSession.TAG_I18N));
         }
 
         // Inverse la mise à jour de l'article
@@ -356,7 +377,7 @@ public class MvtStkBean extends TimeStampBean {
      */
     public void maj(DBSession dbConnect) throws com.increg.commun.exception.FctlException {
 
-        throw (new com.increg.commun.exception.FctlException("Mise à jour interdite"));
+        throw (new com.increg.commun.exception.FctlException(BasicSession.TAG_I18N + "mvtStkBean.noUpdate" + BasicSession.TAG_I18N));
     }
 
     /**
@@ -428,10 +449,17 @@ public class MvtStkBean extends TimeStampBean {
      * @param CD_ART java.lang.String
      * @param DT_MVT Date du mouvement
      * @param CD_FACT Facture concernée
+     * @param aLocale Configuration pour parser la date
+     * @throws Exception Si le format est incorrect
+     * @param rb Messages localisés
      * @return Mouvement correspondant à la clé
      */
-    public static MvtStkBean getMvtStkBean(DBSession dbConnect, String CD_ART, String DT_MVT, String CD_FACT) {
-        String reqSQL = "select * from MVT_STK where CD_ART=" + CD_ART + " and DT_MVT='" + DT_MVT + "'";
+    public static MvtStkBean getMvtStkBean(DBSession dbConnect, String CD_ART, Calendar DT_MVT, String CD_FACT, Locale aLocale, ResourceBundle rb) throws Exception {
+
+        // Passage en GMT +0
+        String DT_MVTstr = dbConnect.formatDateTimeAvecTZ(DT_MVT);
+        
+    	String reqSQL = "select * from MVT_STK where CD_ART=" + CD_ART + " and DT_MVT='" + DT_MVTstr + "'";
         if ((CD_FACT == null) || (CD_FACT.equals("")) || (CD_FACT.equals("0"))) {
             reqSQL = reqSQL + " and CD_FACT is null";
         }
@@ -445,7 +473,7 @@ public class MvtStkBean extends TimeStampBean {
             ResultSet aRS = dbConnect.doRequest(reqSQL);
 
             while (aRS.next()) {
-                res = new MvtStkBean(aRS);
+                res = new MvtStkBean(aRS, rb);
             }
             aRS.close();
         }
@@ -459,9 +487,10 @@ public class MvtStkBean extends TimeStampBean {
      * Creation date: 3 nov. 2002
      * @param dbConnect com.increg.salon.bean.DBSession
      * @param CD_CMD_FOURN N° de commande fournisseur
+     * @param rb Messages localisés
      * @return liste des Mouvements correspondant à la commande
      */
-    public static Vector getMvtStkBeanFromCmd(DBSession dbConnect, String CD_CMD_FOURN) {
+    public static Vector getMvtStkBeanFromCmd(DBSession dbConnect, String CD_CMD_FOURN, ResourceBundle rb) {
         String reqSQL = "select * from MVT_STK where CD_CMD_FOURN=" + CD_CMD_FOURN + " order by DT_MVT";
         Vector lstMvt = new Vector();
 
@@ -470,7 +499,7 @@ public class MvtStkBean extends TimeStampBean {
             ResultSet aRS = dbConnect.doRequest(reqSQL);
 
             while (aRS.next()) {
-                MvtStkBean res = new MvtStkBean(aRS);
+                MvtStkBean res = new MvtStkBean(aRS, rb);
                 lstMvt.add(res);
             }
             aRS.close();
@@ -524,7 +553,7 @@ public class MvtStkBean extends TimeStampBean {
      */
     protected void majStk(DBSession dbConnect, BigDecimal qte, boolean undo) throws SQLException, FctlException {
 
-        ArtBean aArt = ArtBean.getArtBean(dbConnect, Long.toString(CD_ART));
+        ArtBean aArt = ArtBean.getArtBean(dbConnect, Long.toString(CD_ART), message);
         if (!undo) {
             // Tiens compte du sens du mouvement
             TypMvtBean myTypMvt = TypMvtBean.getTypMvtBean(dbConnect, Integer.toString(CD_TYP_MVT));
@@ -602,11 +631,11 @@ public class MvtStkBean extends TimeStampBean {
         
         int nbEnreg = -1;
         
-        com.increg.util.SimpleDateFormatEG formatDate = new SimpleDateFormatEG("dd/MM/yyyy HH:mm:ss");
-
         String reqSQL[] = new String[1];
-         
-        reqSQL[0] = "delete from MVT_STK where DT_MVT < " + DBSession.quoteWith(formatDate.format(dateLimite), '\'');
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(dateLimite);
+        
+        reqSQL[0] = "delete from MVT_STK where DT_MVT < " + DBSession.quoteWith(dbConnect.getFormatDateTimeSansTZ().format(dateLimite), '\'');
         
         dbConnect.setDansTransactions(true);
 
@@ -618,7 +647,7 @@ public class MvtStkBean extends TimeStampBean {
         catch (Exception e) {
             System.out.println("Erreur dans Purge des mouvements de stock : " + e.toString());
             dbConnect.cleanTransaction();
-            throw new FctlException("Erreur à la purge des mouvements de stock.");
+            throw new FctlException(BasicSession.TAG_I18N + "mvtStkBean.purgeKo" + BasicSession.TAG_I18N);
         }
         
         // Fin de cette transaction
@@ -673,21 +702,22 @@ public class MvtStkBean extends TimeStampBean {
      * Insert the method's description here.
      * Creation date: (16/09/2001 19:31:27)
      * @param newDT_MVT String
+     * @param aLocale Configuration pour parser la date
      * @exception Exception en cas d'erreur de format de date
      */
-    public void setDT_MVT(String newDT_MVT) throws Exception {
+    public void setDT_MVT(String newDT_MVT, Locale aLocale) throws Exception {
 
         if ((newDT_MVT != null) && (newDT_MVT.length() != 0)) {
             DT_MVT = Calendar.getInstance();
 
-            java.text.DateFormat formatDate = java.text.DateFormat.getDateTimeInstance(java.text.DateFormat.SHORT, java.text.DateFormat.MEDIUM);
+            java.text.DateFormat formatDate = java.text.DateFormat.getDateTimeInstance(java.text.DateFormat.SHORT, java.text.DateFormat.MEDIUM, aLocale);
             try {
                 DT_MVT.setTime(formatDate.parse(newDT_MVT));
             }
             catch (Exception e) {
                 System.out.println("Erreur de conversion : " + e.toString());
                 DT_MVT = null;
-                throw (new Exception("Erreur de conversion de la date du mouvement"));
+                throw (new Exception(BasicSession.TAG_I18N + "mvtStkBean.formatDateMvt" + BasicSession.TAG_I18N));
             }
         }
         else {
@@ -810,7 +840,7 @@ public class MvtStkBean extends TimeStampBean {
                 ResultSet rs = dbConnect.doRequest(reqSQL);
                 if (!rs.next()) {
                     // Il n'y en a pas : Reset du flag Mixte
-                    ArtBean aArt = ArtBean.getArtBean(dbConnect, Long.toString(CD_ART));
+                    ArtBean aArt = ArtBean.getArtBean(dbConnect, Long.toString(CD_ART), message);
                     aArt.setINDIC_MIXTE("N");
                     aArt.maj(dbConnect);
                 }
@@ -818,7 +848,7 @@ public class MvtStkBean extends TimeStampBean {
             }
             else {
                 // Passe l'article à mixte
-                ArtBean aArt = ArtBean.getArtBean(dbConnect, Long.toString(CD_ART));
+                ArtBean aArt = ArtBean.getArtBean(dbConnect, Long.toString(CD_ART), message);
                 if (!aArt.getINDIC_MIXTE().equals("O")) {
                     aArt.setINDIC_MIXTE("O");
                     aArt.maj(dbConnect);

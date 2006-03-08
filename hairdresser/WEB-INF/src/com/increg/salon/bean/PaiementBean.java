@@ -1,19 +1,41 @@
+/*
+ * Gestion d'un paiement (d'une ou plusieurs factures)
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
+
 package com.increg.salon.bean;
 
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.MessageFormat;
 import java.util.Calendar;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.Vector;
 
+import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.TimeStampBean;
 import com.increg.commun.exception.FctlException;
 import com.increg.util.SimpleDateFormatEG;
 
 /**
- * Gestion d'un paiement (d'une ou plusieurs factures) Creation date:
- * (17/08/2001 20:08:57)
+ * Gestion d'un paiement (d'une ou plusieurs factures)
+ * Creation date: (17/08/2001 20:08:57)
  * 
  * @author Emmanuel GUYOT <emmguyot@wanadoo.fr>
  */
@@ -50,19 +72,20 @@ public class PaiementBean extends TimeStampBean {
 
     /**
      * PaiementBean constructor comment.
+     * @param rb Messages à utiliser
      */
-    public PaiementBean() {
-        super();
+    public PaiementBean(ResourceBundle rb) {
+        super(rb);
     }
 
     /**
      * PaiementBean constructor comment.
      * 
-     * @param rs
-     *            java.sql.ResultSet
+     * @param rs java.sql.ResultSet
+     * @param rb Messages à utiliser
      */
-    public PaiementBean(ResultSet rs) {
-        super(rs);
+    public PaiementBean(ResultSet rs, ResourceBundle rb) {
+        super(rs, rb);
         try {
             CD_PAIEMENT = rs.getLong("CD_PAIEMENT");
         } catch (SQLException e) {
@@ -243,7 +266,7 @@ public class PaiementBean extends TimeStampBean {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Création non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.creationKo" + BasicSession.TAG_I18N));
         }
     }
 
@@ -275,7 +298,7 @@ public class PaiementBean extends TimeStampBean {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Suppression non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.suppressionKo" + BasicSession.TAG_I18N));
         }
 
         // Fin de la transaction
@@ -328,16 +351,26 @@ public class PaiementBean extends TimeStampBean {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Suppression non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.suppressionKo" + BasicSession.TAG_I18N));
         }
 
-        // Mise à jour des soldes de caisse à partir de la date min
-        MvtCaisseBean aMvt = MvtCaisseBean.getLastMvtCaisseBean(dbConnect,
-                Integer.toString(CD_MOD_REGL), formatDate.formatEG(dateMin
-                        .getTime()));
-        MvtCaisseBean.checkAndFix(dbConnect, Integer.toString(CD_MOD_REGL),
-                formatDate.formatEG(aMvt.getDT_MVT().getTime()));
-
+        try {
+	        // Mise à jour des soldes de caisse à partir de la date min
+	        MvtCaisseBean aMvt = MvtCaisseBean.getLastMvtCaisseBean(dbConnect,
+	                Integer.toString(CD_MOD_REGL), formatDate.formatEG(dateMin
+	                        .getTime()), Locale.FRENCH);
+	        MvtCaisseBean.checkAndFix(dbConnect, Integer.toString(CD_MOD_REGL),
+	                formatDate.formatEG(aMvt.getDT_MVT().getTime()), Locale.FRENCH);
+        }
+        catch (SQLException e) {
+        	// Propage l'exception
+			throw e;
+		}
+        catch (Exception e) {
+			// Problème de conversion de la date
+        	System.out.println("Erreur de conversion de la date");
+        	e.printStackTrace();
+		}
         // Fin de la transaction
         dbConnect.endTransaction();
 
@@ -393,14 +426,12 @@ public class PaiementBean extends TimeStampBean {
      * Création d'un Bean Facture à partir de sa clé Creation date: (18/08/2001
      * 17:05:45)
      * 
-     * @param dbConnect
-     *            com.increg.salon.bean.DBSession
-     * @param CD_PAIEMENT
-     *            java.lang.String
+     * @param dbConnect com.increg.salon.bean.DBSession
+     * @param CD_PAIEMENT java.lang.String
+     * @param rb Messages à utiliser
      * @return Paiement correspondant au code
      */
-    public static PaiementBean getPaiementBean(DBSession dbConnect,
-            String CD_PAIEMENT) {
+    public static PaiementBean getPaiementBean(DBSession dbConnect, String CD_PAIEMENT, ResourceBundle rb) {
         String reqSQL = "select * from PAIEMENT where CD_PAIEMENT="
                 + CD_PAIEMENT;
         PaiementBean res = null;
@@ -410,7 +441,7 @@ public class PaiementBean extends TimeStampBean {
             ResultSet aRS = dbConnect.doRequest(reqSQL);
 
             while (aRS.next()) {
-                res = new PaiementBean(aRS);
+                res = new PaiementBean(aRS, rb);
             }
             aRS.close();
         } catch (Exception e) {
@@ -536,7 +567,7 @@ public class PaiementBean extends TimeStampBean {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Mise à jour non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.enregistrementKo" + BasicSession.TAG_I18N));
         }
 
         // Fin de la transaction
@@ -598,28 +629,26 @@ public class PaiementBean extends TimeStampBean {
     }
 
     /**
-     * Insert the method's description here. Creation date: (17/08/2001
-     * 21:27:59)
+     * Insert the method's description here. 
+     * Creation date: (17/08/2001 21:27:59)
      * 
-     * @param newDT_PAIEMENT
-     *            String
-     * @throws Exception
-     *             Format de date erroné
+     * @param newDT_PAIEMENT String
+     * @param aLocale locale à utiliser pour le format de la date 
+     * @throws Exception Format de date erroné
      */
-    public void setDT_PAIEMENT(String newDT_PAIEMENT) throws Exception {
+    public void setDT_PAIEMENT(String newDT_PAIEMENT, Locale aLocale) throws Exception {
 
         if ((newDT_PAIEMENT != null) && (newDT_PAIEMENT.length() != 0)) {
             DT_PAIEMENT = Calendar.getInstance();
 
             java.text.DateFormat formatDate = java.text.DateFormat
-                    .getDateInstance(java.text.DateFormat.SHORT);
+                    .getDateInstance(java.text.DateFormat.SHORT, aLocale);
             try {
                 DT_PAIEMENT.setTime(formatDate.parse(newDT_PAIEMENT));
             } catch (Exception e) {
                 System.out.println("Erreur de conversion : " + e.toString());
                 DT_PAIEMENT = null;
-                throw (new Exception(
-                        "Erreur de conversion de la date de paiement"));
+                throw (new Exception(BasicSession.TAG_I18N + "paiementBean.formatDatePaiement" + BasicSession.TAG_I18N));
             }
         } else {
             DT_PAIEMENT = null;
@@ -691,7 +720,7 @@ public class PaiementBean extends TimeStampBean {
             ResultSet aRS = dbConnect.doRequest(reqSQL);
 
             while (aRS.next()) {
-                lignes.add(new FactBean(aRS));
+                lignes.add(new FactBean(aRS, message));
             }
             aRS.close();
         } catch (Exception e) {
@@ -776,8 +805,7 @@ public class PaiementBean extends TimeStampBean {
                 CaisseBean aCaisse = CaisseBean.getCaisseBean(dbConnect,
                         Integer.toString(CD_MOD_REGL_INIT));
                 if (aCaisse == null) {
-                    throw new FctlException(
-                            "Erreur les caisses sont mal initialisées");
+                    throw new FctlException(BasicSession.TAG_I18N + "paiementBean.caissesKo" + BasicSession.TAG_I18N);
                 }
                 MvtCaisseBean aMvt = new MvtCaisseBean();
 
@@ -801,8 +829,7 @@ public class PaiementBean extends TimeStampBean {
                 CaisseBean aCaisse = CaisseBean.getCaisseBean(dbConnect,
                         Integer.toString(CD_MOD_REGL));
                 if (aCaisse == null) {
-                    throw new FctlException(
-                            "Erreur les caisses sont mal initialisées");
+                    throw new FctlException(BasicSession.TAG_I18N + "paiementBean.caissesKo" + BasicSession.TAG_I18N);
                 }
 
                 if (mvtCree && (CD_MOD_REGL == CD_MOD_REGL_INIT)) {
@@ -825,12 +852,15 @@ public class PaiementBean extends TimeStampBean {
                     if (i > 0) {
                         Comm = Comm + "\n";
                     }
-                    Comm = Comm
-                            + "Facture de "
-                            + ClientBean.getClientBean(
-                                    dbConnect,
-                                    Long.toString(((FactBean) lstFact.get(i))
-                                            .getCD_CLI())).toString();
+					String msg = MessageFormat.format(message.getString("paiementBean.factureDe"), 
+									new Object[] {
+										ClientBean.getClientBean(
+													dbConnect,
+													Long.toString(((FactBean) lstFact.get(i))
+															.getCD_CLI()), 
+													message).toString()
+									});
+                    Comm = Comm + msg;
                 }
                 aMvt.setCOMM(Comm);
                 aMvt.setDT_MVT(Calendar.getInstance());
@@ -883,7 +913,7 @@ public class PaiementBean extends TimeStampBean {
             System.out.println("Erreur dans Purge des paiements : "
                     + e.toString());
             dbConnect.cleanTransaction();
-            throw new FctlException("Erreur à la purge des paiements.");
+            throw new FctlException(BasicSession.TAG_I18N + "paiementBean.purgeKo" + BasicSession.TAG_I18N);
         }
 
         // Fin de cette transaction

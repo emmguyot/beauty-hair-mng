@@ -1,18 +1,21 @@
 package com.increg.salon.tag;
 
-import javax.servlet.http.HttpSession;
-import javax.servlet.jsp.*;
-import javax.servlet.jsp.tagext.*;
-
-import com.increg.commun.DBSession;
-import com.increg.salon.bean.ParamBean;
-import com.increg.salon.bean.SalonSession;
-import com.increg.salon.bean.SalonSessionImpl;
-
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.Calendar;
+import java.util.HashMap;
+
+import javax.servlet.jsp.JspException;
+import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.PageContext;
+import javax.servlet.jsp.tagext.TagSupport;
+
+import com.increg.commun.DBSession;
+import com.increg.salon.bean.ParamBean;
+import com.increg.salon.bean.SalonSessionImpl;
 /**
  * Tag Affichant les infos de date d'un Objet Bean
  * Creation date: (22/08/2001 22:00:08)
@@ -20,6 +23,16 @@ import java.net.UnknownHostException;
  */
 public class TagInclude extends TagSupport {
 
+    /**
+     * Cache des fichiers à charger 
+     */
+    protected static HashMap cache = new HashMap();
+
+    /**
+     * Date de dernière mise à jour du cache
+     */
+    protected static Calendar dateRefresh = Calendar.getInstance();
+    
     /**
      * fichier à récupérer
      */
@@ -55,23 +68,38 @@ public class TagInclude extends TagSupport {
             if (valUrl != null) {
                 curURL = new URL(valUrl.getVAL_PARAM() + file);
             }
-            HttpURLConnection aCon = null;
-            aCon = (HttpURLConnection) curURL.openConnection();
-
-            // Si ok, inclut le fichier
-            aCon.setUseCaches(true);
-            BufferedInputStream pageStream = new BufferedInputStream(aCon.getInputStream());
-            // Lecture
-            byte dataBytes[] = new byte[CHUNK_SIZE];
+            
             StringBuffer pageBuf = new StringBuffer();
-            int byteRead = 0;
-            while (byteRead != -1) {
-                byteRead = pageStream.read(dataBytes, 0, CHUNK_SIZE);
 
-                // Stocke dans la chaine
-                if (byteRead != -1) {
-                    pageBuf.append(new String(dataBytes, 0, byteRead));
-                }
+            // Vérification du cache
+            Calendar dateLimite = Calendar.getInstance();
+            dateLimite.add(Calendar.HOUR, -5);
+            if ((dateRefresh.after(dateLimite)) && (cache.get(curURL.toString()) != null)) {
+            	// Utilisation du cache
+            	pageBuf.append(cache.get(curURL.toString()));
+            }
+            else {
+	            HttpURLConnection aCon = null;
+	            aCon = (HttpURLConnection) curURL.openConnection();
+	
+	            // Si ok, inclut le fichier
+	            aCon.setUseCaches(true);
+	            BufferedInputStream pageStream = new BufferedInputStream(aCon.getInputStream());
+	            // Lecture
+	            byte dataBytes[] = new byte[CHUNK_SIZE];
+	            int byteRead = 0;
+	            while (byteRead != -1) {
+	                byteRead = pageStream.read(dataBytes, 0, CHUNK_SIZE);
+	
+	                // Stocke dans la chaine
+	                if (byteRead != -1) {
+	                    pageBuf.append(new String(dataBytes, 0, byteRead));
+	                }
+	            }
+	            
+	            // Stocke dans le cache
+	            cache.put(curURL.toString(), pageBuf);
+	            dateRefresh = Calendar.getInstance();
             }
             out.println(pageBuf.toString());
         } catch (UnknownHostException e) {

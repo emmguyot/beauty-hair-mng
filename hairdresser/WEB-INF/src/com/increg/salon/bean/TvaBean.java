@@ -1,9 +1,27 @@
+/*
+ * Bean de gestion des taux de TVA
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.bean;
 
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.GenericBean;
 
@@ -121,7 +139,7 @@ public class TvaBean extends GenericBean {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Création non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.creationKo" + BasicSession.TAG_I18N));
         }
 
     }
@@ -143,7 +161,7 @@ public class TvaBean extends GenericBean {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Suppression non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.suppressionKo" + BasicSession.TAG_I18N));
         }
     }
     /**
@@ -154,7 +172,7 @@ public class TvaBean extends GenericBean {
     public int getCD_TVA() {
         return CD_TVA;
     }
-    /**
+	/**
      * Création d'un Bean Type de Vente à partir de sa clé
      * Creation date: (19/08/2001 21:14:20)
      * @param dbConnect Connexion à la base à utiliser
@@ -229,7 +247,7 @@ public class TvaBean extends GenericBean {
         nb = dbConnect.doExecuteSQL(reqs);
 
         if (nb[0] != 1) {
-            throw (new SQLException("Mise à jour non effectuée"));
+            throw (new SQLException(BasicSession.TAG_I18N + "message.enregistrementKo" + BasicSession.TAG_I18N));
         }
 
     }
@@ -287,4 +305,24 @@ public class TvaBean extends GenericBean {
     public java.lang.String toString() {
         return getLIB_TVA();
     }
+
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	public int hashCode() {
+		return getCD_TVA();
+	}
+    /**
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	public boolean equals(Object obj) {
+		if (obj instanceof TvaBean) {
+			TvaBean tva2 = (TvaBean) obj;
+			return (getCD_TVA() == tva2.getCD_TVA());
+		}
+		else {
+			return false;
+		}
+	}
+
 }

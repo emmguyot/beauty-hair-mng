@@ -1,6 +1,7 @@
 package com.increg.salon.bean.update;
 
 import java.sql.SQLException;
+import java.util.ResourceBundle;
 
 import com.increg.commun.DBSession;
 import com.increg.commun.exception.ReloadNeededException;
@@ -19,11 +20,17 @@ public class UpdateBean {
     protected String version;
     
     /**
+     * Messages localisés à utiliser
+     */
+    protected ResourceBundle messages;
+    
+    /**
      * Constructor for UpdateBean.
      * @param dbConnect Connection à la base
+     * @param rb Messages localisés
      * @throws Exception En cas de problème bloquant
      */
-    public UpdateBean(DBSession dbConnect) throws Exception {
+    public UpdateBean(DBSession dbConnect, ResourceBundle rb) throws Exception {
         super();
 
         version = null;
@@ -32,24 +39,6 @@ public class UpdateBean {
         System.out.println("Version base detectee : " + version);
         
         majVersion(dbConnect);
-        
-        // Nettoyage de la base
-        try {
-            dbConnect.doExecuteSQL(new String[] {"vacuum"});
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-            // Ignore l'erreur
-        }
-
-        // Optimisation de la base
-        try {
-            dbConnect.doExecuteSQL(new String[] {"vacuum analyze"});
-        }
-        catch (SQLException e) {
-            e.printStackTrace();
-            // Ignore l'erreur
-        }
     }
 
     /**
@@ -106,5 +95,29 @@ public class UpdateBean {
      */
     public boolean checkDatabase(DBSession dbConnect, String[] lstTables, String[] lstSeq) throws ReloadNeededException {
         return true;
+    }
+
+    /**
+     * Optimization de la base de données
+     * @param dbConnect Connection à utiliser
+     */
+    public void optimizeDatabase(DBSession dbConnect) {
+        // Nettoyage de la base
+        try {
+            dbConnect.doExecuteSQL(new String[] {"vacuum"});
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            // Ignore l'erreur
+        }
+
+        // Optimisation de la base
+        try {
+            dbConnect.doExecuteSQL(new String[] {"vacuum analyze"});
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            // Ignore l'erreur
+        }
     }
 }

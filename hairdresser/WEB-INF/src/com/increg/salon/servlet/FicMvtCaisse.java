@@ -1,5 +1,7 @@
 package com.increg.salon.servlet;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.sql.*;
 import com.increg.salon.bean.*;
@@ -31,6 +33,7 @@ public void performTask(
 	HttpSession mySession = request.getSession(false);
 	SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
 	DBSession myDBSession = mySalon.getMyDBSession();
+    DateFormat formatDate = new SimpleDateFormat(mySalon.getMessagesBundle().getString("format.dateDefaut"));
 
 	MvtCaisseBean aMvt = null;
 	
@@ -54,7 +57,9 @@ public void performTask(
 			try {
 	            aMvt.setCD_MOD_REGL(CD_MOD_REGL);
 	            aMvt.setCD_TYP_MCA(CD_TYP_MCA);
-	            aMvt.setDT_MVT(DT_MVT);
+                Calendar dtMvt = Calendar.getInstance();
+                dtMvt.setTime(formatDate.parse(DT_MVT));
+                aMvt.setDT_MVT(dtMvt);
 	            aMvt.setCOMM(COMM);
 	            aMvt.setMONTANT(MONTANT);
 
@@ -63,7 +68,7 @@ public void performTask(
 
 	            aMvt.create(myDBSession);
 
-	            mySalon.setMessage("Info", "Création effectuée. Vous pouvez passer un nouveau mouvement.");
+	            mySalon.setMessage("Info", BasicSession.TAG_I18N + "ficMvtCaisse.creationOk" + BasicSession.TAG_I18N);
 	            request.setAttribute("Action", "Creation");
 
 	            aMvt = new MvtCaisseBean();

@@ -1,3 +1,22 @@
+<%
+/*
+ * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
+%>
 <%@ page import="java.util.Vector,java.math.BigDecimal,java.util.Calendar" %>
 <%@ page import="com.increg.salon.bean.SalonSession,
                com.increg.salon.bean.ArtBean,
@@ -11,14 +30,16 @@
     }
 %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Achats d'articles</title>
+<title><i18n:message key="ficAchat.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
 <body class="donnees">
-<%@ include file="include/commun.js" %>
+<%@ include file="include/commun.jsp" %>
 <script language="JavaScript">
 <!--
 <%
@@ -46,15 +67,15 @@ function Init() {
 }
 //-->
 </script>
-<h1><img src="images/titres/ficAchat.gif"></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/ficAchat.gif"></h1>
 <salon:message salonSession="<%= mySalon %>" />
 <form method="post" action="ficAchat.srv" name="fiche">
 <p>
-N° de commande/facture : 
+<i18n:message key="label.commande" /> : 
 <salon:valeur valeur="<%= CD_CMD_FOURN %>" valeurNulle="null">
     <input name="CD_CMD_FOURN" type="text" maxlength="10" size="10" value="%%">
 </salon:valeur>
-Fournisseur :
+<i18n:message key="label.fournisseur" /> :
 <salon:DBselection valeur="<%= CD_FOURN %>" sql="select CD_FOURN, RAIS_SOC from FOURN order by RAIS_SOC">
    <select name="CD_FOURN" onChange="Recharge(0)">
       %%
@@ -69,7 +90,7 @@ CD_FOURN = ((CD_FOURN == null) || (CD_FOURN.length() == 0) || (CD_FOURN.equals("
 <input name="Action" type="hidden" value="">
 <input name="paramSup1" type="hidden" value="">
 <input name="paramSup2" type="hidden" value="">
-Type de mouvement :
+<i18n:message key="label.typeMouvement" /> :
 <salon:DBselection valeur="<%= CD_TYP_MVT %>" sql='<%= "select CD_TYP_MVT, LIB_TYP_MVT from TYP_MVT where SENS_MVT=\'" + TypMvtBean.SENS_ENTREE + "\' order by LIB_TYP_MVT" %>'>
    <select name="CD_TYP_MVT">
       %%
@@ -77,13 +98,13 @@ Type de mouvement :
 </salon:DBselection>
 <table width="100%" border="0" >
 	<tr>
-		<th>Catégorie</th>
-		<th>Libellé</th>
-		<th>Qté<br>en<br>stock</th>
-		<th>Valeur<br>unitaire<br>stock</th>
-		<th>Date dernier<br>achat</th>
-		<th>Qté<br>achetée</th>
-		<th>Valeur<br>unitaire<br>achat</th>
+		<th><i18n:message key="label.categorie" /></th>
+		<th><i18n:message key="label.libelle" /></th>
+		<th><i18n:message key="label.qteStockTableau" /></th>
+		<th><i18n:message key="label.valeurStockUnitTableau" /></th>
+		<th><i18n:message key="label.dernierAchat" /></th>
+		<th><i18n:message key="label.qteAchat" /></th>
+		<th><i18n:message key="label.valeurAchatUnit" /></th>
                 <th></th>
 	</tr>
 	<%
@@ -131,7 +152,8 @@ Type de mouvement :
             </td>
 	    <td class="Nombre"><salon:valeur valeur="<%= QTE_STK %>" valeurNulle="null">%%&nbsp;</salon:valeur></td>
 	    <td class="Nombre"><salon:valeur valeur="<%= VAL_STK_HT %>" valeurNulle="null">%%&nbsp;</salon:valeur></td>
-	    <td class="tabDonnees"><salon:valeur valeur="<%= DT_MVT %>" valeurNulle="null" format="dd/MM/yyyy">%%&nbsp;</salon:valeur></td>
+            <i18n:message key="format.dateSimpleDefaut" id="formatDate" />
+	    <td class="tabDonnees"><salon:valeur valeur="<%= DT_MVT %>" valeurNulle="null" format="<%= formatDate %>">%%&nbsp;</salon:valeur></td>
 	    <td class="tabDonnees">
                 <salon:valeur valeur='<%= QTE %>' valeurNulle="null">
                     <input type="text" name="QTE" value="%%" size="3">
@@ -143,14 +165,14 @@ Type de mouvement :
                 </salon:valeur>
             </td>
             <td class="tabDonnees">
-                <a href="javascript:AjouterLigne()"><img src=images/plus.gif width="15" height="15" border="0" alt="Enregistrer la ligne"></a>
+                <a href="javascript:AjouterLigne()"><img src=images/plus.gif width="15" height="15" border="0" alt="<i18n:message key="label.enregistrerLigne" />"></a>
             </td>
         </tr>
         <%
         // Lignes déjà saisies
 	for (int i = lstLignes.size() - 1; i >= 0; i--) {
 	    MvtStkBean aMvtAchat = (MvtStkBean) lstLignes.get(i);
-	    ArtBean aArt = ArtBean.getArtBean(mySalon.getMyDBSession(), Long.toString(aMvtAchat.getCD_ART()));
+	    ArtBean aArt = ArtBean.getArtBean(mySalon.getMyDBSession(), Long.toString(aMvtAchat.getCD_ART()), mySalon.getMessagesBundle());
 	    MvtStkBean aMvt = (MvtStkBean) lstMvt.get(i);
 	%>
 	<tr>
@@ -165,7 +187,7 @@ Type de mouvement :
             <td class="tabDonnees"><a href="_FicheArt.jsp?Action=Modification&CD_ART=<%= aArt.getCD_ART() %>" target="ClientFrame"><%= aArt.toString() %></a></td>
 	    <td class="Nombre"><salon:valeur valeur="<%= aArt.getQTE_STK() %>" valeurNulle="null">%%</salon:valeur></td>
 	    <td class="Nombre"><salon:valeur valeur="<%= aArt.getVAL_STK_HT() %>" valeurNulle="null">%%</salon:valeur></td>
-	    <td class="tabDonnees"><salon:valeur valeur="<%= (aMvt != null) ? aMvt.getDT_MVT() : null %>" valeurNulle="null" format="dd/MM/yyyy"><a href="_FicheArt_Mvt.jsp?Action=Modification&CD_ART=<%= aArt.getCD_ART() %>" target="ClientFrame">%%</a>&nbsp;</salon:valeur></td>
+	    <td class="tabDonnees"><salon:valeur valeur="<%= (aMvt != null) ? aMvt.getDT_MVT() : null %>" valeurNulle="null" format="<%= formatDate %>"><a href="_FicheArt_Mvt.jsp?Action=Modification&CD_ART=<%= aArt.getCD_ART() %>" target="ClientFrame">%%</a>&nbsp;</salon:valeur></td>
 	    <td class="Nombre">
                 <salon:valeur valeur='<%= aMvtAchat.getQTE() %>' valeurNulle="null">
                         %%
@@ -178,7 +200,7 @@ Type de mouvement :
             </td>
             <td>
                 <salon:valeur valeur='<%= aMvtAchat.getDT_MVT() %>' valeurNulle="null" timezone="true">
-                    <a href="javascript:SupprimerLigne(<%= aArt.getCD_ART() %>, '%%')"><img src=images/moins.gif width="15" height="15" border="0" alt="Supprimer la ligne"></a>
+                    <a href="javascript:SupprimerLigne(<%= aArt.getCD_ART() %>, '%%')"><img src=images/moins.gif width="15" height="15" border="0" alt="<i18n:message key="label.supprimerLigne" />"></a>
                 </salon:valeur>
             </td>
 	</tr>
@@ -223,24 +245,24 @@ function ControleEnreg ()
 {
    // Verification des données obligatoires
    if (document.fiche.CD_CMD_FOURN.value == "") {
-      alert ("Le N° de commande/facture fournisseur doit être saisi. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="ficAchat.commandeManquant" />");
       return false;
    }
    if (document.fiche.CD_CATEG_ART.selectedIndex <= 0) {
-      alert ("La catégorie de l'article doit être sélectionnée. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="ficAchat.categorieManquant" />");
       return false;
    }
    if (document.fiche.CD_ART.selectedIndex <= 0) {
-      alert ("L'article doit être sélectionné. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="ficAchat.articleManquant" />");
       return false;
    }
    // Verification des données obligatoires
    if (document.fiche.QTE.value == "") {
-      alert ("La quantité doit être saisie. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="ficAchat.quantiteManquant" />");
       return false;
    }
    if (document.fiche.VAL_MVT_HT.value == "") {
-      alert ("La valeur d'achat doit être saisie. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="ficAchat.valeurAchatManquant" />");
       return false;
    }
    return true;
@@ -269,7 +291,7 @@ function SupprimerLigne(cdArt, dtMvt)
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideFicheAchat.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideFicheAchat.html");
 }
 
 </script>

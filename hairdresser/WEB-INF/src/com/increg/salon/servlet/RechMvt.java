@@ -3,6 +3,7 @@ package com.increg.salon.servlet;
 import java.sql.ResultSet;
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Vector;
 
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.MvtStkBean;
 import com.increg.salon.bean.SalonSession;
+import com.increg.util.ServletUtil;
 
 /**
  * Recherche/Liste de mouvements de stock
@@ -31,35 +33,26 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
 	String DT_FIN = request.getParameter("DT_FIN");
 	String CD_TYP_MVT = request.getParameter("CD_TYP_MVT");
 
-	DateFormat formatDate  = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.MEDIUM);
-
     // Récupère la connexion
     HttpSession mySession = request.getSession(false);
     SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
     DBSession myDBSession = mySalon.getMyDBSession();
+    DateFormat formatDate = new SimpleDateFormat(mySalon.getMessagesBundle().getString("format.dateDefaut"));
+    DateFormat formatDateDB = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
 
 	// Valeurs par défaut
-	if (DT_DEBUT == null) {
-		// J-7
-		Calendar J7 = Calendar.getInstance();
-		J7.add(Calendar.DAY_OF_YEAR, -7);
-		DT_DEBUT = formatDate.format(J7.getTime());
-	}
-	if (DT_FIN == null) {
-		DT_FIN = formatDate.format(Calendar.getInstance().getTime());
-	}
-    try {
-        if ((DT_DEBUT != null) && (DT_DEBUT.length() > 0)) {
-            request.setAttribute("DT_DEBUT", formatDate.parse(DT_DEBUT));
-        }
-        if ((DT_FIN != null) && (DT_FIN.length() > 0)) {
-            request.setAttribute("DT_FIN", formatDate.parse(DT_FIN));
-        }
+	// J-7
+	Calendar J7 = Calendar.getInstance();
+	J7.add(Calendar.DAY_OF_YEAR, -7);
+    Calendar dtDebut = ServletUtil.interpreteDate(DT_DEBUT, formatDate, J7);
+    Calendar dtFin = ServletUtil.interpreteDate(DT_FIN, formatDate, Calendar.getInstance());
+    if (dtFin.before(dtDebut)) {
+        dtFin = dtDebut;
     }
-    catch (ParseException e) {
-        mySalon.setMessage("Erreur", e.toString());
-        e.printStackTrace();
-    }
+    request.setAttribute("DT_DEBUT", dtDebut);
+    request.setAttribute("DT_FIN", dtFin);
+    DT_DEBUT = formatDateDB.format(dtDebut.getTime());
+    DT_FIN = formatDateDB.format(dtFin.getTime());
 	
 	// Constitue la requete SQL
 	String reqSQL = "select * from MVT_STK ";
@@ -85,7 +78,7 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
 		Vector lstLignes = new Vector();
 
 		while (aRS.next()) {
-			MvtStkBean aMvtStk = new MvtStkBean(aRS);
+			MvtStkBean aMvtStk = new MvtStkBean(aRS, mySalon.getMessagesBundle());
 			lstLignes.add(aMvtStk);
 		}
 		aRS.close();

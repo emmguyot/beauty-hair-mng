@@ -1,3 +1,22 @@
+<%
+/*
+ * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
+%>
 <%@ page import="com.increg.salon.bean.SalonSession,
 	       com.increg.salon.bean.ParamBean" %>
 <%
@@ -7,6 +26,8 @@
     }
 %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
 <%
@@ -14,12 +35,12 @@
    String Action = (String) request.getAttribute("Action");
    ParamBean aParam = (ParamBean) request.getAttribute("ParamBean");
 %>
-<title>Fiche paramètre de l'application</title>
+<title><i18n:message key="ficParam.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
 <body class="donnees" onLoad="document.fiche.VAL_PARAM.focus()">
-<%@ include file="include/commun.js" %>
+<%@ include file="include/commun.jsp" %>
 <script language="JavaScript">
 <!--
    var Action="<%=Action%>";
@@ -30,7 +51,7 @@ function Init() {
 }
 //-->
 </script>
-<h1><img src="images/titres/ficParam.gif"></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/ficParam.gif"></h1>
 <salon:message salonSession="<%= mySalon %>" />
 <form method="post" action="ficParam.srv" name="fiche">
 	<p> 
@@ -38,20 +59,20 @@ function Init() {
 		  <input type="hidden" name="CD_PARAM" value="%%" >
 	        </salon:valeur>
 		<input type="hidden" name="Action" value="<%=Action%>">
-		<span class="obligatoire">Description :</span> 
+		<span class="obligatoire"><i18n:message key="label.description" /> :</span> 
 		<salon:valeur valeurNulle="null" valeur="<%= aParam.getLIB_PARAM() %>" >
                     <input type="hidden" name="LIB_PARAM" value="%%">
                     <span class="readOnly">%%</span>
 	        </salon:valeur>
         </p>
 	<p>
-		<span class="obligatoire">Valeur du paramètre :</span> 
+		<span class="obligatoire"><i18n:message key="label.paramValue" /> :</span> 
 		<salon:valeur valeur="<%= aParam.getVAL_PARAM() %>" valeurNulle="null">
                     <% if (aParam.getCD_PARAM() != ParamBean.CD_OP_EXCEPTIONNEL) { %>
                         <input type="text" name="VAL_PARAM" value="%%" size=80>
                     <% } else { %>
                         <input type="password" name="VAL_PARAM" value="%%" size=80></p><p>
-                        <span class="obligatoire">Valeur du paramètre (pour vérification) :</span> 
+                        <span class="obligatoire"><i18n:message key="label.paramValueVerif" /> :</span> 
                         <input type="password" name="VAL_PARAM2" value="%%" size=80>
                     <% } %></td>
 		</salon:valeur>
@@ -65,7 +86,7 @@ function Enregistrer()
 {
    // Verification des données obligatoires
    if (document.fiche.VAL_PARAM.value == "") {
-      alert ("La valeur doit être saisie. L'enregistrement n'a pas pu avoir lieu.");
+      alert ("<i18n:message key="ficParam.valeurManquante" />");
       return;
    }
    document.fiche.submit();
@@ -74,7 +95,7 @@ function Enregistrer()
 // Affichage de l'aide
 function Aide()
 {
-    window.open("aideFicheParam.html");
+    window.open("<%= mySalon.getLangue().getLanguage() %>/aideFicheParam.html");
 }
 
 function RetourListe()

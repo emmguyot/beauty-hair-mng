@@ -1,7 +1,26 @@
+/*
+ * Fiche Rendez-vous
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.servlet;
 
 import java.net.HttpURLConnection;
 import java.sql.ResultSet;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Vector;
@@ -10,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.ClientBean;
 import com.increg.salon.bean.CollabBean;
@@ -50,6 +70,8 @@ public class FicRDV extends ConnectedServlet {
         HttpSession mySession = request.getSession(false);
         SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
         DBSession myDBSession = mySalon.getMyDBSession();
+        DateFormat formatDate = new SimpleDateFormat(mySalon.getMessagesBundle().getString("format.dateHeureSimpleSansSeconde"));
+        formatDate.setTimeZone(RDVBean.getTimeZone());
 
         RDVBean aRDV = null;
         Vector dispo = new Vector();
@@ -77,7 +99,7 @@ public class FicRDV extends ConnectedServlet {
                     ResultSet aRS = myDBSession.doRequest(reqSQL);
 
                     if (aRS.next()) {
-                        FactBean aFact = new FactBean(aRS);
+                        FactBean aFact = new FactBean(aRS, mySalon.getMessagesBundle());
                         aRDV.setCD_COLLAB(aFact.getCD_COLLAB());
                     }
                     aRS.close();
@@ -104,7 +126,7 @@ public class FicRDV extends ConnectedServlet {
                 try {
                     if (Action.equals("Creation+")) {
                         // Création du client
-                        ClientBean aClient = new ClientBean();
+                        ClientBean aClient = new ClientBean(mySalon.getMessagesBundle());
                         aClient.setNOM(NOM);
                         aClient.setPRENOM(PRENOM);
                         aClient.create(myDBSession);
@@ -117,15 +139,18 @@ public class FicRDV extends ConnectedServlet {
 
                     aRDV.setCD_COLLAB(CD_COLLAB);
                     aRDV.setDUREE(DUREE);
-                    aRDV.setDT_DEBUT(DT_DEBUT);
+                    Calendar dtDebut = Calendar.getInstance(RDVBean.getTimeZone());
+                    dtDebut.clear();
+                    dtDebut.setTime(formatDate.parse(DT_DEBUT));
+                    aRDV.setDT_DEBUT(dtDebut);
                     aRDV.setCOMM(COMM);
 
                     aRDV.create(myDBSession);
 
-                    mySalon.setMessage("Info", "Création effectuée.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.creationOk" + BasicSession.TAG_I18N);
                     if (!aRDV.verifChevauchement(myDBSession, true)) {
                         // Chevauchement
-                        mySalon.setMessage("Info", "Attention, ce rendez-vous est en conflit avec un autre.");
+                        mySalon.setMessage("Info", BasicSession.TAG_I18N + "ficRDV.conflitRDV" + BasicSession.TAG_I18N);
                     }
                     request.setAttribute("Action", "Modification");
                 }
@@ -138,7 +163,13 @@ public class FicRDV extends ConnectedServlet {
                 // Affichage de la fiche en modification
                 request.setAttribute("Action", "Modification");
 
-                aRDV = RDVBean.getRDVBean(myDBSession, CD_CLI, DT_DEBUT);
+                Calendar dtDebut = Calendar.getInstance(RDVBean.getTimeZone());
+                dtDebut.clear();
+                dtDebut.setTime(formatDate.parse(DT_DEBUT));
+                aRDV = RDVBean.getRDVBean(myDBSession, CD_CLI, dtDebut.getTime());
+                if (assertOrError((aRDV != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 
             }
             else if (Action.equals("Modification")) {
@@ -147,7 +178,13 @@ public class FicRDV extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                aRDV = RDVBean.getRDVBean(myDBSession, CD_CLI, DT_DEBUT);
+                Calendar dtDebut = Calendar.getInstance(RDVBean.getTimeZone());
+                dtDebut.clear();
+                dtDebut.setTime(formatDate.parse(DT_DEBUT));
+                aRDV = RDVBean.getRDVBean(myDBSession, CD_CLI, dtDebut.getTime());
+                if (assertOrError((aRDV != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
+                	return;
+                }
 
                 try {
                     aRDV.setCD_COLLAB(CD_COLLAB);
@@ -156,10 +193,10 @@ public class FicRDV extends ConnectedServlet {
 
                     aRDV.maj(myDBSession);
 
-                    mySalon.setMessage("Info", "Enregistrement effectué.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.enregistrementOk" + BasicSession.TAG_I18N);
                     if (!aRDV.verifChevauchement(myDBSession, true)) {
                         // Chevauchement
-                        mySalon.setMessage("Info", "Attention, ce rendez-vous est en conflit avec un autre.");
+                        mySalon.setMessage("Info", BasicSession.TAG_I18N + "ficRDV.conflitRDV" + BasicSession.TAG_I18N);
                     }
                     request.setAttribute("Action", "Modification");
                 }
@@ -174,16 +211,23 @@ public class FicRDV extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                RDVBean aRDVtoDelete = RDVBean.getRDVBean(myDBSession, CD_CLI, DT_DEBUT);
+                Calendar dtDebut = Calendar.getInstance(RDVBean.getTimeZone());
+                dtDebut.clear();
+                dtDebut.setTime(formatDate.parse(DT_DEBUT));
+                RDVBean aRDVtoDelete = RDVBean.getRDVBean(myDBSession, CD_CLI, dtDebut.getTime());
+                if (!aRDVtoDelete.verifChevauchement(myDBSession, true)) {
+                    // Chevauchement
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "ficRDV.conflitRDV" + BasicSession.TAG_I18N);
+                }
 
                 try {
                     aRDVtoDelete.delete(myDBSession);
-                    mySalon.setMessage("Info", "Suppression effectuée.");
+                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.suppressionOk" + BasicSession.TAG_I18N);
                     // Un bean vide
                     aRDV = new RDVBean();
                     aRDV.setCD_CLI(CD_CLI);
                     aRDV.setCD_COLLAB(CD_COLLAB);
-                    aRDV.setDT_DEBUT(DT_DEBUT);
+                    aRDV.setDT_DEBUT(dtDebut);
                     aRDV.setDUREE(DUREE);
                     aRDV.setCOMM(COMM);
                     request.setAttribute("Action", "Creation");
@@ -200,7 +244,10 @@ public class FicRDV extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 boolean exist = false;
-                aRDV = RDVBean.getRDVBean(myDBSession, CD_CLI, DT_DEBUT);
+                Calendar dtDebut = Calendar.getInstance(RDVBean.getTimeZone());
+                dtDebut.clear();
+                dtDebut.setTime(formatDate.parse(DT_DEBUT));
+                aRDV = RDVBean.getRDVBean(myDBSession, CD_CLI, dtDebut.getTime());
                 if (aRDV == null) {
                     aRDV = new RDVBean();
                     request.setAttribute("Action", "Creation");
@@ -217,11 +264,11 @@ public class FicRDV extends ConnectedServlet {
                     aRDV.setDUREE(DUREE);
                     aRDV.setCOMM(COMM);
                     // Date en dernier en cas d'erreur de format
-                    aRDV.setDT_DEBUT(DT_DEBUT);
+                    aRDV.setDT_DEBUT(dtDebut);
 
                     if (!aRDV.verifChevauchement(myDBSession, exist)) {
                         // Chevauchement
-                        mySalon.setMessage("Info", "Attention, ce rendez-vous est en conflit avec un autre.");
+                        mySalon.setMessage("Info", BasicSession.TAG_I18N + "ficRDV.conflitRDV" + BasicSession.TAG_I18N);
                     }
                 }
                 catch (Exception e) {

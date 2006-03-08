@@ -1,3 +1,22 @@
+<%
+/*
+ * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
+ * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
+%>
 <%@ page import="com.increg.salon.bean.SalonSession,
 				java.util.Vector,
 				com.increg.salon.bean.ClientBean" %>
@@ -8,9 +27,11 @@
     }
 %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
-<title>Liste des clients</title>
+<title><i18n:message key="title.lstCli" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
@@ -22,9 +43,9 @@
     Vector listeLignes = (Vector) request.getAttribute("Liste");
     int longueurCle = 2;
 %>
-<h1><img src="images/titres/lstCli.gif"></h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstCli.gif"></h1>
 <form name="fiche" action="rechCli.srv" method="post">
-	<p>Premi&egrave;re lettre du nom : 
+	<p><i18n:message key="label.premiereLettreNom" /> : 
 	<input type="hidden" name="premLettre" value="<%= premLettre %>">
 	<%
 	    String lien = "";
@@ -40,18 +61,18 @@
 	    <% }
 	    }
 	%>
-	&nbsp;&nbsp; Affiche anciens clients : 
+	&nbsp;&nbsp; <i18n:message key="label.affAncienClient" /> : 
     <input type="checkbox" name="INDIC_VALID"
 	    <% if ((INDIC_VALID != null) && (INDIC_VALID.equals("on"))) { %> checked <% } %>
     	onClick="document.fiche.submit()" >
     <%
     if (listeLignes.size() > 20) { 
     %>
-        <br/>Seconde lettre :
+        <br/><i18n:message key="label.secondeLettre" /> :
         <%
         String lastKey = "";
-		for (int i = 0; i < listeLignes.size(); i++) {
-	    	ClientBean aCli = (ClientBean) listeLignes.get(i);
+        for (int i = 0; i < listeLignes.size(); i++) {
+        ClientBean aCli = (ClientBean) listeLignes.get(i);
 
             String nextKey = aCli.getNOM().substring(0,Math.min(aCli.getNOM().length(), longueurCle)); 
             if (!nextKey.equals(lastKey))  {
@@ -63,7 +84,8 @@
         }
     }
     %>
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<salon:bouton url="rechCli.srv?type=advanced" img="images/rechAvancee.gif" alt="Recherche avancée..."/>
+        <i18n:message key="label.rechercheAvancee" id="rechAvancee" />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<salon:bouton url="rechCli.srv?type=advanced" img="images/rechAvancee.gif" alt="<%= rechAvancee %>"/>
 	<input type="hidden" name="type" value="simple">
 	</p>
 </form>
