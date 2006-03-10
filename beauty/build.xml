@@ -410,6 +410,7 @@
 				<include name="fr/*"/>
 				<include name="en/*"/>
 				<exclude name="*/histo.html"/>
+				<exclude name="*/glossaire.html"/>
 			</fileset>
 		</copy>
 		<chmod perm="-w"><fileset refid="Common Files" /></chmod>
@@ -487,6 +488,7 @@
 				<include name="**/*.html" />
 				<include name="*.class" />
 				<include name="WEB-INF/web.xml" />
+				<include name="WEB-INF/classes/messages*.properties" />
 
 				<exclude name="WEB-INF/classes/com/increg/serveur/**" />
 				<exclude name="**/light/**" />
@@ -503,7 +505,6 @@
 		</copy>
 		<!-- Compilation des pages JSP -->
 		<mkdir dir="${tmpProdWar}/work" />
-		<mkdir dir="${tmpProdWar}/WEB-INF/classes"/>
 		<jspc srcdir="${tmpProdWar}" 
 				destdir="${tmpProdWar}/WEB-INF/classes" 
 				webinc="${tmpProdWar}/WEB-INF/webInc.xml" 
@@ -523,6 +524,7 @@
 				<pathelement location="${tomcat}/lib/common/jasper-runtime.jar" />
 				<pathelement location="${java.home}/lib/rt.jar" />
 				<pathelement location="${tmpProdWar}/WEB-INF/classes" />
+				<pathelement location="${tmpProdWar}/WEB-INF/lib/taglibs-i18n.jar" />
 				<pathelement location="${java.class.path}" />
 			</classpath>
 		</javac>
