@@ -37,7 +37,7 @@ else { %>
 } %>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 </head>
-<frameset cols="150,*" rows="*" <%@ include file="include/bordure.inc" %>> 
+<frameset cols="171,*" rows="*" <%@ include file="include/bordure.inc" %>> 
 	<frame name="MenuFrame" noresize src="Menu.jsp?<%= request.getQueryString() %>">
 	<frame name="ClientFrame" noresize src="accueilPointage.srv">
 </frameset>

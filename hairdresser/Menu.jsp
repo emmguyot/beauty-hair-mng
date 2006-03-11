@@ -146,8 +146,8 @@ MM_reloadPage(true);
         <a href="ListeDonneeRef.jsp?nomTable=TYP_CHEV&chaineTable=Types%20de%20cheveux" target="ClientFrame"><i18n:message key="label.typesCheveux" /></a><br/>
     	<% } %>
         <a href="ListeDonneeRef.jsp?nomTable=TYP_CONTR&chaineTable=Types%20de%20contrats" target="ClientFrame"><i18n:message key="label.typesContrats" /></a><br/>
-        <a href="ListeTypMca.jsp" target="ClientFrame" title="Types de mouvements caisse"><i18n:message key="label.typesMouvementsCaisse" /></a><br/>
-        <a href="ListeTypMvt.jsp" target="ClientFrame" title="Types de mouvements stock"><i18n:message key="label.typesMouvementsStock" /></a><br/>
+        <a href="ListeTypMca.jsp" target="ClientFrame" title="<i18n:message key="label.typesMouvementsCaisseLong" />"><i18n:message key="label.typesMouvementsCaisse" /></a><br/>
+        <a href="ListeTypMvt.jsp" target="ClientFrame" title="<i18n:message key="label.typesMouvementsStockLong" />"><i18n:message key="label.typesMouvementsStock" /></a><br/>
     	<% if (mySalon.getMySociete().isInstitut()) { %>
         <a href="ListeDonneeRef.jsp?nomTable=TYP_PEAU&chaineTable=Types%20de%20peau" target="ClientFrame"><i18n:message key="label.typesPeau" /></a><br/>
     	<% } %>
@@ -166,8 +166,8 @@ MM_reloadPage(true);
 <% } %>
 </salon:autorisation>
 
-<table cellspacing=0 border=0 width=100%>
-   <tr><td><img src="images/<%= mySalon.getLangue().getLanguage() %>/encours.gif" width="127" height="21"></td></tr>
+<table cellspacing="0" style="border: 0; table-layout: fixed;">
+   <tr><td style="width: 147px"><img src="images/<%= mySalon.getLangue().getLanguage() %>/encours.gif" width="147" height="21"></td></tr>
 <%
    // Affiche les clients en cours
    Vector listeFact = mySalon.getListeFact();
@@ -177,7 +177,7 @@ MM_reloadPage(true);
       ClientBean aCli = ClientBean.getClientBean(mySalon.getMyDBSession(), Long.toString(aFact.getCD_CLI()), mySalon.getMessagesBundle());
       String chaine = aCli.toString();
       %>
-	<tr><td class="ligneTab4"><nobr><font size=-1><a href="_FicheFact.jsp?Action=Modification&CD_FACT=<%= aFact.getCD_FACT() %>" target="ClientFrame" title="<%= chaine %>"><%= chaine.substring(0,Math.min(20,chaine.length())) %></a></font></nobr></td></tr>
+	<tr><td class="ligneTab4"><nobr><font size=-1><a href="_FicheFact.jsp?Action=Modification&CD_FACT=<%= aFact.getCD_FACT() %>" target="ClientFrame" title="<%= chaine %>"><%= chaine %></a></font></nobr></td></tr>
       <%
    }
 
@@ -190,7 +190,7 @@ MM_reloadPage(true);
 <div id="coinBG" style="position:absolute; height=20px; z-index:1; visibility:hidden"><img src="images/perso/coin_bg.gif"></div>
 
 <p style="text-align: center">
-<img src="images/horloge.gif" style="float: left; vertical-align: middle;margin-top: 15px;margin-bottom: 15px;"><span id="pendule" style="text-align: center"></span>
+<img src="images/horloge.gif" style="float: left; vertical-align: middle;margin-top: 15px;margin-bottom: 15px;"><span id="pendule"></span>
 </p>
 <script language="JavaScript" src="include/<%= mySalon.getLangue().getLanguage() %>/dateHome.js"> </script>
 
