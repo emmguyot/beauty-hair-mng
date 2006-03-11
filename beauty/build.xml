@@ -113,12 +113,6 @@
 				<include name="WEB-INF/src/com/increg/salon/bean/graphique/GraphErreur.java"/>
 				<include name="WEB-INF/src/com/increg/salon/bean/graphique/GraphHisto.java"/>
 
-				<include name="WEB-INF/src/com/increg/salon/bean/test/FactBeanTest.java"/>
-				<include name="WEB-INF/src/com/increg/salon/bean/test/MvtCaisseBeanTest.java"/>
-				<include name="WEB-INF/src/com/increg/salon/bean/test/MvtStkBeanTest.java"/>
-				<include name="WEB-INF/src/com/increg/salon/bean/test/PaiementBeanTest.java"/>
-				<include name="WEB-INF/src/com/increg/salon/bean/test/RDVBeanTest.java"/>
-
 				<include name="WEB-INF/src/com/increg/salon/request/Brouillard.java"/>
 				<include name="WEB-INF/src/com/increg/salon/request/CA.java"/>
 				<include name="WEB-INF/src/com/increg/salon/request/EditionFacture.java"/>
@@ -217,18 +211,11 @@
 				<include name="WEB-INF/src/com/increg/salon/tag/TagTimeStamp.java"/>
 				<include name="WEB-INF/src/com/increg/salon/tag/TagValeur.java"/>
 
-				<include name="WEB-INF/src/com/increg/salon/test/AllTests.java"/>
-
-				<include name="WEB-INF/src/com/increg/serveur/DelSauvegarde.java"/>
-				<include name="WEB-INF/src/com/increg/serveur/PutSauvegarde.java"/>
-
 				<include name="WEB-INF/src/com/increg/util/Montant.java"/>
 				<include name="WEB-INF/src/com/increg/util/ServletUtil.java"/>
 				<include name="WEB-INF/src/com/increg/util/SimpleDateFormatEG.java"/>
 				<include name="WEB-INF/src/com/increg/util/StringInverseComp.java"/>
 
-				<include name="WEB-INF/src/com/increg/util/test/MontantTest.java"/>
-				
 				<include name="WEB-INF/src/messages*.properties"/>
 
 				<include name="WEB-INF/salon-taglib.tld"/>
