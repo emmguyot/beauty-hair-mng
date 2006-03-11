@@ -229,7 +229,10 @@
 
 				<include name="WEB-INF/src/com/increg/util/test/MontantTest.java"/>
 				
+				<include name="WEB-INF/src/messages*.properties"/>
+
 				<include name="WEB-INF/salon-taglib.tld"/>
+				<include name="WEB-INF/taglibs-i18n.tld"/>
 				<include name="WEB-INF/web.xml"/>
 				<include name="WEB-INF/webServer.xml"/>
 
@@ -320,6 +323,7 @@
 				<include name="ficDevise.jsp"/>
 				<include name="ficDonneeRef.jsp"/>
 				<include name="ficFact.jsp"/>
+				<include name="ficFactImpr.jsp"/>
 				<include name="ficFactMEG.jsp"/>
 				<include name="ficFactRedirect.jsp"/>
 				<include name="ficFete.jsp"/>
@@ -394,6 +398,7 @@
 				<include name="reconnect.html"/>
 
 				<include name="include/*.js"/>
+				<include name="include/*.jsp"/>
 				<include name="WEB-INF/lib/*.jar"/>
 
 				<include name="config.rgs"/>
@@ -402,29 +407,10 @@
 
 				<!-- Par langue -->
 				<include name="afaire.html"/>
-				<include name="aideFiche.html"/>
-				<include name="aideFicheAchat.html"/>
-				<include name="aideFicheArt.html"/>
-				<include name="aideFicheCli.html"/>
-				<include name="aideFicheCriterePub.html"/>
-				<include name="aideFicheFact.html"/>
-				<include name="aideFicheInventaire.html"/>
-				<include name="aideFichePaiement.html"/>
-				<include name="aideFicheParam.html"/>
-				<include name="aideFichePurge.html"/>
-				<include name="aideFicheRest.html"/>
-				<include name="aideFicheStat.html"/>
-				<include name="aideFicheTech.html"/>
-				<include name="aideFicheTypVent.html"/>
-				<include name="aideListe.html"/>
-				<include name="aideListeArt.html"/>
-				<include name="aideListeBrouillard.html"/>
-				<include name="aideListeCli.html"/>
-				<include name="aideListeFinJournee.html"/>
-				<include name="aideListeParam.html"/>
-				<include name="aideListeTVA.html"/>
-				<include name="aideTrucEtAstuce.html"/>
-				<include name="contact.html"/>
+				<include name="fr/*"/>
+				<include name="en/*"/>
+				<exclude name="*/histo.html"/>
+				<exclude name="*/glossaire.html"/>
 			</fileset>
 		</copy>
 		<chmod perm="-w"><fileset refid="Common Files" /></chmod>
@@ -502,6 +488,7 @@
 				<include name="**/*.html" />
 				<include name="*.class" />
 				<include name="WEB-INF/web.xml" />
+				<include name="WEB-INF/classes/messages*.properties" />
 
 				<exclude name="WEB-INF/classes/com/increg/serveur/**" />
 				<exclude name="**/light/**" />
@@ -538,6 +525,7 @@
 				<pathelement location="${tomcat}/lib/common/jasper-runtime.jar" />
 				<pathelement location="${java.home}/lib/rt.jar" />
 				<pathelement location="${tmpProdWar}/WEB-INF/classes" />
+				<pathelement location="${tmpProdWar}/WEB-INF/lib/taglibs-i18n.jar" />
 				<pathelement location="${java.class.path}" />
 			</classpath>
 		</javac>
