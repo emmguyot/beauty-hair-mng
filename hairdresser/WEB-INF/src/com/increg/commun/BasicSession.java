@@ -157,6 +157,12 @@ public class BasicSession {
 		if (res != null) {
 			messagesBundle = res;
 	        langue = locale;
+	        
+	        // Vérification que la langue est supportée
+	        if (getClass().getClassLoader().getResource("messages_" + langue.getLanguage() + ".properties") == null) {
+	        	// Pas trouvé : Retour à la France
+	        	langue = Locale.FRENCH;
+	        }
 		}
     }
 
