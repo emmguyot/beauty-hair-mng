@@ -45,13 +45,21 @@
     String ville = request.getParameter("VILLE");
     String abonnement = request.getParameter("CD_PREST");
     String INDIC_VALID = request.getParameter("INDIC_VALID");
+    String critereGlobal = request.getParameter("critereGlobal");
     Vector listeLignes = (Vector) request.getAttribute("Liste");
     int longueurCle = 1;
 %>
 <h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/lstCli.gif"></h1>
 <salon:message salonSession="<%= mySalon %>" />
 <form name="fiche" action="rechCli.srv" method="post">
-    <p><i18n:message key="label.nom" /> :
+    <p><div style="float:right">
+    <i18n:message key="label.actualiserListe" id="actualiserListe" />
+    <salon:bouton url="javascript:document.fiche.submit()" img="images/actualiserRech.gif" alt="<%= actualiserListe %>" imgOn="images/actualiserRech2.gif"/>
+    <br/>
+    <i18n:message key="label.rechercheSimple" id="rechSimple" />
+    <salon:bouton url="rechCli.srv" img="images/rechSimplifiee.gif" alt="<%= rechSimple %>"/>
+    </div>
+    <i18n:message key="label.nom" /> :
     <salon:valeur valeurNulle="null" valeur="<%= nom %>" expand="true">
         <input type="text" name="NOM" value="%%" size="15">
     </salon:valeur>
@@ -90,8 +98,11 @@
     <input type="checkbox" name="INDIC_VALID"
         <% if ((INDIC_VALID != null) && (INDIC_VALID.equals("on"))) { %> checked <% } %>
     >
-    <i18n:message key="label.actualiserListe" id="actualiserListe" />
-    &nbsp;&nbsp;<salon:bouton url="javascript:document.fiche.submit()" img="images/actualiserRech.gif" alt="<%= actualiserListe %>" imgOn="images/actualiserRech2.gif"/>
+    <br/>
+    <i18n:message key="label.critereGlobal" /> :
+    <salon:valeur valeurNulle="null" valeur="<%= critereGlobal %>" expand="true">
+        <input type="text" name="critereGlobal" value="%%" size="15">
+    </salon:valeur>
     <%
     if (listeLignes.size() > 20) { 
     %>
@@ -111,8 +122,6 @@
         }
     }
     %>
-        <i18n:message key="label.rechercheSimple" id="rechSimple" />
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<salon:bouton url="rechCli.srv" img="images/rechSimplifiee.gif" alt="<%= rechSimple %>"/>
 	<input type="hidden" name="type" value="advanced">
 	</p>
 </form>

@@ -52,7 +52,7 @@
             }
             lastKey = nextKey;
 	%>
-	<tr><td width="75">
+	<tr><td width="80">
     <%
         if (peutCreerFacture) { %>
 	      <a href="addCli.srv?CD_CLI=<%= aCli.getCD_CLI() %>" title="<%= dupliquerFacture %>" target=MenuFrame><img src=images/plus.gif border="0" width="15" height="15"></a>

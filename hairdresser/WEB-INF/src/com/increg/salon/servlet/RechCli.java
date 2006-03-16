@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.ClientBean;
@@ -115,6 +117,7 @@ public class RechCli extends ConnectedServlet {
         String ville = request.getParameter("VILLE");
         String abonnement = request.getParameter("CD_PREST");
         String INDIC_VALID = request.getParameter("INDIC_VALID");
+        String critereGlobal = request.getParameter("critereGlobal");
 
         HttpSession mySession = request.getSession(false);
         SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
@@ -141,7 +144,7 @@ public class RechCli extends ConnectedServlet {
             } else {
                 reqSQL.append(" and ");
             }
-            reqSQL.append("NOM ilike ").append(DBSession.quoteWith(nom, '\''));
+            reqSQL.append("NOM ilike ").append(DBSession.quoteWith("%" + nom + "%", '\''));
         }
         if ((prenom != null) && (prenom.length() > 0)) {
             if (!where) {
@@ -150,7 +153,7 @@ public class RechCli extends ConnectedServlet {
             } else {
                 reqSQL.append(" and ");
             }
-            reqSQL.append("PRENOM ilike ").append(DBSession.quoteWith(prenom, '\''));
+            reqSQL.append("PRENOM ilike ").append(DBSession.quoteWith("%" + prenom + "%", '\''));
         }
         if ((civilite != null) && (civilite.length() > 0)) {
             if (!where) {
@@ -181,7 +184,7 @@ public class RechCli extends ConnectedServlet {
             } else {
                 reqSQL.append(" and ");
             }
-            reqSQL.append("VILLE ilike ").append(DBSession.quoteWith(ville, '\''));
+            reqSQL.append("VILLE ilike ").append(DBSession.quoteWith("%" + ville + "%", '\''));
         }
         if ((abonnement != null) && (abonnement.length() > 0)) {
             if (!where) {
@@ -205,6 +208,17 @@ public class RechCli extends ConnectedServlet {
                 reqSQL.append(" and ");
             }
             reqSQL.append("INDIC_VALID='O'");
+        }
+        if (StringUtils.isNotEmpty(critereGlobal)) {
+            if (!where) {
+                reqSQL.append(" where ");
+                where = true;
+            } else {
+                reqSQL.append(" and ");
+            }
+            reqSQL.append("coalesce(COMM,'')||coalesce(EMAIL,'')||coalesce(NOM,'')||coalesce(PRENOM,'')")
+            	.append("||coalesce(PORTABLE,'')||coalesce(TEL,'')||coalesce(RUE,'')||coalesce(VILLE,'') ilike ")
+            	.append(DBSession.quoteWith("%" + critereGlobal + "%", '\''));
         }
         reqSQL.append(" order by NOM, PRENOM");
         return reqSQL.toString();
