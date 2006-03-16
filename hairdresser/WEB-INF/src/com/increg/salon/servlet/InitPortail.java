@@ -135,7 +135,7 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
             }
             
     	    if ((!request.getRemoteAddr().equals ("127.0.0.1")) 
-    	            && (!request.getRemoteAddr().substring(0, 10).equals ("192.168.0."))) {
+    	            && (request.getRemoteAddr().indexOf("192.168.0.") == -1)) {
     	        if ((user != null) 
     	                && (mySalon != null) && (mySalon.isRemoteEnable())) {
     	            System.out.println("Connexion de " + user + " le " + new Date().toString());
