@@ -110,6 +110,11 @@ public abstract class SalonSession extends BasicSession {
      */
     protected boolean optimizeDB;
 
+    /**
+     * Indicateur si le serveur est sécurisé par Apache en accès distant
+     */
+	protected boolean secureApache;
+
 	
     /**
      * SalonSession constructor comment.
@@ -206,6 +211,16 @@ public abstract class SalonSession extends BasicSession {
             } catch (Exception ignored) {
                 // ignore the exception
                 remoteEnable = false;
+            }
+
+            secureApache = false;
+            try {
+                if ((resconfig.getString("secureApache") != null) && (resconfig.getString("secureApache").equals("1"))) {
+                	secureApache = true;
+                }
+            } catch (Exception ignored) {
+                // ignore the exception
+            	secureApache = false;
             }
 
             // Affichage du prix sur les factures ?
@@ -706,4 +721,19 @@ public abstract class SalonSession extends BasicSession {
     public void setAutoConnect(boolean newAutoConnect) {
         autoConnect = newAutoConnect;
     }
+
+    /**
+     * 
+     * @return The secureApache
+     */
+	public boolean isSecureApache() {
+		return secureApache;
+	}
+
+	/**
+	 * @param secureApache The secureApache to set.
+	 */
+	public void setSecureApache(boolean secureApache) {
+		this.secureApache = secureApache;
+	}
 }

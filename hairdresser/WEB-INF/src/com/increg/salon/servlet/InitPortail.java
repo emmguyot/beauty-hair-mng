@@ -122,7 +122,7 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
             }
     
             java.security.Principal userPrincipal = request.getUserPrincipal();
-            String user = "default";
+            String user = null;
             if (userPrincipal != null) {
                 user = userPrincipal.getName();
             }
@@ -134,11 +134,18 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
                 }
             }
             
+            // Accès distant ? Il faut vérifier que c'est autorisé
     	    if ((!request.getRemoteAddr().equals ("127.0.0.1")) 
     	            && (request.getRemoteAddr().indexOf("192.168.0.") == -1)) {
     	        if ((user != null) 
     	                && (mySalon != null) && (mySalon.isRemoteEnable())) {
-    	            System.out.println("Connexion de " + user + " le " + new Date().toString());
+    	            System.out.println("Connexion de " + user + " depuis " + request.getRemoteAddr() + " le " + new Date().toString());
+    	        }
+    	        else if ((user == null) 
+    	        		&& (mySalon != null) 
+    	        		&& (mySalon.isRemoteEnable())
+    	        		&& (!mySalon.isSecureApache())) {
+    	            System.out.println("Connexion depuis " + request.getRemoteAddr() + " le " + new Date().toString());
     	        }
     	        else {
     	            System.out.println("Tentative d'intrusion à partir de " + request.getRemoteAddr());
