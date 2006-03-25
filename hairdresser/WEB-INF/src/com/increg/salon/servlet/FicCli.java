@@ -18,6 +18,7 @@
 package com.increg.salon.servlet;
 
 import java.sql.ResultSet;
+import java.util.List;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -114,6 +115,13 @@ public class FicCli extends ConnectedServlet {
                     aCli.setDT_ANNIV(DT_ANNIV, mySalon.getLangue());
                     aCli.create(myDBSession);
                     mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.creationOk" + BasicSession.TAG_I18N);
+
+                    // Recherche existance doublons
+                    List lstClient = ClientBean.getDoubleClientBeans(myDBSession, aCli, mySalon.getMessagesBundle());
+                    if (lstClient.size() > 1) {
+                        mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.existanceDoublon" + BasicSession.TAG_I18N);
+                    }
+                    
                     request.setAttribute("Action", "Modification");
                 } catch (Exception e) {
                     mySalon.setMessage("Erreur", e);

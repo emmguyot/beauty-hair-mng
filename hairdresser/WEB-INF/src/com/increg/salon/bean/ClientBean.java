@@ -21,10 +21,12 @@ package com.increg.salon.bean;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
@@ -998,6 +1000,37 @@ public class ClientBean extends TimeStampBean implements Comparable {
         return nbEnreg;
     }
 
+    /**
+     * Recherche la liste des clients en double avec celui passé en paramètre.
+     * La liste contient celui passé en paramètre si il est présent en base
+     * @param myDBSession Connexion base à utiliser
+     * @param client client initial servant de critère
+     * @param rb Ressource
+     * @return Liste de clients correspondants
+     */
+	public static List getDoubleClientBeans(DBSession myDBSession, ClientBean client, ResourceBundle rb) {
+
+		// TODO : Modifier quand socle mis à jour pour utiliser une recherche floue de postgreSQL
+		String reqSQL = "select * from CLI where CLI.NOM ilike " + DBSession.quoteWith("%" + client.getNOM() + "%", '\'');
+        List res = new ArrayList();
+
+        // Interroge la Base
+        try {
+            ResultSet aRS = myDBSession.doRequest(reqSQL);
+
+            while (aRS.next()) {
+                ClientBean cli2 = new ClientBean(aRS, rb);
+                res.add(cli2);
+            }
+            aRS.close();
+        }
+        catch (Exception e) {
+            System.out.println(
+                "Erreur dans constructeur sur clé : " + e.toString());
+        }
+        return res;
+	}
+
 
     /**
      * Purge des clients à partir des périmés seulement
@@ -1364,5 +1397,5 @@ public class ClientBean extends TimeStampBean implements Comparable {
     public HashMap getAbonnements() {
         return abonnements;
     }
-
+    
 }
