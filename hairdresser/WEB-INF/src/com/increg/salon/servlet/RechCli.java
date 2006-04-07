@@ -1,6 +1,8 @@
 package com.increg.salon.servlet;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Enumeration;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,39 +29,40 @@ public class RechCli extends ConnectedServlet {
 
         // Récupération du paramètre
         String type = request.getParameter("type");
+        String action = request.getParameter("Action");
         boolean advancedQuery = ((type != null) && (type.equals("advanced")));
         
-        String reqSQL;
+        Vector lstLignes;
         if (advancedQuery) {
-            reqSQL = getQueryAdvanced(request);
+        	lstLignes = getListQueryAdvanced(request);
+        } else if (StringUtils.equals(action, "Groupe")) {
+        	// Regroupement des clients sélectionnés
+        	regroupeDoublon(request);
+        	lstLignes = getListQueryDoublon(request);
+        } else if (StringUtils.equals(action, "Doublon")) {
+        	lstLignes = getListQueryDoublon(request);
         } else {
-            reqSQL = getQuerySimple(request);
+        	lstLignes = getListQuerySimple(request);
         }
 
-        // Récupère la connexion
-        HttpSession mySession = request.getSession(false);
-        SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
-        DBSession myDBSession = mySalon.getMyDBSession();
+        // Stocke le Vector pour le JSP
+        request.setAttribute("Liste", lstLignes);
 
         // Interroge la Base
         try {
-            ResultSet aRS = myDBSession.doRequest(reqSQL);
-            Vector lstLignes = new Vector();
-
-            while (aRS.next()) {
-                lstLignes.add(new ClientBean(aRS, mySalon.getMessagesBundle()));
-            }
-            aRS.close();
-
-            // Stocke le Vector pour le JSP
-            request.setAttribute("Liste", lstLignes);
-
             // Affichage de la vue correspondante
             if (advancedQuery) {
                 // Passe la main
                 getServletConfig()
                     .getServletContext()
                     .getRequestDispatcher("/lstCli_Advanced.jsp")
+                    .forward(request, response);
+            } else if (StringUtils.equals(action, "Doublon") 
+            		|| StringUtils.equals(action, "Groupe")) {
+                // Passe la main
+                getServletConfig()
+                    .getServletContext()
+                    .getRequestDispatcher("/lstCli_Doublon.jsp")
                     .forward(request, response);
             } else {
                 // Passe la main
@@ -82,9 +85,9 @@ public class RechCli extends ConnectedServlet {
     /**
      * Constitue la requete de recherche de client pour la recherche simple
      * @param request requete avec les paramétres 
-     * @return requete SQL à executer
+     * @return résultat de la requete
      */
-    private String getQuerySimple(HttpServletRequest request) {
+    private Vector getListQuerySimple(HttpServletRequest request) {
         String premLettre = request.getParameter("premLettre");
         String INDIC_VALID = request.getParameter("INDIC_VALID");
         if (premLettre == null) {
@@ -100,16 +103,16 @@ public class RechCli extends ConnectedServlet {
         if ((INDIC_VALID == null) || (!INDIC_VALID.equals("on"))) {
             reqSQL = reqSQL + " and INDIC_VALID='O'";
         }
-        reqSQL += " order by NOM, PRENOM";
-        return reqSQL;
+        reqSQL += " order by NOM, PRENOM, CD_CLI";
+        return executeQuery(request, reqSQL);
     }
 
     /**
      * Constitue la requete de recherche de client pour la recherche avancée
      * @param request requete avec les paramétres 
-     * @return requete SQL à executer
+     * @return résultat de la requete
      */
-    private String getQueryAdvanced(HttpServletRequest request) {
+    private Vector getListQueryAdvanced(HttpServletRequest request) {
         String nom = request.getParameter("NOM");
         String prenom = request.getParameter("PRENOM");
         String civilite = request.getParameter("CIVILITE");
@@ -221,6 +224,90 @@ public class RechCli extends ConnectedServlet {
             	.append(DBSession.quoteWith("%" + critereGlobal + "%", '\''));
         }
         reqSQL.append(" order by NOM, PRENOM");
-        return reqSQL.toString();
+        return executeQuery(request, reqSQL.toString());
+    }
+    
+    /**
+     * Constitue la requete de recherche de client en doublon pour le client en paramètre
+     * @param request requete avec les paramétres 
+     * @return résultat de la requete
+     */
+    private Vector getListQueryDoublon(HttpServletRequest request) {
+        String CD_CLI = request.getParameter("CD_CLI");
+        request.setAttribute("CD_CLI", CD_CLI);
+        // Charge le client source
+        // Récupère la connexion
+        HttpSession mySession = request.getSession(false);
+        SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
+        DBSession myDBSession = mySalon.getMyDBSession();
+        ClientBean client = ClientBean.getClientBean(myDBSession, CD_CLI, mySalon.getMessagesBundle());
+        if (client == null) {
+            return null;
+        }
+        request.setAttribute("Action", "Doublon");
+        // Rechercher les doublons
+        return new Vector(ClientBean.getDoubleClientBeans(myDBSession, client, mySalon.getMessagesBundle()));
+    }
+
+    /**
+     * Regroupe les clients sélectionnés
+     * @param request requete avec les paramétres
+     */
+    private void regroupeDoublon(HttpServletRequest request) {
+        String CD_CLI = request.getParameter("CD_CLI");
+
+        // Récupère la connexion
+        HttpSession mySession = request.getSession(false);
+        SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
+        DBSession myDBSession = mySalon.getMyDBSession();
+        
+        Enumeration paramNames = request.getParameterNames();
+        while (paramNames.hasMoreElements()) {
+			String paramName = (String) paramNames.nextElement();
+			if (StringUtils.contains(paramName, "DOUBLON")) {
+				String cdCli = paramName.substring(8);
+				if (!cdCli.equals(CD_CLI)) {
+					try {
+	                    myDBSession.setDansTransactions(true);
+						ClientBean.joinDouble(myDBSession, CD_CLI, cdCli, mySalon.getMessagesBundle());
+						myDBSession.endTransaction();
+					}
+					catch (SQLException e) {
+	                    mySalon.setMessage("Erreur", e);
+	                    myDBSession.cleanTransaction();
+					}
+				}
+			}
+		}
+    }
+    
+    /**
+     * Execute une requete de recherche de client
+     * @param request requete HTTP pour accès aux infos 
+     * @param reqSQL requete SQL à passer
+     * @return Liste des clients de la requete
+     */
+    private Vector executeQuery(HttpServletRequest request, String reqSQL) {
+        // Récupère la connexion
+        HttpSession mySession = request.getSession(false);
+        SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
+        DBSession myDBSession = mySalon.getMyDBSession();
+        Vector lstLignes = null;
+
+        // Interroge la Base
+        try {
+            ResultSet aRS = myDBSession.doRequest(reqSQL);
+            lstLignes = new Vector();
+
+            while (aRS.next()) {
+                lstLignes.add(new ClientBean(aRS, mySalon.getMessagesBundle()));
+            }
+            aRS.close();
+        } catch (Exception e) {
+            System.out.println("Erreur dans performTask : " + e.toString());
+            lstLignes = null;
+        }
+        
+        return lstLignes;
     }
 }

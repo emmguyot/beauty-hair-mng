@@ -77,6 +77,13 @@ function Imprimer() {
                 img="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/nouveau.gif\" %>" 
                 alt="<%= paramBouton1 %>"/>
 </span>&nbsp;&nbsp; 
+<span id="DOUBLON" style="position:absolute; width:130px; height:31px; z-index:1; left: 15px; top: 11px; visibility: hidden">
+    <i18n:message key="bouton.Doublon" id="paramBouton1b" />
+    <salon:bouton url="javascript:parent.mainFrame.Doublon()" 
+                imgOn="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/doublon2.gif\" %>" 
+                img="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/doublon.gif\" %>" 
+                alt="<%= paramBouton1b %>"/>
+</span>&nbsp;&nbsp; 
 <span id="AIDE" style="position:absolute; width:130px; height:31px; z-index:1; top: 11px; left: 260px; visibility: visible">
    <i18n:message key="bouton.Aide" id="paramBouton2" />
    <salon:bouton url="javascript:parent.mainFrame.Aide()" 

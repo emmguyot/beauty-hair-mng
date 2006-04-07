@@ -80,6 +80,12 @@
 	%>
 </table>
 <script language="JavaScript">
+function Init() {
+   <%
+   // Positionne les liens d actions
+   %>
+}
+
 function Nouveau()
 {
    parent.location.href = "_FicheCli.jsp";

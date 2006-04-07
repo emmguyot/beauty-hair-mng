@@ -31,6 +31,8 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.TimeStampBean;
@@ -1012,6 +1014,10 @@ public class ClientBean extends TimeStampBean implements Comparable {
 
 		// TODO : Modifier quand socle mis à jour pour utiliser une recherche floue de postgreSQL
 		String reqSQL = "select * from CLI where CLI.NOM ilike " + DBSession.quoteWith("%" + client.getNOM() + "%", '\'');
+		if (StringUtils.isNotEmpty(client.getPRENOM())) {
+			reqSQL += " and CLI.PRENOM ilike " + DBSession.quoteWith("%" + client.getPRENOM() + "%", '\'');
+		}
+		reqSQL += " order by NOM, PRENOM, CD_CLI";
         List res = new ArrayList();
 
         // Interroge la Base
@@ -1397,5 +1403,107 @@ public class ClientBean extends TimeStampBean implements Comparable {
     public HashMap getAbonnements() {
         return abonnements;
     }
+    
+    /**
+     * Dédoublonne 2 clients : 2 entrent, 1 sort
+     * @param myDBSession Connexion base à utiliser
+     * @param cdCli Code client origine et réception
+     * @param cdCliDoublon Cd client à fusionner et à faire disparaitre
+     * @param rb Resources
+     * @throws SQLException 
+     */
+	public static void joinDouble(DBSession myDBSession, String cdCli, String cdCliDoublon, ResourceBundle rb) throws SQLException {
+
+		// Chargement du client qui réceptionne les données
+		ClientBean client = getClientBean(myDBSession, cdCli, rb);
+		if (client != null) {
+			ClientBean clientDoublon = getClientBean(myDBSession, cdCliDoublon, rb);
+			
+			if (clientDoublon != null) {
+				if ((clientDoublon.getCD_CATEG_CLI() != 0)
+						&& (client.getCD_CATEG_CLI() == 0)) {
+					client.setCD_CATEG_CLI(clientDoublon.getCD_CATEG_CLI());
+				}
+				if ((clientDoublon.getCD_ORIG() != 0)
+						&& (client.getCD_ORIG() == 0)) {
+					client.setCD_ORIG(clientDoublon.getCD_ORIG());
+				}
+				if ((clientDoublon.getCD_TR_AGE() != 0)
+						&& (client.getCD_TR_AGE() == 0)) {
+					client.setCD_TR_AGE(clientDoublon.getCD_TR_AGE());
+				}
+				if ((clientDoublon.getCD_TYP_CHEV() != 0)
+						&& (client.getCD_TYP_CHEV() == 0)) {
+					client.setCD_TYP_CHEV(clientDoublon.getCD_TYP_CHEV());
+				}
+				if ((clientDoublon.getCD_TYP_PEAU() != 0)
+						&& (client.getCD_TYP_PEAU() == 0)) {
+					client.setCD_TYP_PEAU(clientDoublon.getCD_TYP_PEAU());
+				}
+				if (StringUtils.isNotEmpty(clientDoublon.getCD_POSTAL())
+						&& StringUtils.isEmpty(client.getCD_POSTAL())) {
+					client.setCD_POSTAL(clientDoublon.getCD_POSTAL());
+				}
+				if (StringUtils.isNotEmpty(clientDoublon.getCIVILITE())
+						&& StringUtils.isEmpty(client.getCIVILITE())) {
+					client.setCIVILITE(clientDoublon.getCIVILITE());
+				}
+				if (StringUtils.isNotEmpty(clientDoublon.getCOMM())
+						&& StringUtils.isEmpty(client.getCOMM())) {
+					client.setCOMM(clientDoublon.getCOMM());
+				}
+				if (StringUtils.isNotEmpty(clientDoublon.getEMAIL())
+						&& StringUtils.isEmpty(client.getEMAIL())) {
+					client.setEMAIL(clientDoublon.getEMAIL());
+				}
+				if (StringUtils.isNotEmpty(clientDoublon.getPORTABLE())
+						&& StringUtils.isEmpty(client.getPORTABLE())) {
+					client.setPORTABLE(clientDoublon.getPORTABLE());
+				}
+				if (StringUtils.isNotEmpty(clientDoublon.getRUE())
+						&& StringUtils.isEmpty(client.getRUE())) {
+					client.setRUE(clientDoublon.getRUE());
+				}
+				if (StringUtils.isNotEmpty(clientDoublon.getTEL())
+						&& StringUtils.isEmpty(client.getTEL())) {
+					client.setTEL(clientDoublon.getTEL());
+				}
+				if (StringUtils.isNotEmpty(clientDoublon.getVILLE())
+						&& StringUtils.isEmpty(client.getVILLE())) {
+					client.setVILLE(clientDoublon.getVILLE());
+				}
+				if ((clientDoublon.getDT_ANNIV() != null)
+						&& (client.getDT_ANNIV() == null)) {
+					client.setDT_ANNIV(clientDoublon.getDT_ANNIV());
+				}
+				Iterator iterAbonnement = clientDoublon.getAbonnements().keySet().iterator();
+				while (iterAbonnement.hasNext()) {
+		            Long CD_PREST = (Long) iterAbonnement.next();
+		            Integer CPT = (Integer) clientDoublon.getAbonnements().get(CD_PREST);
+		            
+		            if (client.getAbonnements().get(CD_PREST) == null) {
+		            	client.getAbonnements().put(CD_PREST, CPT);
+		            }
+		            else {
+		            	// Ajoute
+		            	Integer newCPT = (Integer) client.getAbonnements().get(CD_PREST);
+		            	client.getAbonnements().put(CD_PREST, new Integer(newCPT.intValue() + CPT.intValue()));
+		            }
+				}
+
+				client.maj(myDBSession);
+				
+				String[] reqSQL = {
+						"update Fact set CD_CLI=" + cdCli + " where CD_CLI=" + cdCliDoublon,
+						"update Histo_Prest set CD_CLI=" + cdCli + " where CD_CLI=" + cdCliDoublon,
+						"update RDV set CD_CLI=" + cdCli + " where CD_CLI=" + cdCliDoublon,
+					};
+				
+				myDBSession.doExecuteSQL(reqSQL);
+				
+				clientDoublon.delete(myDBSession);
+			}
+		}
+	}
     
 }

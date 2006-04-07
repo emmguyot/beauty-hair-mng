@@ -234,7 +234,7 @@ function Init() {
    				<td align="right">
                     <span class="souslien">
                     	<i18n:message key="ficCli.doublon" id="paramBouton1a" />
-                    	<salon:bouton url="<%= \"_FicheRDV.jsp?Action=Creation&CD_CLI=\" + aCli.getCD_CLI() %>" 
+                    	<salon:bouton url="<%= \"ListeCli.jsp?Action=Doublon&CD_CLI=\" + aCli.getCD_CLI() %>" 
                                     alt="<%= paramBouton1a %>" 
                                     target="ClientFrame" 
                                     img="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/priseRDV.gif\" %>" />&nbsp;&nbsp;
