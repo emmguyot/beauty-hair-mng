@@ -237,7 +237,7 @@ function Init() {
                     	<salon:bouton url="<%= \"ListeCli.jsp?Action=Doublon&CD_CLI=\" + aCli.getCD_CLI() %>" 
                                     alt="<%= paramBouton1a %>" 
                                     target="ClientFrame" 
-                                    img="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/priseRDV.gif\" %>" />&nbsp;&nbsp;
+                                    img="<%= \"images/recherche.gif\" %>" />&nbsp;&nbsp;
                     	<i18n:message key="ficCli.nouveauRDV" id="paramBouton1" />
                     	<salon:bouton url="<%= \"_FicheRDV.jsp?Action=Creation&CD_CLI=\" + aCli.getCD_CLI() %>" 
                                     alt="<%= paramBouton1 %>" 
