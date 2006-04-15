@@ -76,7 +76,7 @@ function Init() {
 <span id="AttenteSpan" style="visibility: hidden">
 <p class="Warning"><img name="Attente" src="images/attente.gif" width="231" height="10" alt="<i18n:message key="message.patience" />"></p>
 </span>
-<salon:include file="include/salonNews.inc" />
+<salon:include file="<%= \"include/\" + mySalon.getLangue().getLanguage() + \"/salonNews.inc\" %>" />
 <script language="JavaScript">
 // Fonctions d'action
 
