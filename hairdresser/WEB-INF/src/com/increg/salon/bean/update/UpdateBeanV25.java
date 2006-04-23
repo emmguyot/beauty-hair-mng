@@ -1,10 +1,8 @@
 package com.increg.salon.bean.update;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.sql.ResultSet;
@@ -66,7 +64,9 @@ public class UpdateBeanV25 extends UpdateBeanV24 {
                 };
             String sql[] = {
                 "insert into PARAM (CD_PARAM, LIB_PARAM, VAL_PARAM) values (" + Integer.toString(ParamBean.CD_REPART_REMISE)
-                    + ", 'Répartition de la remise (P ou F)', 'P')"
+                    + ", "
+            		+ DBSession.quoteWith(messages.getString("label.paramRepartitionRemise"), '\'') + ","
+                    + "'P')"
                 };
             String sqlAvecRes[] = {
                 "select setval ('seq_param', max (CD_PARAM), true) from PARAM"

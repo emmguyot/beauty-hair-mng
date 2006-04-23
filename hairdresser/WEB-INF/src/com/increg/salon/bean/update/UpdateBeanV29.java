@@ -58,7 +58,9 @@ public class UpdateBeanV29 extends UpdateBeanV28 {
             String reqStat[][] = {
                 };
             String sql[] = {
-                "insert into PARAM (CD_PARAM, LIB_PARAM, VAL_PARAM) values (nextval('SEQ_PARAM'), 'Largeur d''impression des fiches (cm)', '8.5')",
+                "insert into PARAM (CD_PARAM, LIB_PARAM, VAL_PARAM) values (nextval('SEQ_PARAM'), "
+            		+ DBSession.quoteWith(messages.getString("label.paramLargeurFiches"), '\'') + ","
+            		+ "'8.5')",
                 "create table DEVISE ("
                     + "CD_DEVISE numeric(2) not null,"
                     + "LIB_COURT_DEVISE varchar(10) not null,"

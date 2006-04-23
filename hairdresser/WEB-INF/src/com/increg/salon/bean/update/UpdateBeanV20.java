@@ -51,8 +51,12 @@ public class UpdateBeanV20 extends UpdateBeanV17 {
         if (version.equals("1.7")) {
             // Mise à jour de la base pour passer en 2.0
             String sql[] = {
-                "insert into PROFIL (CD_PROFIL, LIB_PROFIL) values (nextval('seq_profil'), 'Responsable')",
-                "insert into PROFIL (CD_PROFIL, LIB_PROFIL) values (nextval('seq_profil'), 'Coiffeur')",
+                "insert into PROFIL (CD_PROFIL, LIB_PROFIL) values (nextval('seq_profil'), "
+            		+ DBSession.quoteWith(messages.getString("label.responsable"), '\'')
+            		+ ")",
+                "insert into PROFIL (CD_PROFIL, LIB_PROFIL) values (nextval('seq_profil'), "
+            		+ DBSession.quoteWith(messages.getString("label.coiffeur"), '\'')
+            		+ ")",
                 "alter table MOD_REGL add IMP_CHEQUE char(1)",
                 "alter table MOD_REGL add RENDU_MONNAIE char(1)",
                 "update MOD_REGL set IMP_CHEQUE='N', RENDU_MONNAIE='N'"};

@@ -90,6 +90,10 @@ public class ParamBean extends GenericBean {
      * Code pour l'URL de récupération des infos
      */
     public static final int CD_URL_INFO = 13;
+    /**
+     * Code pour le message Taxes comprises du ticket
+     */
+    public static final int CD_MSG_TAXE_TICKET = 14;
 
 
     /**

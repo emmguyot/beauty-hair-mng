@@ -82,12 +82,24 @@ public class UpdateBeanV31 extends UpdateBeanV30 {
                 "drop index IDX_PREST_CATEG_PREST",
                 "drop index IDX_PREST_MARQUE",
                 "create table ABO_CLI (CD_CLI numeric(5,0) not null, CD_PREST numeric(5,0), CPT numeric(4,0) not null)",
-                "insert into PARAM (CD_PARAM, LIB_PARAM, VAL_PARAM) values (nextval('SEQ_PARAM'), 'Disque amovible (ex. : A:/)', 'A:/')",
-                "insert into PARAM (CD_PARAM, LIB_PARAM, VAL_PARAM) values (nextval('SEQ_PARAM'), 'URL des mises à jour du logiciel', 'http://www.increg.com/MiseAJour')",
-                "insert into PARAM (CD_PARAM, LIB_PARAM, VAL_PARAM) values (nextval('SEQ_PARAM'), 'URL de lecture des sauvegardes', 'http://www.increg.com/Sauvegardes/')",
-                "insert into PARAM (CD_PARAM, LIB_PARAM, VAL_PARAM) values (nextval('SEQ_PARAM'), 'URL de suppression des sauvegardes', 'http://www.increg.com/servlet/sauvegardeSup')",
-                "insert into PARAM (CD_PARAM, LIB_PARAM, VAL_PARAM) values (nextval('SEQ_PARAM'), 'URL de creation de sauvegardes', 'http://www.increg.com/servlet/sauvegarde')",
-                "insert into PARAM (CD_PARAM, LIB_PARAM, VAL_PARAM) values (nextval('SEQ_PARAM'), 'URL des messages d''info', 'http://beauty-hair-mng.sourceforge.net/')",
+                "insert into PARAM (CD_PARAM, LIB_PARAM, VAL_PARAM) values (nextval('SEQ_PARAM'), "
+        		+ DBSession.quoteWith(messages.getString("label.paramDisqueAmovible"), '\'') + ","
+                + "'A:/')",
+                "insert into PARAM (CD_PARAM, LIB_PARAM, VAL_PARAM) values (nextval('SEQ_PARAM'), "
+        		+ DBSession.quoteWith(messages.getString("label.paramURLMaj"), '\'') + ","
+                + "'http://beauty-hair-mng.sourceforge.net/download/')",
+                "insert into PARAM (CD_PARAM, LIB_PARAM, VAL_PARAM) values (nextval('SEQ_PARAM'), "
+        		+ DBSession.quoteWith(messages.getString("label.paramURLLectureSauv"), '\'') + ","
+                + "'http://www.increg.com/Sauvegardes/')",
+                "insert into PARAM (CD_PARAM, LIB_PARAM, VAL_PARAM) values (nextval('SEQ_PARAM'), "
+        		+ DBSession.quoteWith(messages.getString("label.paramURLSuppSauv"), '\'') + ","
+                + "'http://www.increg.com/servlet/sauvegardeSup')",
+                "insert into PARAM (CD_PARAM, LIB_PARAM, VAL_PARAM) values (nextval('SEQ_PARAM'), "
+        		+ DBSession.quoteWith(messages.getString("label.paramURLCreationSauv"), '\'') + ","
+                + "'http://www.increg.com/servlet/sauvegarde')",
+                "insert into PARAM (CD_PARAM, LIB_PARAM, VAL_PARAM) values (nextval('SEQ_PARAM'), "
+        		+ DBSession.quoteWith(messages.getString("label.paramURLInfos"), '\'') + ","
+                + "'http://beauty-hair-mng.sourceforge.net/')",
                 "alter table HISTO_PREST add TVA numeric(8,2)",
                 "alter table HISTO_PREST add PRX_TOT_TTC numeric(8,2)",
                 "alter table HISTO_PREST add PRX_TOT_HT numeric(8,2)",

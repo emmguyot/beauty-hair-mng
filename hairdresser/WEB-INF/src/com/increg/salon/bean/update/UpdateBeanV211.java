@@ -61,20 +61,29 @@ public class UpdateBeanV211 extends UpdateBeanV210 {
                     + "DT_CREAT timestamp with time zone NOT NULL,"
                     + "DT_MODIF timestamp with time zone DEFAULT now() NOT NULL,"
                     + "Constraint pk_critere_pub Primary Key (CD_CRITERE_PUB))",
-                "insert into CRITERE_PUB (LIB_CRITERE_PUB, CLAUSE, dt_creat) values ('Nouveaux clients',"                    + "'from CLI where DT_CREAT > ''$DateDebut$''', now())",
-                "insert into CRITERE_PUB (LIB_CRITERE_PUB, CLAUSE, dt_creat) values ('Clients d''une ville',"
+                "insert into CRITERE_PUB (LIB_CRITERE_PUB, CLAUSE, dt_creat) values ("
+            		+ DBSession.quoteWith(messages.getString("label.pubNouveauxClients"), '\'') + ","
+                    + "'from CLI where DT_CREAT > ''$DateDebut$''', now())",
+                "insert into CRITERE_PUB (LIB_CRITERE_PUB, CLAUSE, dt_creat) values ("
+            		+ DBSession.quoteWith(messages.getString("label.pubClientsVille"), '\'') + ","
                     + "'from CLI where VILLE=''$VILLE$''', now())",
-                "insert into CRITERE_PUB (LIB_CRITERE_PUB, CLAUSE, dt_creat) values ('Clients en fonction de leur genre',"
+                "insert into CRITERE_PUB (LIB_CRITERE_PUB, CLAUSE, dt_creat) values ("
+            		+ DBSession.quoteWith(messages.getString("label.pubClientsGenre"), '\'') + ","
                     + "'from CLI where case when CIVILITE = ''M.'' then ''M'' when CIVILITE in (''Mle'', ''Mme'') then ''F'' else null end = ''$Genre$''', now())",
-                "insert into CRITERE_PUB (LIB_CRITERE_PUB, CLAUSE, dt_creat) values ('Anniversaire dans les n prochains jours',"
+                "insert into CRITERE_PUB (LIB_CRITERE_PUB, CLAUSE, dt_creat) values ("
+            		+ DBSession.quoteWith(messages.getString("label.pubClientsAnniversaire"), '\'') + ","
                     + "'from CLI where (date_part(''day'', DT_ANNIV) || ''/'' || date_part(''month'', DT_ANNIV) || ''/'' || date_part(''year'', now()))::date between now() and now() + interval ''$Nombre$ days''', now())",
-                "insert into CRITERE_PUB (LIB_CRITERE_PUB, CLAUSE, dt_creat) values ('Clients dans la tranche d''âge',"
+                "insert into CRITERE_PUB (LIB_CRITERE_PUB, CLAUSE, dt_creat) values ("
+            		+ DBSession.quoteWith(messages.getString("label.pubClientsAge"), '\'') + ","
                     + "'from CLI where CD_TR_AGE = $CD_TR_AGE$', now())",
-                "insert into CRITERE_PUB (LIB_CRITERE_PUB, CLAUSE, dt_creat) values ('Clients dans la catégorie de prestations',"
+                "insert into CRITERE_PUB (LIB_CRITERE_PUB, CLAUSE, dt_creat) values ("
+            		+ DBSession.quoteWith(messages.getString("label.pubClientsCategPrest"), '\'') + ","
                     + "'from CLI where CD_CLI in (select CD_CLI from HISTO_PREST,PREST where HISTO_PREST.CD_PREST = PREST.CD_PREST and CD_CATEG_PREST = $CD_CATEG_PREST$ and DT_PREST > ''$DateDebut$'')', now())",
-                "insert into CRITERE_PUB (LIB_CRITERE_PUB, CLAUSE, dt_creat) values ('Clients ayant acheté un produit',"
+                "insert into CRITERE_PUB (LIB_CRITERE_PUB, CLAUSE, dt_creat) values ("
+            		+ DBSession.quoteWith(messages.getString("label.pubClientsProduit"), '\'') + ","
                     + "'from CLI where CD_CLI in (select CD_CLI from HISTO_PREST,PREST where HISTO_PREST.CD_PREST = PREST.CD_PREST and PREST.CD_ART = $CD_ART$ and DT_PREST > ''$DateDebut$'')', now())",
-                "insert into CRITERE_PUB (LIB_CRITERE_PUB, CLAUSE, dt_creat) values ('Clients inactifs depuis le...',"
+                "insert into CRITERE_PUB (LIB_CRITERE_PUB, CLAUSE, dt_creat) values ("
+            		+ DBSession.quoteWith(messages.getString("label.pubClientsInactif"), '\'') + ","
                     + "'from CLI where CD_CLI not in (select distinct CD_CLI from FACT where DT_PREST > ''$DateDebut$'')', now())",
                 };
             String sqlAvecRes[] = {

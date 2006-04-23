@@ -58,16 +58,22 @@ public class UpdateBeanV33 extends UpdateBeanV31 {
                 "create table VERSION (VERSION varchar(10) not null)",
                 "insert into VERSION values ('3.3')",
                 "insert into STAT (CD_STAT,  LIB_STAT, REQ_SQL, LABEL_X, LABEL_Y, DT_CREAT, DT_MODIF) values ("
-                + "nextval('seq_stat'), 'Création de clients par origine', "
+                + "nextval('seq_stat'), "
+        		+ DBSession.quoteWith(messages.getString("label.statCreationClientOrigine"), '\'') + ","
                 + "'select date_trunc(''$PeriodeTemps$'', CLI.DT_CREAT), count(DISTINCT CLI.CD_CLI) from CLI "
                 + "where CLI.CD_ORIG = $CD_ORIG$ and CLI.DT_CREAT between ''$DateDebut$'' and ''$DateFin$'' "
                 + "group by date_trunc(''$PeriodeTemps$'', CLI.DT_CREAT)',"
-                + "'Période', 'Nombre', now(), now())",
+        		+ DBSession.quoteWith(messages.getString("label.periode"), '\'') + ","
+        		+ DBSession.quoteWith(messages.getString("label.nombre"), '\'') + ","
+                + "now(), now())",
                 "insert into STAT (CD_STAT,  LIB_STAT, REQ_SQL, LABEL_X, LABEL_Y, DT_CREAT, DT_MODIF) values ("
-                + "nextval('seq_stat'), 'Clients par origine', "
+                + "nextval('seq_stat'), "
+        		+ DBSession.quoteWith(messages.getString("label.statClientOrigine"), '\'') + ","
                 + "'select LIB_ORIG, count(DISTINCT CLI.CD_CLI) from CLI, ORIG "
                 + "where CLI.CD_ORIG = ORIG.CD_ORIG and CLI.DT_CREAT between ''$DateDebut$'' and ''$DateFin$'' group by LIB_ORIG',"
-                + "'Origine', 'Nombre', now(), now())",
+        		+ DBSession.quoteWith(messages.getString("label.origine"), '\'') + ","
+        		+ DBSession.quoteWith(messages.getString("label.nombre"), '\'') + ","
+                + "now(), now())",
                 "alter table SOC add FLG_INSTITUT char(1)",
                 "alter table SOC add FLG_SALON char(1)",
                 "create table TYP_PEAU ("

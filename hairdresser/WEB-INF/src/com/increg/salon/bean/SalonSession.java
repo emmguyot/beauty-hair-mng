@@ -29,7 +29,7 @@ import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.exception.ReloadNeededException;
 import com.increg.salon.bean.update.UpdateBean;
-import com.increg.salon.bean.update.UpdateBeanV33;
+import com.increg.salon.bean.update.UpdateBeanV40;
 import com.increg.util.SimpleDateFormatEG;
 
 /**
@@ -64,6 +64,11 @@ public abstract class SalonSession extends BasicSession {
      * msgTicket Message à afficher sur le ticket
      */
     protected String msgTicket;
+
+    /**
+     * msgTicket Message à afficher sur le ticket sur les taxes
+     */
+    protected String msgTicketTaxe;
 
     /**
      * Indicateur si les connexions externes sont autorisées
@@ -123,6 +128,7 @@ public abstract class SalonSession extends BasicSession {
      */
     public SalonSession() {
         msgTicket = "Mauvaise licence";
+        msgTicketTaxe = "";
     }
     
     /**
@@ -153,7 +159,7 @@ public abstract class SalonSession extends BasicSession {
                  * Mise à jour éventuelle de l'appli
                  * <b>A mettre à jour à chaque changement de version</b>
                  */
-                majBase = new UpdateBeanV33(myDBSession, messagesBundle);
+                majBase = new UpdateBeanV40(myDBSession, messagesBundle);
             } catch (Exception e) {
                 System.out.println("Mise à jour de la base en erreur :");
                 e.printStackTrace();
@@ -536,6 +542,21 @@ public abstract class SalonSession extends BasicSession {
             }
         }
         return msgTicket;
+    }
+
+    /**
+     * Insert the method's description here.
+     * Creation date: (20/08/2001 21:56:47)
+     * @return String
+     */
+    public String getMsgTicketTaxe() {
+        if (msgTicketTaxe == null) {
+            ParamBean valMsg = ParamBean.getParamBean(myDBSession, Integer.toString(ParamBean.CD_MSG_TAXE_TICKET));
+            if (valMsg != null) {
+                msgTicketTaxe = valMsg.getVAL_PARAM();
+            }
+        }
+        return msgTicketTaxe;
     }
 
     /**

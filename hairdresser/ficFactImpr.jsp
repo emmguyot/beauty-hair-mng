@@ -252,7 +252,7 @@
 	 }
 	 %>
 	 <tr>
-	 <td><font size=-2><i18n:message key="ficFactImpr.taxeComprise" /></font></td>
+	 <td><font size=-2><salon:valeur valeur='<%= mySalon.getMsgTicketTaxe() %>' valeurNulle="null">%%</salon:valeur></font></td>
 	 </tr>
 	 </table>
 	 <table width="100%">

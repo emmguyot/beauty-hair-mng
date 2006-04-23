@@ -56,86 +56,125 @@ public class UpdateBeanV27 extends UpdateBeanV26 {
             String sql[] = {
                   "alter table MVT_STK add CD_CMD_FOURN varchar (10) null",
                   "insert into STAT (CD_STAT,  LIB_STAT, REQ_SQL, LABEL_X, LABEL_Y, DT_CREAT, DT_MODIF) values ("
-                  + "11, 'Nombre de prestations par catégorie et par personne', "
+                  + "11, "
+          		  + DBSession.quoteWith(messages.getString("label.statPrestCategPersonne"), '\'') + ","
                   + "'select date_trunc(''$PeriodeTemps$'', DT_PAIEMENT), sum(HISTO_PREST.QTE) from FACT, PAIEMENT, HISTO_PREST, PREST, COLLAB "
                   + "where FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT and HISTO_PREST.CD_FACT = FACT.CD_FACT and HISTO_PREST.CD_PREST = PREST.CD_PREST "
                   + "and HISTO_PREST.CD_COLLAB = COLLAB.CD_COLLAB and COLLAB.CD_COLLAB = $CD_COLLAB$ and PREST.CD_CATEG_PREST = $CD_CATEG_PREST$ "
                   + "and FACT.DT_PREST between ''$DateDebut$'' and ''$DateFin$'' group by date_trunc(''$PeriodeTemps$'', DT_PAIEMENT)',"
-                  + "'Période', 'Nombre', now(), now())",
+          		  + DBSession.quoteWith(messages.getString("label.periode"), '\'') + ","
+          		  + DBSession.quoteWith(messages.getString("label.nombre"), '\'') + ","
+                  + "now(), now())",
                   "insert into STAT (CD_STAT,  LIB_STAT, REQ_SQL, LABEL_X, LABEL_Y, DT_CREAT, DT_MODIF) values ("
-                  + "12, 'Chiffre d''affaires par personne et par catégorie', "
+                  + "12, "
+          		  + DBSession.quoteWith(messages.getString("label.statCAPersonneCateg"), '\'') + ","
                   + "'select date_trunc(''$PeriodeTemps$'', DT_PAIEMENT), SUM(round(HISTO_PREST.PRX_UNIT_TTC*HISTO_PREST.QTE,2)) from FACT, PAIEMENT, HISTO_PREST, PREST "
                   + "where FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT and HISTO_PREST.CD_FACT = FACT.CD_FACT and HISTO_PREST.CD_PREST = PREST.CD_PREST "
                   + "and HISTO_PREST.CD_COLLAB = $CD_COLLAB$ and PREST.CD_CATEG_PREST = $CD_CATEG_PREST$ "
                   + "and FACT.DT_PREST between ''$DateDebut$'' and ''$DateFin$'' group by date_trunc(''$PeriodeTemps$'', DT_PAIEMENT)',"
-                  + "'Période', 'Montant TTC', now(), now())",
+          		  + DBSession.quoteWith(messages.getString("label.periode"), '\'') + ","
+          		  + DBSession.quoteWith(messages.getString("label.montant"), '\'') + ","
+                  + "now(), now())",
                   "insert into STAT (CD_STAT,  LIB_STAT, REQ_SQL, LABEL_X, LABEL_Y, DT_CREAT, DT_MODIF) values ("
-                  + "13, 'Clients actifs par genre', "
+                  + "13, "
+          		  + DBSession.quoteWith(messages.getString("label.statClientsActifsGenre"), '\'') + ","
                   + "'select date_trunc(''$PeriodeTemps$'', FACT.DT_PREST), count(DISTINCT FACT.CD_CLI) from CLI, FACT, PAIEMENT "
                   + "where FACT.CD_CLI = CLI.CD_CLI and FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT "
                   + "and ((''$Genre$'' = ''M'' and CIVILITE=''M.'') or (''$Genre$'' = ''F'' and CIVILITE in (''Mle'', ''Mme''))) "
                   + "and FACT.DT_PREST between ''$DateDebut$'' and ''$DateFin$'' group by date_trunc(''$PeriodeTemps$'', FACT.DT_PREST)',"
-                  + "'Période', 'Nombre', now(), now())",
+          		  + DBSession.quoteWith(messages.getString("label.periode"), '\'') + ","
+          		  + DBSession.quoteWith(messages.getString("label.nombre"), '\'') + ","
+                  + "now(), now())",
                   "insert into STAT (CD_STAT,  LIB_STAT, REQ_SQL, LABEL_X, LABEL_Y, DT_CREAT, DT_MODIF) values ("
-                  + "14, 'Clients actifs par trimestre par genre', "
+                  + "14, "
+          		  + DBSession.quoteWith(messages.getString("label.statClientsActifsTrimestreGenre"), '\'') + ","
                   + "'select to_char(extract(YEAR from DT_PAIEMENT), ''9999'') || to_char(extract(QUARTER from DT_PAIEMENT), '' T9''), count(DISTINCT FACT.CD_CLI) from CLI, FACT, PAIEMENT "
                   + "where FACT.CD_CLI = CLI.CD_CLI and FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT "
                   + "and ((''$Genre$'' = ''M'' and CIVILITE=''M.'') or (''$Genre$'' = ''F'' and CIVILITE in (''Mle'', ''Mme''))) "
                   + "and DT_PAIEMENT between ''$DateDebut$'' and ''$DateFin$'' group by to_char(extract(YEAR from DT_PAIEMENT), ''9999'') || to_char(extract(QUARTER from DT_PAIEMENT), '' T9'')',"
-                  + "'Trimestre', 'Nombre', now(), now())",
+          		  + DBSession.quoteWith(messages.getString("label.trimestre"), '\'') + ","
+          		  + DBSession.quoteWith(messages.getString("label.nombre"), '\'') + ","
+                  + "now(), now())",
                   // Statistiques par période de temps
                   // Mise à jour de la requête, du libellé et du l'absisse
-                  "update STAT set LIB_STAT='Nombre de prestations par catégorie', "
+                  "update STAT set LIB_STAT="
+          		  + DBSession.quoteWith(messages.getString("label.statPrestCategorie"), '\'') + ","
                   + "REQ_SQL='select date_trunc(''$PeriodeTemps$'', FACT.DT_PREST), sum(HISTO_PREST.QTE) from FACT, PAIEMENT, HISTO_PREST, PREST "
                   + "where FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT and HISTO_PREST.CD_FACT = FACT.CD_FACT and HISTO_PREST.CD_PREST = PREST.CD_PREST "
                   + "and PREST.CD_CATEG_PREST = $CD_CATEG_PREST$ and FACT.DT_PREST between ''$DateDebut$'' and ''$DateFin$'' group by date_trunc(''$PeriodeTemps$'', FACT.DT_PREST)', "
-                  + "LABEL_X='Période' where CD_STAT=1",
-                  "update STAT set LIB_STAT='Clients actifs', "
+                  + "LABEL_X="
+          		  + DBSession.quoteWith(messages.getString("label.periode"), '\'')
+                  + " where CD_STAT=1",
+                  "update STAT set LIB_STAT="
+          		  + DBSession.quoteWith(messages.getString("label.statClientsActifs"), '\'') + ","
                   + "REQ_SQL='select date_trunc(''$PeriodeTemps$'', FACT.DT_PREST), count(DISTINCT FACT.CD_CLI) from FACT, PAIEMENT "
                   + "where FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT and FACT.DT_PREST between ''$DateDebut$'' and ''$DateFin$'' "
                   + "group by date_trunc(''$PeriodeTemps$'', FACT.DT_PREST)', "
-                  + "LABEL_X='Période' where CD_STAT=2",
+                  + "LABEL_X="
+          		  + DBSession.quoteWith(messages.getString("label.periode"), '\'')
+                  + " where CD_STAT=2",
                   "update STAT set "
                   + "REQ_SQL='select to_char(extract(YEAR from DT_PAIEMENT), ''9999'') || to_char(extract(QUARTER from DT_PAIEMENT), '' T9''), "
                   + "count(DISTINCT FACT.CD_CLI) from FACT, PAIEMENT where FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT "
                   + "and DT_PAIEMENT between ''$DateDebut$'' and ''$DateFin$'' group by to_char(extract(YEAR from DT_PAIEMENT), ''9999'') || to_char(extract(QUARTER from DT_PAIEMENT), '' T9'')' "
                   + "where CD_STAT=3",
-                  "update STAT set LIB_STAT='Chiffre d''affaires par catégorie de client', "
+                  "update STAT set LIB_STAT="
+          		  + DBSession.quoteWith(messages.getString("label.statCACategClient"), '\'') + ","
                   + "REQ_SQL='select date_trunc(''$PeriodeTemps$'', DT_PAIEMENT), SUM(round(HISTO_PREST.PRX_UNIT_TTC*HISTO_PREST.QTE,2)) from FACT, PAIEMENT, HISTO_PREST, CLI "
                   + "where FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT and HISTO_PREST.CD_FACT = FACT.CD_FACT and HISTO_PREST.CD_CLI = CLI.CD_CLI "
                   + "and CLI.CD_CATEG_CLI = $CD_CATEG_CLI$ and DT_PAIEMENT between ''$DateDebut$'' and ''$DateFin$'' group by date_trunc(''$PeriodeTemps$'', DT_PAIEMENT)', "
-                  + "LABEL_X='Période' where CD_STAT=4",
-                  "update STAT set LIB_STAT='Chiffre d''affaires', "
+                  + "LABEL_X="
+          		  + DBSession.quoteWith(messages.getString("label.periode"), '\'')
+                  + " where CD_STAT=4",
+                  "update STAT set LIB_STAT="
+          		  + DBSession.quoteWith(messages.getString("label.ca"), '\'') + ","
                   + "REQ_SQL='select date_trunc(''$PeriodeTemps$'', DT_PAIEMENT), SUM(FACT.PRX_TOT_TTC) from FACT, PAIEMENT "
                   + "where FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT and DT_PAIEMENT between ''$DateDebut$'' and ''$DateFin$'' "
                   + "group by date_trunc(''$PeriodeTemps$'', DT_PAIEMENT)', "
-                  + "LABEL_X='Période' where CD_STAT=5",
-                  "update STAT set LIB_STAT='Chiffre d''affaires par catégorie', "
+                  + "LABEL_X="
+          		  + DBSession.quoteWith(messages.getString("label.periode"), '\'')
+                  + " where CD_STAT=5",
+                  "update STAT set LIB_STAT="
+          		  + DBSession.quoteWith(messages.getString("label.statCACateg"), '\'') + ","
                   + "REQ_SQL='select date_trunc(''$PeriodeTemps$'', DT_PAIEMENT), SUM(HISTO_PREST.PRX_UNIT_TTC*HISTO_PREST.QTE) from FACT, PAIEMENT, HISTO_PREST, PREST "
                   + "where FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT and HISTO_PREST.CD_FACT = FACT.CD_FACT and HISTO_PREST.CD_PREST = PREST.CD_PREST "
                   + "and PREST.CD_CATEG_PREST = $CD_CATEG_PREST$ and DT_PAIEMENT between ''$DateDebut$'' and ''$DateFin$'' group by date_trunc(''$PeriodeTemps$'', DT_PAIEMENT)', "
-                  + "LABEL_X='Période' where CD_STAT=6",
-                  "update STAT set LIB_STAT='Chiffre d''affaires par type de prestations', "
+                  + "LABEL_X="
+          		  + DBSession.quoteWith(messages.getString("label.periode"), '\'')
+                  + " where CD_STAT=6",
+                  "update STAT set LIB_STAT="
+          		  + DBSession.quoteWith(messages.getString("label.statCATypePrest"), '\'') + ","
                   + "REQ_SQL='select date_trunc(''$PeriodeTemps$'', DT_PAIEMENT), SUM(round(HISTO_PREST.PRX_UNIT_TTC*HISTO_PREST.QTE,2)) from FACT, PAIEMENT, HISTO_PREST, PREST "
                   + "where FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT and HISTO_PREST.CD_FACT = FACT.CD_FACT and HISTO_PREST.CD_PREST = PREST.CD_PREST and PREST.CD_TYP_VENT = $CD_TYP_VENT$ "
                   + "and DT_PAIEMENT between ''$DateDebut$'' and ''$DateFin$'' group by date_trunc(''$PeriodeTemps$'', DT_PAIEMENT)', "
-                  + "LABEL_X='Période' where CD_STAT=7",
-                  "update STAT set LIB_STAT='Chiffre d''affaires par personne', "
+                  + "LABEL_X=" 
+          		  + DBSession.quoteWith(messages.getString("label.periode"), '\'')
+                  + " where CD_STAT=7",
+                  "update STAT set LIB_STAT="
+          		  + DBSession.quoteWith(messages.getString("label.statCAPersonne"), '\'') + ","
                   + "REQ_SQL='select date_trunc(''$PeriodeTemps$'', DT_PAIEMENT), SUM(round(HISTO_PREST.PRX_UNIT_TTC*HISTO_PREST.QTE,2)) from FACT, PAIEMENT, HISTO_PREST "
                   + "where FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT and HISTO_PREST.CD_FACT = FACT.CD_FACT and HISTO_PREST.CD_COLLAB = $CD_COLLAB$ "
                   + "and DT_PAIEMENT between ''$DateDebut$'' and ''$DateFin$'' group by date_trunc(''$PeriodeTemps$'', DT_PAIEMENT)', "
-                  + "LABEL_X='Période' where CD_STAT=8",
-                  "update STAT set LIB_STAT='Chiffre d''affaires par personne et par type de prestations', "
+                  + "LABEL_X="
+          		  + DBSession.quoteWith(messages.getString("label.periode"), '\'')
+                  + " where CD_STAT=8",
+                  "update STAT set LIB_STAT="
+          		  + DBSession.quoteWith(messages.getString("label.statCAPersonneTypePrestation"), '\'') + ","
                   + "REQ_SQL='select date_trunc(''$PeriodeTemps$'', DT_PAIEMENT), SUM(round(HISTO_PREST.PRX_UNIT_TTC*HISTO_PREST.QTE,2)) from FACT, PAIEMENT, HISTO_PREST, PREST "
                   + "where FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT and HISTO_PREST.CD_FACT = FACT.CD_FACT and HISTO_PREST.CD_PREST = PREST.CD_PREST "
                   + "and HISTO_PREST.CD_COLLAB = $CD_COLLAB$ and PREST.CD_TYP_VENT = $CD_TYP_VENT$ "
                   + "and DT_PAIEMENT between ''$DateDebut$'' and ''$DateFin$'' group by date_trunc(''$PeriodeTemps$'', DT_PAIEMENT)', "
-                  + "LABEL_X='Période' where CD_STAT=9",
-                  "update STAT set LIB_STAT='Consommation valorisée par catégorie de produits', "
+                  + "LABEL_X="
+          		  + DBSession.quoteWith(messages.getString("label.periode"), '\'')
+                  + " where CD_STAT=9",
+                  "update STAT set LIB_STAT="
+          		  + DBSession.quoteWith(messages.getString("label.statConsoCategProduit"), '\'') + ","
                   + "REQ_SQL='select date_trunc(''$PeriodeTemps$'', DT_MVT), sum(MVT_STK.VAL_MVT_HT*MVT_STK.QTE) from MVT_STK, ART "
                   + "where MVT_STK.CD_ART = ART.CD_ART and MVT_STK.CD_TYP_MVT = $CD_TYP_MVT$ and ART.CD_CATEG_ART = $CD_CATEG_ART$ "
                   + "and MVT_STK.DT_MVT between ''$DateDebut$'' and ''$DateFin$'' group by date_trunc(''$PeriodeTemps$'', DT_MVT)', "
-                  + "LABEL_X='Période' where CD_STAT=10"
+                  + "LABEL_X="
+          		  + DBSession.quoteWith(messages.getString("label.periode"), '\'')
+          		  + " where CD_STAT=10"
                 };
             String sqlAvecRes[] = {
                 // Mise à jour de la sequence de statistique

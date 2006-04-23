@@ -6,21 +6,20 @@ import java.util.ResourceBundle;
 
 import com.increg.commun.DBSession;
 import com.increg.commun.exception.ReloadNeededException;
-import com.increg.salon.bean.ParamBean;
 
 /**
- * Passage à la version 2.10 
- * Creation date : 27 sept. 2003
+ * Passage à la version 3.3
+ * Creation date : 30 déc. 2004
  * @author Emmanuel GUYOT <emmguyot@wanadoo.fr>
  */
-public class UpdateBeanV210 extends UpdateBeanV29 {
+public class UpdateBeanV40 extends UpdateBeanV33 {
 
     /**
      * Constructor for UpdateBeanVxx.
      * @param dbConnect .
      * @throws Exception .
      */
-    public UpdateBeanV210(DBSession dbConnect, ResourceBundle rb) throws Exception {
+    public UpdateBeanV40(DBSession dbConnect, ResourceBundle rb) throws Exception {
         super(dbConnect, rb);
     }
 
@@ -29,20 +28,15 @@ public class UpdateBeanV210 extends UpdateBeanV29 {
      */
     protected void deduitVersion(DBSession dbConnect) throws Exception {
 
-        // Vérification de la taille de la colonne cd_ident
-        String sql = "select CD_PARAM from PARAM where CD_PARAM=" + ParamBean.CD_AUTOCONNECT;
+        // Vérification de la présence de la table de Version
+        String sql = "select VERSION from VERSION";
         try {
             ResultSet rs = dbConnect.doRequest(sql);
-            if (rs.next()) {
-                // Tout va bien : Le param est là
-                version = "2.10";
-            } else {
-                super.deduitVersion(dbConnect);
-            }
+            
+            version = rs.getString(0);
             rs.close();
-        }
-        catch (SQLException se) {
-            // Erreur SQL : Champ inexistant
+        } catch (SQLException se) {
+            // Erreur SQL : table inexistante
             // C'est donc une version antérieure
             super.deduitVersion(dbConnect);
         }
@@ -53,28 +47,32 @@ public class UpdateBeanV210 extends UpdateBeanV29 {
      */
     protected void majVersion(DBSession dbConnect) throws Exception {
         super.majVersion(dbConnect);
-        if (version.equals("2.9")) {
-            // Mise à jour de la base pour passer en 2.10
+        if (version.equals("3.3")) {
+            // Mise à jour de la base pour passer en 4.0
             // Requète Avant / Après
-            String reqStat[][] = {
+            String[][] reqStat = {
                 };
-            String sql[] = {
+            String[] sql = {
+                "update VERSION set VERSION='4.0'",
                 "insert into PARAM (CD_PARAM, LIB_PARAM, VAL_PARAM) values (nextval('SEQ_PARAM'), "
-            		+ DBSession.quoteWith(messages.getString("label.paramCnxAuto"), '\'') + ","
-            		+ "'O')"
+            		+ DBSession.quoteWith(messages.getString("label.paramMsgTaxesTicket"), '\'') + ","
+                	+ DBSession.quoteWith(messages.getString("ficFactImpr.taxeComprise"), '\'') + ")",
+                "insert into FETE (CD_FETE, PRENOM, DT_FETE) values (nextval('SEQ_FETE'), 'Eliott', '20/07/1970')",
+                
+                
                 };
-            String sqlAvecRes[] = {
+            String[] sqlAvecRes = {
                 };
 
             for (int i = 0; i < reqStat.length; i++) {
-                String aSql[] = new String[1];
+                String[] aSql = new String[1];
                 aSql[0] = "update STAT set REQ_SQL=" + DBSession.quoteWith(reqStat[i][1], '\'') 
                         + " where REQ_SQL=" + DBSession.quoteWith(reqStat[i][0], '\'');
                 dbConnect.doExecuteSQL(aSql);
             }
                                     
             for (int i = 0; i < sql.length; i++) {
-                String aSql[] = new String[1];
+                String[] aSql = new String[1];
                 aSql[0] = sql[i];
                 dbConnect.doExecuteSQL(aSql);
             }
@@ -84,18 +82,8 @@ public class UpdateBeanV210 extends UpdateBeanV29 {
                 rs.close();
             }
 
-            try {
-                // Spécial !!! Supression de l'induex UI_ART_LIB ==> Présent sur certaines bases
-                String aSql[] = new String[1];
-                aSql[0] = "drop index UI_ART_LIB";
-                dbConnect.doExecuteSQL(aSql);
-            }
-            catch (SQLException e) {
-                // Ignore l'erreur : C'est probablement que l'index n'existe déjà plus
-            }
-            
-            // On vient de passer en 2.10
-            version = "2.10";
+            // On vient de passer en 4.0
+            version = "4.0";
         }
     }
     /**
@@ -104,7 +92,8 @@ public class UpdateBeanV210 extends UpdateBeanV29 {
     public boolean checkDatabase(DBSession dbConnect) throws ReloadNeededException {
 
         // Liste des tables qui devraient être présentes, dans l'ordre alphabétique
-        String lstTables[] = {
+        String[] lstTables = {
+                            "ABO_CLI",
                             "ART",
                             "CAISSE",
                             "CAT_FOURN",
@@ -113,6 +102,7 @@ public class UpdateBeanV210 extends UpdateBeanV29 {
                             "CATEG_PREST",
                             "CLI",
                             "COLLAB",
+                            "CRITERE_PUB",
                             "DEVISE",
                             "FACT",
                             "FCT",
@@ -130,28 +120,33 @@ public class UpdateBeanV210 extends UpdateBeanV29 {
                             "POINTAGE",
                             "PREST",
                             "PROFIL",
+                            "RDV",
                             "SOC",
                             "STAT",
                             "STAT_HISTO",
                             "TR_AGE",
+                            "TVA",
                             "TYP_ART",
                             "TYP_CHEV",
                             "TYP_CONTR",
                             "TYP_MCA",
                             "TYP_MVT",
+                            "TYP_PEAU",
                             "TYP_POINTAGE",
                             "TYP_VENT",
-                            "UNIT_MES"
+                            "UNIT_MES",
+                            "VERSION"
                             };
 
         // liste des séquences qui devraient être présentes, dans l'ordre alphabétique
-        String lstSequences[] = {
+        String[] lstSequences = {
                             "SEQ_ART",
                             "SEQ_CATEG_ART",
                             "SEQ_CATEG_CLI",
                             "SEQ_CATEG_PREST",
                             "SEQ_CLI",
                             "SEQ_COLLAB",
+                            "SEQ_CRITERE_PUB",
                             "SEQ_DEVISE",
                             "SEQ_FACT",
                             "SEQ_FCT",
@@ -167,11 +162,13 @@ public class UpdateBeanV210 extends UpdateBeanV29 {
                             "SEQ_PROFIL",
                             "SEQ_STAT",
                             "SEQ_TR_AGE",
+                            "SEQ_TVA",
                             "SEQ_TYP_ART",
                             "SEQ_TYP_CHEV",
                             "SEQ_TYP_CONTR",
                             "SEQ_TYP_MCA",
                             "SEQ_TYP_MVT",
+                            "SEQ_TYP_PEAU",
                             "SEQ_TYP_POINTAGE",
                             "SEQ_TYP_VENT",
                             "SEQ_UNIT_MES"
@@ -179,5 +176,4 @@ public class UpdateBeanV210 extends UpdateBeanV29 {
         
         return checkDatabase(dbConnect, lstTables, lstSequences);
     }
-
 }

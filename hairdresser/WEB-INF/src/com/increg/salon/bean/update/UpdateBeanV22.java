@@ -57,9 +57,13 @@ public class UpdateBeanV22 extends UpdateBeanV21 {
             String reqStat[][] = {
                 };
             String sql[] = {
-                "update PARAM set LIB_PARAM='Mot de passe Opérations Exceptionnelles' where CD_PARAM=1",
+                "update PARAM set LIB_PARAM="
+            		+ DBSession.quoteWith(messages.getString("label.paramMDPOpExcep"), '\'')
+            		+ " where CD_PARAM=1",
                 "update PARAM set VAL_PARAM=(select MOT_PASSE from IDENT where CD_IDENT=1) where CD_PARAM=1",
-                "insert into PARAM (CD_PARAM, LIB_PARAM, VAL_PARAM) values (4, 'Affichage prix en bas de facture', 'O')"
+                "insert into PARAM (CD_PARAM, LIB_PARAM, VAL_PARAM) values (4, "
+                	+ DBSession.quoteWith(messages.getString("label.paramAffPrixFacture"), '\'') + ","
+                	+ "'O')"
                 };
             String sqlAvecRes[] = {
                 "select setval ('seq_param', 4, true)"
