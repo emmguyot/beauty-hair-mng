@@ -11,13 +11,13 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.text.MessageFormat;
 import java.util.Enumeration;
+import java.util.ResourceBundle;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.Executer;
 import com.increg.salon.bean.ParamBean;
@@ -57,6 +57,7 @@ public class Restauration extends ConnectedServlet {
 
         HttpSession mySession = request.getSession(false);
         SalonSessionImpl mySalon = (SalonSessionImpl) mySession.getAttribute("SalonSession");
+        ResourceBundle messages = mySalon.getMessagesBundle();
         DBSession myDBSession = mySalon.getMyDBSession();
 
         // Récupère les paramètres
@@ -140,7 +141,7 @@ public class Restauration extends ConnectedServlet {
                             /**
                              * Messages dans les attributs car plus de bean session
                              */
-                            request.setAttribute("Erreur", BasicSession.TAG_I18N + "restauration.erreurP1" + BasicSession.TAG_I18N);
+                            request.setAttribute("Erreur", messages.getString("restauration.erreurP1"));
                             erreur = true;
                         }
                     }
@@ -152,7 +153,7 @@ public class Restauration extends ConnectedServlet {
                             /**
                              * Messages dans les attributs car plus de bean session
                              */
-                            request.setAttribute("Erreur", BasicSession.TAG_I18N + "restauration.erreurP2" + BasicSession.TAG_I18N);
+                            request.setAttribute("Erreur", messages.getString("restauration.erreurP2"));
                             erreur = true;
                         }
                     }
@@ -168,7 +169,7 @@ public class Restauration extends ConnectedServlet {
                             /**
                              * Messages dans les attributs car plus de bean session
                              */
-                            request.setAttribute("Erreur", BasicSession.TAG_I18N + "restauration.erreurP3" + BasicSession.TAG_I18N);
+                            request.setAttribute("Erreur", messages.getString("restauration.erreurP3"));
                             erreur = true;
                         }
 
@@ -192,7 +193,7 @@ public class Restauration extends ConnectedServlet {
 
                             int cr = resto.runAndWait(5 * 60 * 1000, 2000);
                             if (cr < 0) {
-                                request.setAttribute("Erreur", BasicSession.TAG_I18N + "restauration.erreurRelance" + BasicSession.TAG_I18N);
+                                request.setAttribute("Erreur", messages.getString("restauration.erreurRelance"));
                                 // Kill le process au cas où il traine
                                 Executer killIt = new Executer("bash --login -c \"kill -9 `ps | grep pg_restore | grep -v grep | gawk '{ print $1 '}` \"");
                                 killIt.runAndWait();
@@ -208,11 +209,11 @@ public class Restauration extends ConnectedServlet {
                                     /**
                                      * Messages dans les attributs car plus de bean session
                                      */
-                                    request.setAttribute("Erreur", BasicSession.TAG_I18N + "restauration.erreur" + BasicSession.TAG_I18N);
+                                    request.setAttribute("Erreur", messages.getString("restauration.erreur"));
                                     erreur = true;
                                 }
                                 else {
-                                    request.setAttribute("Info", BasicSession.TAG_I18N + "restauration.succes" + BasicSession.TAG_I18N);
+                                    request.setAttribute("Info", messages.getString("restauration.succes"));
                                     erreur = false;
                                     done = true;
                                 }
@@ -266,7 +267,7 @@ public class Restauration extends ConnectedServlet {
                     }
                     if (aCon == null) {
                         // Connexion impossible
-                        throw (new Exception(BasicSession.TAG_I18N + "message.serverKo" + BasicSession.TAG_I18N));
+                        throw (new Exception(messages.getString("message.serverKo")));
                     }
 
                     aCon.setUseCaches(false);
@@ -289,7 +290,7 @@ public class Restauration extends ConnectedServlet {
                         }
                     }
                     if (!connectionOk) {
-                        throw (new Exception(BasicSession.TAG_I18N + "message.serverKo" + BasicSession.TAG_I18N));
+                        throw (new Exception(messages.getString("message.serverKo")));
                     }
 
                     DataOutputStream dataOut = new DataOutputStream(new BufferedOutputStream(aCon.getOutputStream()));
@@ -320,7 +321,7 @@ public class Restauration extends ConnectedServlet {
                         mySalon.setMessage("Erreur", msg);
                     }
                     else {
-                        mySalon.setMessage("Info", BasicSession.TAG_I18N + "restauration.suppressionInternetOk" + BasicSession.TAG_I18N);
+                        mySalon.setMessage("Info", messages.getString("restauration.suppressionInternetOk"));
                     }
 
                 }
@@ -346,7 +347,7 @@ public class Restauration extends ConnectedServlet {
                         }
 
                     }
-                    mySalon.setMessage("Info", BasicSession.TAG_I18N + "restauration.suppressionOk" + BasicSession.TAG_I18N);
+                    mySalon.setMessage("Info", messages.getString("restauration.suppressionOk"));
                 }
 
             }
@@ -399,7 +400,7 @@ public class Restauration extends ConnectedServlet {
                     }
                     if (aCon == null) {
                         // Connexion impossible
-                        throw (new Exception(BasicSession.TAG_I18N + "message.serverKo" + BasicSession.TAG_I18N));
+                        throw (new Exception(messages.getString("message.serverKo")));
                     }
 
                     aCon.setUseCaches(false);
