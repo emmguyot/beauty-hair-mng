@@ -88,7 +88,7 @@ function checkAndSubmit()
                                                 <% } %>
                                             </p>
                                         </form>
-                                        <div align="center"><font size="-1"><a href="histo.html"><%@ include file="include/version.inc" %></a> &copy; 
+                                        <div align="center"><font size="-1"><a href="<%= request.getLocale().getLanguage() %>/histo.html"><%@ include file="include/version.inc" %></a> &copy; 
                                                 <i18n:message key="message.copyrightLicence" /></font></div>
                                     </td>
                                 </tr>

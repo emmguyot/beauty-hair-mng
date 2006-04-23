@@ -72,7 +72,7 @@
                                             <salon:bouton url="javascript:document.base.submit()" imgOn="<%= \"images/\" + request.getLocale().getLanguage() + \"/valider2.gif\" %>" img="<%= \"images/\" + request.getLocale().getLanguage() + \"/valider.gif\" %>" alt="<%= paramBouton2 %>" />
                                             </p>
                                         </form>
-                                        <div align="center"><font size="-1"><a href="/<%= request.getLocale().getLanguage() %>/histo.html"><%@ include file="include/version.inc" %></a> &copy; 
+                                        <div align="center"><font size="-1"><a href="<%= request.getLocale().getLanguage() %>/histo.html"><%@ include file="include/version.inc" %></a> &copy; 
                                                 <i18n:message key="message.copyrightLicence" /></font></div>
                                     </td>
                                 </tr>
