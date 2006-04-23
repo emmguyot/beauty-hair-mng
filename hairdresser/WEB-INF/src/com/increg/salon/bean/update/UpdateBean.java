@@ -34,6 +34,7 @@ public class UpdateBean {
         super();
 
         version = null;
+        messages = rb;
         deduitVersion(dbConnect);
 
         System.out.println("Version base detectee : " + version);
