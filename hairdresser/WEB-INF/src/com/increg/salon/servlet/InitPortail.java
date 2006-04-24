@@ -10,7 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.ibm.ejs.security.util.Base64Coder;
+import org.apache.commons.codec.binary.Base64;
+
 import com.increg.commun.exception.ReloadNeededException;
 import com.increg.salon.bean.IdentBean;
 import com.increg.salon.bean.MultiConfigBean;
@@ -129,7 +130,7 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
             else {
                 // Triture le Header pour en extraire le user
                 if (request.getHeader("Authorization") != null) {
-                    String authorization = Base64Coder.base64Decode(request.getHeader("Authorization").substring(6));
+                    String authorization = new String(Base64.decodeBase64(request.getHeader("Authorization").substring(6).getBytes()));
                     user = authorization.substring(0, authorization.indexOf(':'));
                 }
             }

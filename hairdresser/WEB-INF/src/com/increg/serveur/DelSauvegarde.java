@@ -10,7 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ibm.ejs.security.util.Base64Coder;
+import org.apache.commons.codec.binary.Base64;
 
 /**
  * Place un fichier de sauvegarde sur le serveur Creation date: (10/10/2001
@@ -57,7 +57,7 @@ public class DelSauvegarde extends javax.servlet.http.HttpServlet {
                 user = userPrincipal.getName();
             } else {
                 // Triture le Header pour en extraire le user
-                String authorization = Base64Coder.base64Decode(request.getHeader("Authorization").substring(6));
+                String authorization = new String(Base64.decodeBase64(request.getHeader("Authorization").substring(6).getBytes()));
                 user = authorization.substring(0, authorization.indexOf(':'));
             }
             rootPath = rootPath + user + System.getProperty("file.separator");

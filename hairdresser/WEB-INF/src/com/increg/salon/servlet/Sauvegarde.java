@@ -11,7 +11,8 @@ import java.util.Calendar;
 
 import javax.servlet.http.HttpSession;
 
-import com.ibm.ejs.security.util.Base64Coder;
+import org.apache.commons.codec.binary.Base64;
+
 import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.Executer;
@@ -141,7 +142,7 @@ public class Sauvegarde extends ConnectedServlet {
                             dataOut.writeBytes("\r\n");
 
                             // Envoi du fichier
-                            dataOut.write(Base64Coder.base64Encode(dataBytes));
+                            dataOut.write(Base64.encodeBase64(dataBytes));
                             dataOut.writeBytes("\r\n\r\n" + boundary + "--\r\n");
 
                             dataOut.flush();

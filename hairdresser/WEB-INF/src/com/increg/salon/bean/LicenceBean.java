@@ -21,7 +21,8 @@ import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 import java.util.MissingResourceException;
 
-import com.ibm.ejs.security.util.Base64Coder;
+import org.apache.commons.codec.binary.Base64;
+
 import com.increg.commun.BasicSession;
 import com.increg.commun.exception.UnauthorisedUserException;
 /**
@@ -145,9 +146,9 @@ public class LicenceBean extends Authenticator {
      */
     public String getBasicAuthentication() {
         PasswordAuthentication aPwd = getPasswordAuthentication();
-        String res =
-            Base64Coder.base64Encode(
-                aPwd.getUserName() + ":" + new String(aPwd.getPassword()));
+        String res = new String(
+            Base64.encodeBase64(
+                (aPwd.getUserName() + ":" + new String(aPwd.getPassword())).getBytes()));
         return "Basic " + res;
     }
 }
