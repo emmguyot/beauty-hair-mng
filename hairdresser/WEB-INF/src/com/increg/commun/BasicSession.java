@@ -85,6 +85,16 @@ public class BasicSession {
      */
     public void setMessage(String key, String value) {
 		
+		value = internationaliseMessage(value);
+        messages.put(key, value);
+    }
+
+    /**
+	 * Internationalise le message
+	 * @param value
+	 * @return
+	 */
+	public String internationaliseMessage(String value) {
 		// La valeur est literale ou à internationnaliser ?
 		if ((value != null) && (value.indexOf(TAG_I18N) >= 0)) {
 			// A internationaliser la clé est encadrée par 1 tag de chaque coté
@@ -96,8 +106,8 @@ public class BasicSession {
 			
 			value = debut + messagesBundle.getString(cle) + fin;
 		}
-        messages.put(key, value);
-    }
+		return value;
+	}
     /**
      * Insert the method's description here.
      * Creation 7 mai 2005 10:45:52

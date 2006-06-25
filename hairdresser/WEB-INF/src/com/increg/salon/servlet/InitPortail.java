@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.commons.codec.binary.Base64;
 
+import com.increg.commun.BasicSession;
 import com.increg.commun.exception.ReloadNeededException;
 import com.increg.salon.bean.IdentBean;
 import com.increg.salon.bean.MultiConfigBean;
@@ -77,6 +78,8 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
 	try {
 		// Création de la session
 		HttpSession mySession = request.getSession(true);
+		BasicSession myBasicSession = new BasicSession();
+		myBasicSession.setLangue(request.getLocale());
 
         String numBase = request.getParameter("numBase");
         
@@ -103,11 +106,11 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
         		mySalon = new SalonSessionImpl(fichConfig);
             }
             catch (ReloadNeededException e) {
-                request.setAttribute("Erreur", e.toString());
+                request.setAttribute("Erreur", myBasicSession.internationaliseMessage(e.toString()));
                 reloadNeeded = true;
             }
             catch (MissingResourceException e) {
-                request.setAttribute("Erreur", e.toString());
+                request.setAttribute("Erreur", myBasicSession.internationaliseMessage(e.toString()));
                 badConfig = true;
             }
             catch (Throwable e) {
