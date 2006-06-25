@@ -114,6 +114,11 @@
 		  </salon:valeur>
 	 </td></tr>
 	 <tr>
+	 <td colspan="2"><i18n:message key="label.numeroFacture" /> :
+                <%= aPaiement.getCD_PAIEMENT() %>
+         </td>
+         </tr>
+	 <tr>
 	 <td colspan="2"><i18n:message key="label.client" /> :
 	 <%
 	       ClientBean aCli = ClientBean.getClientBean(mySalon.getMyDBSession(), Long.toString(aFact.getCD_CLI()), mySalon.getMessagesBundle());
