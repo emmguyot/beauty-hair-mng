@@ -24,6 +24,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.exception.FctlException;
@@ -442,13 +444,18 @@ public class FicFact extends ConnectedServlet {
                         request.setAttribute("COMM_SELECT", lastPrest.getCOMM());
                     }
                 } else if (Action.equals("Impression")) {
-                    // Crée le Bean spécifique pour l'édition
-                    EditionFacture aEditFact = new EditionFacture();
-                    aEditFact.setMyPaiement(aPaiement);
-                    aEditFact.setMyFact(aFact);
-                    Vector listeEdition = new Vector(1);
-                    listeEdition.add(aEditFact);
-                    request.setAttribute("listeEdition", listeEdition);
+                	if (StringUtils.isEmpty(mySalon.getMessage("Erreur"))) {
+	                    // Crée le Bean spécifique pour l'édition
+	                    EditionFacture aEditFact = new EditionFacture();
+	                    aEditFact.setMyPaiement(aPaiement);
+	                    aEditFact.setMyFact(aFact);
+	                    Vector listeEdition = new Vector(1);
+	                    listeEdition.add(aEditFact);
+	                    request.setAttribute("listeEdition", listeEdition);
+                	}
+                	else {
+                		allCorrect = false;
+                	}
                 }
             }
             // *****************************************************************************************

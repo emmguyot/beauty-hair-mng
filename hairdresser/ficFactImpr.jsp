@@ -109,13 +109,15 @@
 	 %> : <%= collab.toString() %>
 	 </td>
 	 <td><i18n:message key="label.leDate" /> :
-		  <salon:valeur valeurNulle="null" valeur="<%= aFact.getDT_PREST() %>" >
-		     %%
-		  </salon:valeur>
+                <salon:valeur valeurNulle="null" valeur="<%= aFact.getDT_PREST() %>" >
+                    %%
+                </salon:valeur>
 	 </td></tr>
 	 <tr>
 	 <td colspan="2"><i18n:message key="label.numeroFacture" /> :
-                <%= aPaiement.getCD_PAIEMENT() %>
+                <salon:valeur valeurNulle="null" valeur="<%= aPaiement.getCD_PAIEMENT() %>" >
+                    %%
+                </salon:valeur>
          </td>
          </tr>
 	 <tr>
