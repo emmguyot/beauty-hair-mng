@@ -29,11 +29,16 @@ public class UpdateBeanV40 extends UpdateBeanV33 {
     protected void deduitVersion(DBSession dbConnect) throws Exception {
 
         // Vérification de la présence de la table de Version
-        String sql = "select VERSION from VERSION";
+        String sql = "select VERSION.VERSION from VERSION";
         try {
             ResultSet rs = dbConnect.doRequest(sql);
             
-            version = rs.getString(0);
+            if (rs.next()) {
+            	version = rs.getString(1);
+            }
+            else {
+                super.deduitVersion(dbConnect);
+            }
             rs.close();
         } catch (SQLException se) {
             // Erreur SQL : table inexistante
