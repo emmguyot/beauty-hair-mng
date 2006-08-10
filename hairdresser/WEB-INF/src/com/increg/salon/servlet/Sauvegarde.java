@@ -63,7 +63,7 @@ public class Sauvegarde extends ConnectedServlet {
 
                     nomFichier = nomFichier + Fichier + ".gz";
                     Executer dumpProc =
-                        new Executer("bash --login -c \"" + "/usr/bin/pg_dump -d -c -F c -Z 9 " + myDBSession.getBaseName() + " 2> /dev/null | gzip -9 2> /dev/null > '" + nomFichier + "'\"");
+                        new Executer("bash --login -c \"" + "/usr/bin/pg_dump -d -c -F c -Z 9 " + myDBSession.getBaseName() + " | gzip -9 2> /dev/null > '" + nomFichier + "'\"");
                     if (dumpProc.runAndWait() != 0) {
                         mySalon.setMessage("Erreur", BasicSession.TAG_I18N + "sauvegarde.erreur" + BasicSession.TAG_I18N);
                     }
