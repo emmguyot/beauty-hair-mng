@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ResourceBundle;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpSession;
@@ -36,6 +37,7 @@ public class MiseAJour extends ConnectedServlet {
 
         HttpSession mySession = request.getSession(false);
         SalonSessionImpl mySalon = (SalonSessionImpl) mySession.getAttribute("SalonSession");
+        ResourceBundle messages = mySalon.getMessagesBundle();
         DBSession myDBSession = mySalon.getMyDBSession();
 
         // Récupère les paramètres
@@ -231,11 +233,11 @@ public class MiseAJour extends ConnectedServlet {
                         /**
                          * Messages dans les attributs car plus de bean session
                          */
-                        request.setAttribute("Erreur", BasicSession.TAG_I18N + "miseAJour.erreur" + BasicSession.TAG_I18N);
+                        request.setAttribute("Erreur", messages.getString("miseAJour.erreur"));
                         //response.getWriter().println("<html><body><h1>Erreur durant la mise à jour.<br>Merci de prendre contact avec l'assistance InCrEG pour débloquer la situation.</h1></body></html>");
                     }
                     else {
-                        request.setAttribute("Info", BasicSession.TAG_I18N + "miseAJour.succes" + BasicSession.TAG_I18N);
+                        request.setAttribute("Info", messages.getString("miseAJour.succes"));
                         // Informe du résultat
                         //response.getWriter().println("<html><body><h1>La mise à jour est terminée.<br>Vous devez arrêter le logiciel et le redémarrer pour que cette mise à jour soit prise en compte.</h1></body></html>");
                     }
