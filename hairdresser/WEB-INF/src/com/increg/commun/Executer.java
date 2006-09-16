@@ -48,20 +48,29 @@ public class Executer {
     public int runAndWait() {
         
         int cr = runAsync();
-        
-        if (cr == 0) {        
-            try {
-                // Attente
-                return currentProc.waitFor();
-            }
-            catch (InterruptedException e) {
-                System.out.println ("Interruption de : " + command);
-                return -2;
-            }
+        try {
+	        if (cr == 0) {        
+	            try {
+	                // Attente
+	                cr = currentProc.waitFor();
+	            }
+	            catch (InterruptedException e) {
+	                System.out.println ("Interruption de : " + command);
+	                cr = -2;
+	            }
+	        }
         }
-        else {
-            return cr;
+        finally {
+        	errorPump.interrupt();
+        	outputPump.interrupt();
+        	
+        	if (cr == 0) {
+        		if (errorPump.getNbLignes() != 0) {
+        			cr = -55;
+        		}
+        	}
         }
+        return cr;
     }
 
     /**
@@ -110,43 +119,55 @@ public class Executer {
     
         runAsync();
 
-        do {
-            try {
-                // Attente pour laisser tourner le process
-                Thread.sleep(step);
-                cr = currentProc.exitValue();
-                // C'est fini
-                encore = false;
-            }
-            catch (IllegalThreadStateException e) {
-                // Le process n'est pas terminé
-                nbPas++;
-                // Max = 5 minutes
-                encore = (nbPas < nbPasMax);
-                if (!encore) {
-                    // Kill le process : Timeout
-                    System.out.println ("Timeout : Arret force");
-                    currentProc.destroy();
-                    cr = -3;
-                }
-            }
-            catch (IllegalArgumentException e) {
-                System.out.println ("Erreur " + e.toString());
-                encore = false;
-                cr = -4;
-            }
-            catch (IllegalMonitorStateException e) {
-                System.out.println ("Erreur " + e.toString());
-                encore = false;
-                cr = -5;
-            }
-            catch (InterruptedException e) {
-                System.out.println ("Erreur " + e.toString());
-                encore = false;
-                cr = -6;
-            }
+        try {
+	        do {
+	            try {
+	                // Attente pour laisser tourner le process
+	                Thread.sleep(step);
+	                cr = currentProc.exitValue();
+	                // C'est fini
+	                encore = false;
+	            }
+	            catch (IllegalThreadStateException e) {
+	                // Le process n'est pas terminé
+	                nbPas++;
+	                // Max = 5 minutes
+	                encore = (nbPas < nbPasMax);
+	                if (!encore) {
+	                    // Kill le process : Timeout
+	                    System.out.println ("Timeout : Arret force");
+	                    currentProc.destroy();
+	                    cr = -3;
+	                }
+	            }
+	            catch (IllegalArgumentException e) {
+	                System.out.println ("Erreur " + e.toString());
+	                encore = false;
+	                cr = -4;
+	            }
+	            catch (IllegalMonitorStateException e) {
+	                System.out.println ("Erreur " + e.toString());
+	                encore = false;
+	                cr = -5;
+	            }
+	            catch (InterruptedException e) {
+	                System.out.println ("Erreur " + e.toString());
+	                encore = false;
+	                cr = -6;
+	            }
+	        }
+	        while (encore);
         }
-        while (encore);
+        finally {
+        	errorPump.interrupt();
+        	outputPump.interrupt();
+        	
+        	if (cr == 0) {
+        		if (errorPump.getNbLignes() != 0) {
+        			cr = -55;
+        		}
+        	}
+        }
         
         return cr;
     }

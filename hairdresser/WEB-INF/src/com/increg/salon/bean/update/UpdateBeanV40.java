@@ -34,7 +34,7 @@ public class UpdateBeanV40 extends UpdateBeanV33 {
             ResultSet rs = dbConnect.doRequest(sql);
             
             if (rs.next()) {
-            	version = rs.getString(1);
+            	version = rs.getString("VERSION");
             }
             else {
                 super.deduitVersion(dbConnect);

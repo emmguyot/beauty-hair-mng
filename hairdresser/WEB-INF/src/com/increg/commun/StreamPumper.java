@@ -22,6 +22,11 @@ public class StreamPumper extends Thread {
     protected String type;
 
     /**
+     * Compteur de ligne
+     */
+    protected int nbLignes = 0;
+
+    /**
      * Constructeur
      * @param is Stream à vider
      * @param type Type (texte préfixant les sorties)
@@ -41,9 +46,17 @@ public class StreamPumper extends Thread {
             String line = null;
             while ((line = br.readLine()) != null) {
                 System.out.println(type + ">" + line);
+                nbLignes ++;
             }
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
     }
+
+	/**
+	 * @return Returns the nbLignes.
+	 */
+	public int getNbLignes() {
+		return nbLignes;
+	}
 }
