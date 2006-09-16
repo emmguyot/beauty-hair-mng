@@ -52,7 +52,7 @@ MM_reloadPage(true);
 
 <body class="menu" onLoad="clock()">
 <p align="center"><a href="main.srv" target="_top"><font color="#000000"><%=mySalon.getMySociete().getRAIS_SOC()%><br>
-	<img src="images/perso/Logo_petit.gif" width="100" height="52" border="0"></font></a></p>
+	<img src="../perso/Logo_petit.gif" width="100" height="52" border="0"></font></a></p>
 <p><salon:autorisation entite="RDV"><a href="ListeRDV.jsp" target="ClientFrame"><img src="images/rdv.gif" align=middle border=0 width="21" height="21"><i18n:message key="label.RDV" /></a><br></salon:autorisation>
         <salon:autorisation entite="Clients"><a href="ListeCli.jsp" target="ClientFrame"><img src="images/client.gif" align=middle border=0 width="21" height="21"><i18n:message key="label.clients" /></a><br></salon:autorisation>
 	<salon:autorisation entite="Prestations"><a href="ListePrest.jsp" target="ClientFrame"><img src="images/prest.gif" align=middle border=0 width="21" height="21"><i18n:message key="label.prestations" /></a><br></salon:autorisation>
@@ -184,10 +184,10 @@ MM_reloadPage(true);
 %>
 </table>
 
-<div id="coinHD" style="position:absolute; height=20px; z-index:1; visibility:hidden"><img src="images/perso/coin_hd.gif"></div>
-<div id="coinBD" style="position:absolute; height=20px; z-index:1; visibility:hidden"><img src="images/perso/coin_bd.gif"></div>
-<div id="coinHG" style="position:absolute; height=20px; z-index:1; visibility:hidden"><img src="images/perso/coin_hg.gif"></div>
-<div id="coinBG" style="position:absolute; height=20px; z-index:1; visibility:hidden"><img src="images/perso/coin_bg.gif"></div>
+<div id="coinHD" style="position:absolute; height=20px; z-index:1; visibility:hidden"><img src="../perso/coin_hd.gif"></div>
+<div id="coinBD" style="position:absolute; height=20px; z-index:1; visibility:hidden"><img src="../perso/coin_bd.gif"></div>
+<div id="coinHG" style="position:absolute; height=20px; z-index:1; visibility:hidden"><img src="../perso/coin_hg.gif"></div>
+<div id="coinBG" style="position:absolute; height=20px; z-index:1; visibility:hidden"><img src="../perso/coin_bg.gif"></div>
 
 <p style="text-align: center">
 <img src="images/horloge.gif" style="float: left; vertical-align: middle;margin-top: 15px;margin-bottom: 15px;"><span id="pendule"></span>

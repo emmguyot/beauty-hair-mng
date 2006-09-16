@@ -1,9 +1,9 @@
 a {  font-weight: bold; text-decoration: none}
 .facultatif {  font-style: italic; vertical-align: top}
 .obligatoire { font-style: normal; vertical-align: top}
-.donnees {  background-color: #FFFFFF; background-image: url(../images/perso/fd_gris3.jpg); color: #000000}
-.menu { background-color: #00C69E; background-image: url(../images/perso/fd_vert.jpg); color: #000000}
-.action { background-color: #00C69E; background-image: url(../images/perso/fd_vert.jpg); color: #000000}
+.donnees {  background-color: #FFFFFF; background-image: url(../../perso/fd_gris3.jpg); color: #000000}
+.menu { background-color: #00C69E; background-image: url(../../perso/fd_vert.jpg); color: #000000}
+.action { background-color: #00C69E; background-image: url(../../perso/fd_vert.jpg); color: #000000}
 h1 {  text-align: center}
 a:link {  color: #0000FF}
 a:visited {  color: #0000FF}
@@ -17,7 +17,7 @@ a:hover {  color: #FF9933; background-color: #99CCCC; text-decoration: underline
 .nombre {  text-align: right}
 .total {  text-align: right; font-weight: bold}
 .tabDonnees {  text-align: center; vertical-align: top}
-.ligneTab1 {  background-image: url(../images/perso/fd_vert.jpg)}
+.ligneTab1 {  background-image: url(../../perso/fd_vert.jpg)}
 .ligneTab2 { }
 .tabDonneesGauche { text-align: left; vertical-align: top }
 .ficheImpr {  border: none}
@@ -25,9 +25,9 @@ a:hover {  color: #FF9933; background-color: #99CCCC; text-decoration: underline
 .corpsImpr {  font-size: 10pt; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px}
 .warning {  font-size: larger; font-weight: bold; color: #FF6600; text-decoration: blink; text-align: center}
 .newpage {  page-break-before: always}
-.ligneTab3 { background-image: url(../images/perso/fd_gris4.jpg)}
-.ligneTab4 { background-image: url(../images/perso/fd_vert2.jpg)}
-.ligneTab4C { text-align: center; background-image: url(../images/perso/fd_vert2.jpg)}
+.ligneTab3 { background-image: url(../../perso/fd_gris4.jpg)}
+.ligneTab4 { background-image: url(../../perso/fd_vert2.jpg)}
+.ligneTab4C { text-align: center; background-image: url(../../perso/fd_vert2.jpg)}
 a:hover.nohover { color: #FF9933 ; background-color: transparent }
 .big {  font-size: large}
 .small {  font-size: x-small}
@@ -36,7 +36,7 @@ a:hover.nohover { color: #FF9933 ; background-color: transparent }
 img { border: 0 }
 p { vertical-align: top}
 
-.cpYearNavigation,.cpMonthNavigation { background-image: url(../images/perso/fd_vert.jpg); text-align:center; vertical-align:center; text-decoration:none; color:#2A5058; font-weight:bold; }
+.cpYearNavigation,.cpMonthNavigation { background-image: url(../../perso/fd_vert.jpg); text-align:center; vertical-align:center; text-decoration:none; color:#2A5058; font-weight:bold; }
 td.cpDayColumnHeader { padding: 2px; padding-top: 5px; text-align:center; border:solid thin #B7D9D1;border-width:0 0 1 0; }
 .cpCurrentMonthDate, .cpCurrentDate { color:#2A5058; }
 .cpOtherMonthDate { color:#B7D9D1; }
@@ -44,7 +44,7 @@ td.cpTodayText, .cpTodayTextDisabled { border:solid thin #B7D9D1; border-width:1
 a.cpTodayText, a.cpTodayTextDisabled, a:visited.cpTodayText, a:visited.cpTodayTextDisabled { margin: 10px; padding: 1px 15px; background-color: #FFFEC1; color:#F78E13; border:solid thin #804316; border-width:1px;    }
 a.cpCurrentMonthDate, a:visited.cpCurrentMonthDate { color:#2A5058; }
 td.cpCurrentDate {   }
-a.cpCurrentDate, a:visited.cpCurrentDate { color:#873905; background-image: url(../images/perso/fd_vert.jpg); border:solid thin #2A5058; border-width:1px; padding-right: 2px; padding-left: 2px; }
+a.cpCurrentDate, a:visited.cpCurrentDate { color:#873905; background-image: url(../../perso/fd_vert.jpg); border:solid thin #2A5058; border-width:1px; padding-right: 2px; padding-left: 2px; }
 
 a.cpOtherMonthDate, a:visited.cpOtherMonthDate { color:#B7D9D1; }
 .cpTodayTextDisabled { color:#D0D0D0; }

@@ -2,9 +2,9 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "InCrEG LibertyLook"
-!define PRODUCT_VERSION "3.3"
-!define PRODUCT_VERSION_FULL "${PRODUCT_VERSION}.0.1"
-!define PRODUCT_COPYRIGHT "2002-2005 Valérie, Alexandre et Emmanuel Guyot"
+!define PRODUCT_VERSION "4.0"
+!define PRODUCT_VERSION_FULL "${PRODUCT_VERSION}"
+!define PRODUCT_COPYRIGHT "2002-2006 Valérie, Alexandre et Emmanuel Guyot"
 !define PRODUCT_PUBLISHER "SourceForge"
 !define PRODUCT_WEB_SITE "http://beauty-hair-mng.sourceforge.net/"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
@@ -83,7 +83,6 @@ Section "Fichiers principaux" SEC00
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
   File "${ORIG_DIR}\*.*"
-  File /r "${ORIG_DIR}\Apache"
   File /a /r "${ORIG_DIR}\cygwin"
   File /r "${ORIG_DIR}\Doc"
   File /r "${ORIG_DIR}\install"
@@ -92,8 +91,6 @@ Section "Fichiers principaux" SEC00
   File /r "${ORIG_DIR}\tomcat"
   File /r "${ORIG_DIR}\war"
   
-  CreateDirectory "$INSTDIR\Apache\logs"
-  CreateDirectory "$INSTDIR\Apache\proxy"
   CreateDirectory "$INSTDIR\Base"
   CreateDirectory "$INSTDIR\cygwin\home\InCrEG"
   CreateDirectory "$INSTDIR\cygwin\usr\local\etc"
@@ -137,11 +134,6 @@ Section "Fichiers principaux" SEC00
   CreateShortCut "$DESKTOP\3 - Arrêt ${PRODUCT_NAME}.lnk" "$INSTDIR\StopWeb.bat" "" "$INSTDIR\StopWeb.ico" 0 SW_SHOWMINIMIZED
   ;
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Manuel Utilisateur.lnk" "$INSTDIR\Doc\Manuel Utilisateur.pdf"
-
-  SetOutPath "$INSTDIR\Apache"
-  ExecWait "$INSTDIR\Apache\Apache.exe -k install"
-  ; Empeche le démarrage automatique du service
-  WriteRegDWORD HKEY_LOCAL_MACHINE "SYSTEM\CurrentControlSet\Services\Apache" "Start" "0x03"
 
   WriteRegStr HKEY_CLASSES_ROOT "InternetShortcut\shell\open\command" "" "iexplore -k %l"
   
@@ -233,12 +225,8 @@ FunctionEnd
 Section Uninstall
   ReadRegStr $ICONS_GROUP ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "${PRODUCT_STARTMENU_REGVAL}"
 
-  SetOutPath "$INSTDIR\Apache"
-  ExecWait "$INSTDIR\Apache\Apache.exe -k uninstall"
-
   RMDir /r "$SMPROGRAMS\$ICONS_GROUP"
   Delete "$INSTDIR\*.*"
-  RMDir /r "$INSTDIR\Apache"
   RMDir /r "$INSTDIR\cygwin"
   RMDir /r "$INSTDIR\Doc"
   RMDir /r "$INSTDIR\install"
@@ -248,7 +236,6 @@ Section Uninstall
   RMDir /r "$INSTDIR\war"
   RMDir /r "$INSTDIR\Base"
   RMDir /r "$INSTDIR\Temp"
-  RMDir /r "$INSTDIR\salon"
 
   DeleteRegKey HKEY_LOCAL_MACHINE "Software\Cygnus Solutions\Cygwin"
 

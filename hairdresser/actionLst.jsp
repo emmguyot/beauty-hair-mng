@@ -98,10 +98,10 @@ function Imprimer() {
                 img="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/imprimer.gif\" %>" 
                 alt="<%= paramBouton3 %>"/>
 </span>
-<div id="coinHD" style="position:absolute; height=20px; z-index:1; visibility:hidden"><img src="images/perso/coin_hd.gif"></div>
-<div id="coinBD" style="position:absolute; height=20px; z-index:1; visibility:hidden"><img src="images/perso/coin_bd.gif"></div>
-<div id="coinHG" style="position:absolute; height=20px; z-index:1; visibility:hidden"><img src="images/perso/coin_hg.gif"></div>
-<div id="coinBG" style="position:absolute; height=20px; z-index:1; visibility:hidden"><img src="images/perso/coin_bg.gif"></div>
+<div id="coinHD" style="position:absolute; height=20px; z-index:1; visibility:hidden"><img src="../perso/coin_hd.gif"></div>
+<div id="coinBD" style="position:absolute; height=20px; z-index:1; visibility:hidden"><img src="../perso/coin_bd.gif"></div>
+<div id="coinHG" style="position:absolute; height=20px; z-index:1; visibility:hidden"><img src="../perso/coin_hg.gif"></div>
+<div id="coinBG" style="position:absolute; height=20px; z-index:1; visibility:hidden"><img src="../perso/coin_bg.gif"></div>
 <SCRIPT FOR=window EVENT=onscroll LANGUAGE="JScript">
 PlaceCoins()
 PlaceCoins()

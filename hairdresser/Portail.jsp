@@ -63,7 +63,7 @@ function checkAndSubmit()
                                     <p>&nbsp;</p>
                                     <p><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/Portail.gif" width="448" height="72" border="0"></p>
                                     <h1><%=mySalon.getMySociete().getRAIS_SOC()%></h1>
-                                    <p><img src="images/perso/Logo.gif" width="130" height="68" border="0"></p>
+                                    <p><img src="../perso/Logo.gif" width="130" height="68" border="0"></p>
                                     <p>&nbsp;</p>
                         </td>
                     </tr>

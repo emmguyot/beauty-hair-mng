@@ -48,7 +48,7 @@
                                     <p>&nbsp;</p>
                                     <p><img src="images/<%= request.getLocale().getLanguage() %>/titres/Portail.gif" width="448" height="72" border="0"></p>
                                     <h1><i18n:message key="label.choixBase" /></h1>
-                                    <p><img src="images/perso/Logo.gif" width="130" height="68" border="0"></p>
+                                    <p><img src="../perso/Logo.gif" width="130" height="68" border="0"></p>
                                     <p>&nbsp;</p>
                         </td>
                     </tr>

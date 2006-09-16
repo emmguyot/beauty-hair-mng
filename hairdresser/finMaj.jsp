@@ -46,11 +46,11 @@
 <% } 
    if (Info != null) { %>
    <p class="Info"><%= Info %></p>
+   <p>
+    Vous devez maintenant vous reconnecter.
+   </p>
 <% } %>
 
-<p>
-Pour terminer cette mise à jour, vous devez arrêter le logiciel (icône "feu rouge") et le relancer (icône "feu vert").
-</p>
 
 </script>
 </body>

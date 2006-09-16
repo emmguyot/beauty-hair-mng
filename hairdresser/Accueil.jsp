@@ -42,7 +42,7 @@
 <i18n:message key="message.fermer" id="msgFermer" />
 <div id="coinHD" style="position:absolute; height=52px; z-index:1; visibility:hidden"><salon:bouton url="javascript:top.close()" imgOn="images/quit2.gif" img="images/quit.gif" alt="<%= msgFermer %>"/></div>
 <h1 align="center"><%=mySalon.getMySociete().getRAIS_SOC()%></h1>
-<p align="center"><img src="images/perso/Salon.jpg"></p>
+<p align="center"><img src="../perso/Salon.jpg"></p>
 <salon:message salonSession="<%= mySalon %>" />
 <form method="post" action="accueilPointage.srv" name="fiche">
 <p align="center"><span class="Obligatoire"><i18n:message key="accueil.collabPresent" /> :</span>

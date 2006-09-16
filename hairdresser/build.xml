@@ -1,7 +1,7 @@
 <project name="salon" default="clean" basedir=".">
 	<description description="Gestion de Salon de Coiffure"></description>
 
-	<property name="tomcat" value="C:/Program Files/jakarta-tomcat-3.3.1" />
+	<property name="tomcat" value="C:/InCrEG/tomcat" />
     <property name="src" value='.' />
     <property name="work" value='./work' />
     <property name="build" value="c:/build/${ant.project.name}" />
@@ -125,36 +125,67 @@
 		<!-- Compilation des pages JSP -->
 		<mkdir dir="${tmpProdWar}/work" />
 		<mkdir dir="${tmpProdWar}/WEB-INF/classes" />
-		<jspc srcdir="${tmpProdWar}" 
+
+		<taskdef classname="org.apache.jasper.JspC" name="jasper2" > 
+	      <classpath id="jspc.classpath"> 
+	        <pathelement location="${java.home}/../lib/tools.jar"/> 
+	        <fileset dir="${tomcat}/bin"> 
+	          <include name="*.jar"/> 
+	        </fileset> 
+	        <fileset dir="${tomcat}/server/lib"> 
+	          <include name="*.jar"/> 
+	        </fileset> 
+	        <fileset dir="${tomcat}/common/lib"> 
+	          <include name="*.jar"/> 
+	        </fileset> 
+	      </classpath> 
+	    </taskdef> 
+
+	    <jasper2 
+	             validateXml="false" 
+	             uriroot="${tmpProdWar}" 
+	             webXmlFragment="${tmpProdWar}/WEB-INF/generated_web.xml" 
+	             outputDir="${tmpProdWar}/WEB-INF/classes" 
+	    	addwebxmlmappings="yes"
+	    /> 
+		
+		
+<!--		<jspc srcdir="${tmpProdWar}" 
 				destdir="${tmpProdWar}/WEB-INF/classes" 
 				webinc="${tmpProdWar}/WEB-INF/webInc.xml" 
 				verbose="9" >
 			<webapp basedir="${tmpProdWar}"/>
 			<classpath>
 				<pathelement location="${src}/../Toolbox/classes" />
-				<pathelement location="${tomcat}/lib/container/jasper.jar" />
+				<pathelement location="${tomcat}/common/lib/jasper-compiler.jar" />
+				<pathelement location="${tomcat}/common/lib/servlet-api.jar" />
+				<pathelement location="${tomcat}/common/lib/jasper-runtime.jar" />
 				<pathelement location="${java.home}/lib/rt.jar" />
 				<pathelement location="${java.class.path}" />
 			</classpath>
 		</jspc>
-		<javac srcdir="${tmpProdWar}/WEB-INF/classes" destdir="${tmpProdWar}/WEB-INF/classes" excludes="ficArt_Common.java, lstCli_Common.java" encoding="UTF-8">
+-->		<javac srcdir="${tmpProdWar}/WEB-INF/classes" destdir="${tmpProdWar}/WEB-INF/classes" encoding="UTF-8" deprecation="on">
 			<classpath>
-				<pathelement location="${tomcat}/lib/container/jasper.jar" />
-				<pathelement location="${tomcat}/lib/common/servlet.jar" />
-				<pathelement location="${tomcat}/lib/common/jasper-runtime.jar" />
+				<pathelement location="${tomcat}/common/lib/jasper-compiler.jar" />
+				<pathelement location="${tomcat}/common/lib/servlet-api.jar" />
+				<pathelement location="${tomcat}/common/lib/jsp-api.jar" />
+				<pathelement location="${tomcat}/common/lib/jasper-runtime.jar" />
 				<pathelement location="${java.home}/lib/rt.jar" />
 				<pathelement location="${tmpProdWar}/WEB-INF/classes" />
 				<pathelement location="${tmpProdWar}/WEB-INF/lib/taglibs-i18n.jar" />
 				<pathelement location="${java.class.path}" />
 			</classpath>
+		    <include name="**/*.java"/>
+		    <exclude name="**/ficArt_*Common_jsp.java"/>
+		    <exclude name="**/lstCli_*Common_jsp.java"/>
 		</javac>
 		<delete>
 			<fileset dir="${tmpProdWar}/WEB-INF/classes">
 				<include name="*.java" />
 			</fileset>
 		</delete>
-		<!-- Remplace le fichier web.xml par celui contenant les JSP -->
-		<move file="${tmpProdWar}/WEB-INF/webInc.xml" tofile="${tmpProdWar}/WEB-INF/web.xml" preservelastmodified="yes" verbose="yes" overwrite="true" />
+		<!-- Remplace le fichier web.xml par celui contenant les JSP 
+		<move file="${tmpProdWar}/WEB-INF/webInc.xml" tofile="${tmpProdWar}/WEB-INF/web.xml" preservelastmodified="yes" verbose="yes" overwrite="true" /> -->
 		<!-- Crée le jar des classes -->
 		<jar destfile="${tmpProdWar}/WEB-INF/lib/increg.jar" basedir="${tmpProdWar}/WEB-INF/classes" />
 		<!-- Suppression des JSP et du répertoire classes -->		

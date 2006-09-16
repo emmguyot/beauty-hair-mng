@@ -110,23 +110,26 @@ public class UpdateBeanV25 extends UpdateBeanV24 {
             
             // Mise à jour de la configuration Apache pour désactiver GZIP
             File fichierHttpd = new File(tomcatHome + "/../Apache/conf/httpd.conf");
-            File fichierHttpdNew = new File(tomcatHome + "/../Apache/conf/httpd.conf.new");
-            BufferedReader brHttpd = new BufferedReader(new FileReader(fichierHttpd));
-            BufferedWriter bwHttpd = new BufferedWriter(new FileWriter(fichierHttpdNew));
-            String ligne = null;
-            
-            while ((ligne = brHttpd.readLine()) != null) {
-                if (ligne.indexOf("mod_gzip_on") != -1) {
-                    ligne = "mod_gzip_on No";
-                }
-                bwHttpd.write(ligne + "\r\n");
+            // Sécurité pour nouveau socle et ancienne sauvegarde
+            if (fichierHttpd.exists()) {
+	            File fichierHttpdNew = new File(tomcatHome + "/../Apache/conf/httpd.conf.new");
+	            BufferedReader brHttpd = new BufferedReader(new FileReader(fichierHttpd));
+	            BufferedWriter bwHttpd = new BufferedWriter(new FileWriter(fichierHttpdNew));
+	            String ligne = null;
+	            
+	            while ((ligne = brHttpd.readLine()) != null) {
+	                if (ligne.indexOf("mod_gzip_on") != -1) {
+	                    ligne = "mod_gzip_on No";
+	                }
+	                bwHttpd.write(ligne + "\r\n");
+	            }
+	            
+	            bwHttpd.close();
+	            brHttpd.close();
+	            
+	            fichierHttpd.delete();
+	            fichierHttpdNew.renameTo(fichierHttpd);
             }
-            
-            bwHttpd.close();
-            brHttpd.close();
-            
-            fichierHttpd.delete();
-            fichierHttpdNew.renameTo(fichierHttpd);
             
             // On vient de passer en 2.5
             version = "2.5";

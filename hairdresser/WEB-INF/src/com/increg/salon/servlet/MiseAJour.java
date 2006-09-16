@@ -45,9 +45,6 @@ public class MiseAJour extends ConnectedServlet {
         String Type = request.getParameter("Type");
         String nomFichier = request.getParameter("nomFichier");
 
-        // pg_restore -c -f fichier -F c
-        Runtime aRuntime = Runtime.getRuntime();
-
         // Liste des fichiers
         TreeSet listeFichier = new TreeSet(new StringInverseComp());
 
@@ -224,23 +221,9 @@ public class MiseAJour extends ConnectedServlet {
                     System.gc();
 
                     /**
-                     * Création d'un fichier "flag" pour suppression du répertoire salon de webapps au prochain démarrage
+                     * Messages dans les attributs car plus de bean session
                      */
-                    String cmd = "bash --login -c \"touch " + fichier.getParent().replace('\\', '/') + "/../maj_afaire\"";
-                    Process RestoProc = aRuntime.exec(cmd);
-                    // Test sur le code retour du rm
-                    if (RestoProc.waitFor() != 0) {
-                        /**
-                         * Messages dans les attributs car plus de bean session
-                         */
-                        request.setAttribute("Erreur", messages.getString("miseAJour.erreur"));
-                        //response.getWriter().println("<html><body><h1>Erreur durant la mise à jour.<br>Merci de prendre contact avec l'assistance InCrEG pour débloquer la situation.</h1></body></html>");
-                    }
-                    else {
-                        request.setAttribute("Info", messages.getString("miseAJour.succes"));
-                        // Informe du résultat
-                        //response.getWriter().println("<html><body><h1>La mise à jour est terminée.<br>Vous devez arrêter le logiciel et le redémarrer pour que cette mise à jour soit prise en compte.</h1></body></html>");
-                    }
+                    request.setAttribute("Info", messages.getString("miseAJour.succes"));
 
                 }
                 catch (Exception e) {
