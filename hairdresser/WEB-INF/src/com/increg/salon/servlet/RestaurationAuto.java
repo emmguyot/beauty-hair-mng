@@ -4,6 +4,9 @@ import java.text.MessageFormat;
 
 import javax.servlet.http.*;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.SalonSessionImpl;
@@ -36,6 +39,8 @@ public void doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.h
  */
 public void performTask(HttpServletRequest request, HttpServletResponse response) {
 
+	Log log = LogFactory.getLog(this.getClass());
+	
     HttpSession mySession = request.getSession(false);
     
 	Runtime aRuntime = Runtime.getRuntime();
@@ -56,11 +61,15 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
         /**
          * Deconnexion de la base pour pouvoir restaurer
          */
-        mySession.removeAttribute("SalonSession");
         SalonSessionImpl mySalon = (SalonSessionImpl) mySession.getAttribute("SalonSession");
-        DBSession myDBSession = mySalon.getMyDBSession();
-        myDBSession.closeAll();
-        myDBSession = null;
+        mySession.removeAttribute("SalonSession");
+        
+        // La session peut ne pas être là en cas de coup dur!!
+        if (mySalon != null) {
+        	DBSession myDBSession = mySalon.getMyDBSession();
+        	myDBSession.closeAll();
+        	myDBSession = null;
+        }
         mySalon = null;
         mySession.invalidate();
         System.gc();
@@ -68,7 +77,7 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
         /**
          * Partie 1 : Arrêt de la base
          */
-        System.out.println("Arret de la base de donnees");
+        log.info("Arret de la base de donnees");
         String cmd = "bash --login -c \"pg_ctl stop -m immediate 2>&1 > ~/RestoAuto_p1.txt\"";
         Process aProc = aRuntime.exec(cmd);
         // Test sur le code retour 
@@ -84,7 +93,7 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
          * <b>Non compatible avec la solution multi salons!!!</b>
          */
         if (!error) {
-            System.out.println("Suppression de la base");
+        	log.info("Suppression de la base");
             cmd = "bash --login -c \"rm -rf $PGDATA\"";
             aProc = aRuntime.exec(cmd);
             // Test sur le code retour 
@@ -100,7 +109,7 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
          * Partie 3 : Arrêt et redémarrage du daemon IPC
          */
         if (!error) {
-            System.out.println("Arret de ipc-daemon");
+        	log.info("Arret de ipc-daemon");
             cmd = "bash --login -c \"kill `ps | grep ipc-daemon | gawk '{ print $1 }'`\"";
             aProc = aRuntime.exec(cmd);
             // Test sur le code retour 
@@ -113,7 +122,7 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
         }
 	}
 	catch (Exception e) {
-		System.out.println("Note : " + e.toString());
+		log.error("Erreur", e);
 		String msg = MessageFormat.format(myBasicSession.getMessagesBundle().getString("restaurationAuto.erreur"), new Object[] { e.toString() });
         request.setAttribute("Erreur", msg);
 	}
@@ -123,7 +132,7 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
         getServletConfig().getServletContext().getRequestDispatcher("/finReload.jsp").forward(request, response);
 	}
 	catch (Exception e) {
-		System.out.println("RestaurationAuto::performTask : Erreur à la redirection : " + e.toString());
+		log.error("RestaurationAuto::performTask : Erreur à la redirection", e);
 	}
 
 }
