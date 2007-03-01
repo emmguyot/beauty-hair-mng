@@ -8,10 +8,12 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ResourceBundle;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpSession;
 
+import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.ParamBean;
 import com.increg.salon.bean.SalonSessionImpl;
@@ -33,8 +35,13 @@ public class MiseAJour extends ConnectedServlet {
 
         final int CHUNK_SIZE = 4096;
 
+        // Initialise une session light de traduction
+        BasicSession myBasicSession = new BasicSession();
+        myBasicSession.setLangue(request.getLocale());
+ 
         HttpSession mySession = request.getSession(false);
         SalonSessionImpl mySalon = (SalonSessionImpl) mySession.getAttribute("SalonSession");
+        ResourceBundle messages = mySalon.getMessagesBundle();
         DBSession myDBSession = mySalon.getMyDBSession();
 
         // Récupère les paramètres
@@ -91,7 +98,7 @@ public class MiseAJour extends ConnectedServlet {
                     }
                     if (aCon == null) {
                         // Connexion impossible
-                        throw (new Exception("Impossible de se connecter au serveur."));
+                        throw (new Exception(BasicSession.TAG_I18N + "message.serverKo" + BasicSession.TAG_I18N));
                     }
 
                     aCon.setUseCaches(false);
@@ -155,6 +162,7 @@ public class MiseAJour extends ConnectedServlet {
                     }
                     File fichier = new File(tomcatHome + "/../war/institut.war");
                     if ((Type != null) && (Type.equals(Restauration.TYPE_INTERNET))) {
+
                         URL curURL = null;
                         ParamBean valUrl = ParamBean.getParamBean(myDBSession, Integer.toString(ParamBean.CD_URL_MAJ));
                         if (valUrl != null) {
@@ -220,7 +228,7 @@ public class MiseAJour extends ConnectedServlet {
                     System.gc();
 
                     /**
-                     * Création d'un fichier "flag" pour suppression du répertoire salon de webapps au prochain démarrage
+                     * Messages dans les attributs car plus de bean session
                      */
                     String cmd = "bash --login -c \"touch " + fichier.getParent().replace('\\', '/') + "/../maj_afaire\"";
                     Process RestoProc = aRuntime.exec(cmd);
@@ -229,11 +237,13 @@ public class MiseAJour extends ConnectedServlet {
                         /**
                          * Messages dans les attributs car plus de bean session
                          */
-                        request.setAttribute("Erreur", "La mise à jour ne s'est pas bien déroulée.");
+                    	myBasicSession.setMessage("Erreur", BasicSession.TAG_I18N + "miseAJour.erreur" + BasicSession.TAG_I18N);
+                        request.setAttribute("Erreur", myBasicSession.getMessage("Erreur"));
                         //response.getWriter().println("<html><body><h1>Erreur durant la mise à jour.<br>Merci de prendre contact avec l'assistance InCrEG pour débloquer la situation.</h1></body></html>");
                     }
                     else {
-                        request.setAttribute("Info", "La mise à jour est terminée.");
+                    	myBasicSession.setMessage("Info", BasicSession.TAG_I18N + "miseAJour.succes" + BasicSession.TAG_I18N);
+                        request.setAttribute("Info", myBasicSession.getMessage("Info"));
                         // Informe du résultat
                         //response.getWriter().println("<html><body><h1>La mise à jour est terminée.<br>Vous devez arrêter le logiciel et le redémarrer pour que cette mise à jour soit prise en compte.</h1></body></html>");
                     }
@@ -250,7 +260,7 @@ public class MiseAJour extends ConnectedServlet {
             }
         }
         catch (Exception e) {
-            mySalon.setMessage("Erreur", e.toString());
+            request.setAttribute("Erreur", e.toString());
             System.out.println("Note : " + e.toString());
         }
 

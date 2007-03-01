@@ -35,6 +35,10 @@ public class MiseAJour extends ConnectedServlet {
 
         final int CHUNK_SIZE = 4096;
 
+        // Initialise une session light de traduction
+        BasicSession myBasicSession = new BasicSession();
+        myBasicSession.setLangue(request.getLocale());
+ 
         HttpSession mySession = request.getSession(false);
         SalonSessionImpl mySalon = (SalonSessionImpl) mySession.getAttribute("SalonSession");
         ResourceBundle messages = mySalon.getMessagesBundle();
@@ -44,6 +48,9 @@ public class MiseAJour extends ConnectedServlet {
         String Action = request.getParameter("Action");
         String Type = request.getParameter("Type");
         String nomFichier = request.getParameter("nomFichier");
+
+        // pg_restore -c -f fichier -F c
+        Runtime aRuntime = Runtime.getRuntime();
 
         // Liste des fichiers
         TreeSet listeFichier = new TreeSet(new StringInverseComp());
@@ -223,7 +230,23 @@ public class MiseAJour extends ConnectedServlet {
                     /**
                      * Messages dans les attributs car plus de bean session
                      */
-                    request.setAttribute("Info", messages.getString("miseAJour.succes"));
+                    String cmd = "bash --login -c \"touch " + fichier.getParent().replace('\\', '/') + "/../maj_afaire\"";
+                    Process RestoProc = aRuntime.exec(cmd);
+                    // Test sur le code retour du rm
+                    if (RestoProc.waitFor() != 0) {
+                        /**
+                         * Messages dans les attributs car plus de bean session
+                         */
+                    	myBasicSession.setMessage("Erreur", BasicSession.TAG_I18N + "miseAJour.erreur" + BasicSession.TAG_I18N);
+                        request.setAttribute("Erreur", myBasicSession.getMessage("Erreur"));
+                        //response.getWriter().println("<html><body><h1>Erreur durant la mise à jour.<br>Merci de prendre contact avec l'assistance InCrEG pour débloquer la situation.</h1></body></html>");
+                    }
+                    else {
+                    	myBasicSession.setMessage("Info", BasicSession.TAG_I18N + "miseAJour.succes" + BasicSession.TAG_I18N);
+                        request.setAttribute("Info", myBasicSession.getMessage("Info"));
+                        // Informe du résultat
+                        //response.getWriter().println("<html><body><h1>La mise à jour est terminée.<br>Vous devez arrêter le logiciel et le redémarrer pour que cette mise à jour soit prise en compte.</h1></body></html>");
+                    }
 
                 }
                 catch (Exception e) {
@@ -237,7 +260,7 @@ public class MiseAJour extends ConnectedServlet {
             }
         }
         catch (Exception e) {
-            mySalon.setMessage("Erreur", e.toString());
+            request.setAttribute("Erreur", e.toString());
             System.out.println("Note : " + e.toString());
         }
 
