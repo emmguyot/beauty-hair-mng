@@ -34,15 +34,15 @@
     for (int i=0; i< lstLignes.size(); i++) {
         ClientBean aCli = (ClientBean) lstLignes.get(i);
         %>
-<%      %><salon:valeur valeurNulle="0" valeur="<%= aCli.getCIVILITE() %>" expand="true">%%</salon:valeur>;<%
-        %><salon:valeur valeurNulle="0" valeur="<%= aCli.getNOM() %>" expand="true">%%</salon:valeur>;<%
-        %><salon:valeur valeurNulle="0" valeur="<%= aCli.getPRENOM() %>" expand="true">%%</salon:valeur>;<%
-        %><salon:valeur valeurNulle="0" valeur="<%= aCli.getRUE() %>" expand="false">"%%"</salon:valeur>;<%
-        %><salon:valeur valeurNulle="0" valeur="<%= aCli.getCD_POSTAL() %>" expand="true">%%</salon:valeur>;<%
-        %><salon:valeur valeurNulle="0" valeur="<%= aCli.getVILLE() %>" expand="true">%%</salon:valeur>;<%
-        %><salon:valeur valeurNulle="0" valeur="<%= aCli.getTEL() %>" expand="true">%%</salon:valeur>;<%
-        %><salon:valeur valeurNulle="0" valeur="<%= aCli.getPORTABLE() %>" expand="true">%%</salon:valeur>;<%
-        %><salon:valeur valeurNulle="0" valeur="<%= aCli.getEMAIL() %>" expand="true">%%</salon:valeur>;<%
-        %><salon:valeur valeurNulle="0" valeur="<%= aCli.getDT_ANNIV() %>" expand="true">%%</salon:valeur><%
+<%      %><salon:valeur valeurNulle="0" valeur="<%= aCli.getCIVILITE() %>" includeHTML="true">%%</salon:valeur>;<%
+        %><salon:valeur valeurNulle="0" valeur="<%= aCli.getNOM() %>" includeHTML="true">"%%"</salon:valeur>;<%
+        %><salon:valeur valeurNulle="0" valeur="<%= aCli.getPRENOM() %>" includeHTML="true">"%%"</salon:valeur>;<%
+        %><salon:valeur valeurNulle="0" valeur="<%= aCli.getRUE() %>" includeHTML="true">"%%"</salon:valeur>;<%
+        %><salon:valeur valeurNulle="0" valeur="<%= aCli.getCD_POSTAL() %>" includeHTML="true">%%</salon:valeur>;<%
+        %><salon:valeur valeurNulle="0" valeur="<%= aCli.getVILLE() %>" includeHTML="true">"%%"</salon:valeur>;<%
+        %><salon:valeur valeurNulle="0" valeur="<%= aCli.getTEL() %>" includeHTML="true">%%</salon:valeur>;<%
+        %><salon:valeur valeurNulle="0" valeur="<%= aCli.getPORTABLE() %>" includeHTML="true">%%</salon:valeur>;<%
+        %><salon:valeur valeurNulle="0" valeur="<%= aCli.getEMAIL() %>" includeHTML="true">%%</salon:valeur>;<%
+        %><salon:valeur valeurNulle="0" valeur="<%= aCli.getDT_ANNIV() %>" includeHTML="true">%%</salon:valeur><%
     }
 %>
