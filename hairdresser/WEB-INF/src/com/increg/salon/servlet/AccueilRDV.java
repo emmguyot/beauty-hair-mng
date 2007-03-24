@@ -1,3 +1,20 @@
+/*
+ * Page d'accueil avec carnet de rendez-vous
+ * Copyright (C) 2001-2007 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.servlet;
 
 import java.net.HttpURLConnection;
@@ -10,6 +27,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.ClientBean;
 import com.increg.salon.bean.SalonSession;
@@ -20,7 +40,10 @@ import com.increg.salon.bean.SalonSession;
  * @author Emmanuel GUYOT <emmguyot@wanadoo.fr>
  */
 public class AccueilRDV extends ConnectedServlet {
-    /**
+
+	protected Log log = LogFactory.getLog(this.getClass());
+	
+	/**
      * @see com.increg.salon.servlet.ConnectedServlet
      */
     public void performTask(HttpServletRequest request, HttpServletResponse response) {
@@ -102,11 +125,13 @@ public class AccueilRDV extends ConnectedServlet {
         }
         catch (Exception e) {
             System.out.println("Erreur dans performTask : " + e.toString());
+            log.error("Erreur générale", e);
             try {
                 response.sendError(HttpURLConnection.HTTP_INTERNAL_ERROR);
             }
             catch (Exception e2) {
                 System.out.println("Erreur sur sendError : " + e2.toString());
+                log.error("Erreur sur redirection", e);
             }
         }
     }

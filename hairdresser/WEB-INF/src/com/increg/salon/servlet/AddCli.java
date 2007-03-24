@@ -1,15 +1,36 @@
+/*
+ * Ajout d'un client dans l'encours
+ * Copyright (C) 2001-2007 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.servlet;
 
-import java.util.*;
-import java.sql.*;
-import com.increg.salon.bean.*;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import com.increg.salon.bean.SalonSession;
 /**
  * Ajout d'un client aux encours
  * Creation date: (09/09/2001 22:00:00)
  * @author: Emmanuel GUYOT <emmguyot@wanadoo.fr>
  */
 public class AddCli extends ConnectedServlet {
+	protected Log log = LogFactory.getLog(this.getClass());
+
 /**
  * @see com.increg.salon.servlet.ConnectedServlet
  */
@@ -49,6 +70,7 @@ public void performTask(
 	}
 	catch (Exception e) {
 		System.out.println("AddCli::performTask : Erreur à la redirection : " + e.toString());
+		log.error("Erreurà la redirection", e);
 	}
 }
 }

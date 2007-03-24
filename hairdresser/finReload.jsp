@@ -1,7 +1,7 @@
 <%
 /*
  * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
- * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2007 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -31,7 +31,6 @@
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
 <body class="donnees">
-<%@ include file="include/commun.jsp" %>
 <h1>Rechargement de secours de la base</h1>
 <% if (Erreur != null) { %>
    <p class="Erreur"><%= Erreur %></p>

@@ -1,8 +1,28 @@
+/*
+ * Fiche de création / modification d'un collab
+ * Copyright (C) 2001-2007 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.servlet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
@@ -15,7 +35,10 @@ import com.increg.salon.bean.SalonSession;
  * @author Emmanuel GUYOT <emmguyot@wanadoo.fr>
  */
 public class FicCollab extends ConnectedServlet {
-    /**
+
+	protected Log log = LogFactory.getLog(this.getClass());
+	
+	/**
      * @see com.increg.salon.servlet.ConnectedServlet
      */
     public void performTask(HttpServletRequest request, HttpServletResponse response) {
@@ -92,6 +115,7 @@ public class FicCollab extends ConnectedServlet {
                 }
                 catch (Exception e) {
                     mySalon.setMessage("Erreur", e.toString());
+                    log.error("Erreur à la création du collab", e);
                     request.setAttribute("Action", Action);
                 }
             }
@@ -144,6 +168,7 @@ public class FicCollab extends ConnectedServlet {
                 }
                 catch (Exception e) {
                     mySalon.setMessage("Erreur", e.toString());
+                    log.error("Erreur à la mise à jour du collab", e);
                     request.setAttribute("Action", Action);
                 }
             }
@@ -167,6 +192,7 @@ public class FicCollab extends ConnectedServlet {
                 }
                 catch (Exception e) {
                     mySalon.setMessage("Erreur", e.toString());
+                    log.error("Erreur à la suppression du collab", e);
                     request.setAttribute("Action", "Modification");
                 }
             }
@@ -176,6 +202,7 @@ public class FicCollab extends ConnectedServlet {
         }
         catch (Exception e) {
             mySalon.setMessage("Erreur", e.toString());
+            log.error("Erreur générale", e);
             System.out.println("Note : " + e.toString());
         }
 
@@ -193,6 +220,7 @@ public class FicCollab extends ConnectedServlet {
         }
         catch (Exception e) {
             System.out.println("FicCollab::performTask : Erreur à la redirection : " + e.toString());
+            log.error("Erreur à la redirection", e);
         }
     }
 }

@@ -1,3 +1,20 @@
+/*
+ * Page d'accueil permettant le pointage
+ * Copyright (C) 2001-2007 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.servlet;
 
 import java.util.Calendar;
@@ -8,6 +25,9 @@ import java.util.Vector;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.CollabBean;
@@ -21,7 +41,10 @@ import com.increg.salon.bean.SalonSession;
  * @author Emmanuel GUYOT <emmguyot@wanadoo.fr>
  */
 public class AccueilPointage extends ConnectedServlet {
-    /**
+
+	protected Log log = LogFactory.getLog(this.getClass());
+	
+	/**
      * @see com.increg.salon.servlet.ConnectedServlet
      */
     public void performTask(HttpServletRequest request, HttpServletResponse response) {
@@ -84,6 +107,7 @@ public class AccueilPointage extends ConnectedServlet {
                             }
                             catch (Exception e) {
                                 mySalon.setMessage("Erreur", e.toString());
+                                log.error("Erreur à la création du pointage", e);
                                 /**
                                  * Reset de la transaction pour la recherche des informations complémentaires
                                  */
@@ -106,6 +130,7 @@ public class AccueilPointage extends ConnectedServlet {
                         }
                         catch (Exception e) {
                             mySalon.setMessage("Erreur", e.toString());
+                            log.error("Erreur à la modification du pointage", e);
                             /**
                              * Reset de la transaction pour la recherche des informations complémentaires
                              */
@@ -120,6 +145,7 @@ public class AccueilPointage extends ConnectedServlet {
         catch (Exception e) {
             mySalon.setMessage("Erreur", e.toString());
             System.out.println("Note : " + e.toString());
+            log.error("Erreur générale", e);
         }
 
         request.setAttribute("lstCollab", lstCollab);
@@ -133,6 +159,7 @@ public class AccueilPointage extends ConnectedServlet {
         }
         catch (Exception e) {
             System.out.println("AccueilPointage::performTask : Erreur à la redirection : " + e.toString());
+            log.error("Erreur à la redirection", e);
         }
     }
 }

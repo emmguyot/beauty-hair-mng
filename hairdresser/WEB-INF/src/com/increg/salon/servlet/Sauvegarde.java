@@ -1,3 +1,20 @@
+/*
+ * Sauvegarde d'une base
+ * Copyright (C) 2001-2007 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.servlet;
 
 import java.io.BufferedOutputStream;
@@ -19,6 +36,7 @@ import com.increg.commun.Executer;
 import com.increg.salon.bean.ParamBean;
 import com.increg.salon.bean.SalonSession;
 import com.increg.salon.bean.SalonSessionImpl;
+import com.increg.util.GZipper;
 /**
  * Servlet de sauvegarde de la base
  * Creation date: (05/10/2001 08:26:28)
@@ -61,13 +79,17 @@ public class Sauvegarde extends ConnectedServlet {
                         nomFichier = mySalon.getSavePath();
                     }
 
+                    String nomFichierTmp = nomFichier + Fichier + ".tmp";
                     nomFichier = nomFichier + Fichier + ".gz";
-                    Executer dumpProc =
-                        new Executer("bash --login -c \"" + "/usr/bin/pg_dump -d -c -F c -Z 9 " + myDBSession.getBaseName() + " | gzip -9 2> /dev/null > '" + nomFichier + "'\"");
+                    String cmd = System.getenv("PG_HOME") + "\\bin\\pg_dump.exe -d -c -F c -Z 9 -f " + nomFichierTmp + " " + myDBSession.getBaseName();
+                    Executer dumpProc = new Executer(cmd);
                     if (dumpProc.runAndWait() != 0) {
                         mySalon.setMessage("Erreur", BasicSession.TAG_I18N + "sauvegarde.erreur" + BasicSession.TAG_I18N);
                     }
                     else {
+                    	GZipper.gzipFile(nomFichierTmp, nomFichier);
+                    	new File(nomFichierTmp).delete();
+                    	
                         mySalon.setMessage("Info", BasicSession.TAG_I18N + "sauvegarde.succes" + BasicSession.TAG_I18N);
                         if ((Type != null) && (Type.equals(Restauration.TYPE_INTERNET))) {
                             // Sauvegarde sur Internet

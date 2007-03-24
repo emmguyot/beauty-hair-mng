@@ -1,3 +1,20 @@
+/*
+ * Restauration base d'urgence
+ * Copyright (C) 2001-2007 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.servlet;
 
 import java.text.MessageFormat;
@@ -9,6 +26,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
+import com.increg.commun.Executer;
 import com.increg.salon.bean.SalonSessionImpl;
 
 /**
@@ -78,15 +96,18 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
          * Partie 1 : Arrêt de la base
          */
         log.info("Arret de la base de donnees");
-        String cmd = "bash --login -c \"pg_ctl stop -m immediate 2>&1 > ~/RestoAuto_p1.txt\"";
-        Process aProc = aRuntime.exec(cmd);
-        // Test sur le code retour 
-        if (aProc.waitFor() != 0) {
+        String cmd = System.getenv("PG_HOME") + "\\bin\\pg_ctl.exe stop -m immediate";
+        log.info("Arret de la base de donnees : " + cmd);
+        Executer dumpProc = new Executer(cmd);
+        if (dumpProc.runAndWait() != 0) {
             // Impossible d'arrêter la base
         	myBasicSession.setMessage("Erreur", BasicSession.TAG_I18N + "restaurationAuto.erreurArretBase" + BasicSession.TAG_I18N);
             request.setAttribute("Erreur", myBasicSession.getMessage("Erreur"));
             error = true;
         }
+        
+        // Petite tempo pour laisser le temps de libérer le répertoire
+        Thread.sleep(500);
         
         /**
          * Partie 2 : Suppression du répertoire de données
@@ -94,28 +115,12 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
          */
         if (!error) {
         	log.info("Suppression de la base");
-            cmd = "bash --login -c \"rm -rf $PGDATA\"";
-            aProc = aRuntime.exec(cmd);
+            cmd = "cmd /c \"rmdir /s/q " + System.getenv("PGDATA") + "\"";
+            dumpProc = new Executer(cmd);
             // Test sur le code retour 
-            if (aProc.waitFor() != 0) {
+            if (dumpProc.runAndWait() != 0) {
                 // Impossible de supprimer la base
             	myBasicSession.setMessage("Erreur", BasicSession.TAG_I18N + "restaurationAuto.erreurSupprBase" + BasicSession.TAG_I18N);
-                request.setAttribute("Erreur", myBasicSession.getMessage("Erreur"));
-                error = true;
-            }
-        }
-        
-        /**
-         * Partie 3 : Arrêt et redémarrage du daemon IPC
-         */
-        if (!error) {
-        	log.info("Arret de ipc-daemon");
-            cmd = "bash --login -c \"kill `ps | grep ipc-daemon | gawk '{ print $1 }'`\"";
-            aProc = aRuntime.exec(cmd);
-            // Test sur le code retour 
-            if (aProc.waitFor() != 0) {
-                // Impossible 
-            	myBasicSession.setMessage("Erreur", BasicSession.TAG_I18N + "restaurationAuto.erreurKillIPC" + BasicSession.TAG_I18N);
                 request.setAttribute("Erreur", myBasicSession.getMessage("Erreur"));
                 error = true;
             }

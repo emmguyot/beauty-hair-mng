@@ -22,6 +22,9 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.ResourceBundle;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.increg.commun.exception.FctlException;
 
 /**
@@ -31,6 +34,9 @@ import com.increg.commun.exception.FctlException;
  */
 public abstract class GenericBean {
 
+	// Logger par défaut
+	protected Log log = LogFactory.getLog(this.getClass());
+	
 	/**
 	 * Bundle contenant les messages
 	 */

@@ -1,8 +1,29 @@
+/*
+ * Lanceur de programmes externes
+ * Copyright (C) 2001-2007 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
+
 package com.increg.commun;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * @author Manu
@@ -11,6 +32,10 @@ import java.util.Calendar;
  */
 public class Executer {
 
+   	protected Log log = LogFactory.getLog(this.getClass());
+
+	public static final String NOM_FICHIER_ERR = System.getenv("INCREG_a") + "\\Temp\\exec.err";
+	public static final String NOM_FICHIER_STD = System.getenv("INCREG_a") + "\\Temp\\exec.std";
 
     /**
      * Commande à executer
@@ -48,37 +73,39 @@ public class Executer {
     public int runAndWait() {
         
         int cr = runAsync();
-        try {
-	        if (cr == 0) {        
-	            try {
-	                // Attente
-	                cr = currentProc.waitFor();
-	            }
-	            catch (InterruptedException e) {
-	                System.out.println ("Interruption de : " + command);
-	                cr = -2;
-	            }
-	        }
-        }
-        finally {
-        	errorPump.interrupt();
-        	outputPump.interrupt();
-        	
-        	if (cr == 0) {
-        		if (errorPump.getNbLignes() != 0) {
-        			cr = -55;
-        		}
-        	}
-        }
+        if (cr == 0) {
+			try {
+				try {
+					// Attente
+					cr = currentProc.waitFor();
+				} catch (InterruptedException e) {
+					log.error("Interruption de : " + command, e);
+					cr = -2;
+				}
+			} finally {
+				errorPump.interrupt();
+				outputPump.interrupt();
+
+				if (cr == 0) {
+					if (errorPump.getNbLignes() != 0) {
+						cr = -55;
+					}
+				}
+			}
+		}
         return cr;
     }
 
     /**
-     * Execute la ligne et retourne en laissant se terminer tranquillement le process
-     * @return exit 0 si ok
-     */
+	 * Execute la ligne et retourne en laissant se terminer tranquillement le
+	 * process
+	 * 
+	 * @return exit 0 si ok
+	 */
     public int runAsync() {
         
+    	log.info("Lancement du processus : " + command);
+    	
         Runtime aRuntime = Runtime.getRuntime();
 
         try {
@@ -86,16 +113,13 @@ public class Executer {
             currentProc = aRuntime.exec(command, env);
         }
         catch (IOException e) {
-            System.out.println ("Erreur à l'exécution de : " + command);
+            log.error("Erreur à l'exécution de : " + command, e);
             return -1;
         }
         
         // Pompes pour les messages
-        Calendar aCal = Calendar.getInstance();
-        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy HH;mm");
-        String chDate = format.format(aCal.getTime());
-        errorPump = new StreamPumper(currentProc.getErrorStream(), chDate + " (E) ");
-        outputPump = new StreamPumper(currentProc.getInputStream(), chDate + " (S) ");
+        errorPump = new StreamPumper(currentProc.getErrorStream(), "(E) ", NOM_FICHIER_ERR);
+        outputPump = new StreamPumper(currentProc.getInputStream(), "(S) ", NOM_FICHIER_STD);
         
         // Démarrage des pompes
         errorPump.start();
@@ -135,23 +159,23 @@ public class Executer {
 	                encore = (nbPas < nbPasMax);
 	                if (!encore) {
 	                    // Kill le process : Timeout
-	                    System.out.println ("Timeout : Arret force");
+	                    log.error("Timeout : Arret force");
 	                    currentProc.destroy();
 	                    cr = -3;
 	                }
 	            }
 	            catch (IllegalArgumentException e) {
-	                System.out.println ("Erreur " + e.toString());
+	                log.error("Erreur ", e);
 	                encore = false;
 	                cr = -4;
 	            }
 	            catch (IllegalMonitorStateException e) {
-	                System.out.println ("Erreur " + e.toString());
+	                log.error("Erreur ", e);
 	                encore = false;
 	                cr = -5;
 	            }
 	            catch (InterruptedException e) {
-	                System.out.println ("Erreur " + e.toString());
+	                log.error("Erreur ", e);
 	                encore = false;
 	                cr = -6;
 	            }
@@ -161,12 +185,6 @@ public class Executer {
         finally {
         	errorPump.interrupt();
         	outputPump.interrupt();
-        	
-        	if (cr == 0) {
-        		if (errorPump.getNbLignes() != 0) {
-        			cr = -55;
-        		}
-        	}
         }
         
         return cr;
@@ -177,7 +195,7 @@ public class Executer {
      */
     public void stop() {
         try {
-            int cr = currentProc.exitValue();
+            currentProc.exitValue();
             
             // Le process est déjà fini
         }

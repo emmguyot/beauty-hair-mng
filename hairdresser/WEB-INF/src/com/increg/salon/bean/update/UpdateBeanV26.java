@@ -1,3 +1,21 @@
+/*
+ * Upgrade de la base pour passer en 2.6
+ * Copyright (C) 2001-2007 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
+
 package com.increg.salon.bean.update;
 
 import java.sql.ResultSet;
@@ -59,7 +77,7 @@ public class UpdateBeanV26 extends UpdateBeanV25 {
                 };
             String sql[] = {
                   "alter table IDENT rename to IDENT_OLD",
-                  "drop index pk_ident",
+                  "alter table IDENT_OLD drop constraint pk_ident",
                   "CREATE TABLE IDENT ( "
                     + "CD_IDENT numeric(6,0) DEFAULT nextval('SEQ_IDENT'::text) NOT NULL,"
                     + "LIB_IDENT character varying(80) NOT NULL,"

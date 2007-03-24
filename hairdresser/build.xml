@@ -1,7 +1,7 @@
 <project name="salon" default="clean" basedir=".">
 	<description description="Gestion de Salon de Coiffure"></description>
 
-	<property name="tomcat" value="C:/InCrEG/tomcat" />
+	<property name="tomcat" value="C:/InCrEG.salon/tomcat" />
     <property name="src" value='.' />
     <property name="work" value='./work' />
     <property name="build" value="c:/build/${ant.project.name}" />

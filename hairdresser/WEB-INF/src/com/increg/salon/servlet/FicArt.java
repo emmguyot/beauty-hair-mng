@@ -1,9 +1,30 @@
+/*
+ * Fiche de création / modification d'un article
+ * Copyright (C) 2001-2007 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.servlet;
 
 import java.util.*;
 import java.sql.*;
 import com.increg.salon.bean.*;
 import javax.servlet.http.*;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.increg.commun.*;
 /**
  * Création d'une prestation
@@ -11,6 +32,9 @@ import com.increg.commun.*;
  * @author Emmanuel GUYOT <emmguyot@wanadoo.fr>
  */
 public class FicArt extends ConnectedServlet {
+	
+	protected Log log = LogFactory.getLog(this.getClass());
+	
 /**
  * @see com.increg.salon.servlet.ConnectedServlet
  */
@@ -114,6 +138,7 @@ public void performTask(
 			}
 			catch (Exception e) {
 	            mySalon.setMessage("Erreur", e.toString());
+	            log.error("Erreur à la création de l'article", e);
 				request.setAttribute("Action", Action);
 			}
 		}
@@ -220,6 +245,7 @@ public void performTask(
 			}
 			catch (Exception e) {
 	            mySalon.setMessage("Erreur", e.toString());
+	            log.error("Erreur à la mise à jour de l'article", e);
 				request.setAttribute("Action", Action);
 			}
 		}
@@ -271,6 +297,7 @@ public void performTask(
 			}
 			catch (Exception e) {
 	            mySalon.setMessage("Erreur", e.toString());
+	            log.error("Erreur à la duplication de l'article", e);
 				request.setAttribute("Action", Action);
 			}
 		}
@@ -295,6 +322,7 @@ public void performTask(
 	        }	
 			catch (Exception e) {
 	            mySalon.setMessage("Erreur", e.toString());
+	            log.error("Erreur à la suppression de l'article", e);
 				request.setAttribute("Action", "Modification");
 			}
 		}
@@ -304,6 +332,7 @@ public void performTask(
 	}
 	catch (Exception e) {
 		mySalon.setMessage("Erreur", e.toString());
+        log.error("Erreur générale", e);
 		System.out.println("Note : " + e.toString());
 	}
 
@@ -334,11 +363,13 @@ public void performTask(
 		}
 		catch (Exception e) {
 			System.out.println("Erreur dans requète sur clé : " + e.toString());
+            log.error("Erreur à la recherche des fournisseurs", e);
 			try {
 				response.sendError(500);
 			}
 			catch (Exception e2) {
 				System.out.println("Erreur sur sendError : " + e2.toString());
+	            log.error("Erreur à la redirection sur erreur 500", e);
 			}
 		}
 	}
@@ -352,6 +383,7 @@ public void performTask(
 	}
 	catch (Exception e) {
 		System.out.println("FicCli::performTask : Erreur à la redirection : " + e.toString());
+        log.error("Erreur à la redirection", e);
 	}
 }
 }

@@ -1,3 +1,20 @@
+/*
+ * Mise à jour du programme
+ * Copyright (C) 2001-2007 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.servlet;
 
 import java.io.BufferedInputStream;
@@ -227,27 +244,10 @@ public class MiseAJour extends ConnectedServlet {
                     mySession.invalidate();
                     System.gc();
 
-                    /**
-                     * Messages dans les attributs car plus de bean session
-                     */
-                    String cmd = "bash --login -c \"touch " + fichier.getParent().replace('\\', '/') + "/../maj_afaire\"";
-                    Process RestoProc = aRuntime.exec(cmd);
-                    // Test sur le code retour du rm
-                    if (RestoProc.waitFor() != 0) {
-                        /**
-                         * Messages dans les attributs car plus de bean session
-                         */
-                    	myBasicSession.setMessage("Erreur", BasicSession.TAG_I18N + "miseAJour.erreur" + BasicSession.TAG_I18N);
-                        request.setAttribute("Erreur", myBasicSession.getMessage("Erreur"));
-                        //response.getWriter().println("<html><body><h1>Erreur durant la mise à jour.<br>Merci de prendre contact avec l'assistance InCrEG pour débloquer la situation.</h1></body></html>");
-                    }
-                    else {
-                    	myBasicSession.setMessage("Info", BasicSession.TAG_I18N + "miseAJour.succes" + BasicSession.TAG_I18N);
-                        request.setAttribute("Info", myBasicSession.getMessage("Info"));
-                        // Informe du résultat
-                        //response.getWriter().println("<html><body><h1>La mise à jour est terminée.<br>Vous devez arrêter le logiciel et le redémarrer pour que cette mise à jour soit prise en compte.</h1></body></html>");
-                    }
-
+                 	myBasicSession.setMessage("Info", BasicSession.TAG_I18N + "miseAJour.succes" + BasicSession.TAG_I18N);
+                    request.setAttribute("Info", myBasicSession.getMessage("Info"));
+                    // Informe du résultat
+                    //response.getWriter().println("<html><body><h1>La mise à jour est terminée.<br>Vous devez arrêter le logiciel et le redémarrer pour que cette mise à jour soit prise en compte.</h1></body></html>");
                 }
                 catch (Exception e) {
                     System.out.println("Erreur " + e.toString());

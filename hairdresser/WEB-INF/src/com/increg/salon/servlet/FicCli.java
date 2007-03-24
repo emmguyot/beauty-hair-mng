@@ -1,5 +1,5 @@
 /*
- * Bean Session incluant les données d'une session LibertyLook
+ * Fiche de création / modification d'un client
  * Copyright (C) 2001-2006 Emmanuel Guyot <See emmguyot on SourceForge>
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
@@ -25,6 +25,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.ClientBean;
@@ -39,7 +42,10 @@ import com.increg.salon.bean.SalonSession;
  * @author Emmanuel GUYOT <emmguyot@wanadoo.fr>
  */
 public class FicCli extends ConnectedServlet {
-    /**
+
+	protected Log log = LogFactory.getLog(this.getClass());
+	
+	/**
      * @see com.increg.salon.servlet.ConnectedServlet
      */
     public void performTask(HttpServletRequest request, HttpServletResponse response) {
@@ -125,6 +131,7 @@ public class FicCli extends ConnectedServlet {
                     request.setAttribute("Action", "Modification");
                 } catch (Exception e) {
                     mySalon.setMessage("Erreur", e);
+                    log.error("Erreur à la création du client", e);
                     request.setAttribute("Action", Action);
                 }
                 request.setAttribute("ClientBean", aCli);
@@ -175,6 +182,7 @@ public class FicCli extends ConnectedServlet {
                     request.setAttribute("Action", "Modification");
                 } catch (Exception e) {
                     mySalon.setMessage("Erreur", e);
+                    log.error("Erreur à la mise à jour du client", e);
                     request.setAttribute("Action", Action);
                 }
                 request.setAttribute("ClientBean", aCli);
@@ -197,6 +205,7 @@ public class FicCli extends ConnectedServlet {
                     request.setAttribute("Action", "Creation");
                 } catch (Exception e) {
                     mySalon.setMessage("Erreur", e);
+                    log.error("Erreur à la suppression du client", e);
                     request.setAttribute("Action", "Modification");
                 }
                 request.setAttribute("ClientBean", aCli);
@@ -224,6 +233,7 @@ public class FicCli extends ConnectedServlet {
                     mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.enregistrementOk" + BasicSession.TAG_I18N);
                 } catch (Exception e) {
                     mySalon.setMessage("Erreur", e);
+                    log.error("Erreur à la mise à jour de l'historique du client", e);
                 }
 
                 request.setAttribute("Action", "Modification");
@@ -235,6 +245,7 @@ public class FicCli extends ConnectedServlet {
             }
         } catch (Exception e) {
             mySalon.setMessage("Erreur", e);
+            log.error("Erreur générale", e);
             System.out.println("Note : " + e.toString());
         }
 
@@ -289,10 +300,12 @@ public class FicCli extends ConnectedServlet {
                 aRS.close();
             } catch (Exception e) {
                 System.out.println("Erreur dans requète sur clé : " + e.toString());
+                log.error("Erreur à la recherche des factures/prestations du client", e);
                 try {
                     response.sendError(500);
                 } catch (Exception e2) {
                     System.out.println("Erreur sur sendError : " + e2.toString());
+                    log.error("Erreur à la redirection sur erreur 500", e2);
                 }
             }
             request.setAttribute("NbPrest", Long.toString(compteur));
@@ -306,6 +319,7 @@ public class FicCli extends ConnectedServlet {
 
         } catch (Exception e) {
             System.out.println("FicCli::performTask : Erreur à la redirection : " + e.toString());
+            log.error("Erreur à la redirection", e);
         }
     }
 }

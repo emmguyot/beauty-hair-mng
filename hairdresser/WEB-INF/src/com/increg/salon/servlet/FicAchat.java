@@ -25,6 +25,10 @@ import com.increg.salon.bean.*;
 import com.increg.util.SimpleDateFormatEG;
 
 import javax.servlet.http.*;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.increg.commun.*;
 /**
  * Fiche de création des achats
@@ -32,6 +36,8 @@ import com.increg.commun.*;
  * @author Emmanuel GUYOT <emmguyot@wanadoo.fr>
  */
 public class FicAchat extends ConnectedServlet {
+	protected Log log = LogFactory.getLog(this.getClass());
+
 /**
  * @see com.increg.salon.servlet.ConnectedServlet
  */
@@ -127,6 +133,7 @@ public void performTask(
             }
             catch (Exception e) {
                 mySalon.setMessage("Erreur", e.toString());
+                log.error("Erreur sur la création du mouvement", e);
             }
         }
         else if ((Action.equals ("SuppressionLigne"))) {
@@ -147,6 +154,7 @@ public void performTask(
             }
             catch (Exception e) {
                 mySalon.setMessage("Erreur", e.toString());
+                log.error("Erreur sur la suppression du mouvement", e);
             }
             CD_ART = null;
             CD_CATEG_ART = null;
@@ -158,6 +166,7 @@ public void performTask(
 	catch (Exception e) {
 		mySalon.setMessage("Erreur", e.toString());
 		System.out.println("Note : " + e.toString());
+        log.error("Erreur générale", e);
 	}
 
     /**
@@ -198,11 +207,13 @@ public void performTask(
         }
         catch (Exception e) {
             System.out.println("Erreur dans requète sur commande : " + e.toString());
+            log.error("Erreur sur recherche des mouvements", e);
             try {
                 response.sendError(500);
             }
             catch (Exception e2) {
                 System.out.println("Erreur sur sendError : " + e2.toString());
+                log.error("Erreur à la redirection", e);
             }
         }
 	}
@@ -226,6 +237,7 @@ public void performTask(
 	}
 	catch (Exception e) {
 		System.out.println("FicAchat::performTask : Erreur à la redirection : " + e.toString());
+        log.error("Erreur à la redirection", e);
 	}
 }
 
@@ -261,6 +273,7 @@ protected MvtStkBean getPreviousMvt (DBSession myDBSession, String CD_CMD_FOURN,
     }
     catch (Exception e) {
         System.out.println("Erreur dans requète sur historique achat : " + e.toString());
+        log.error("Erreur sur historique achat", e);
     }
     return anOldMvt;
 }

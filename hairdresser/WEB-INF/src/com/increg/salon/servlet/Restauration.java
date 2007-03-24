@@ -1,10 +1,29 @@
+/*
+ * Restauration d'une base préalablement sauvegardée
+ * Copyright (C) 2001-2007 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.servlet;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -18,10 +37,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.increg.commun.DBSession;
 import com.increg.commun.Executer;
 import com.increg.salon.bean.ParamBean;
 import com.increg.salon.bean.SalonSessionImpl;
+import com.increg.util.GZipper;
 import com.increg.util.StringInverseComp;
 /**
  * Servlet de restauration de la base
@@ -55,7 +78,9 @@ public class Restauration extends ConnectedServlet {
      */
     public void performTask(HttpServletRequest request, HttpServletResponse response) {
 
-        HttpSession mySession = request.getSession(false);
+    	Log log = LogFactory.getLog(this.getClass());
+
+    	HttpSession mySession = request.getSession(false);
         SalonSessionImpl mySalon = (SalonSessionImpl) mySession.getAttribute("SalonSession");
         ResourceBundle messages = mySalon.getMessagesBundle();
         DBSession myDBSession = mySalon.getMyDBSession();
@@ -135,20 +160,12 @@ public class Restauration extends ConnectedServlet {
                      */
                     boolean erreur = false;
                     if (!erreur) {
-                        Executer uncompress =
-                            new Executer("bash --login -c \"zcat '" + fichier.getAbsolutePath().replace('\\', '/') + "' > '" + fichierUnzip.getAbsolutePath().replace('\\', '/') + "' \"");
-                        if (uncompress.runAndWait() != 0) {
-                            /**
-                             * Messages dans les attributs car plus de bean session
-                             */
-                            request.setAttribute("Erreur", messages.getString("restauration.erreurP1"));
-                            erreur = true;
-                        }
+                    	GZipper.gunzipFile(fichier.getAbsolutePath(), fichierUnzip.getAbsolutePath());
                     }
 
                     // Suppression de toutes les tables et sequences pour que la restauration soit propre
                     if (!erreur) {
-                        Executer dropDB = new Executer("bash --login -c \"dropdb " + dbName + "\"");
+                        Executer dropDB = new Executer(System.getenv("PG_HOME") + "\\bin\\dropdb.exe " + dbName);
                         if (dropDB.runAndWait() != 0) {
                             /**
                              * Messages dans les attributs car plus de bean session
@@ -165,7 +182,7 @@ public class Restauration extends ConnectedServlet {
 
                         String[] SQL = {"create database " + dbName + " with template=template0 encoding='LATIN1'"};
                         int[] cr = myDBSession.doExecuteSQL(SQL);
-                        if (cr[0] != 1) {
+                        if (cr[0] != 0) {
                             /**
                              * Messages dans les attributs car plus de bean session
                              */
@@ -182,37 +199,42 @@ public class Restauration extends ConnectedServlet {
                         int nbEssai = 0;
                         boolean done = false;
 
-                        while (!done && (++nbEssai < 3)) {
+                        while (!done && (++nbEssai <= 2)) {
+                        	erreur = false;
                             if (nbEssai > 1) {
                                 // Trace
-                                System.out.println("Tentative de restauration N°" + nbEssai);
+                                log.debug("Tentative de restauration N°" + nbEssai);
                             }
                             Executer resto =
-                                new Executer(
-                                    "bash --login -c \"/usr/bin/pg_restore.exe -v -F c -d " + dbName + " '" + fichierUnzip.getAbsolutePath().replace('\\', '/') + "' 2> Resto.err > Resto.txt \"");
-
-                            int cr = resto.runAndWait(5 * 60 * 1000, 2000);
+                                new Executer(System.getenv("PG_HOME") +
+                                    "\\bin\\pg_restore.exe -v -F c -d " + dbName + 
+                                    " \"" + fichierUnzip.getAbsolutePath() + "\"");
+                            int cr = resto.runAndWait(5l * 60l * 1000l, 2000);
                             if (cr < 0) {
                                 request.setAttribute("Erreur", messages.getString("restauration.erreurRelance"));
                                 // Kill le process au cas où il traine
-                                Executer killIt = new Executer("bash --login -c \"kill -9 `ps | grep pg_restore | grep -v grep | gawk '{ print $1 '}` \"");
-                                killIt.runAndWait();
+                                // Executer killIt = new Executer("bash --login -c \"kill -9 `ps | grep pg_restore | grep -v grep | gawk '{ print $1 '}` \"");
+                                // killIt.runAndWait();
+                                log.error("Timeout sur la restauration cr=" + cr);
                                 erreur = true;
                             }
                             else {
                                 // Vérification du fichier log
-                                Executer verify = new Executer("bash --login -c \"grep ERROR Resto.txt Resto.err \"");
-                                cr = verify.runAndWait();
-
-                                // Test sur le code retour du grep
-                                if (cr != 1) {
-                                    /**
-                                     * Messages dans les attributs car plus de bean session
-                                     */
-                                    request.setAttribute("Erreur", messages.getString("restauration.erreur"));
-                                    erreur = true;
+                            	FileReader fr = new FileReader(Executer.NOM_FICHIER_ERR);
+                            	BufferedReader br = new BufferedReader(fr);
+                            	String ligne;
+                            	while ((ligne = br.readLine()) != null) {
+                            		if (ligne.indexOf("ERROR") != -1) {
+                                        /**
+                                         * Messages dans les attributs car plus de bean session
+                                         */
+                                        request.setAttribute("Erreur", messages.getString("restauration.erreur"));
+                                        log.error("Erreur dans le log de restauration : " + ligne);
+                                        erreur = true;
+                            		}
                                 }
-                                else {
+                            	
+                            	if (!erreur) {
                                     request.setAttribute("Info", messages.getString("restauration.succes"));
                                     erreur = false;
                                     done = true;

@@ -1,3 +1,20 @@
+/*
+ * Upgrade de la base pour passe en 2.8
+ * Copyright (C) 2001-2007 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.bean.update;
 
 import java.sql.ResultSet;
@@ -60,12 +77,11 @@ public class UpdateBeanV28 extends UpdateBeanV27 {
                 "update PREST set INDIC_PERIM='N'",
                 "insert into FETE (CD_FETE, PRENOM, DT_FETE) values (nextval('SEQ_FETE'), 'Joshua', '01/09/1970')",
                 // Reset des catégories effacées
-                "update PREST set CD_CATEG_PREST=(select min(CD_CATEG_PREST) from CATEG_PREST) where CD_CATEG_PREST not in (select CD_CATEG_PREST from CATEG_PREST)",
-                "alter table PREST add constraint FK_ESTDE_CATEG_PREST foreign key (CD_CATEG_PREST) references CATEG_PREST (CD_CATEG_PREST)"
+                "update PREST set CD_CATEG_PREST=(select min(CD_CATEG_PREST) from CATEG_PREST) where CD_CATEG_PREST not in (select CD_CATEG_PREST from CATEG_PREST)"
                 };
             String sqlAvecRes[] = {
                 // Mise à jour de la sequence des paramètres suite à bug précédent
-                "select setval ('seq_param', max (CD_PARAM), true) from PARAM"
+                "select setval ('seq_param', max (CD_PARAM)::bigint, true) from PARAM"
                 };
                 
             for (int i = 0; i < reqStat.length; i++) {

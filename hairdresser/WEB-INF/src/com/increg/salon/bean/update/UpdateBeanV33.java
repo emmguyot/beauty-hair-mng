@@ -1,3 +1,20 @@
+/*
+ * Upgrade de la base pour passer en 3.3
+ * Copyright (C) 2001-2007 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.bean.update;
 
 import java.sql.ResultSet;
@@ -100,8 +117,8 @@ public class UpdateBeanV33 extends UpdateBeanV31 {
                 "update TYP_VENT set CD_TVA = 1",
                 "alter table TYP_VENT add constraint FK_APOUR_TVA foreign key (CD_TVA) references TVA (CD_TVA)",
                 "delete from PARAM where CD_PARAM=" + ParamBean.CD_TVA,
+                "alter table DEVISE drop constraint PK_DEVISE",
                 "alter table DEVISE rename to DEVISE_OLD",
-                "drop index PK_DEVISE",
                 "create table DEVISE ("
                 + "CD_DEVISE numeric(2) not null default nextval('SEQ_DEVISE'),"
                 + "LIB_COURT_DEVISE varchar(10) not null,"
@@ -112,7 +129,7 @@ public class UpdateBeanV33 extends UpdateBeanV31 {
                 "drop table DEVISE_OLD"
                 };
             String[] sqlAvecRes = {
-                "select setval ('seq_typ_peau', max (CD_TYP_PEAU), true) from TYP_PEAU"
+                "select setval('seq_typ_peau', max(CD_TYP_PEAU)::bigint, true) from TYP_PEAU"
                 };
 
             for (int i = 0; i < reqStat.length; i++) {

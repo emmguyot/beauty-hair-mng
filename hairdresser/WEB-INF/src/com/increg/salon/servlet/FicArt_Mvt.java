@@ -26,6 +26,9 @@ import java.util.Vector;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.ArtBean;
@@ -38,7 +41,10 @@ import com.increg.util.SimpleDateFormatEG;
  * @author Emmanuel GUYOT <emmguyot@wanadoo.fr>
  */
 public class FicArt_Mvt extends ConnectedServlet {
-    /**
+
+	protected Log log = LogFactory.getLog(this.getClass());
+	
+	/**
      * @see com.increg.salon.servlet.ConnectedServlet
      */
     public void performTask(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) {
@@ -128,6 +134,7 @@ public class FicArt_Mvt extends ConnectedServlet {
                 }
                 catch (Exception e) {
                     mySalon.setMessage("Erreur", e.toString());
+                    log.error("Erreur à la création de l'article", e);
                     request.setAttribute("Action", Action);
                 }
             }
@@ -238,6 +245,7 @@ public class FicArt_Mvt extends ConnectedServlet {
                 }
                 catch (Exception e) {
                     mySalon.setMessage("Erreur", e.toString());
+                    log.error("Erreur à la mise à jour de l'article", e);
                     request.setAttribute("Action", Action);
                 }
             }
@@ -273,6 +281,7 @@ public class FicArt_Mvt extends ConnectedServlet {
                 }
                 catch (Exception e) {
                     mySalon.setMessage("Erreur", e.toString());
+                    log.error("Erreur à la création de l'article par duplication", e);
                     request.setAttribute("Action", Action);
                 }
             }
@@ -297,6 +306,7 @@ public class FicArt_Mvt extends ConnectedServlet {
                 }
                 catch (Exception e) {
                     mySalon.setMessage("Erreur", e.toString());
+                    log.error("Erreur à la suppression de l'article", e);
                     request.setAttribute("Action", "Modification");
                 }
             }
@@ -306,6 +316,7 @@ public class FicArt_Mvt extends ConnectedServlet {
         }
         catch (Exception e) {
             mySalon.setMessage("Erreur", e.toString());
+            log.error("Erreur générale", e);
             System.out.println("Note : " + e.toString());
         }
 
@@ -315,7 +326,7 @@ public class FicArt_Mvt extends ConnectedServlet {
         myDBSession.cleanTransaction();
 
         /**
-         * Recherche les fournisseurs de cet article
+         * Recherche les mouvements de cet article
          */
         Vector listeMvt = new Vector();
         if ((CD_ART != null) && (CD_ART.length() > 0)) {
@@ -354,11 +365,13 @@ public class FicArt_Mvt extends ConnectedServlet {
                 catch (Exception e) {
                     vide = false; // Stop la boucle
                     System.out.println("Erreur dans requète sur clé : " + e.toString());
+                    log.error("Erreur à la recherche des mouvements", e);
                     try {
                         response.sendError(500);
                     }
                     catch (Exception e2) {
                         System.out.println("Erreur sur sendError : " + e2.toString());
+                        log.error("Erreur à la redirection sur erreur 500", e);
                     }
                 }
             }
@@ -375,6 +388,7 @@ public class FicArt_Mvt extends ConnectedServlet {
         }
         catch (Exception e) {
             System.out.println("FicArt_Mvt::performTask : Erreur à la redirection : " + e.toString());
+            log.error("Erreur à la redirection", e);
         }
     }
 }
