@@ -3,7 +3,7 @@
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "InCrEG LibertyLook"
 !define PRODUCT_VERSION "4.0"
-!define PRODUCT_VERSION_FULL "${PRODUCT_VERSION}"
+!define PRODUCT_VERSION_FULL "${PRODUCT_VERSION}.0.0"
 !define PRODUCT_COPYRIGHT "2002-2007 Valérie, Alexandre et Emmanuel Guyot"
 !define PRODUCT_PUBLISHER "SourceForge"
 !define PRODUCT_WEB_SITE "http://beauty-hair-mng.sourceforge.net/"
@@ -83,45 +83,30 @@ Section "Fichiers principaux" SEC00
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
   File "${ORIG_DIR}\*.*"
-  File /a /r "${ORIG_DIR}\cygwin"
   File /r "${ORIG_DIR}\Doc"
   File /r "${ORIG_DIR}\install"
   File /r "${ORIG_DIR}\jdk"
   File /r "${ORIG_DIR}\perso"
+  File /r "${ORIG_DIR}\pgsql"
   File /r "${ORIG_DIR}\tomcat"
   File /r "${ORIG_DIR}\war"
   
   CreateDirectory "$INSTDIR\Base"
-  CreateDirectory "$INSTDIR\cygwin\home\InCrEG"
-  CreateDirectory "$INSTDIR\cygwin\usr\local\etc"
-  CreateDirectory "$INSTDIR\cygwin\usr\man\cat1"
-  CreateDirectory "$INSTDIR\cygwin\usr\man\catl"
-  CreateDirectory "$INSTDIR\cygwin\usr\src"
-  CreateDirectory "$INSTDIR\cygwin\usr\ssl\certs"
-  CreateDirectory "$INSTDIR\cygwin\usr\ssl\private"
-  CreateDirectory "$INSTDIR\cygwin\usr\tmp"
-  CreateDirectory "$INSTDIR\cygwin\var\tmp"
   CreateDirectory "$INSTDIR\jdk\jre\lib\applet"
   CreateDirectory "$INSTDIR\jdk\jre\lib\ext"
   CreateDirectory "$INSTDIR\Sauvegardes"
   CreateDirectory "$INSTDIR\Temp"
-  CreateDirectory "$INSTDIR\tomcat\conf\auto"
+  CreateDirectory "$INSTDIR\tomcat\common\classes"
+  CreateDirectory "$INSTDIR\tomcat\common\endorsed"
+  CreateDirectory "$INSTDIR\tomcat\conf\Catalina\localhost"
   CreateDirectory "$INSTDIR\tomcat\logs"
-  CreateDirectory "$INSTDIR\tomcat\modules"
+  CreateDirectory "$INSTDIR\tomcat\server\classes"
+  CreateDirectory "$INSTDIR\tomcat\server\webapps"
+  CreateDirectory "$INSTDIR\tomcat\shared\classes"
+  CreateDirectory "$INSTDIR\tomcat\temp"
   CreateDirectory "$INSTDIR\tomcat\webapps"
   CreateDirectory "$INSTDIR\tomcat\work"
   
-  WriteRegStr HKEY_LOCAL_MACHINE "Software\Cygnus Solutions\Cygwin\mounts v2\/" "native" "$INSTDIR/cygwin"
-  WriteRegDWORD HKEY_LOCAL_MACHINE "Software\Cygnus Solutions\Cygwin\mounts v2\/" "flags" "0x0a"
-  WriteRegStr HKEY_LOCAL_MACHINE "Software\Cygnus Solutions\Cygwin\mounts v2\/usr/bin" "native" "$INSTDIR/cygwin/bin"
-  WriteRegDWORD HKEY_LOCAL_MACHINE "Software\Cygnus Solutions\Cygwin\mounts v2\/usr/bin" "flags" "0x0a"
-  WriteRegStr HKEY_LOCAL_MACHINE "Software\Cygnus Solutions\Cygwin\mounts v2\/usr/lib" "native" "$INSTDIR/cygwin/lib"
-  WriteRegDWORD HKEY_LOCAL_MACHINE "Software\Cygnus Solutions\Cygwin\mounts v2\/usr/lib" "flags" "0x0a"
-  
-  ; Pour créer l'arborescence
-  WriteRegStr HKEY_LOCAL_MACHINE "Software\Cygnus Solutions\Cygwin\Program Options" "InCrEG" "true"
-  DeleteRegValue HKEY_LOCAL_MACHINE "Software\Cygnus Solutions\Cygwin\Program Options" "InCrEG"
-
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\1 - Démarrage ${PRODUCT_NAME}.lnk" "$INSTDIR\LaunchWeb.bat" "" "$INSTDIR\LaunchWeb.ico" 0 SW_SHOWMINIMIZED
   CreateShortCut "$DESKTOP\1 - Démarrage ${PRODUCT_NAME}.lnk" "$INSTDIR\LaunchWeb.bat" "" "$INSTDIR\LaunchWeb.ico" 0 SW_SHOWMINIMIZED
   CreateShortCut "$SMSTARTUP\1 - Démarrage ${PRODUCT_NAME}.lnk" "$INSTDIR\LaunchWeb.bat" "" "$INSTDIR\LaunchWeb.ico" 0 SW_SHOWMINIMIZED
@@ -185,7 +170,8 @@ Function CheckWindowsVersion
 
              StrCmp $R1 '5.0' lbl_winnt_2000
              StrCmp $R1 '5.1' lbl_winnt_XP
-             StrCmp $R1 '5.2' lbl_winnt_2003 lbl_error
+             StrCmp $R1 '5.2' lbl_winnt_2003
+             StrCmp $R1 '600' lbl_winvista lbl_error
 
    lbl_winnt_x:
                StrCpy $R0 "NT $R0" 6
@@ -201,6 +187,10 @@ Function CheckWindowsVersion
 
    lbl_winnt_2003:
                   Strcpy $R0 '2003'
+                  Goto lbl_done
+
+   lbl_winvista:
+                  Strcpy $R0 'Vista'
                   Goto lbl_done
 
    lbl_error:             Strcpy $R0 ''
@@ -227,17 +217,15 @@ Section Uninstall
 
   RMDir /r "$SMPROGRAMS\$ICONS_GROUP"
   Delete "$INSTDIR\*.*"
-  RMDir /r "$INSTDIR\cygwin"
   RMDir /r "$INSTDIR\Doc"
   RMDir /r "$INSTDIR\install"
   RMDir /r "$INSTDIR\jdk"
   RMDir /r "$INSTDIR\perso"
+  RMDir /r "$INSTDIR\pgsql"
   RMDir /r "$INSTDIR\tomcat"
   RMDir /r "$INSTDIR\war"
   RMDir /r "$INSTDIR\Base"
   RMDir /r "$INSTDIR\Temp"
-
-  DeleteRegKey HKEY_LOCAL_MACHINE "Software\Cygnus Solutions\Cygwin"
 
   Delete "$DESKTOP\1 - Démarrage ${PRODUCT_NAME}.lnk"
   Delete "$SMSTARTUP\1 - Démarrage ${PRODUCT_NAME}.lnk"
