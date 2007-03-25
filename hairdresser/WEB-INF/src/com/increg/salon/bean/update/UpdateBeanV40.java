@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import com.increg.commun.DBSession;
+import com.increg.commun.exception.BadPlatformException;
 import com.increg.commun.exception.ReloadNeededException;
 
 /**
@@ -35,6 +36,19 @@ public class UpdateBeanV40 extends UpdateBeanV33 {
             
             if (rs.next()) {
             	version = rs.getString("VERSION");
+            	
+            	// Vérification de la version du socle via la version de la base
+            	sql = "select version()";
+                ResultSet rsPostgre = dbConnect.doRequest(sql);
+                if (rsPostgre.next()) {
+                	if (rsPostgre.getString(1).compareToIgnoreCase("postgresql 8.2") < 0) {
+                    	throw new BadPlatformException();
+                	}
+                }
+                else {
+                	throw new BadPlatformException();
+                }
+                rsPostgre.close();
             }
             else {
                 super.deduitVersion(dbConnect);
