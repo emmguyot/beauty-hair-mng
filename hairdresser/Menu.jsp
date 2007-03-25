@@ -197,7 +197,7 @@ MM_reloadPage(true);
 <p class="tabDonnees">
 <font size=-1>
 <a href="<%= mySalon.getLangue().getLanguage() %>/histo.html" target="ClientFrame"><%@ include file="include/version.inc" %></a><br/>
-<a href="<%= mySalon.getLangue().getLanguage() %>/contact.html" target="ClientFrame">&copy; 2002-2006</a></font></p>
+<a href="<%= mySalon.getLangue().getLanguage() %>/contact.html" target="ClientFrame">&copy; 2002-2007</a></font></p>
 
 <SCRIPT FOR=window EVENT=onscroll LANGUAGE="JScript">
 PlaceCoins()
