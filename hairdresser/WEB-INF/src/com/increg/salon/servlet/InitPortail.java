@@ -140,6 +140,8 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
             
             // Accès distant ? Il faut vérifier que c'est autorisé
     	    if ((!request.getRemoteAddr().equals ("127.0.0.1")) 
+    	    		&& (!request.getRemoteAddr().equals ("0:0:0:0:0:0:0:1")) // IPV6
+    	    		&& (!request.getRemoteAddr().equals ("::1")) // IPV6
     	            && (request.getRemoteAddr().indexOf("192.168.0.") == -1)) {
     	        if ((user != null) 
     	                && (mySalon != null) && (mySalon.isRemoteEnable())) {
