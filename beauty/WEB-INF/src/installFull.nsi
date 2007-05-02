@@ -171,7 +171,7 @@ Function CheckWindowsVersion
              StrCmp $R1 '5.0' lbl_winnt_2000
              StrCmp $R1 '5.1' lbl_winnt_XP
              StrCmp $R1 '5.2' lbl_winnt_2003
-             StrCmp $R1 '600' lbl_winvista lbl_error
+             StrCmp $R1 '6.0' lbl_winvista lbl_error
 
    lbl_winnt_x:
                StrCpy $R0 "NT $R0" 6
