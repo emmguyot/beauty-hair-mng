@@ -22,6 +22,7 @@ import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.InputStream;
@@ -163,81 +164,79 @@ public class Restauration extends ConnectedServlet {
                     	GZipper.gunzipFile(fichier.getAbsolutePath(), fichierUnzip.getAbsolutePath());
                     }
 
-                    // Suppression de toutes les tables et sequences pour que la restauration soit propre
                     if (!erreur) {
-                        Executer dropDB = new Executer(System.getenv("PG_HOME") + "\\bin\\dropdb.exe " + dbName);
-                        if (dropDB.runAndWait() != 0) {
-                            /**
-                             * Messages dans les attributs car plus de bean session
-                             */
-                            request.setAttribute("Erreur", messages.getString("restauration.erreurP2"));
-                            erreur = true;
-                        }
-                    }
-
-                    // Recréation de la base !!!! A la main 
-                    if (!erreur) {
-                        myDBSession.setBaseName("template1");
-                        myDBSession.open();
-
-                        String[] SQL = {"create database " + dbName + " with template=template0 encoding='LATIN1'"};
-                        int[] cr = myDBSession.doExecuteSQL(SQL);
-                        if (cr[0] != 0) {
-                            /**
-                             * Messages dans les attributs car plus de bean session
-                             */
-                            request.setAttribute("Erreur", messages.getString("restauration.erreurP3"));
-                            erreur = true;
-                        }
-
-                        myDBSession.close();
-                        myDBSession.setBaseName(dbName);
-                    }
-
-                    if (!erreur) {
+                        // Suppression de toutes les tables et sequences pour que la restauration soit propre
                         // Plusieurs tentatives de restauration au cas ou                
                         int nbEssai = 0;
                         boolean done = false;
 
                         while (!done && (++nbEssai <= 2)) {
                         	erreur = false;
-                            if (nbEssai > 1) {
-                                // Trace
-                                log.debug("Tentative de restauration N°" + nbEssai);
-                            }
-                            Executer resto =
-                                new Executer(System.getenv("PG_HOME") +
-                                    "\\bin\\pg_restore.exe -v -F c -d " + dbName + 
-                                    " \"" + fichierUnzip.getAbsolutePath() + "\"");
-                            int cr = resto.runAndWait(5l * 60l * 1000l, 2000);
-                            if (cr < 0) {
-                                request.setAttribute("Erreur", messages.getString("restauration.erreurRelance"));
-                                // Kill le process au cas où il traine
-                                // Executer killIt = new Executer("bash --login -c \"kill -9 `ps | grep pg_restore | grep -v grep | gawk '{ print $1 '}` \"");
-                                // killIt.runAndWait();
-                                log.error("Timeout sur la restauration cr=" + cr);
-                                erreur = true;
-                            }
-                            else {
-                                // Vérification du fichier log
-                            	FileReader fr = new FileReader(Executer.NOM_FICHIER_ERR);
-                            	BufferedReader br = new BufferedReader(fr);
-                            	String ligne;
-                            	while ((ligne = br.readLine()) != null) {
-                            		if (ligne.indexOf("ERROR") != -1) {
-                                        /**
-                                         * Messages dans les attributs car plus de bean session
-                                         */
-                                        request.setAttribute("Erreur", messages.getString("restauration.erreur"));
-                                        log.error("Erreur dans le log de restauration : " + ligne);
-                                        erreur = true;
-                            		}
+	                        Executer dropDB = new Executer(System.getenv("PG_HOME") + "\\bin\\dropdb.exe " + dbName);
+	                        if (dropDB.runAndWait() != 0) {
+	                            /**
+	                             * Messages dans les attributs car plus de bean session
+	                             */
+	                            request.setAttribute("Erreur", messages.getString("restauration.erreurP2"));
+	                            erreur = true;
+	                        }
+	                        // Recréation de la base !!!! A la main 
+	                        if (!erreur) {
+	                            myDBSession.setBaseName("template1");
+	                            myDBSession.open();
+
+	                            String[] SQL = {"create database " + dbName + " with template=template0 encoding='LATIN1'"};
+	                            int[] cr = myDBSession.doExecuteSQL(SQL);
+	                            if (cr[0] != 0) {
+	                                /**
+	                                 * Messages dans les attributs car plus de bean session
+	                                 */
+	                                request.setAttribute("Erreur", messages.getString("restauration.erreurP3"));
+	                                erreur = true;
+	                            }
+
+	                            myDBSession.close();
+	                            myDBSession.setBaseName(dbName);
+	                        }
+                            if (!erreur) {
+                                if (nbEssai > 1) {
+                                    // Trace
+                                    log.debug("Tentative de restauration N°" + nbEssai);
                                 }
-                            	
-                            	if (!erreur) {
-                                    request.setAttribute("Info", messages.getString("restauration.succes"));
-                                    erreur = false;
-                                    done = true;
+                                Executer resto =
+                                    new Executer(System.getenv("PG_HOME") +
+                                        "\\bin\\pg_restore.exe -v -F c -d " + dbName + 
+                                        " \"" + fichierUnzip.getAbsolutePath() + "\"");
+                                int cr = resto.runAndWait(5l * 60l * 1000l, 2000);
+                                if (cr < 0) {
+                                    request.setAttribute("Erreur", messages.getString("restauration.erreurRelance"));
+                                    // Kill le process au cas où il traine
+                                    // Executer killIt = new Executer("bash --login -c \"kill -9 `ps | grep pg_restore | grep -v grep | gawk '{ print $1 '}` \"");
+                                    // killIt.runAndWait();
+                                    log.error("Timeout sur la restauration cr=" + cr);
+                                    erreur = true;
+                                }
+                                else {
+                                    // Vérification du fichier log
+                                	FileReader fr = new FileReader(Executer.NOM_FICHIER_ERR);
+                                	BufferedReader br = new BufferedReader(fr);
+                                	String ligne;
+                                	while ((ligne = br.readLine()) != null) {
+                                		if (ligne.indexOf("ERROR") != -1) {
+                                            /**
+                                             * Messages dans les attributs car plus de bean session
+                                             */
+                                            request.setAttribute("Erreur", messages.getString("restauration.erreur"));
+                                            log.error("Erreur dans le log de restauration : " + ligne);
+                                            erreur = true;
+                                		}
+                                    }
+                                	
+                                	if (!erreur) {
+                                        request.setAttribute("Info", messages.getString("restauration.succes"));
+                                        erreur = false;
+                                        done = true;
+                                    }
                                 }
                             }
                         }
