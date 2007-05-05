@@ -197,13 +197,12 @@ public class FicCollab extends ConnectedServlet {
                 }
             }
             else {
-                System.out.println("Action non codée : " + Action);
+                log.error("Action non codée : " + Action);
             }
         }
         catch (Exception e) {
             mySalon.setMessage("Erreur", e.toString());
             log.error("Erreur générale", e);
-            System.out.println("Note : " + e.toString());
         }
 
         /**
@@ -219,7 +218,6 @@ public class FicCollab extends ConnectedServlet {
 
         }
         catch (Exception e) {
-            System.out.println("FicCollab::performTask : Erreur à la redirection : " + e.toString());
             log.error("Erreur à la redirection", e);
         }
     }

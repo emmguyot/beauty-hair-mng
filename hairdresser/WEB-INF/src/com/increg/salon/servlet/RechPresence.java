@@ -3,7 +3,6 @@ package com.increg.salon.servlet;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TreeMap;
@@ -11,6 +10,9 @@ import java.util.TreeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.SalonSession;
@@ -27,6 +29,8 @@ public class RechPresence extends ConnectedServlet {
  * @see com.increg.salon.servlet.ConnectedServlet
  */
 public void performTask(HttpServletRequest request, HttpServletResponse response) {
+
+	Log log = LogFactory.getLog(this.getClass());
 
 	// Récupération des paramètres
 	String CD_COLLAB = request.getParameter("CD_COLLAB");
@@ -112,13 +116,13 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
 		aRS.close();
 	}
 	catch (Exception e) {
-		System.out.println ("Erreur dans performTask : " + e.toString());
+		log.error("Erreur dans performTask : ", e);
 		try {
 			response.sendError(500);
 			return;
 		}
 		catch (Exception e2) {
-			System.out.println ("Erreur sur sendError : " + e2.toString());
+			log.error("Erreur sur sendError : ", e2);
 		}
 	}
 		
@@ -132,12 +136,12 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
 
 	}
 	catch (Exception e) {
-		System.out.println ("Erreur dans performTask : " + e.toString());
+		log.error("Erreur dans performTask : ", e);
 		try {
 			response.sendError(500);
 		}
 		catch (Exception e2) {
-			System.out.println ("Erreur sur sendError : " + e2.toString());
+			log.error("Erreur sur sendError : ", e2);
 		}
 	}
 }

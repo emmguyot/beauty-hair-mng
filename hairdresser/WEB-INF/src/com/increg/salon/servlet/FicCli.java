@@ -241,12 +241,11 @@ public class FicCli extends ConnectedServlet {
                 ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI, mySalon.getMessagesBundle());
                 request.setAttribute("ClientBean", aCli);
             } else {
-                System.out.println("Action non codée : " + Action);
+                log.error("Action non codée : " + Action);
             }
         } catch (Exception e) {
             mySalon.setMessage("Erreur", e);
             log.error("Erreur générale", e);
-            System.out.println("Note : " + e.toString());
         }
 
         /**
@@ -299,12 +298,10 @@ public class FicCli extends ConnectedServlet {
                 }
                 aRS.close();
             } catch (Exception e) {
-                System.out.println("Erreur dans requète sur clé : " + e.toString());
                 log.error("Erreur à la recherche des factures/prestations du client", e);
                 try {
                     response.sendError(500);
                 } catch (Exception e2) {
-                    System.out.println("Erreur sur sendError : " + e2.toString());
                     log.error("Erreur à la redirection sur erreur 500", e2);
                 }
             }
@@ -318,7 +315,6 @@ public class FicCli extends ConnectedServlet {
             getServletConfig().getServletContext().getRequestDispatcher("/ficCli.jsp").forward(request, response);
 
         } catch (Exception e) {
-            System.out.println("FicCli::performTask : Erreur à la redirection : " + e.toString());
             log.error("Erreur à la redirection", e);
         }
     }

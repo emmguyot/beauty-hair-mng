@@ -144,7 +144,6 @@ public class AccueilPointage extends ConnectedServlet {
         }
         catch (Exception e) {
             mySalon.setMessage("Erreur", e.toString());
-            System.out.println("Note : " + e.toString());
             log.error("Erreur générale", e);
         }
 
@@ -158,7 +157,6 @@ public class AccueilPointage extends ConnectedServlet {
 
         }
         catch (Exception e) {
-            System.out.println("AccueilPointage::performTask : Erreur à la redirection : " + e.toString());
             log.error("Erreur à la redirection", e);
         }
     }

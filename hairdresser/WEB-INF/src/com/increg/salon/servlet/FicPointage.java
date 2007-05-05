@@ -6,6 +6,9 @@ import java.util.Calendar;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.PointageBean;
@@ -23,6 +26,8 @@ public class FicPointage extends ConnectedServlet {
 public void performTask(
 	javax.servlet.http.HttpServletRequest request,
 	javax.servlet.http.HttpServletResponse response) {
+
+	Log log = LogFactory.getLog(this.getClass());
 
 	// Récupération des paramètres
 	String Action = request.getParameter("Action");
@@ -163,12 +168,12 @@ public void performTask(
 			}
 		}
 		else {
-			System.out.println ("Action non codée : " + Action);
+			log.error("Action non codée : " + Action);
 		}
 	}
 	catch (Exception e) {
 		mySalon.setMessage("Erreur", e.toString());
-		System.out.println("Note : " + e.toString());
+		log.error("Erreur générale : ", e);
 	}
 
     /**
@@ -184,7 +189,7 @@ public void performTask(
 
 	}
 	catch (Exception e) {
-		System.out.println("FicPointage::performTask : Erreur à la redirection : " + e.toString());
+		log.error("Erreur à la redirection : ", e);
 	}
 }
 }

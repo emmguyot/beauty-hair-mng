@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.exception.FctlException;
@@ -30,7 +33,9 @@ public class FicCriterePub extends ConnectedServlet {
      */
     public void performTask(HttpServletRequest request, HttpServletResponse response) {
 
-        // Récupération des paramètres
+    	Log log = LogFactory.getLog(this.getClass());
+
+    	// Récupération des paramètres
         String Action = request.getParameter("Action");
         String CD_CRITERE_PUB = request.getParameter("CD_CRITERE_PUB");
         String LIB_CRITERE_PUB = request.getParameter("LIB_CRITERE_PUB");
@@ -197,16 +202,16 @@ public class FicCriterePub extends ConnectedServlet {
                 catch (FctlException e) {
                     // Message à afficher graphiquement
                     request.setAttribute("Erreur", e.toString());
-                    e.printStackTrace();
+                    log.error("Erreur sur getData", e);
                 }
             }
             else {
-                System.out.println("Action non codée : " + Action);
+                log.error("Action non codée : " + Action);
             }
         }
         catch (Exception e) {
             mySalon.setMessage("Erreur", e.toString());
-            System.out.println("FicCriterePub : " + e.toString());
+            log.error("Erreur générale : ", e);
         }
 
         /**
@@ -240,9 +245,7 @@ public class FicCriterePub extends ConnectedServlet {
             }
         }
         catch (Exception e) {
-            System.out.println(
-                "FicCriterePub::performTask : Erreur à la redirection : "
-                    + e.toString());
+            log.error("Erreur à la redirection : ", e);
         }
     }
 }

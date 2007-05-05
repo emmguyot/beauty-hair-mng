@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
@@ -22,7 +24,10 @@ import com.increg.salon.bean.SalonSession;
  * @author Emmanuel GUYOT <emmguyot@wanadoo.fr>
  */
 public class RechCli extends ConnectedServlet {
-    /**
+
+	protected Log log = LogFactory.getLog(this.getClass());
+
+	/**
      * @see com.increg.salon.servlet.ConnectedServlet
      */
     public void performTask(HttpServletRequest request, HttpServletResponse response) {
@@ -73,11 +78,11 @@ public class RechCli extends ConnectedServlet {
             }
 
         } catch (Exception e) {
-            System.out.println("Erreur dans performTask : " + e.toString());
+            log.error("Erreur dans performTask : ", e);
             try {
                 response.sendError(500);
             } catch (Exception e2) {
-                System.out.println("Erreur sur sendError : " + e2.toString());
+                log.error("Erreur sur sendError : ", e2);
             }
         }
     }
@@ -304,7 +309,7 @@ public class RechCli extends ConnectedServlet {
             }
             aRS.close();
         } catch (Exception e) {
-            System.out.println("Erreur dans performTask : " + e.toString());
+            log.error("Erreur dans performTask : ", e);
             lstLignes = null;
         }
         

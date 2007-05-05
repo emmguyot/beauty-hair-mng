@@ -5,6 +5,9 @@ import java.util.Vector;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.SalonSession;
 import com.increg.salon.bean.TvaBean;
@@ -21,6 +24,8 @@ public class RechTxTVA extends ConnectedServlet {
      */
     public void performTask(javax.servlet.http.HttpServletRequest request,
             javax.servlet.http.HttpServletResponse response) {
+
+    	Log log = LogFactory.getLog(this.getClass());
 
         // Constitue la requete SQL
         String reqSQL = "select * from TVA order by LIB_TVA";
@@ -48,11 +53,11 @@ public class RechTxTVA extends ConnectedServlet {
                     "/lstTxTVA.jsp").forward(request, response);
 
         } catch (Exception e) {
-            System.out.println("Erreur dans performTask : " + e.toString());
+            log.error("Erreur dans performTask : ", e);
             try {
                 response.sendError(500);
             } catch (Exception e2) {
-                System.out.println("Erreur sur sendError : " + e2.toString());
+                log.error("Erreur sur sendError : ", e2);
             }
         }
     }

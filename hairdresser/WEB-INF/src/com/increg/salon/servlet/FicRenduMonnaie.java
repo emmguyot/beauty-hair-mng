@@ -3,6 +3,10 @@ package com.increg.salon.servlet;
 import com.increg.commun.BasicSession;
 import com.increg.salon.bean.*;
 import javax.servlet.http.*;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.math.BigDecimal;
 
 /**
@@ -16,6 +20,8 @@ public class FicRenduMonnaie extends ConnectedServlet {
      * @see com.increg.salon.servlet.ConnectedServlet
      */
     public void performTask(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) {
+
+    	Log log = LogFactory.getLog(this.getClass());
 
         // Récupération des paramètres
         String montant = request.getParameter("montant");
@@ -35,7 +41,7 @@ public class FicRenduMonnaie extends ConnectedServlet {
         }
         catch (Throwable t) {
             mySalon.setMessage("Erreur", t.toString());
-            System.out.println("Note : " + t.toString());
+            log.error("Erreur générale : ", t);
         }
 
         request.setAttribute("montant", montant);
@@ -48,7 +54,7 @@ public class FicRenduMonnaie extends ConnectedServlet {
 
         }
         catch (Exception e) {
-            System.out.println("FicTypEsp::performTask : Erreur à la redirection : " + e.toString());
+            log.error("Erreur à la redirection : ", e);
         }
     }
 }

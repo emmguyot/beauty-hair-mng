@@ -160,12 +160,11 @@ public void performTask(
             CD_CATEG_ART = null;
         }
 		else {
-			System.out.println ("Action non codée : " + Action);
+			log.error("Action non codée : " + Action);
 		}
 	}
 	catch (Exception e) {
 		mySalon.setMessage("Erreur", e.toString());
-		System.out.println("Note : " + e.toString());
         log.error("Erreur générale", e);
 	}
 
@@ -206,14 +205,12 @@ public void performTask(
 
         }
         catch (Exception e) {
-            System.out.println("Erreur dans requète sur commande : " + e.toString());
             log.error("Erreur sur recherche des mouvements", e);
             try {
                 response.sendError(500);
             }
             catch (Exception e2) {
-                System.out.println("Erreur sur sendError : " + e2.toString());
-                log.error("Erreur à la redirection", e);
+                log.error("Erreur sur sendError", e2);
             }
         }
 	}
@@ -236,7 +233,6 @@ public void performTask(
 
 	}
 	catch (Exception e) {
-		System.out.println("FicAchat::performTask : Erreur à la redirection : " + e.toString());
         log.error("Erreur à la redirection", e);
 	}
 }
@@ -272,8 +268,7 @@ protected MvtStkBean getPreviousMvt (DBSession myDBSession, String CD_CMD_FOURN,
 
     }
     catch (Exception e) {
-        System.out.println("Erreur dans requète sur historique achat : " + e.toString());
-        log.error("Erreur sur historique achat", e);
+        log.error("Erreur dans requète sur historique achat", e);
     }
     return anOldMvt;
 }

@@ -3,7 +3,6 @@ package com.increg.salon.servlet;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.TreeSet;
@@ -12,6 +11,9 @@ import java.util.Vector;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.SalonSession;
@@ -23,10 +25,13 @@ import com.increg.util.ServletUtil;
  * @author Emmanuel GUYOT <emmguyot@wanadoo.fr>
  */
 public class RechCA extends ConnectedServlet {
+
+	protected static Log log = LogFactory.getLog(RechCA.class);
 /**
  * @see com.increg.salon.servlet.ConnectedServlet
  */
 public void performTask(HttpServletRequest request, HttpServletResponse response) {
+
 
 	// Récupération des paramètres
 	String CD_COLLAB = request.getParameter("CD_COLLAB");
@@ -69,12 +74,12 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
 
 	}
 	catch (Exception e) {
-		System.out.println ("Erreur dans performTask : " + e.toString());
+		log.error("Erreur dans performTask : ", e);
 		try {
 			response.sendError(500);
 		}
 		catch (Exception e2) {
-			System.out.println ("Erreur sur sendError : " + e2.toString());
+			log.error("Erreur sur sendError : ", e2);
 		}
 	}
  } 
@@ -135,7 +140,7 @@ public static void rechercheCA (DBSession myDBSession, String CD_COLLAB, String 
         aRS.close();
     }
     catch (SQLException e) {
-        System.out.println("Erreur dans RechercheCA : " + e.toString());
+        log.error("Erreur dans RechercheCA : ", e);
         throw (e);
     }
 }    

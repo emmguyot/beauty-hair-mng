@@ -23,6 +23,9 @@ import java.util.Vector;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.FactBean;
@@ -41,6 +44,8 @@ public class FicPaiement extends ConnectedServlet {
      * @see com.increg.salon.servlet.ConnectedServlet
      */
     public void performTask(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) {
+
+    	Log log = LogFactory.getLog(this.getClass());
 
         // Récupération des paramètres
         String Action = request.getParameter("Action");
@@ -248,11 +253,11 @@ public class FicPaiement extends ConnectedServlet {
                     request.setAttribute("Action", "Modification");
                 }
             } else {
-                System.out.println("Action non codée : " + Action);
+                log.error("Action non codée : " + Action);
             }
         } catch (Exception e) {
             mySalon.setMessage("Erreur", e.toString());
-            System.out.println("Note : " + e.toString());
+            log.error("Erreur générale : ", e);
         }
 
         /**
@@ -279,11 +284,11 @@ public class FicPaiement extends ConnectedServlet {
 
                 aRS.close();
             } catch (Exception e) {
-                System.out.println("Erreur dans requète pour liste : " + e.toString());
+                log.error("Erreur dans requète pour liste : ", e);
                 try {
                     response.sendError(500);
                 } catch (Exception e2) {
-                    System.out.println("Erreur sur sendError : " + e2.toString());
+                    log.error("Erreur sur sendError : ", e2);
                 }
             }
         } else {
@@ -321,7 +326,7 @@ public class FicPaiement extends ConnectedServlet {
             }
 
         } catch (Exception e) {
-            System.out.println("FicPaiement::performTask : Erreur à la redirection : " + e.toString());
+            log.error("Erreur à la redirection : ", e);
         }
     }
 }

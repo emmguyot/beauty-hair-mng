@@ -9,6 +9,9 @@ import java.util.TreeMap;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.ParamBean;
 import com.increg.salon.bean.SalonSession;
@@ -21,10 +24,14 @@ import com.increg.util.ServletUtil;
  * @author Emmanuel GUYOT <emmguyot@wanadoo.fr>
  */
 public class RechBrouillard extends ConnectedServlet {
+
+	protected static Log log = LogFactory.getLog(RechBrouillard.class);
+
 /**
  * @see com.increg.salon.servlet.ConnectedServlet
  */
 public void performTask(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) {
+
 
 	// Récupération des paramètres
 	String DT_DEBUT = request.getParameter("DT_DEBUT");
@@ -60,12 +67,13 @@ public void performTask(javax.servlet.http.HttpServletRequest request, javax.ser
         rechercheBrouillard(myDBSession, DT_DEBUT, DT_FIN, lstLignes, lstType, lstTypeRem, lstTypeMca, brouillardTotal);
     }
     catch (Exception e) {
+        log.error("Erreur dans le brouillard : ", e);
         try {
             response.sendError(500);
             return;
         }
         catch (Exception e2) {
-            System.out.println ("Erreur sur sendError : " + e2.toString());
+            log.error("Erreur sur sendError : ", e2);
         }
     }
     
@@ -82,12 +90,12 @@ public void performTask(javax.servlet.http.HttpServletRequest request, javax.ser
 
 	}
 	catch (Exception e) {
-		System.out.println ("Erreur dans performTask : " + e.toString());
+		log.error("Erreur dans performTask : ", e);
 		try {
 			response.sendError(500);
 		}
 		catch (Exception e2) {
-			System.out.println ("Erreur sur sendError : " + e2.toString());
+			log.error("Erreur sur sendError : ", e2);
 		}
 	}
 }
@@ -222,8 +230,7 @@ public static void rechercheBrouillard (DBSession myDBSession, String DT_DEBUT, 
         aRS_Paiement_Ventil.close();
     }
     catch (Exception e) {
-        e.printStackTrace();
-        System.out.println ("Erreur dans performTask (Partie Entrée) : " + e.toString());
+        log.error("Erreur dans performTask (Partie Entrée) : ", e);
         throw (e);
     }
         
@@ -267,8 +274,7 @@ public static void rechercheBrouillard (DBSession myDBSession, String DT_DEBUT, 
         aRS_Paiement_Remise.close();
     }
     catch (Exception e) {
-        e.printStackTrace();
-        System.out.println ("Erreur dans performTask (Partie Remise) : " + e.toString());
+        log.error("Erreur dans performTask (Partie Remise) : ", e);
         throw(e);
     }
         
@@ -310,8 +316,7 @@ public static void rechercheBrouillard (DBSession myDBSession, String DT_DEBUT, 
         aRS_Mvt_Encaissement.close();
     }
     catch (Exception e) {
-        e.printStackTrace();
-        System.out.println ("Erreur dans performTask (Partie Encaissement) : " + e.toString());
+        log.error("Erreur dans performTask (Partie Encaissement) : ", e);
         throw(e);
     }
 }

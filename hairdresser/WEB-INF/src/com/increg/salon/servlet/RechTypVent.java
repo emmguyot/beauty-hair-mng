@@ -4,6 +4,10 @@ import java.util.*;
 import java.sql.*;
 import com.increg.salon.bean.*;
 import javax.servlet.http.*;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.increg.commun.*;
 /**
  * Liste des données de référence
@@ -15,6 +19,8 @@ public class RechTypVent extends ConnectedServlet {
  * @see com.increg.salon.servlet.ConnectedServlet
  */
 public void performTask(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) {
+
+	Log log = LogFactory.getLog(this.getClass());
 
 	// Constitue la requete SQL
 	String reqSQL = "select * from TYP_VENT order by LIB_TYP_VENT";
@@ -41,12 +47,12 @@ public void performTask(javax.servlet.http.HttpServletRequest request, javax.ser
 
 	}
 	catch (Exception e) {
-		System.out.println ("Erreur dans performTask : " + e.toString());
+		log.error("Erreur dans performTask : ", e);
 		try {
 			response.sendError(500);
 		}
 		catch (Exception e2) {
-			System.out.println ("Erreur sur sendError : " + e2.toString());
+			log.error("Erreur sur sendError : ", e2);
 		}
 	}
  } 

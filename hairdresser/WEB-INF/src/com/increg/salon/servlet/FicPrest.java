@@ -2,6 +2,9 @@ package com.increg.salon.servlet;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.PrestBean;
@@ -17,6 +20,8 @@ public class FicPrest extends ConnectedServlet {
      * @see com.increg.salon.servlet.ConnectedServlet
      */
     public void performTask(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) {
+
+    	Log log = LogFactory.getLog(this.getClass());
 
         // Récupération des paramètres
         String Action = request.getParameter("Action");
@@ -227,7 +232,7 @@ public class FicPrest extends ConnectedServlet {
                 }
             }
             else {
-                System.out.println("Action non codée : " + Action);
+                log.error("Action non codée : " + Action);
             }
 
             request.setAttribute("PrestBean", aPrest);
@@ -235,7 +240,7 @@ public class FicPrest extends ConnectedServlet {
         }
         catch (Exception e) {
             mySalon.setMessage("Erreur", e.toString());
-            System.out.println("Note : " + e.toString());
+            log.error("Erreur générale : ", e);
         }
 
         /**
@@ -249,7 +254,7 @@ public class FicPrest extends ConnectedServlet {
 
         }
         catch (Exception e) {
-            System.out.println("FicCli::performTask : Erreur à la redirection : " + e.toString());
+            log.error("Erreur à la redirection : ", e);
         }
     }
 }

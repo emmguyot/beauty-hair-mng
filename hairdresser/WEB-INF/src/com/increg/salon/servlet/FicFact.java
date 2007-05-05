@@ -25,6 +25,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
@@ -50,7 +52,9 @@ public class FicFact extends ConnectedServlet {
     public void performTask(HttpServletRequest request,
             HttpServletResponse response) {
 
-        boolean allCorrect = true;
+    	Log log = LogFactory.getLog(this.getClass());
+
+    	boolean allCorrect = true;
         boolean forcage = false;
 
         // Récupération des paramètres
@@ -567,7 +571,7 @@ public class FicFact extends ConnectedServlet {
             }
             // *****************************************************************************************
             else {
-                System.out.println("Action non codée : " + Action);
+                log.error("Action non codée : " + Action);
             }
 
             /**
@@ -606,7 +610,7 @@ public class FicFact extends ConnectedServlet {
 
         } catch (Exception e) {
             mySalon.setMessage("Erreur", e.toString());
-            System.out.println("Note : " + e.toString());
+            log.error("Erreur générale : ", e);
         }
 
         // Positionne les attributs
@@ -658,9 +662,7 @@ public class FicFact extends ConnectedServlet {
             }
 
         } catch (Exception e) {
-            System.out
-                    .println("FicFact::performTask : Erreur à la redirection : "
-                            + e.toString());
+            log.error("Erreur à la redirection : ", e);
         }
     }
 

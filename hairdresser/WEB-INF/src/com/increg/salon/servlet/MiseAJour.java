@@ -30,6 +30,9 @@ import java.util.TreeSet;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.ParamBean;
@@ -50,6 +53,8 @@ public class MiseAJour extends ConnectedServlet {
      */
     public void performTask(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) {
 
+    	Log log = LogFactory.getLog(this.getClass());
+
         final int CHUNK_SIZE = 4096;
 
         // Initialise une session light de traduction
@@ -65,9 +70,6 @@ public class MiseAJour extends ConnectedServlet {
         String Action = request.getParameter("Action");
         String Type = request.getParameter("Type");
         String nomFichier = request.getParameter("nomFichier");
-
-        // pg_restore -c -f fichier -F c
-        Runtime aRuntime = Runtime.getRuntime();
 
         // Liste des fichiers
         TreeSet listeFichier = new TreeSet(new StringInverseComp());
@@ -147,12 +149,12 @@ public class MiseAJour extends ConnectedServlet {
                             pos = page.indexOf("\"", pos + 2);
                         }
                         else {
-                            System.out.println("Format de la page non prévu");
+                            log.error("Format de la page non prévu");
                         }
                     }
                 }
                 else {
-                    System.out.println("Type non codé : " + Type);
+                    log.error("Type non codé : " + Type);
                 }
 
             }
@@ -250,18 +252,18 @@ public class MiseAJour extends ConnectedServlet {
                     //response.getWriter().println("<html><body><h1>La mise à jour est terminée.<br>Vous devez arrêter le logiciel et le redémarrer pour que cette mise à jour soit prise en compte.</h1></body></html>");
                 }
                 catch (Exception e) {
-                    System.out.println("Erreur " + e.toString());
+                    log.error("Erreur ", e);
                     request.setAttribute("Erreur", e.toString());
                 }
 
             }
             else {
-                System.out.println("Action non codée : " + Action);
+                log.error("Action non codée : " + Action);
             }
         }
         catch (Exception e) {
             request.setAttribute("Erreur", e.toString());
-            System.out.println("Note : " + e.toString());
+            log.error("Erreur générale : ", e);
         }
 
         request.setAttribute("Type", Type);
@@ -277,7 +279,7 @@ public class MiseAJour extends ConnectedServlet {
             }
         }
         catch (Exception e) {
-            System.out.println("MiseAJour::performTask : Erreur à la redirection : " + e.toString());
+            log.error("Erreur à la redirection : ", e);
         }
 
     }

@@ -327,13 +327,12 @@ public void performTask(
 			}
 		}
 		else {
-			System.out.println ("Action non codée : " + Action);
+			log.error("Action non codée : " + Action);
 		}
 	}
 	catch (Exception e) {
 		mySalon.setMessage("Erreur", e.toString());
         log.error("Erreur générale", e);
-		System.out.println("Note : " + e.toString());
 	}
 
     /**
@@ -362,14 +361,12 @@ public void performTask(
 			aRS.close();
 		}
 		catch (Exception e) {
-			System.out.println("Erreur dans requète sur clé : " + e.toString());
             log.error("Erreur à la recherche des fournisseurs", e);
 			try {
 				response.sendError(500);
 			}
 			catch (Exception e2) {
-				System.out.println("Erreur sur sendError : " + e2.toString());
-	            log.error("Erreur à la redirection sur erreur 500", e);
+	            log.error("Erreur à la redirection sur erreur 500", e2);
 			}
 		}
 	}
@@ -382,7 +379,6 @@ public void performTask(
 
 	}
 	catch (Exception e) {
-		System.out.println("FicCli::performTask : Erreur à la redirection : " + e.toString());
         log.error("Erreur à la redirection", e);
 	}
 }

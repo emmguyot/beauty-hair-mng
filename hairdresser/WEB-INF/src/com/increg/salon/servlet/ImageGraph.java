@@ -3,6 +3,10 @@ import com.increg.salon.bean.graphique.*;
 import java.util.*;
 import com.increg.salon.bean.*;
 import javax.servlet.http.*;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import java.awt.*;
 /**
  * Création d'un graphe au format image
@@ -16,6 +20,8 @@ public class ImageGraph extends ConnectedServlet {
 public void performTask(
 	javax.servlet.http.HttpServletRequest request,
 	javax.servlet.http.HttpServletResponse response) {
+
+	Log log = LogFactory.getLog(this.getClass());
 
 	// Récupération des paramètres
 //	String Action = request.getParameter("Action");
@@ -79,7 +85,7 @@ public void performTask(
 	}
 	catch (Exception e) {
 		mySalon.setMessage("Erreur", e.toString());
-		System.out.println("ImageGraph : " + e.toString());
+		log.error("Erreur générale : ", e);
 	}
 
 }}

@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.increg.commun.BasicSession;
 import com.increg.commun.exception.ReloadNeededException;
@@ -75,6 +77,8 @@ public void init() {
  */
 public void performTask(HttpServletRequest request, HttpServletResponse response) {
 
+	Log log = LogFactory.getLog(this.getClass());
+
 	try {
 		// Création de la session
 		HttpSession mySession = request.getSession(true);
@@ -119,8 +123,7 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
                     response.sendError(500);
                 } 
                 catch (Exception e2) {
-                    System.out.println("sendError en erreur ");
-                    e2.printStackTrace();
+                    log.error("sendError en erreur ", e2);
                 }
                 return;
             }
@@ -145,22 +148,21 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
     	            && (request.getRemoteAddr().indexOf("192.168.0.") == -1)) {
     	        if ((user != null) 
     	                && (mySalon != null) && (mySalon.isRemoteEnable())) {
-    	            System.out.println("Connexion de " + user + " depuis " + request.getRemoteAddr() + " le " + new Date().toString());
+    	            log.info("Connexion de " + user + " depuis " + request.getRemoteAddr() + " le " + new Date().toString());
     	        }
     	        else if ((user == null) 
     	        		&& (mySalon != null) 
     	        		&& (mySalon.isRemoteEnable())
     	        		&& (!mySalon.isSecureApache())) {
-    	            System.out.println("Connexion depuis " + request.getRemoteAddr() + " le " + new Date().toString());
+    	            log.info("Connexion depuis " + request.getRemoteAddr() + " le " + new Date().toString());
     	        }
     	        else {
-    	            System.out.println("Tentative d'intrusion à partir de " + request.getRemoteAddr());
+    	            log.error("Tentative d'intrusion à partir de " + request.getRemoteAddr());
     	            try {
                         response.sendError(500);
                     } 
                     catch (Exception e) {
-                        System.out.println("sendError en erreur ");
-                        e.printStackTrace();
+                        log.error("sendError en erreur ", e);
                     }
     	            return;
     	        }
@@ -188,7 +190,7 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
                 }
                 else if (aIdent != null) {
                     // Tente une connexion automatique à partir du nom de l'utilisateur
-                    getServletConfig().getServletContext().getRequestDispatcher("/ident.srv?MOT_PASSE=" + URLEncoder.encode(aIdent.getMOT_PASSE())).forward(request, response);
+                    getServletConfig().getServletContext().getRequestDispatcher("/ident.srv?MOT_PASSE=" + URLEncoder.encode(aIdent.getMOT_PASSE(), "UTF-8")).forward(request, response);
                 }
                 else {
                     // Affiche le portail
@@ -204,8 +206,7 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
         }
 	}
 	catch (Throwable theException) {
-		System.out.println("Erreur dans InitPortail : ");
-        theException.printStackTrace();
+		log.error("Erreur dans InitPortail : ", theException);
 	}
 }
 }

@@ -25,6 +25,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.ClientBean;
 import com.increg.salon.bean.FactBean;
@@ -42,6 +45,8 @@ public class RechAbonnement extends ConnectedServlet {
      * @see com.increg.salon.servlet.ConnectedServlet
      */
     public void performTask(HttpServletRequest request, HttpServletResponse response) {
+
+    	Log log = LogFactory.getLog(this.getClass());
 
         // Récupération du paramètre
         String CD_CLI = request.getParameter("CD_CLI");
@@ -105,11 +110,11 @@ public class RechAbonnement extends ConnectedServlet {
                 }
                 aRS.close();
             } catch (Exception e) {
-                System.out.println("Erreur dans requète sur clé : " + e.toString());
+                log.error("Erreur dans requète sur clé : ", e);
                 try {
                     response.sendError(500);
                 } catch (Exception e2) {
-                    System.out.println("Erreur sur sendError : " + e2.toString());
+                    log.error("Erreur sur sendError : ", e2);
                 }
             }
             request.setAttribute("NbPrest", Long.toString(compteur));
@@ -125,11 +130,11 @@ public class RechAbonnement extends ConnectedServlet {
                 .forward(request, response);
 
         } catch (Exception e) {
-            System.out.println("Erreur dans performTask : " + e.toString());
+            log.error("Erreur dans performTask : ", e);
             try {
                 response.sendError(HttpURLConnection.HTTP_INTERNAL_ERROR);
             } catch (Exception e2) {
-                System.out.println("Erreur sur sendError : " + e2.toString());
+                log.error("Erreur sur sendError : ", e2);
             }
         }
     }

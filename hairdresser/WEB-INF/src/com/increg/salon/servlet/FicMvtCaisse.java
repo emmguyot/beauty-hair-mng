@@ -6,6 +6,10 @@ import java.util.*;
 import java.sql.*;
 import com.increg.salon.bean.*;
 import javax.servlet.http.*;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.increg.commun.*;
 
 /**
@@ -14,6 +18,9 @@ import com.increg.commun.*;
  * @author Emmanuel GUYOT <emmguyot@wanadoo.fr>
  */
 public class FicMvtCaisse extends ConnectedServlet {
+
+	protected static Log log = LogFactory.getLog(FicMvtCaisse.class);
+
 /**
  * @see com.increg.salon.servlet.ConnectedServlet
  */
@@ -81,12 +88,12 @@ public void performTask(
 			}
 		}
 		else {
-			System.out.println ("Action non codée : " + Action);
+			log.error("Action non codée : " + Action);
 		}
 	}
 	catch (Exception e) {
 		mySalon.setMessage("Erreur", e.toString());
-		System.out.println("Note : " + e.toString());
+		log.error("Erreur générale : ", e);
 	}
 
     /**
@@ -107,7 +114,7 @@ public void performTask(
            response.sendError(500);
        }
        catch (Exception e2) {
-           System.out.println("Erreur sur sendError : " + e2.toString());
+           log.error("Erreur sur sendError : ", e2);
        }
     }
 
@@ -121,7 +128,7 @@ public void performTask(
 
 	}
 	catch (Exception e) {
-		System.out.println("FicMvtCaisse::performTask : Erreur à la redirection : " + e.toString());
+		log.error("Erreur à la redirection : ", e);
 	}
 }
 
@@ -153,7 +160,7 @@ static void rechercheTouteCaisse(DBSession myDBSession, String utilisable, Vecto
         aRS.close();
     }
     catch (SQLException e) {
-       System.out.println("Erreur dans requète de recherche de caisse : " + e.toString());
+       log.error("Erreur dans requète de recherche de caisse : ", e);
        throw (e);
     }
 }

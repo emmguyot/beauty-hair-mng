@@ -3,6 +3,9 @@ package com.increg.salon.servlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 /**
  * Servlet principale pour affichage menus et par principale
  * Permet uniquement la vérif de la connection
@@ -14,6 +17,8 @@ public class Main extends ConnectedServlet {
  * @see com.increg.salon.servlet.ConnectedServlet
  */
 public void performTask(HttpServletRequest request, HttpServletResponse response) {
+
+	Log log = LogFactory.getLog(this.getClass());
 
     String menu = request.getParameter("menu");
     
@@ -29,7 +34,7 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
 
 	}
 	catch (Exception e) {
-		System.out.println("Main::performTask : Erreur à la redirection : " + e.toString());
+		log.error("Erreur à la redirection : ", e);
 	}
 }
 }

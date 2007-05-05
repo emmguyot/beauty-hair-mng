@@ -29,6 +29,8 @@ import java.util.Calendar;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
@@ -51,6 +53,8 @@ public class Sauvegarde extends ConnectedServlet {
      * @param response Object that encapsulates the response from the servlet
      */
     public void performTask(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) {
+
+    	Log log = LogFactory.getLog(this.getClass());
 
         HttpSession mySession = request.getSession(false);
         SalonSessionImpl mySalon = (SalonSessionImpl) mySession.getAttribute("SalonSession");
@@ -107,7 +111,7 @@ public class Sauvegarde extends ConnectedServlet {
                                     aCon = (HttpURLConnection) sauvURL.openConnection();
                                 }
                                 catch (Exception e) {
-                                    System.out.println("<1>Erreur à l'ouverture de la connection");
+                                    log.error("<1>Erreur à l'ouverture de la connection", e);
                                     aCon = null;
                                 }
                             }
@@ -134,7 +138,7 @@ public class Sauvegarde extends ConnectedServlet {
                                     connectionOk = true;
                                 }
                                 catch (Exception e) {
-                                    System.out.println("<2>Erreur à la connection proprement dite");
+                                    log.error("<2>Erreur à la connection proprement dite", e);
                                 }
                             }
                             if (!connectionOk) {
@@ -188,18 +192,18 @@ public class Sauvegarde extends ConnectedServlet {
                     }
                 }
                 catch (Exception e) {
-                    System.out.println("Erreur " + e.toString());
+                    log.error("Erreur ", e);
                     mySalon.setMessage("Erreur", e.toString());
                 }
 
             }
             else {
-                System.out.println("Action non codée : " + Action);
+                log.error("Action non codée : " + Action);
             }
         }
         catch (Exception e) {
             mySalon.setMessage("Erreur", e.toString());
-            System.out.println("Note : " + e.toString());
+            log.error("Erreur générale : ", e);
         }
 
         request.setAttribute("Fichier", Fichier);
@@ -210,7 +214,7 @@ public class Sauvegarde extends ConnectedServlet {
 
         }
         catch (Exception e) {
-            System.out.println("Sauvegarde::performTask : Erreur à la redirection : " + e.toString());
+            log.error("Erreur à la redirection : ", e);
         }
 
     }

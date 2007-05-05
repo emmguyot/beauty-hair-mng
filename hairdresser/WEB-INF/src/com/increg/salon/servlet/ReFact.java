@@ -27,6 +27,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.increg.commun.DBSession;
 import com.increg.commun.exception.NoImplementationException;
 import com.increg.salon.bean.FactBean;
@@ -45,6 +48,8 @@ public class ReFact extends ConnectedServlet {
  */
 public void performTask(HttpServletRequest request, HttpServletResponse response) {
 	
+	Log log = LogFactory.getLog(this.getClass());
+
 	// Récupère les paramètres
 	String DT_DEBUT = request.getParameter("DT_DEBUT");
 	String DT_FIN = request.getParameter("DT_FIN");
@@ -119,7 +124,7 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
 		}
 		catch (Exception e) {
 			mySalon.setMessage("Erreur", e.toString());
-	        System.out.println("Note : " + e.toString());
+	        log.error("Erreur générale : ", e);
 		}
 
 		request.setAttribute("listeEdition", liste);
@@ -142,7 +147,7 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
 
 	}
 	catch (Exception e) {
-		System.out.println("ReFact::performTask : Erreur à la redirection : " + e.toString());
+		log.error("Erreur à la redirection : ", e);
 	}
 }
 }

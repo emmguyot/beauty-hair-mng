@@ -124,13 +124,11 @@ public class AccueilRDV extends ConnectedServlet {
             forward(request, response, "/ListeCliRDV.jsp");
         }
         catch (Exception e) {
-            System.out.println("Erreur dans performTask : " + e.toString());
             log.error("Erreur générale", e);
             try {
                 response.sendError(HttpURLConnection.HTTP_INTERNAL_ERROR);
             }
             catch (Exception e2) {
-                System.out.println("Erreur sur sendError : " + e2.toString());
                 log.error("Erreur sur redirection", e);
             }
         }

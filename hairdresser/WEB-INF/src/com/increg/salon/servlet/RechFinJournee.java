@@ -2,12 +2,13 @@ package com.increg.salon.servlet;
 
 import com.increg.commun.*;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import com.increg.salon.bean.*;
 import com.increg.salon.request.*;
 import javax.servlet.http.*;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * Recherche/Liste des informations de synthèse de la journée
@@ -19,6 +20,8 @@ public class RechFinJournee extends ConnectedServlet {
  * @see com.increg.salon.servlet.ConnectedServlet
  */
 public void performTask(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) {
+
+	Log log = LogFactory.getLog(this.getClass());
 
     // Récupère la connexion
     HttpSession mySession = request.getSession(false);
@@ -58,7 +61,7 @@ public void performTask(javax.servlet.http.HttpServletRequest request, javax.ser
             return;
         }
         catch (Exception e2) {
-            System.out.println ("Erreur sur sendError : " + e2.toString());
+            log.error("Erreur sur sendError : ", e2);
         }
     }
     
@@ -81,12 +84,12 @@ public void performTask(javax.servlet.http.HttpServletRequest request, javax.ser
 
 	}
 	catch (Exception e) {
-		System.out.println ("Erreur dans performTask : " + e.toString());
+		log.error("Erreur dans performTask : ", e);
 		try {
 			response.sendError(500);
 		}
 		catch (Exception e2) {
-			System.out.println ("Erreur sur sendError : " + e2.toString());
+			log.error("Erreur sur sendError : ", e2);
 		}
 	}
 }

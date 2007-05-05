@@ -30,6 +30,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.FactBean;
 import com.increg.salon.bean.RDVBean;
@@ -47,6 +50,8 @@ public class RechRDV extends ConnectedServlet {
      * @see com.increg.salon.servlet.ConnectedServlet
      */
     public void performTask(HttpServletRequest request, HttpServletResponse response) {
+
+    	Log log = LogFactory.getLog(this.getClass());
 
         // Récupération des paramètres
         String action = request.getParameter("Action");
@@ -162,12 +167,12 @@ public class RechRDV extends ConnectedServlet {
 
         }
         catch (Exception e) {
-            System.out.println("RechRDV::Erreur dans performTask : " + e.toString());
+            log.error("Erreur dans performTask : ", e);
             try {
                 response.sendError(500);
             }
             catch (Exception e2) {
-                System.out.println("Erreur sur sendError : " + e2.toString());
+                log.error("Erreur sur sendError : ", e2);
             }
         }
     }

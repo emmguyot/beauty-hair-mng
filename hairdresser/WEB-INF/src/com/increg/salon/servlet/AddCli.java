@@ -69,8 +69,7 @@ public void performTask(
 		response.sendRedirect("Menu.jsp");
 	}
 	catch (Exception e) {
-		System.out.println("AddCli::performTask : Erreur à la redirection : " + e.toString());
-		log.error("Erreurà la redirection", e);
+		log.error("Erreur à la redirection", e);
 	}
 }
 }

@@ -15,6 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.exception.FctlException;
@@ -36,6 +39,8 @@ public class FicStat extends ConnectedServlet {
     public void performTask(
         HttpServletRequest request,
         HttpServletResponse response) {
+
+    	Log log = LogFactory.getLog(this.getClass());
 
         // Récupération des paramètres
         String Action = request.getParameter("Action");
@@ -229,7 +234,7 @@ public class FicStat extends ConnectedServlet {
                 }
                 catch (SQLException e) {
                     request.setAttribute("Erreur", e.toString());
-                    e.printStackTrace();
+                    log.error("Erreur au chargement de l'historique", e);
                 }
 
                 for (int nb = 0; nb < 10; nb++) {
@@ -308,14 +313,14 @@ public class FicStat extends ConnectedServlet {
                                 }
                                 catch (SQLException e1) {
                                     request.setAttribute("Erreur", e1.toString());
-                                    e1.printStackTrace();
+                                    log.error("Erreur à l'enregistrement de l'historique", e1);
                                 }
                             }
                         }
                         catch (FctlException e) {
                             // Message à afficher graphiquement
                             request.setAttribute("Erreur", e.toString());
-                            e.printStackTrace();
+                            log.error("Erreur à la constitution de la stat", e);
                         }
                     }
                 }
@@ -330,12 +335,12 @@ public class FicStat extends ConnectedServlet {
                 request.setAttribute("ListeCouleur", lstCouleur);
             }
             else {
-                System.out.println("Action non codée : " + Action);
+                log.error("Action non codée : " + Action);
             }
         }
         catch (Exception e) {
             mySalon.setMessage("Erreur", e.toString());
-            System.out.println("FicStat : " + e.toString());
+            log.error("Erreur générale : ", e);
         }
 
         /**
@@ -369,9 +374,7 @@ public class FicStat extends ConnectedServlet {
             }
         }
         catch (Exception e) {
-            System.out.println(
-                "FicStat::performTask : Erreur à la redirection : "
-                    + e.toString());
+            log.error("Erreur à la redirection : ", e);
         }
     }
 }

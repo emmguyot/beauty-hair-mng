@@ -22,7 +22,6 @@ import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.InputStream;
@@ -229,6 +228,13 @@ public class Restauration extends ConnectedServlet {
                                             request.setAttribute("Erreur", messages.getString("restauration.erreur"));
                                             log.error("Erreur dans le log de restauration : " + ligne);
                                             erreur = true;
+                                            
+                                            if (ligne.indexOf("literal carriage return found in data") != -1) {
+                                            	/**
+                                            	 * Erreur lié à une précédente sauvegarde
+                                            	 */
+                                                request.setAttribute("Erreur", messages.getString("restauration.erreurUpgradePostgreSQL"));
+                                            }
                                 		}
                                     }
                                 	
@@ -259,7 +265,7 @@ public class Restauration extends ConnectedServlet {
                     System.gc();
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    log.error("Erreur durant la restauration", e);
                     request.setAttribute("Erreur", e.toString());
                 }
 
@@ -282,7 +288,7 @@ public class Restauration extends ConnectedServlet {
                             aCon = (HttpURLConnection) sauvURL.openConnection();
                         }
                         catch (Exception e) {
-                            System.out.println("<1>Erreur à l'ouverture de la connection");
+                            log.error("<1>Erreur à l'ouverture de la connection", e);
                             aCon = null;
                         }
                     }
@@ -307,7 +313,7 @@ public class Restauration extends ConnectedServlet {
                             connectionOk = true;
                         }
                         catch (Exception e) {
-                            System.out.println("<2>Erreur à la connection proprement dite");
+                            log.error("<2>Erreur à la connection proprement dite", e);
                         }
                     }
                     if (!connectionOk) {
@@ -328,7 +334,7 @@ public class Restauration extends ConnectedServlet {
                             if (!first) {
                                 dataOut.writeBytes("&");
                             }
-                            dataOut.writeBytes("NOM=" + URLEncoder.encode(paramName));
+                            dataOut.writeBytes("NOM=" + URLEncoder.encode(paramName, "UTF-8"));
                             first = false;
                         }
 
@@ -373,7 +379,7 @@ public class Restauration extends ConnectedServlet {
 
             }
             else if (!Action.equals("Liste") && !Action.equals("Gestion")) {
-                System.out.println("Action non codée : " + Action);
+                log.error("Action non codée : " + Action);
             }
 
             /**
@@ -452,19 +458,19 @@ public class Restauration extends ConnectedServlet {
                             listeFichier.add(page.substring(pos + 2, page.indexOf("\"", pos + 2)));
                         }
                         else {
-                            System.out.println("Format de la page non prévu");
+                            log.error("Format de la page non prévu");
                         }
                     }
                 }
                 else {
-                    System.out.println("Type non codé : " + Type);
+                    log.error("Type non codé : " + Type);
                 }
 
             }
         }
         catch (Exception e) {
             mySalon.setMessage("Erreur", e.toString());
-            e.printStackTrace();
+            log.error("Erreur de restauration", e);
             request.setAttribute("Erreur", e.toString());
         }
 
@@ -485,7 +491,7 @@ public class Restauration extends ConnectedServlet {
 
         }
         catch (Exception e) {
-            System.out.println("Restauration::performTask : Erreur à la redirection : " + e.toString());
+            log.error("Restauration::performTask : Erreur à la redirection : ", e);
         }
 
     }

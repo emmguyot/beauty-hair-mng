@@ -1,7 +1,6 @@
 package com.increg.salon.servlet;
 
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Vector;
@@ -9,6 +8,9 @@ import java.util.Vector;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.FactBean;
@@ -26,6 +28,8 @@ public class RechTVA extends ConnectedServlet {
  * @see com.increg.salon.servlet.ConnectedServlet
  */
 public void performTask(HttpServletRequest request, HttpServletResponse response) {
+
+	Log log = LogFactory.getLog(this.getClass());
 
 	// Récupération des paramètres
 	String DT_DEBUT = request.getParameter("DT_DEBUT");
@@ -57,13 +61,13 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
         lstLignes = FactBean.calculTVARepartie(myDBSession, DT_DEBUT, DT_FIN);
     }
     catch (Exception e) {
-        System.out.println ("Erreur dans performTask : " + e.toString());
+        log.error("Erreur dans performTask : ", e);
         try {
             response.sendError(500);
             return;
         }
         catch (Exception e2) {
-            System.out.println ("Erreur sur sendError : " + e2.toString());
+            log.error("Erreur sur sendError : ", e2);
         }
     }
         
@@ -76,12 +80,12 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
 
 	}
 	catch (Exception e) {
-		System.out.println ("Erreur dans performTask : " + e.toString());
+		log.error("Erreur dans performTask : ", e);
 		try {
 			response.sendError(500);
 		}
 		catch (Exception e2) {
-			System.out.println ("Erreur sur sendError : " + e2.toString());
+			log.error("Erreur sur sendError : ", e2);
 		}
 	}
 }

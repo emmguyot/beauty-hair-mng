@@ -2,6 +2,10 @@ package com.increg.salon.servlet;
 
 import com.increg.salon.bean.*;
 import javax.servlet.http.*;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.increg.commun.*;
 /**
  * Gestion des devises
@@ -15,6 +19,8 @@ public class FicDevise extends ConnectedServlet {
 public void performTask(
 	javax.servlet.http.HttpServletRequest request,
 	javax.servlet.http.HttpServletResponse response) {
+
+	Log log = LogFactory.getLog(this.getClass());
 
 	// Récupération des paramètres
 	String Action = request.getParameter("Action");
@@ -140,15 +146,16 @@ public void performTask(
 			catch (Exception e) {
 	            mySalon.setMessage("Erreur", e.toString());
 				request.setAttribute("Action", Action);
+				log.error("Erreur à la création", e);
 			}
 		}
 		else {
-			System.out.println ("Action non codée : " + Action);
+			log.error("Action non codée : " + Action);
 		}
 	}
 	catch (Exception e) {
 		mySalon.setMessage("Erreur", e.toString());
-		System.out.println("Note : " + e.toString());
+		log.error("Erreur générale : ", e);
 	}
 
     /**
@@ -164,7 +171,7 @@ public void performTask(
 
 	}
 	catch (Exception e) {
-		System.out.println("FicDevise::performTask : Erreur à la redirection : " + e.toString());
+		log.error("Erreur à la redirection : ", e);
 	}
 }
 }

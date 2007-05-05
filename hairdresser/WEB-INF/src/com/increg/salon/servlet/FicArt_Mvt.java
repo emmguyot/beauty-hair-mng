@@ -21,7 +21,6 @@ import java.sql.ResultSet;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.TimeZone;
 import java.util.Vector;
 
 import javax.servlet.http.HttpSession;
@@ -311,13 +310,12 @@ public class FicArt_Mvt extends ConnectedServlet {
                 }
             }
             else {
-                System.out.println("Action non codée : " + Action);
+                log.error("Action non codée : " + Action);
             }
         }
         catch (Exception e) {
             mySalon.setMessage("Erreur", e.toString());
             log.error("Erreur générale", e);
-            System.out.println("Note : " + e.toString());
         }
 
         /**
@@ -364,14 +362,12 @@ public class FicArt_Mvt extends ConnectedServlet {
                 }
                 catch (Exception e) {
                     vide = false; // Stop la boucle
-                    System.out.println("Erreur dans requète sur clé : " + e.toString());
                     log.error("Erreur à la recherche des mouvements", e);
                     try {
                         response.sendError(500);
                     }
                     catch (Exception e2) {
-                        System.out.println("Erreur sur sendError : " + e2.toString());
-                        log.error("Erreur à la redirection sur erreur 500", e);
+                        log.error("Erreur à la redirection sur erreur 500", e2);
                     }
                 }
             }
@@ -387,7 +383,6 @@ public class FicArt_Mvt extends ConnectedServlet {
 
         }
         catch (Exception e) {
-            System.out.println("FicArt_Mvt::performTask : Erreur à la redirection : " + e.toString());
             log.error("Erreur à la redirection", e);
         }
     }

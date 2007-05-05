@@ -8,6 +8,9 @@ import javax.servlet.*;
 import java.io.*;
 
 import javax.servlet.http.*;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 /**
  * Insert the type's description here.
  * Creation date: (08/07/2001 12:48:48)
@@ -127,15 +130,17 @@ public abstract class ConnectedServlet extends javax.servlet.http.HttpServlet {
 	 */
 	protected boolean assertOrError(boolean condition, String messageErreur, HttpServletRequest request, HttpServletResponse response) {
 		if (!condition) {
-	        HttpSession mySession = request.getSession(false);
+	    	Log log = LogFactory.getLog(this.getClass());
+
+	    	HttpSession mySession = request.getSession(false);
 	        SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
 	        mySalon.setMessage("Erreur", messageErreur);
 	        try {
 				forward(request, response, "/Erreur.jsp");
 			} catch (IOException e) {
-				e.printStackTrace();
+				log.error("Erreur à la redirection", e);
 			} catch (ServletException e) {
-				e.printStackTrace();
+				log.error("Erreur à la redirection", e);
 			}
 		}
 		return !condition;
