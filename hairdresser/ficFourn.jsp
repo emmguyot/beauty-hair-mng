@@ -83,7 +83,7 @@ function Init() {
 		<font size="+1"><i18n:message key="label.contact" /> :</font><br>
 		<span class="facultatif"><i18n:message key="label.civilite" /> :</span> 
                 <i18n:message key="valeur.civilite" id="valeurCivilite" />
-		<salon:selection valeur="<%= aFourn.getCIVILITE_CONT() %>" valeurs='<%= valeurCivilite %>'>
+                <salon:selection valeur="<%= aFourn.getCIVILITE_CONT() %>" valeurs='<%= "|Mle|Mme|M. " %>' libelle='<%= valeurCivilite %>'>
 		  <select name="CIVILITE_CONT">
 		     %%
 		  </select>
