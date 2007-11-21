@@ -104,7 +104,7 @@ public class BasicSession {
 			String cle = value.substring(posDebut + TAG_I18N.length(), posFin);
 			String fin = value.substring(posFin + TAG_I18N.length());
 			
-			value = debut + messagesBundle.getString(cle) + fin;
+			value = internationaliseMessage(debut + messagesBundle.getString(cle) + fin);
 		}
 		return value;
 	}
