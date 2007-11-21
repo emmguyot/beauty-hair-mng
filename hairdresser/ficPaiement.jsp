@@ -177,7 +177,7 @@ function Init() {
    </table>
 </form>
 
-<div id="PRIX" style="position:absolute; height=20px; z-index:1; visibility:hidden" > 
+<div id="PRIX" style="position:absolute; height:20px; z-index:1; visibility:hidden" > 
 <p class="label"><% if (mySalon.isAffichePrix()) { %><salon:inverse montant="<%= aPaiement.getPRX_TOT_TTC() %>" /><% } %></p>
 </div>
 
@@ -188,8 +188,8 @@ deplacePrix();
 
 // Fonctions d'action
 function deplacePrix() {
-   document.all["PRIX"].style.left = document.body.clientWidth - 500;
-   document.all["PRIX"].style.top = document.body.clientHeight - 55;
+   MM_findObj("PRIX").style.left = document.body.clientWidth - 500;
+   MM_findObj("PRIX").style.top = document.body.clientHeight - 55;
    MM_showHideLayers('PRIX','','show');
 }
 
@@ -204,8 +204,8 @@ function Update()
 function Verif()
 {
    coche = false;
-   for (i in document.fiche.elements) {
-      if (i.indexOf("AFFECT") != -1) {
+   for (var i=0; i < document.fiche.elements.length; i++) {
+      if (document.fiche.elements[i].name.indexOf("AFFECT") != -1) {
 	 coche = coche || (document.fiche.elements[i].checked);
       }
    }
