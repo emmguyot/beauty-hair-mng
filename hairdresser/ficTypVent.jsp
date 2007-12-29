@@ -132,7 +132,7 @@ function Dupliquer()
 function Supprimer()
 {
     if ((document.fiche.CD_TYP_VENT.value != "0") && (document.fiche.CD_TYP_VENT.value != "")) {
-        if (confirm ("<i18n:message key="message.suppressionDefinitiveConfirm" />)) {
+        if (confirm ("<i18n:message key="message.suppressionDefinitiveConfirm" />")) {
             document.fiche.Action.value = "Suppression";
             document.fiche.submit();
         }
