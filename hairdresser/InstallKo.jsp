@@ -28,7 +28,7 @@
 <body class="donnees">
 <h1>Installation incomplète du logiciel</h1>
 <p class="erreur"><%= request.getAttribute("Erreur") %></p>
-<p><span class="warning">Attention : Le logiciel est mal ou seulement partiellement installé.</span> Veuillez vérifier que le fichier de licence est bien dans le répertoire c:\InCrEG\Perso</p>
+<p><span class="warning">Attention : Le logiciel est mal ou seulement partiellement installé.</span> Veuillez vérifier que le fichier de configuration (config.properties) est bien dans le répertoire c:\InCrEG\Perso</p>
 <p class="important">Si vous n'êtes pas familier avec cette procédure, <a href="contact.html" target="_blank">contactez-nous.</a></p>
 <p>Une fois le fichier au bon endroit, vous devez arrêter le logiciel (icône "feu rouge") et le relancer (icône "feu vert").</p>
 </body>
