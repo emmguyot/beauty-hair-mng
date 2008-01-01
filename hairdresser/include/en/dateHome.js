@@ -55,11 +55,6 @@ function clock() {
    var mois = moisComplet(digital.getMonth());
    var annee = digital.getFullYear();
    dispTime += "<br/><small>" + jourSemaineCh +  "<br/>" + mois + " " + jour + " " + annee + "</small>";
-   if (document.layers) {
-      document.layers.pendule.document.write(dispTime);
-      document.layers.pendule.document.close();
-   }
-   else if (document.all)
-      pendule.innerHTML = dispTime;
+   MM_findObj("pendule").innerHTML = dispTime;
    setTimeout("clock()", 1000);
 }

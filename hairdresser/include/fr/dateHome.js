@@ -42,7 +42,6 @@ function aujourdhui() {
 }
 
 function clock() {
-   if (!document.layers && !document.all) return;
    var digital = new Date();
    var hours = digital.getHours();
    var minutes = digital.getMinutes();
@@ -55,11 +54,6 @@ function clock() {
    var mois = moisComplet(digital.getMonth());
    var annee = digital.getFullYear();
    dispTime += "<br/><small>" + jourSemaineCh +  "<br/>" + jour + " " + mois + " " + annee + "</small>";
-   if (document.layers) {
-      document.layers.pendule.document.write(dispTime);
-      document.layers.pendule.document.close();
-   }
-   else if (document.all)
-      pendule.innerHTML = dispTime;
+   MM_findObj("pendule").innerHTML = dispTime;
    setTimeout("clock()", 1000);
 }
