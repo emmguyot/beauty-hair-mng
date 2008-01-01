@@ -1,20 +1,36 @@
+/*
+ * Recherche/Liste des informations de synthèse de la journée
+ * Copyright (C) 2001-2008 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.servlet;
 
-import com.increg.commun.*;
+import java.util.Calendar;
+import java.util.TreeMap;
+import java.util.TreeSet;
+import java.util.Vector;
 
-import java.util.*;
-import com.increg.salon.bean.*;
-import com.increg.salon.request.*;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-/**
- * Recherche/Liste des informations de synthèse de la journée
- * Creation date: (15/10/2001 14:09:47)
- * @author Emmanuel GUYOT <emmguyot@wanadoo.fr>
- */
+import com.increg.commun.DBSession;
+import com.increg.salon.bean.SalonSession;
+import com.increg.salon.request.Brouillard;
+
 public class RechFinJournee extends ConnectedServlet {
 /**
  * @see com.increg.salon.servlet.ConnectedServlet

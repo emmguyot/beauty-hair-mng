@@ -1,18 +1,34 @@
+/*
+ * Création d'un graphe au format image
+ * Copyright (C) 2002-2008 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms 
+ * of the GNU General Public License as published by the Free Software Foundation; either 
+ * version 2 of the License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+ * See the GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; 
+ * if not, write to the 
+ * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ */
 package com.increg.salon.servlet;
-import com.increg.salon.bean.graphique.*;
-import java.util.*;
-import com.increg.salon.bean.*;
-import javax.servlet.http.*;
+import java.awt.Color;
+import java.util.Vector;
+
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.awt.*;
-/**
- * Création d'un graphe au format image
- * Creation date: (24/03/2002 10:45:33)
- * @author Emmanuel GUYOT <emmguyot@wanadoo.fr>
- */
+import com.increg.salon.bean.SalonSession;
+import com.increg.salon.bean.graphique.AbstractGraph;
+import com.increg.salon.bean.graphique.GraphErreur;
+import com.increg.salon.bean.graphique.GraphHisto;
+
 public class ImageGraph extends ConnectedServlet {
 /**
  * @see com.increg.salon.servlet.ConnectedServlet

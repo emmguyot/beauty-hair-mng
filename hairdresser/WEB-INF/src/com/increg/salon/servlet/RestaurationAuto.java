@@ -1,6 +1,6 @@
 /*
  * Restauration base d'urgence
- * Copyright (C) 2001-2007 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2008 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
