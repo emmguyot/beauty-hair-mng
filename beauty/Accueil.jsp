@@ -89,18 +89,16 @@
 </p>
 <salon:include file="<%= \"include/\" + mySalon.getLangue().getLanguage() + \"/salonNews.inc\" %>" />
 
-<SCRIPT FOR=window EVENT=onscroll LANGUAGE="JScript">
-PlaceCoins()
-PlaceCoins()
-</script>
-<SCRIPT FOR=window EVENT=onresize LANGUAGE="JScript">
-PlaceCoins()
-PlaceCoins()
-</script>
 <script language="JavaScript">
 <!--
-PlaceCoins()
-PlaceCoins()
+Place2Coins();
+window.onresize = Place2Coins;
+window.onscroll = Place2Coins;
+
+function Place2Coins() {
+    PlaceCoins();
+    PlaceCoins();
+}
 
 function PlaceCoins() {
    document.all["coinHD"].style.left = document.body.clientWidth - 40 + document.body.scrollLeft;
