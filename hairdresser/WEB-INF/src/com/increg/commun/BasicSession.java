@@ -25,7 +25,7 @@ import java.util.ResourceBundle;
 import com.increg.commun.exception.FctlException;
 
 /**
- * Bean Session incluant la méchanique de base d'une session
+ * Bean Session incluant la mécanique de base d'une session
  * Creation date: (08/07/2001 16:13:56)
  * @author Emmanuel GUYOT <emmguyot@wanadoo.fr>
  */
