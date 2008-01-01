@@ -40,7 +40,7 @@
 <%@ include file="include/commun.jsp" %>
 <body class="donnees">
 <i18n:message key="message.fermer" id="msgFermer" />
-<div id="coinHD" style="position:absolute; height=52px; z-index:1; visibility:hidden"><salon:bouton url="javascript:top.close()" imgOn="images/quit2.gif" img="images/quit.gif" alt="<%= msgFermer %>"/></div>
+<div id="coinHD" style="position:absolute; height:52px; z-index:1; visibility:hidden"><salon:bouton url="javascript:top.close()" imgOn="images/quit2.gif" img="images/quit.gif" alt="<%= msgFermer %>"/></div>
 <h1 align="center"><%=mySalon.getMySociete().getRAIS_SOC()%></h1>
 <p align="center"><img src="../perso/Salon.jpg"></p>
 <salon:message salonSession="<%= mySalon %>" />
@@ -89,22 +89,20 @@
 </p>
 <salon:include file="<%= \"include/\" + mySalon.getLangue().getLanguage() + \"/salonNews.inc\" %>" />
 
-<SCRIPT FOR=window EVENT=onscroll LANGUAGE="JScript">
-PlaceCoins()
-PlaceCoins()
-</script>
-<SCRIPT FOR=window EVENT=onresize LANGUAGE="JScript">
-PlaceCoins()
-PlaceCoins()
-</script>
 <script language="JavaScript">
 <!--
-PlaceCoins()
-PlaceCoins()
+Place2Coins();
+window.onresize = Place2Coins;
+window.onscroll = Place2Coins;
+
+function Place2Coins() {
+    PlaceCoins();
+    PlaceCoins();
+}
 
 function PlaceCoins() {
-   document.all["coinHD"].style.left = document.body.clientWidth - 40 + document.body.scrollLeft;
-   document.all["coinHD"].style.top = document.body.scrollTop;
+   MM_findObj("coinHD").style.left = document.body.clientWidth - 40 + document.body.scrollLeft;
+   MM_findObj("coinHD").style.top = document.body.scrollTop;
    MM_showHideLayers("coinHD","","show");
 }
 

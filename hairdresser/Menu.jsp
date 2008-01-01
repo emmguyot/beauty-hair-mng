@@ -34,23 +34,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 <script src="include/core.jsp" language="JavaScript"></script>
-<script language="JavaScript">
-<!--
-function MM_reloadPage(init) {  //reloads the window if Nav4 resized
-  if (init==true) with (navigator) {if ((appName=="Netscape")&&(parseInt(appVersion)==4)) {
-    document.MM_pgW=innerWidth; document.MM_pgH=innerHeight; onresize=MM_reloadPage; }}
-  else if (innerWidth!=document.MM_pgW || innerHeight!=document.MM_pgH) location.reload();
-}
-MM_reloadPage(true);
-
 <%    String sub = request.getParameter("sub");
       IdentBean aIdent = mySalon.getMyIdent(); %>
-
-// -->
-</script>
 </head>
 
-<body class="menu" onLoad="clock()">
+<body class="menu" onLoad="clock();">
 <p align="center"><a href="main.srv" target="_top"><font color="#000000"><%=mySalon.getMySociete().getRAIS_SOC()%><br>
 	<img src="../perso/Logo_petit.gif" width="100" height="52" border="0"></font></a></p>
 <p><salon:autorisation entite="RDV"><a href="ListeRDV.jsp" target="ClientFrame"><img src="images/rdv.gif" align=middle border=0 width="21" height="21"><i18n:message key="label.RDV" /></a><br></salon:autorisation>
@@ -184,10 +172,10 @@ MM_reloadPage(true);
 %>
 </table>
 
-<div id="coinHD" style="position:absolute; height=20px; z-index:1; visibility:hidden"><img src="../perso/coin_hd.gif"></div>
-<div id="coinBD" style="position:absolute; height=20px; z-index:1; visibility:hidden"><img src="../perso/coin_bd.gif"></div>
-<div id="coinHG" style="position:absolute; height=20px; z-index:1; visibility:hidden"><img src="../perso/coin_hg.gif"></div>
-<div id="coinBG" style="position:absolute; height=20px; z-index:1; visibility:hidden"><img src="../perso/coin_bg.gif"></div>
+<div id="coinHD" style="position:absolute; height:20px; z-index:1; visibility:hidden"><img src="../perso/coin_hd.gif"></div>
+<div id="coinBD" style="position:absolute; height:20px; z-index:1; visibility:hidden"><img src="../perso/coin_bd.gif"></div>
+<div id="coinHG" style="position:absolute; height:20px; z-index:1; visibility:hidden"><img src="../perso/coin_hg.gif"></div>
+<div id="coinBG" style="position:absolute; height:20px; z-index:1; visibility:hidden"><img src="../perso/coin_bg.gif"></div>
 
 <p style="text-align: center">
 <img src="images/horloge.gif" style="float: left; vertical-align: middle;margin-top: 15px;margin-bottom: 15px;"><span id="pendule"></span>
@@ -199,31 +187,28 @@ MM_reloadPage(true);
 <a href="<%= mySalon.getLangue().getLanguage() %>/histo.html" target="ClientFrame"><%@ include file="include/version.inc" %></a><br/>
 <a href="<%= mySalon.getLangue().getLanguage() %>/contact.html" target="ClientFrame">&copy; 2002-2007</a></font></p>
 
-<SCRIPT FOR=window EVENT=onscroll LANGUAGE="JScript">
-PlaceCoins()
-PlaceCoins()
-</script>
-<SCRIPT FOR=window EVENT=onresize LANGUAGE="JScript">
-PlaceCoins()
-PlaceCoins()
-</script>
 <script language="JavaScript">
 <!--
-PlaceCoins()
-PlaceCoins()
+Place2Coins();
+window.onresize = Place2Coins;
+window.onscroll = Place2Coins;
 
+function Place2Coins() {
+    PlaceCoins();
+    PlaceCoins();
+}
 function PlaceCoins() {
-   document.all["coinHD"].style.left = document.body.clientWidth - 20 + document.body.scrollLeft;
-   document.all["coinHD"].style.top = document.body.scrollTop;
+   MM_findObj("coinHD").style.left = document.body.clientWidth - 20 + document.body.scrollLeft;
+   MM_findObj("coinHD").style.top = document.body.scrollTop;
    MM_showHideLayers("coinHD","","show");
-   document.all["coinBD"].style.left = document.body.clientWidth - 20 + document.body.scrollLeft;
-   document.all["coinBD"].style.top = document.body.scrollTop + document.body.clientHeight - 20;
+   MM_findObj("coinBD").style.left = document.body.clientWidth - 20 + document.body.scrollLeft;
+   MM_findObj("coinBD").style.top = document.body.scrollTop + document.body.clientHeight - 20;
    MM_showHideLayers("coinBD","","show");
-   document.all["coinHG"].style.left = 0 + document.body.scrollLeft;
-   document.all["coinHG"].style.top = document.body.scrollTop;
+   MM_findObj("coinHG").style.left = 0 + document.body.scrollLeft;
+   MM_findObj("coinHG").style.top = document.body.scrollTop;
    MM_showHideLayers("coinHG","","show");
-   document.all["coinBG"].style.left = 0 + document.body.scrollLeft;
-   document.all["coinBG"].style.top = document.body.scrollTop + document.body.clientHeight - 20;
+   MM_findObj("coinBG").style.left = 0 + document.body.scrollLeft;
+   MM_findObj("coinBG").style.top = document.body.scrollTop + document.body.clientHeight - 20;
    MM_showHideLayers("coinBG","","show");
 }
 

@@ -125,35 +125,33 @@ function Imprimer() {
                 img="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/aide.gif\" %>" 
                 alt="<%= paramBouton8 %>"/>
 </span> 
-<div id="coinHD" style="position:absolute; height=20px; z-index:1; visibility:hidden"><img src="../perso/coin_hd.gif"></div>
-<div id="coinBD" style="position:absolute; height=20px; z-index:1; visibility:hidden"><img src="../perso/coin_bd.gif"></div>
-<div id="coinHG" style="position:absolute; height=20px; z-index:1; visibility:hidden"><img src="../perso/coin_hg.gif"></div>
-<div id="coinBG" style="position:absolute; height=20px; z-index:1; visibility:hidden"><img src="../perso/coin_bg.gif"></div>
-<SCRIPT FOR=window EVENT=onscroll LANGUAGE="JScript">
-PlaceCoins()
-PlaceCoins()
-</script>
-<SCRIPT FOR=window EVENT=onresize LANGUAGE="JScript">
-PlaceCoins()
-PlaceCoins()
-</script>
+<div id="coinHD" style="position:absolute; height:20px; z-index:1; visibility:hidden"><img src="../perso/coin_hd.gif"></div>
+<div id="coinBD" style="position:absolute; height:20px; z-index:1; visibility:hidden"><img src="../perso/coin_bd.gif"></div>
+<div id="coinHG" style="position:absolute; height:20px; z-index:1; visibility:hidden"><img src="../perso/coin_hg.gif"></div>
+<div id="coinBG" style="position:absolute; height:20px; z-index:1; visibility:hidden"><img src="../perso/coin_bg.gif"></div>
 <script language="JavaScript">
 <!--
-PlaceCoins()
-PlaceCoins()
+Place2Coins();
+window.onresize = Place2Coins;
+window.onscroll = Place2Coins;
+
+function Place2Coins() {
+    PlaceCoins();
+    PlaceCoins();
+}
 
 function PlaceCoins() {
-   document.all["coinHD"].style.left = document.body.clientWidth - 20 + document.body.scrollLeft;
-   document.all["coinHD"].style.top = document.body.scrollTop;
+   MM_findObj("coinHD").style.left = document.body.clientWidth - 20 + document.body.scrollLeft;
+   MM_findObj("coinHD").style.top = document.body.scrollTop;
    MM_showHideLayers("coinHD","","show");
-   document.all["coinBD"].style.left = document.body.clientWidth - 20 + document.body.scrollLeft;
-   document.all["coinBD"].style.top = document.body.scrollTop + document.body.clientHeight - 20;
+   MM_findObj("coinBD").style.left = document.body.clientWidth - 20 + document.body.scrollLeft;
+   MM_findObj("coinBD").style.top = document.body.scrollTop + document.body.clientHeight - 20;
    MM_showHideLayers("coinBD","","show");
-   document.all["coinHG"].style.left = 0 + document.body.scrollLeft;
-   document.all["coinHG"].style.top = document.body.scrollTop;
+   MM_findObj("coinHG").style.left = 0 + document.body.scrollLeft;
+   MM_findObj("coinHG").style.top = document.body.scrollTop;
    MM_showHideLayers("coinHG","","show");
-   document.all["coinBG"].style.left = 0 + document.body.scrollLeft;
-   document.all["coinBG"].style.top = document.body.scrollTop + document.body.clientHeight - 20;
+   MM_findObj("coinBG").style.left = 0 + document.body.scrollLeft;
+   MM_findObj("coinBG").style.top = document.body.scrollTop + document.body.clientHeight - 20;
    MM_showHideLayers("coinBG","","show");
 }
 // -->
