@@ -370,7 +370,7 @@ function Init() {
 <% } %> 
     </form>
 
-    <span id="COMMENTAIRE" class="action" style="position:absolute; height:23px; z-index:1; left: 15px; visibility: hidden">
+    <span id="COMMENTAIRE" class="action" style="position:absolute; z-index:1; left: 15px; visibility: hidden">
         <form name="fComm" method="post" action="ficCli.srv">
             <table>
                 <tr>
