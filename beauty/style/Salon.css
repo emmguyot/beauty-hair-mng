@@ -36,7 +36,7 @@ a:hover.nohover { color: #FF9933 ; background-color: transparent }
 img { border: 0 }
 p { vertical-align: top}
 
-.cpYearNavigation,.cpMonthNavigation { background-image: url(../../perso/fd_menu.jpg); text-align:center; vertical-align:center; text-decoration:none; color:#164B81; font-weight:bold; }
+.cpYearNavigation,.cpMonthNavigation { background-image: url(../../perso/fd_menu.jpg); text-align:center; vertical-align:middle; text-decoration:none; color:#164B81; font-weight:bold; }
 td.cpDayColumnHeader { padding: 2px; padding-top: 5px; text-align:center; border:solid thin #88B9E0;border-width:0 0 1 0; }
 .cpCurrentMonthDate, .cpCurrentDate { color:#164B81; }
 .cpOtherMonthDate { color:#88B9E0; }
