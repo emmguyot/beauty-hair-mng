@@ -193,6 +193,8 @@ Place2Coins();
 window.onresize = Place2Coins;
 window.onscroll = Place2Coins;
 
+setTimeout("Place2Coins()", 100);
+
 function Place2Coins() {
     PlaceCoins();
     PlaceCoins();
