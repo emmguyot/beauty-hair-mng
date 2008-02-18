@@ -294,7 +294,11 @@ function Imprimer()
    window.opener.document.fiche.CD_PAIEMENT.value="<%= ((EditionFacture) listeEdition.get(0)).getMyPaiement().getCD_PAIEMENT() %>";
    window.opener.document.fiche.submit();
    <% } %>
-   window.close();
+   var obj_window = window.open('', '_self');
+   obj_window.opener = window;
+   obj_window.focus();
+   opener=self;
+   self.close();
 }
 
 </script>

@@ -177,7 +177,11 @@
 function Imprimer()
 {
    window.print();
-   window.close();
+   var obj_window = window.open('', '_self');
+   obj_window.opener = window;
+   obj_window.focus();
+   opener=self;
+   self.close();
 }
 
 </script>
