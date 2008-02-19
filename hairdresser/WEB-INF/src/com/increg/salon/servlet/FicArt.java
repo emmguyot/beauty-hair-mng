@@ -325,6 +325,9 @@ public void performTask(
 				if (e.toString().indexOf("fk_concerne_art") != -1) {
 					mySalon.setMessage("Erreur", BasicSession.TAG_I18N + "ficArt.suppressionKoMouvement" + BasicSession.TAG_I18N);
 				}
+				else if (e.toString().indexOf("fk_correspond_art") != -1) {
+					mySalon.setMessage("Erreur", BasicSession.TAG_I18N + "ficArt.suppressionKoPrestation" + BasicSession.TAG_I18N);
+				}
 				else {
 					mySalon.setMessage("Erreur", e.toString());
 				}
