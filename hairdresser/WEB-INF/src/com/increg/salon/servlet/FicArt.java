@@ -321,7 +321,13 @@ public void performTask(
 	            request.setAttribute("Action", "Creation");
 	        }	
 			catch (Exception e) {
-	            mySalon.setMessage("Erreur", e.toString());
+	            // Interprétation de certaines erreurs
+				if (e.toString().indexOf("fk_concerne_art") != -1) {
+					mySalon.setMessage("Erreur", BasicSession.TAG_I18N + "ficArt.suppressionKoMouvement" + BasicSession.TAG_I18N);
+				}
+				else {
+					mySalon.setMessage("Erreur", e.toString());
+				}
 	            log.error("Erreur à la suppression de l'article", e);
 				request.setAttribute("Action", "Modification");
 			}
