@@ -128,6 +128,8 @@ public class FicCli extends ConnectedServlet {
                         mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.existanceDoublon" + BasicSession.TAG_I18N);
                     }
                     
+                    CD_CLI = Long.toString(aCli.getCD_CLI());
+                    
                     request.setAttribute("Action", "Modification");
                 } catch (Exception e) {
                     mySalon.setMessage("Erreur", e);
