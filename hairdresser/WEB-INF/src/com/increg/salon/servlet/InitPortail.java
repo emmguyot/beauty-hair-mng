@@ -91,10 +91,11 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
 
 	Log log = LogFactory.getLog(this.getClass());
 
+	BasicSession myBasicSession = null;
 	try {
 		// Création de la session
 		HttpSession mySession = request.getSession(true);
-		BasicSession myBasicSession = new BasicSession();
+		myBasicSession = new BasicSession();
 		myBasicSession.setLangue(request.getLocale());
 
         String numBase = request.getParameter("numBase");
@@ -218,7 +219,7 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
         }
 	}
 	catch (Throwable theException) {
-		log.error("Erreur dans InitPortail : ", theException);
+		log.error("Erreur dans InitPortail : " + myBasicSession.internationaliseMessage(theException.getMessage()),  theException);
 	}
 }
 }

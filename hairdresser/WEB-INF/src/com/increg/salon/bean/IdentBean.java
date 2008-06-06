@@ -115,7 +115,7 @@ public class IdentBean extends TimeStampBean {
 		}
 		catch (Exception e) {
 		    System.out.println ("Erreur constructeur IdentBean : " + e.toString());
-		    log.error("Erreur constructeur IdentBean", e);
+		    log.error("Erreur constructeur IdentBean " + new BasicSession().internationaliseMessage(e.getMessage()), e);
 		    throw (e);
 		}
 	}
