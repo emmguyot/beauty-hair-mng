@@ -616,7 +616,12 @@ public class HistoPrestBean extends TimeStampBean {
      * @return java.lang.String
      */
     public java.lang.String getCOMM() {
-        return COMM;
+        if (COMM == null) {
+        	return "";
+        }
+        else {
+        	return COMM;
+        }
     }
     /**
      * Création d'une ligne de Facture à partir de sa clé
