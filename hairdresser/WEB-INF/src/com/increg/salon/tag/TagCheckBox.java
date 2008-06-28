@@ -24,6 +24,8 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.BodyContent;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
+import org.apache.commons.lang.StringUtils;
+
 public class TagCheckBox extends BodyTagSupport {
     /**
      * Le nom des elements des checkbox
@@ -101,7 +103,7 @@ public class TagCheckBox extends BodyTagSupport {
                         val = valeurs.substring(lastPos);
                         lastPos = newPos;
                     }
-                    if (libelle != null) {
+                    if (StringUtils.isNotEmpty(libelle)) {
                         newPosLib = libelle.indexOf("|", lastPosLib);
                         if (newPosLib != -1) {
                             lib = libelle.substring(lastPosLib, newPosLib);
@@ -111,8 +113,10 @@ public class TagCheckBox extends BodyTagSupport {
                             lib = libelle.substring(lastPosLib);
                             lastPosLib = newPosLib;
                         }
+                        if (StringUtils.isNotEmpty(lib)) {
+                        	printOne(out, val, lib);
+                        }
                     }
-                    printOne(out, val, lib);
                 }
                 
                 out.print(texte.substring(pos + chaineCherchee.length()));
@@ -146,9 +150,9 @@ public class TagCheckBox extends BodyTagSupport {
                 }
             } 
             out.print(
-                "<input type=\"CHECKBOX\" name =\""
+                "<input type=\"CHECKBOX\" name=\""
                     + nom
-                    + "\"value=\""
+                    + "\" value=\""
                     + aValeur + "\"");
            if (action != null) {
                out.print(" onClick=\"" + action + "\" ");
