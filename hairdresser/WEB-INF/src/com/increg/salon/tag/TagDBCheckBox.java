@@ -143,14 +143,14 @@ public class TagDBCheckBox extends BodyTagSupport {
                 //On doit regarder si on respecte la mise en forme
                 if (longueurTotale + libelle.length() > longueurMax) {
                     //Il faut revenir a la ligne
-                    out.print("<br/>");
+                    out.print("<br />");
                     longueurTotale = 0;
                 }
             } 
             out.print(
-                "<input type=\"CHECKBOX\" name =\""
+                "<input type=\"CHECKBOX\" name=\""
                     + nom
-                    + "\"value=\""
+                    + "\" value=\""
                     + aValeur + "\"");
            if (action != null) {
                out.print(" onClick=\"" + action + "\" ");
