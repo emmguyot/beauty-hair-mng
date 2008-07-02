@@ -18,6 +18,8 @@
 package com.increg.salon.bean;
 
 import java.sql.*;
+import java.util.Vector;
+
 import com.increg.commun.*;
 
 /**
@@ -420,6 +422,30 @@ public class ModReglBean extends GenericBean {
 	 */
 	public void setRENDU_MONNAIE(java.lang.String rENDU_MONNAIE) {
 		RENDU_MONNAIE = rENDU_MONNAIE;
+	}
+	/**
+	 * Lecture des modes de règlements utilisables
+	 * Creation date: 28 juin 08 17:20:52
+	 * @param dbConnect com.increg.salon.bean.DBSession
+     * @return liste des Beans correspondants
+	 */
+	public static Vector<ModReglBean> getAllUtilisable(DBSession dbConnect) {
+		String reqSQL = "select * from MOD_REGL where UTILISABLE='O'";
+		Vector<ModReglBean> res = new Vector<ModReglBean>();
+	
+		// Interroge la Base
+		try {
+			ResultSet aRS = dbConnect.doRequest(reqSQL);
+	
+			while (aRS.next()) {
+				res.add(new ModReglBean(aRS));
+			}
+			aRS.close();
+		}
+		catch (Exception e) {
+			System.out.println("Erreur dans sélecteur de tout mode utilisables : " + e.toString());
+		}
+		return res;
 	}
 
 }
