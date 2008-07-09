@@ -129,7 +129,7 @@ public static void rechercheCA (DBSession myDBSession, String CD_COLLAB, String 
     if ((DT_FIN != null) && (DT_FIN.length() > 0)) {
         reqSQL = reqSQL + " and HISTO_PREST.DT_PREST <= '" + DT_FIN + "'";
     }
-    reqSQL = reqSQL + " group by MONTH_PREST, PRENOM, LIB_TYP_VENT";
+    reqSQL = reqSQL + " group by MONTH_PREST, PRENOM, LIB_TYP_VENT order by PRENOM, LIB_TYP_VENT";
 
     // Interroge la Base
     try {
