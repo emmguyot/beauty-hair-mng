@@ -29,7 +29,7 @@ import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.exception.ReloadNeededException;
 import com.increg.salon.bean.update.UpdateBean;
-import com.increg.salon.bean.update.UpdateBeanV40;
+import com.increg.salon.bean.update.UpdateBeanV41;
 import com.increg.util.SimpleDateFormatEG;
 
 /**
@@ -159,7 +159,7 @@ public abstract class SalonSession extends BasicSession {
                  * Mise à jour éventuelle de l'appli
                  * <b>A mettre à jour à chaque changement de version</b>
                  */
-                majBase = new UpdateBeanV40(myDBSession, messagesBundle);
+                majBase = new UpdateBeanV41(myDBSession, messagesBundle);
             } catch (Exception e) {
                 System.out.println("Mise à jour de la base en erreur :");
                 e.printStackTrace();
