@@ -267,7 +267,7 @@ public class FicPaiement extends ConnectedServlet {
         myDBSession.cleanTransaction();
 
         if ((Action == null) || (!Action.equals("Impression"))) {
-            String reqSQL = "select * from FACT, CLI where FACT.FACT_HISTO = 'N' and FACT.CD_CLI=CLI.CD_CLI and (CD_PAIEMENT is null or CD_PAIEMENT=" + aPaiement.getCD_PAIEMENT()
+            String reqSQL = "select FACT.* from FACT, CLI where FACT.FACT_HISTO = 'N' and FACT.CD_CLI=CLI.CD_CLI and (CD_PAIEMENT is null or CD_PAIEMENT=" + aPaiement.getCD_PAIEMENT()
                     + ") order by FACT.DT_CREAT, NOM, PRENOM";
 
             // Interroge la Base

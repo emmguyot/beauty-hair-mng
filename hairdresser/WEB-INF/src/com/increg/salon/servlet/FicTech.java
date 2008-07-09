@@ -60,7 +60,7 @@ public void performTask(
 	boolean all = false;//Permet de savoir si il faut cocher toutes les cases ou non
 	
 	try {
-		String SQL = "select * from HISTO_PREST, PREST, CATEG_PREST where CD_CLI=" + CD_CLI 
+		String SQL = "select HISTO_PREST.*, PREST.CD_CATEG_PREST from HISTO_PREST, PREST, CATEG_PREST where CD_CLI=" + CD_CLI 
 					+ " and HISTO_PREST.CD_PREST=PREST.CD_PREST and CATEG_PREST.CD_CATEG_PREST = PREST.CD_CATEG_PREST"
 					+ " and HISTO_PREST.COMM is not null ";
 		if (CD_CATEG_PREST != null) {

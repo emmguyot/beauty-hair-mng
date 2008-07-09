@@ -661,7 +661,7 @@ public class HistoPrestBean extends TimeStampBean {
      */
     public static HistoPrestBean getLastHistoPrest(DBSession dbConnect, String CD_CLI, String CD_MARQUE, String CD_CATEG, String CD_PREST) {
 
-        String reqSQL = "select * from HISTO_PREST, PREST where HISTO_PREST.CD_PREST = PREST.CD_PREST and CD_CLI=" + CD_CLI;
+        String reqSQL = "select HISTO_PREST.* from HISTO_PREST, PREST where HISTO_PREST.CD_PREST = PREST.CD_PREST and CD_CLI=" + CD_CLI;
         if (CD_MARQUE != null) {
             reqSQL = reqSQL + " and CD_MARQUE=" + CD_MARQUE;
         }

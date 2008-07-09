@@ -153,7 +153,7 @@ public void performTask(
  */
 static void rechercheTouteCaisse(DBSession myDBSession, String utilisable, Vector listeCaisse) throws SQLException {
 
-    String reqSQL = "select * from CAISSE, MOD_REGL where CAISSE.CD_MOD_REGL=MOD_REGL.CD_MOD_REGL";
+    String reqSQL = "select CAISSE.* from CAISSE, MOD_REGL where CAISSE.CD_MOD_REGL=MOD_REGL.CD_MOD_REGL";
     if ((utilisable != null) && (utilisable.length() > 0)) {
         reqSQL = reqSQL + " AND UTILISABLE=" + DBSession.quoteWith(utilisable, '\'');
     }

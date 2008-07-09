@@ -354,7 +354,7 @@ public void performTask(
 	 */
 	Vector listeFourn = new Vector();
 	if ((CD_ART != null) && (CD_ART.length() > 0)) {
-		String reqSQL = "select * from CAT_FOURN, FOURN where FOURN.CD_FOURN = CAT_FOURN.CD_FOURN and CD_ART=" + aArt.getCD_ART() + " order by FOURN_PRINC DESC, RAIS_SOC, QTE_CMD_MIN";
+		String reqSQL = "select CAT_FOURN.* from CAT_FOURN, FOURN where FOURN.CD_FOURN = CAT_FOURN.CD_FOURN and CD_ART=" + aArt.getCD_ART() + " order by FOURN_PRINC DESC, RAIS_SOC, QTE_CMD_MIN";
 
 		// Interroge la Base
 		try {
