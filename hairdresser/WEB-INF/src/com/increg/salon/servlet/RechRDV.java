@@ -64,7 +64,7 @@ public class RechRDV extends ConnectedServlet {
         SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
         DBSession myDBSession = mySalon.getMyDBSession();
         DateFormat formatDate = new SimpleDateFormat(mySalon.getMessagesBundle().getString("format.dateHeureSimpleSansSeconde"));
-        DateFormat formatDateDB = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+        DateFormat formatDateDB = myDBSession.getFormatDateTimeSansTZ();
         formatDate.setTimeZone(RDVBean.getTimeZone());
         formatDateDB.setTimeZone(RDVBean.getTimeZone());
 
