@@ -54,7 +54,7 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
     SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
     DBSession myDBSession = mySalon.getMyDBSession();
     DateFormat formatDate = new SimpleDateFormat(mySalon.getMessagesBundle().getString("format.dateDefaut"));
-    DateFormat formatDateDB = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
+    DateFormat formatDateDB = myDBSession.getFormatDateTimeSansTZ();
 
 	// Valeurs par défaut
 	// J-7
