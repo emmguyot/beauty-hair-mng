@@ -390,10 +390,7 @@ public class MvtCaisseBean extends TimeStampBean {
 		}
 
         // Passage en GMT +0
-        java.text.DateFormat formatDateStd =
-            java.text.DateFormat.getDateTimeInstance(
-                java.text.DateFormat.SHORT,
-                java.text.DateFormat.MEDIUM);
+        java.text.DateFormat formatDateStd = dbConnect.getFormatDateTimeSansTZ(2);
         DT_MVT = formatDateStd.format(dtMvt);
         
     	String reqSQL = "select * from MVT_CAISSE where CD_MOD_REGL=" + CD_MOD_REGL + " and DT_MVT='" + DT_MVT + "'";
@@ -445,10 +442,7 @@ public class MvtCaisseBean extends TimeStampBean {
 		}
 
         // Passage en GMT +0
-        java.text.DateFormat formatDateStd =
-            java.text.DateFormat.getDateTimeInstance(
-                java.text.DateFormat.SHORT,
-                java.text.DateFormat.MEDIUM);
+        java.text.DateFormat formatDateStd = dbConnect.getFormatDateTimeSansTZ();
         DT_MVT = formatDateStd.format(dtMvt);
         
     	String reqSQL = "select * from MVT_CAISSE where CD_MOD_REGL=" + CD_MOD_REGL + " and DT_MVT <= '" + DT_MVT + "' order by DT_MVT desc LIMIT 1";
@@ -875,10 +869,7 @@ public class MvtCaisseBean extends TimeStampBean {
 		}
 
         // Passage en GMT +0
-        java.text.DateFormat formatDateStd =
-            java.text.DateFormat.getDateTimeInstance(
-                java.text.DateFormat.SHORT,
-                java.text.DateFormat.MEDIUM);
+        java.text.DateFormat formatDateStd = dbConnect.getFormatDateTimeSansTZ();
         DT_DEBUT = formatDateStd.format(dtDebut);
         
         String modReglSup = "";

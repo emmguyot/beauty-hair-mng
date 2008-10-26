@@ -419,10 +419,7 @@ public class RDVBean extends TimeStampBean {
     public static RDVBean getRDVBean(DBSession dbConnect, String CD_CLI, Date DT_DEBUT) {
 
         // Passage en GMT +0
-        java.text.DateFormat formatDateStd =
-            java.text.DateFormat.getDateTimeInstance(
-                java.text.DateFormat.SHORT,
-                java.text.DateFormat.SHORT);
+        java.text.DateFormat formatDateStd = dbConnect.getFormatDateTimeSansTZ();
         formatDateStd.setTimeZone(RDVBean.getTimeZone());
         String dtDebut = formatDateStd.format(DT_DEBUT);
         
