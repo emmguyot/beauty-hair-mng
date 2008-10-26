@@ -415,7 +415,21 @@ public class DBSession {
 	 * Création à chaque fois car non threadsafe
 	 */
     public DateFormat getFormatDateTimeSansTZ() {
-		return new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		return getFormatDateTimeSansTZ(4);
+	}    
+
+	/**
+	 * @return Returns the formatDateSansTZ.
+	 * Création à chaque fois car non threadsafe
+	 */
+    public DateFormat getFormatDateTimeSansTZ(int tailleAnnee) {
+		if (tailleAnnee == 2) {
+	    	return new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+		}
+		else if (tailleAnnee == 4) {
+			return new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		}
+		return null;
 	}    
 
     /**

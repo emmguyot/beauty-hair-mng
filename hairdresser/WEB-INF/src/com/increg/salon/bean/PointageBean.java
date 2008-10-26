@@ -674,10 +674,7 @@ public class PointageBean extends TimeStampBean {
     public static PointageBean getPointageBean(DBSession dbConnect, String CD_COLLAB, Date DT_DEBUT) {
     	
         // Passage en GMT +0
-        java.text.DateFormat formatDateStd =
-            java.text.DateFormat.getDateTimeInstance(
-                java.text.DateFormat.SHORT,
-                java.text.DateFormat.SHORT);
+        java.text.DateFormat formatDateStd = dbConnect.getFormatDateTimeSansTZ(2);
         String dtDebut = formatDateStd.format(DT_DEBUT);
         
         String reqSQL =
