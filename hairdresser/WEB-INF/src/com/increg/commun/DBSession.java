@@ -30,6 +30,7 @@ import java.util.Iterator;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
+import com.increg.commun.exception.NoDatabaseException;
 import com.increg.util.SimpleDateFormatEG;
 
 /**
@@ -80,17 +81,19 @@ public class DBSession {
     
     /**
      * SalonSession constructor comment.
+     * @throws NoDatabaseException 
      * 
      */
-    public DBSession() {
+    public DBSession() throws NoDatabaseException {
         this("config");
     }
     
     /**
      * SalonSession constructor comment.
      * @param configName Nom du fichier de config à utiliser
+     * @throws NoDatabaseException 
      */
-    public DBSession(String configName) {
+    public DBSession(String configName) throws NoDatabaseException {
     	super();
     
     	// Connection à la base
@@ -104,6 +107,7 @@ public class DBSession {
     	catch (Exception e) {
     		System.out.println("Pb à la connexion BD : " + e.toString());
     		dbConnect = null;
+    		throw new NoDatabaseException("Problème à la connexion à la base de données :" + e.toString());
     	}
     	
     }

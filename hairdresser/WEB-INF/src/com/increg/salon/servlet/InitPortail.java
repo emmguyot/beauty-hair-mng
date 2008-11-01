@@ -32,6 +32,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.increg.commun.BasicSession;
+import com.increg.commun.exception.NoDatabaseException;
 import com.increg.commun.exception.ReloadNeededException;
 import com.increg.salon.bean.IdentBean;
 import com.increg.salon.bean.MultiConfigBean;
@@ -125,6 +126,10 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
             catch (ReloadNeededException e) {
                 request.setAttribute("Erreur", myBasicSession.internationaliseMessage(e.toString()));
                 reloadNeeded = true;
+            }
+            catch (NoDatabaseException e) {
+                request.setAttribute("Erreur", myBasicSession.internationaliseMessage(e.toString()));
+                badConfig = true;
             }
             catch (MissingResourceException e) {
                 request.setAttribute("Erreur", myBasicSession.internationaliseMessage(e.toString()));
