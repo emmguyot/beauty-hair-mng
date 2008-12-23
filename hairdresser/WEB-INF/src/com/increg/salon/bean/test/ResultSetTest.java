@@ -28,6 +28,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.increg.commun.DBSession;
+import com.increg.commun.exception.NoDatabaseException;
 
 import junit.framework.TestCase;
 
@@ -51,7 +52,7 @@ public class ResultSetTest extends TestCase {
      * Test for java.math.BigDecimal getBigDecimal(int)
      * @throws SQLException en cas de pb
      */
-    public void testGetBigDecimalint() throws SQLException {
+    public void testGetBigDecimalint() throws SQLException, NoDatabaseException {
         String sql = "select PRX_TOT_HT from FACT";
         
         DBSession dbConnect = new DBSession();

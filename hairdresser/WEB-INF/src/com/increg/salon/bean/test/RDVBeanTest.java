@@ -39,7 +39,7 @@ public class RDVBeanTest extends TestCase {
     /**
      * Connexion à la base de donnée  
      */
-    private DBSession aDBSession = new DBSession("config");
+    private DBSession aDBSession;
 
     /**
      * Constructor for PaiementBeanTest.
@@ -50,6 +50,16 @@ public class RDVBeanTest extends TestCase {
     }
 
     /**
+	 * @see junit.framework.TestCase#setUp()
+	 */
+	@Override
+	protected void setUp() throws Exception {
+		// TODO Auto-generated method stub
+		super.setUp();
+		aDBSession = new DBSession("config");
+	}
+
+	/**
      * Vérification du test de chevauchement des RDV
      * @throws Exception en cas d'erreur programme
      */

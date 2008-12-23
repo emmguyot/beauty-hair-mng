@@ -83,19 +83,21 @@ public class MvtStkBeanTest extends TestCase {
     /**
       *  Connexion à la base de donnée	
       */
-    private DBSession aDBSession = new DBSession("config");
+    private DBSession aDBSession;
     /**
      * Messages localisés
      */
     private ResourceBundle msg = ResourceBundle.getBundle("messages");
+ 
     /**
-     * Sets up the environment
-     * @exception Exception jetée quand le set up echoue
-     */
-    protected void setUp() throws Exception {
-        super.setUp();
-
-    }
+	 * @see junit.framework.TestCase#setUp()
+	 */
+	@Override
+	protected void setUp() throws Exception {
+		// TODO Auto-generated method stub
+		super.setUp();
+		aDBSession = new DBSession("config");
+	}
 
     /**	
      * Teste le calcul du stock en cas d'entrée

@@ -20,6 +20,7 @@ package com.increg.salon.app;
 import java.util.Locale;
 
 import com.increg.commun.DBSession;
+import com.increg.commun.exception.NoDatabaseException;
 import com.increg.salon.bean.ModReglBean;
 import com.increg.salon.bean.MvtCaisseBean;
 
@@ -34,18 +35,20 @@ public class MvtCaisseFix {
     /**
       *  Connexion à la base de donnée  
       */
-    private DBSession aDBSession = new DBSession();
+    private DBSession aDBSession;
 
 
     /**
      * Constructor for MvtCaisseBeanTest.
+     * @throws NoDatabaseException 
      */
-    public MvtCaisseFix() {
+    public MvtCaisseFix() throws NoDatabaseException {
+    	aDBSession = new DBSession();
     }
 
     public static void main (java.lang.String[] args) {
-        MvtCaisseFix aMvtCaisseFix = new MvtCaisseFix();
         try {
+            MvtCaisseFix aMvtCaisseFix = new MvtCaisseFix();
             aMvtCaisseFix.testCheckAndFix();
         }
         catch (Exception e) {
