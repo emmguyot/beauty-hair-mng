@@ -116,6 +116,7 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
                     EditionFacture aEditFact = new EditionFacture();
                     aEditFact.setMyPaiement(aPaiement);
                     aEditFact.setMyFact(aFact);
+                    aEditFact.setReglements(aPaiement.getReglement(myDBSession));
 
                     liste.add(aEditFact);
                 }

@@ -21,6 +21,7 @@
 <%@ page import="com.increg.salon.bean.SalonSession,
 	       com.increg.salon.bean.FactBean,
 	       com.increg.salon.bean.PaiementBean,
+	       com.increg.salon.bean.ReglementBean,
 	       com.increg.salon.bean.HistoPrestBean,
 	       com.increg.salon.bean.ClientBean,
 	       com.increg.salon.bean.PrestBean,
@@ -64,6 +65,7 @@
 <% for (int iListe=0; iListe < listeEdition.size(); iListe++) { 
       FactBean aFact = ((EditionFacture) listeEdition.get(iListe)).getMyFact();
       PaiementBean aPaiement = ((EditionFacture) listeEdition.get(iListe)).getMyPaiement();
+      Vector<ReglementBean> reglements = ((EditionFacture) listeEdition.get(iListe)).getReglements();
       String totPrest = aFact.getTotPrest().toString();
 
       Vector lignes = aFact.getLignes(mySalon.getMyDBSession());
@@ -125,9 +127,12 @@
 		  </salon:valeur>
 	       </td>
 	       <td>
-		  <salon:valeur valeur='<%= DonneeRefBean.getDonneeRefBean(mySalon.getMyDBSession(), "MOD_REGL", Integer.toString(aPaiement.getCD_MOD_REGL())).toString() %>' valeurNulle="null">
-		     %%
-		  </salon:valeur>
+                    <%  
+                    String sep = "";	
+                    for (ReglementBean aReglement : reglements) { 
+                        %><salon:valeur valeur='<%= sep + DonneeRefBean.getDonneeRefBean(mySalon.getMyDBSession(), "MOD_REGL", Integer.toString(aReglement.getCD_MOD_REGL())).toString() %>' valeurNulle="null">%%</salon:valeur><% 
+                            sep = ", ";
+                    } %>
 	       </td>
 	    </tr>
 	    </tbody>

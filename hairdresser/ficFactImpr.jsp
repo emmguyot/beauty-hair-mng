@@ -61,7 +61,7 @@
       FactBean aFact = ((EditionFacture) listeEdition.get(iListe)).getMyFact();
       PaiementBean aPaiement = ((EditionFacture) listeEdition.get(iListe)).getMyPaiement();
       String totPrest = aFact.getTotPrest(mySalon.getMyDBSession()).toString();
-	  Vector<ReglementBean> reglements = (Vector<ReglementBean>) request.getAttribute("Reglements");
+	  Vector<ReglementBean> reglements = ((EditionFacture) listeEdition.get(iListe)).getReglements();
 %>
    <table class="ficheImpr" style="{ width: <%= mySalon.getLargeurFiche() %> }" width="400">
    <tr>

@@ -392,6 +392,7 @@ public class FicPaiement extends ConnectedServlet {
             // Crée le Bean spécifique pour l'édition
             EditionFacture aEditFact = new EditionFacture();
             aEditFact.setMyPaiement(aPaiement);
+            aEditFact.setReglements(reglements);
 
             // Création en mémoire d'une facture fictive contenant toutes les
             // lignes
