@@ -1352,7 +1352,7 @@ public class ClientBean extends TimeStampBean implements Comparable {
      */
     public int compareTo(Object o) {
         ClientBean client2 = (ClientBean) o;
-        return (getNOM() + " " + getPRENOM()).compareTo(client2.getNOM() + " " + client2.getPRENOM());
+        return (getNOM() + "#" + getPRENOM() + "#" + getCD_CLI()).compareTo(client2.getNOM() + "#" + client2.getPRENOM() + "#" + client2.getCD_CLI());
     }
 
     /**
