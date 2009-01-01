@@ -86,6 +86,7 @@ public void performTask(
                 
                 try {
                     aParam.maj(myDBSession);
+                    // TODO Refresh à faire des paramètres dans la session
                     mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.enregistrementOk" + BasicSession.TAG_I18N);
                 }
                 catch (Exception e) {

@@ -17,13 +17,17 @@
  * 
  */
 %>
-<%@ page import="java.util.Vector" %>
+<%@ page import="java.util.Vector,
+		java.util.Map,
+		java.text.SimpleDateFormat,
+		java.math.BigDecimal" %>
 <%@ page import="com.increg.salon.bean.SalonSession,
 	       com.increg.salon.bean.PaiementBean,
 	       com.increg.salon.bean.FactBean,
 	       com.increg.salon.bean.ClientBean,
 	       com.increg.salon.bean.DeviseBean,
-               com.increg.salon.bean.ModReglBean
+           com.increg.salon.bean.ModReglBean,
+           com.increg.salon.bean.ReglementBean
 	       " %>
 <%
     SalonSession mySalon = (SalonSession) session.getAttribute("SalonSession");
@@ -49,6 +53,9 @@
    String Action = (String) request.getAttribute("Action");
    String Etat = (String) request.getAttribute("Etat");
    PaiementBean aPaiement = (PaiementBean) request.getAttribute("PaiementBean");
+   Vector<ReglementBean> reglements = (Vector<ReglementBean>) request.getAttribute("Reglements");
+   BigDecimal totPrest = (BigDecimal) request.getAttribute("totPrest");
+   Map<Integer, ReglementBean> mapCD_MOD_REGL = (Map<Integer, ReglementBean>) request.getAttribute("mapCD_MOD_REGL");
 %>
    var Action="<%=Action%>";
 
@@ -83,15 +90,34 @@ function Init() {
 	<table width="100%">
 	<tr>
 	<td class="label"><span class="obligatoire"><i18n:message key="label.modePaiement" /></span> : </td>
+	<td><%
+    	// TODO Gestion du cas où une vieille facture est éditée et le mode de réglement n'est plus utilisable
+         Vector<ModReglBean> lstModRegl = ModReglBean.getAllUtilisable(mySalon.getMyDBSession());
+         for (ModReglBean modRegl : lstModRegl) { %>
+           <input type="checkbox" id="CD_MOD_REGL<%= modRegl.getCD_MOD_REGL() %>" value="<%= modRegl.getCD_MOD_REGL() %>" onclick="return clickPaiement(this);" <%= 
+               mapCD_MOD_REGL.containsKey(modRegl.getCD_MOD_REGL()) ? "checked=\"checked\"" : "" 
+           %> /><label for="CD_MOD_REGL<%= modRegl.getCD_MOD_REGL() %>" ><%= modRegl.getLIB_MOD_REGL() %></label>
+           <span id="modregl<%= modRegl.getCD_MOD_REGL() %>" <%= mapCD_MOD_REGL.containsKey(modRegl.getCD_MOD_REGL()) ? "" : "style=\"visibility: hidden\"" %> >
+           	<input type="text" size="6" name="REGLEMENT<%= modRegl.getCD_MOD_REGL() %>" 
+           			value="<%= mapCD_MOD_REGL.containsKey(modRegl.getCD_MOD_REGL()) ? mapCD_MOD_REGL.get(modRegl.getCD_MOD_REGL()).getMONTANT() : "" %>" ></span><br/><%
+         }
+	%>
+	</td>
 	<td>
-	       <salon:DBselection valeur="<%= aPaiement.getCD_MOD_REGL() %>" sql='<%= "select CD_MOD_REGL, LIB_MOD_REGL from MOD_REGL where UTILISABLE=\'O\' or CD_MOD_REGL=" + Integer.toString(aPaiement.getCD_MOD_REGL()) + " order by LIB_MOD_REGL" %>'>
-		  <select name="CD_MOD_REGL">
-		     %%
-		  </select>
-	       </salon:DBselection>
+         <% if (!Action.equals("Creation")) { 
+            for (ReglementBean aReglement : reglements) {
+            	ModReglBean aModRegl = ModReglBean.getModReglBean(mySalon.getMyDBSession(), Integer.toString(aReglement.getCD_MOD_REGL()));
+             if (aModRegl.getIMP_CHEQUE().equals("O")) { %>
+	                <a href="ficChqImpr.jsp?montant=<%= aReglement.getMONTANT() %>" target="_blank"><i18n:message key="ficFact.impressionCheque" /></a><br/>
+         	<% } else if (aModRegl.getRENDU_MONNAIE().equals("O")) {%>                
+            	    <a href="javascript:calculRendu(<%= aReglement.getMONTANT() %>)"><i18n:message key="ficFact.renduMonnaie" /></a><br/>
+         	<% }
+            }
+           } %>
+	
 	</td>
 	<td class="label"><span class="obligatoire"><i18n:message key="label.dtPaiement" /></span> : </td>
-	<td>
+	<td class="readonly">
 	       <salon:valeur valeurNulle="null" valeur="<%= aPaiement.getDT_PAIEMENT() %>" > 
 		  <input type="hidden" name="DT_PAIEMENT" size="11" value="%%">
                   <span class="readonly">%%</span>
@@ -102,7 +128,7 @@ function Init() {
 	<tr>
 	<td class="label"><span class="obligatoire"><i18n:message key="label.total" /> :</span></td>
 	<td>
-	        <salon:valeur valeurNulle="null" valeur="<%= aPaiement.getPRX_TOT_TTC() %>" > 
+	        <salon:valeur valeurNulle="null" valeur="<%= totPrest %>" > 
 		     <span class="readonly">%% <%= mySalon.getDevise().toString() %></span>
 		</salon:valeur>
                <%
@@ -111,22 +137,11 @@ function Init() {
                     for (int i = 0; i < lstDevise.size(); i++) {
                         DeviseBean aDevise = (DeviseBean) lstDevise.get(i);
                %>= 
-                        <salon:valeur valeurNulle="null" valeur="<%= aDevise.convertiMontant(aPaiement.getPRX_TOT_TTC()) %>" >
+                        <salon:valeur valeurNulle="null" valeur="<%= aDevise.convertiMontant(totPrest) %>" >
                             <span class="readonly">%% <%= aDevise.toString() %></span>
                         </salon:valeur><%
                     } // for 
                     %>
-        </td>
-        <td>
-            <% if (!Action.equals("Creation")) { 
-                  ModReglBean aModRegl = ModReglBean.getModReglBean(mySalon.getMyDBSession(), Integer.toString(aPaiement.getCD_MOD_REGL()));
-                  if (aModRegl.getIMP_CHEQUE().equals("O")) { %>
-                       <a href="ficChqImpr.jsp?montant=<%= aPaiement.getPRX_TOT_TTC() %>" target="_blank"><i18n:message key="label.impressionCheque" /></a>
-             <%   } else if (aModRegl.getRENDU_MONNAIE().equals("O")) {%>
-                       <a href="javascript:calculRendu(<%= aPaiement.getPRX_TOT_TTC() %>)"><i18n:message key="label.renduMonnaie" /></a>
-                 <%}
- 
-               } %>
         </td>
 	</tr>
 	</table>
@@ -178,7 +193,7 @@ function Init() {
 </form>
 
 <div id="PRIX" style="position:absolute; height:20px; z-index:1; visibility:hidden" > 
-<p class="label"><% if (mySalon.isAffichePrix()) { %><salon:inverse montant="<%= aPaiement.getPRX_TOT_TTC() %>" /><% } %></p>
+<p class="label"><% if (mySalon.isAffichePrix()) { %><salon:inverse montant="<%= totPrest %>" /><% } %></p>
 </div>
 
 <script language="JavaScript">
@@ -189,7 +204,7 @@ deplacePrix();
 // Fonctions d'action
 function deplacePrix() {
    MM_findObj("PRIX").style.left = document.body.clientWidth - 500;
-   MM_findObj("PRIX").style.top = document.body.clientHeight - 55;
+   MM_findObj("PRIX").style.top = document.body.clientHeight - 70;
    MM_showHideLayers('PRIX','','show');
 }
 
@@ -254,6 +269,30 @@ function Imprimer()
 function Aide()
 {
     window.open("<%= mySalon.getLangue().getLanguage() %>/aideFichePaiement.html");
+}
+
+    <i18n:message key="format.dateSimpleDefaut" id="formatSimple" />
+// Un paiement vient d'être cliqué
+function clickPaiement(ctrl) {
+    if (document.fiche.DT_PAIEMENT.value == "") {
+        document.fiche.DT_PAIEMENT.value='<%= new SimpleDateFormat(formatSimple).format(aPaiement.getDT_PAIEMENT_defaut().getTime()) %>'; 
+    }
+    cd_mod_regl = ctrl.value; 
+    if (MM_findObj('modregl' + cd_mod_regl).style.visibility == "hidden") {
+    	MM_showHideLayers('modregl' + cd_mod_regl, '', 'show');
+	    // Calcul le total des prix
+	    total = <%= totPrest %>;
+	    for(i=0;i<document.fiche.elements.length;i++){
+	  		if (document.fiche.elements[i].name.indexOf("REGLEMENT") == 0) {
+	  			total -= new Number(document.fiche.elements[i].value);
+	  		} 
+		}
+		document.fiche.elements["REGLEMENT"+cd_mod_regl].value = Math.round(total*100.0)/100;
+    }
+    else {
+    	MM_showHideLayers('modregl' + cd_mod_regl, '', 'hide');
+		document.fiche.elements["REGLEMENT"+cd_mod_regl].value = "";
+    }
 }
 
 //Ouverture du calcul de rendu

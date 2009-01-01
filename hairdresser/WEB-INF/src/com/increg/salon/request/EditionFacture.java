@@ -17,13 +17,19 @@
  */
 package com.increg.salon.request;
 
+import java.util.Vector;
+
 import com.increg.salon.bean.FactBean;
 import com.increg.salon.bean.PaiementBean;
+import com.increg.salon.bean.ReglementBean;
 
 public class EditionFacture {
 	PaiementBean myPaiement;
 
 	FactBean myFact;
+	
+    Vector<ReglementBean> reglements;
+
 
 	/**
 	 * EditionFacture constructor comment.
@@ -72,5 +78,19 @@ public class EditionFacture {
 	 */
 	public void setMyPaiement(com.increg.salon.bean.PaiementBean newMyPaiement) {
 		myPaiement = newMyPaiement;
+	}
+
+	/**
+	 * @return the reglements
+	 */
+	public Vector<ReglementBean> getReglements() {
+		return reglements;
+	}
+
+	/**
+	 * @param reglements the reglements to set
+	 */
+	public void setReglements(Vector<ReglementBean> reglements) {
+		this.reglements = reglements;
 	}
 }

@@ -18,10 +18,14 @@
  */
 %>
 <%@ page import="java.util.Vector,
-	       java.util.List" %>
+java.util.List,
+java.util.Map,
+java.text.SimpleDateFormat" %>
+<%@ page import="org.apache.commons.lang.ArrayUtils" %>
 <%@ page import="com.increg.salon.bean.SalonSession,
                 com.increg.salon.bean.FactBean,
 	        com.increg.salon.bean.PaiementBean,
+	        com.increg.salon.bean.ReglementBean,
 	        com.increg.salon.bean.HistoPrestBean,
 	        com.increg.salon.bean.ClientBean,
 	        com.increg.salon.bean.PrestBean,
@@ -55,6 +59,7 @@
    String NbPrest = (String) request.getAttribute("NbPrest");
    FactBean aFact = (FactBean) request.getAttribute("FactBean");
    PaiementBean aPaiement = (PaiementBean) request.getAttribute("PaiementBean");
+   Vector<ReglementBean> reglements = (Vector<ReglementBean>) request.getAttribute("Reglements");
    String totPrest = (String) request.getAttribute("totPrest");
    String CD_PREST_SELECT = (String) request.getAttribute("CD_PREST_SELECT");
    String CD_TYP_VENT_SELECT = (String) request.getAttribute("CD_TYP_VENT_SELECT");
@@ -62,6 +67,7 @@
    String CD_CATEG_PREST_SELECT = (String) request.getAttribute("CD_CATEG_PREST_SELECT");
    String COMM_SELECT = (String) request.getAttribute("COMM_SELECT");
    List collabs = (List) request.getAttribute("collabs");
+   Map<Integer, ReglementBean> mapCD_MOD_REGL = (Map<Integer, ReglementBean>) request.getAttribute("mapCD_MOD_REGL");
 %>
    var Action="<%=Action%>";
 
@@ -428,52 +434,58 @@ function Init() {
         </td>
 	</tr>
 	</table>
-	<span ID="PAIEMENT" style="position:absolute; visibility:visible">
-	<table width="100%">
+	<div ID="PAIEMENT" style="visibility:visible; width:100%">
+	<table style="width:100%">
 	<tr>
 	<td class="label"><span class="obligatoire"><i18n:message key="label.modePaiement" /></span> : </td>
 	<td>
 	    <salon:valeur valeurNulle="0" valeur="<%= aPaiement.getCD_PAIEMENT() %>" >
 	       <input type="hidden" name="CD_PAIEMENT" value="%%" >
 	    </salon:valeur>
-	    <% long nbFact = aPaiement.getFact(mySalon.getMyDBSession()).size();
-	       if (nbFact > 1) { %>
-		  <salon:valeur valeur='<%= aPaiement.getCD_MOD_REGL() %>' valeurNulle="null">
-		     <input type="hidden" name="CD_MOD_REGL" value="%%">
-		  </salon:valeur>
-		  <salon:valeur valeur='<%= DonneeRefBean.getDonneeRefBean(mySalon.getMyDBSession(), "MOD_REGL", Integer.toString(aPaiement.getCD_MOD_REGL())).toString() %>' valeurNulle="null">
-		     <span class="readonly">%%</span>
-		  </salon:valeur>
-	    <% }
-	       else { %>
-	       <salon:DBselection valeur="<%= aPaiement.getCD_MOD_REGL() %>" sql='<%= "select CD_MOD_REGL, LIB_MOD_REGL from MOD_REGL where UTILISABLE=\'O\' or CD_MOD_REGL=" + Integer.toString(aPaiement.getCD_MOD_REGL()) + " order by LIB_MOD_REGL" %>'>
-		  <salon:valeur valeurNulle="null" valeur="<%= aPaiement.getDT_PAIEMENT_defaut() %>" > 
-		  <select name="CD_MOD_REGL" onChange="document.fiche.DT_PAIEMENT.value='%%'">
-		  </salon:valeur>
-		     <option value=""></option>
-		     %%
-		  </select>
-                </salon:DBselection> 
-            <% } 
+	    <%
+	    long nbFact = aPaiement.getFact(mySalon.getMyDBSession()).size();
+	    if (nbFact > 1) { 
+	    	for (ReglementBean aReglement : reglements) { %>
+		    	<input type="hidden" name="REGLEMENT<%= aReglement.getCD_MOD_REGL() %>" value="<%= aReglement.getMONTANT() %>">
+		    	<span class="readonly"><%= DonneeRefBean.getDonneeRefBean(mySalon.getMyDBSession(), "MOD_REGL", Integer.toString(aReglement.getCD_MOD_REGL())).toString() %> (<%= aReglement.getMONTANT() %>)</span><br/>
+	    <%
+	    	}
+	    }
+        else {
+        	// TODO Gestion du cas où une vieille facture est éditée et le mode de réglement n'est plus utilisable
+              Vector<ModReglBean> lstModRegl = ModReglBean.getAllUtilisable(mySalon.getMyDBSession());
+              for (ModReglBean modRegl : lstModRegl) { %>
+                <input type="checkbox" id="CD_MOD_REGL<%= modRegl.getCD_MOD_REGL() %>" value="<%= modRegl.getCD_MOD_REGL() %>" onclick="return clickPaiement(this);" <%= 
+                    mapCD_MOD_REGL.containsKey(modRegl.getCD_MOD_REGL()) ? "checked=\"checked\"" : "" 
+                %> /><label for="CD_MOD_REGL<%= modRegl.getCD_MOD_REGL() %>" ><%= modRegl.getLIB_MOD_REGL() %></label>
+                <span id="modregl<%= modRegl.getCD_MOD_REGL() %>" <%= mapCD_MOD_REGL.containsKey(modRegl.getCD_MOD_REGL()) ? "" : "style=\"visibility: hidden\"" %> >
+                	<input type="text" size="6" name="REGLEMENT<%= modRegl.getCD_MOD_REGL() %>" 
+                			value="<%= mapCD_MOD_REGL.containsKey(modRegl.getCD_MOD_REGL()) ? mapCD_MOD_REGL.get(modRegl.getCD_MOD_REGL()).getMONTANT() : "" %>" ></span><br/><%
+              }
+           %>
+        <% } %>
+        </td><td valign="top">
+        <%
 	       if (nbFact == 0) { %>
                     <a href="_FichePaiement.jsp" target="ClientFrame"><i18n:message key="ficFact.paiementRegroupe" /></a> 
-            <% }
+        <% }
 	       else if (nbFact > 1) { %>
                     <a href="_FichePaiement.jsp?Action=Modification&CD_PAIEMENT=<%= aPaiement.getCD_PAIEMENT() %>" target="ClientFrame"><i18n:message key="ficFact.paiementRegroupe" /></a> 
-            <% } 
-               else { 
-                    // 1 mode de règlement 
-                    ModReglBean aModRegl = ModReglBean.getModReglBean(mySalon.getMyDBSession(), Integer.toString(aPaiement.getCD_MOD_REGL()));
-                    if (aModRegl.getIMP_CHEQUE().equals("O")) { %>
-                        <a href="ficChqImpr.jsp?montant=<%= aFact.getPRX_TOT_TTC() %>" target="_blank"><i18n:message key="ficFact.impressionCheque" /></a>
-                 <% } else if (aModRegl.getRENDU_MONNAIE().equals("O")) {%>                
-                        <a href="javascript:calculRendu(<%= aFact.getPRX_TOT_TTC() %>)"><i18n:message key="ficFact.renduMonnaie" /></a>
-                 <% }
-
-              } %>
+        <% } 
+           else { 
+                // 1 mode de règlement
+                for (ReglementBean aReglement : reglements) {
+                	ModReglBean aModRegl = ModReglBean.getModReglBean(mySalon.getMyDBSession(), Integer.toString(aReglement.getCD_MOD_REGL()));
+	                if (aModRegl.getIMP_CHEQUE().equals("O")) { %>
+    	                <a href="ficChqImpr.jsp?montant=<%= aReglement.getMONTANT() %>" target="_blank"><i18n:message key="ficFact.impressionCheque" /></a><br/>
+             	<% } else if (aModRegl.getRENDU_MONNAIE().equals("O")) {%>                
+                	    <a href="javascript:calculRendu(<%= aReglement.getMONTANT() %>)"><i18n:message key="ficFact.renduMonnaie" /></a><br/>
+             	<% }
+                }
+          } %>
         </td>
 	<td class="label"><span class="obligatoire"><i18n:message key="ficFact.dtPaiement" /></span> : </td>
-	<td width="100">
+	<td class="readonly">
             <salon:valeur valeurNulle="null" valeur="<%= aPaiement.getDT_PAIEMENT() %>" > 
                 <input type="hidden" name="DT_PAIEMENT" value="%%">
                 <span class="readonly">%%</span>
@@ -482,7 +494,7 @@ function Init() {
 	</td>
 	</tr>
 	</table>
-	</span><p>&nbsp;</p>
+	</div><p>&nbsp;</p>
 </form>
 
 <span id="COMMENTAIRE" class="action" style="position:absolute; z-index:2; left: 15px; visibility: hidden">
@@ -635,7 +647,13 @@ function Supprimer()
 function Imprimer()
 {
    // Verification des données obligatoires
-   if ((document.fiche.DT_PAIEMENT.value == "") || (document.fiche.CD_MOD_REGL.selected == 1)) {
+   factureReglee = false;
+   for(i=0;i<document.fiche.elements.length;i++){
+ 		if (document.fiche.elements[i].id.indexOf("CD_MOD_REGL") == 0) {
+ 			factureReglee = factureReglee || document.fiche.elements[i].checked;
+ 		} 
+   }
+   if ((document.fiche.DT_PAIEMENT.value == "") || (!factureReglee)) {
       alert ("<i18n:message key="ficFact.reglementPourImp" />");
       return;
    }
@@ -650,6 +668,29 @@ function Imprimer()
 function Aide()
 {
     window.open("<%= mySalon.getLangue().getLanguage() %>/aideFicheFact.html");
+}
+
+// Un paiement vient d'être cliqué
+function clickPaiement(ctrl) {
+    if (document.fiche.DT_PAIEMENT.value == "") {
+        document.fiche.DT_PAIEMENT.value='<%= new SimpleDateFormat(formatSimple).format(aPaiement.getDT_PAIEMENT_defaut().getTime()) %>'; 
+    }
+    cd_mod_regl = ctrl.value; 
+    if (MM_findObj('modregl' + cd_mod_regl).style.visibility == "hidden") {
+    	MM_showHideLayers('modregl' + cd_mod_regl, '', 'show');
+	    // Calcul le total des prix
+	    total = <%= aFact.getPRX_TOT_TTC() %>;
+	    for(i=0;i<document.fiche.elements.length;i++){
+	  		if (document.fiche.elements[i].name.indexOf("REGLEMENT") == 0) {
+	  			total -= new Number(document.fiche.elements[i].value);
+	  		} 
+		}
+		document.fiche.elements["REGLEMENT"+cd_mod_regl].value = Math.round(total*100.0)/100;
+    }
+    else {
+    	MM_showHideLayers('modregl' + cd_mod_regl, '', 'hide');
+		document.fiche.elements["REGLEMENT"+cd_mod_regl].value = "";
+    }
 }
 
 //Ouverture du calcul de rendu

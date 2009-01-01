@@ -883,12 +883,6 @@ public class FactBean extends TimeStampBean {
         try {
             // Sauvegarde en base
             maj(dbConnect);
-
-            // Maj du paiement si besoin
-            if (getCD_PAIEMENT() != 0) {
-                PaiementBean myPaiement = PaiementBean.getPaiementBean(dbConnect, Long.toString(getCD_PAIEMENT()), message);
-                myPaiement.calculTotaux(dbConnect);
-            }
         } catch (Exception e) {
             System.out.println("FactBean ==> Erreur dans maj & calculTotaux : " + e.toString());
             throw (e);

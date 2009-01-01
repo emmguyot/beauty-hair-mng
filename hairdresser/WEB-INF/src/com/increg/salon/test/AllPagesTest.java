@@ -63,6 +63,7 @@ public class AllPagesTest extends TestCase {
      * Marqueur temporel du début du test
      */
     protected Calendar debut;
+    protected WebConversation wc;
      
     /**
      * Constructor for PerformanceTest.
@@ -80,6 +81,9 @@ public class AllPagesTest extends TestCase {
         
         debut = Calendar.getInstance();
         
+        HttpUnitOptions.setScriptingEnabled(false);
+        wc = new WebConversation();
+
         // Ouvre la connexion à l'application
         WebResponse respons;
         
@@ -103,8 +107,6 @@ public class AllPagesTest extends TestCase {
      */
     protected WebResponse lectureURL(String url) {
         // Pas d'analyse de script
-        HttpUnitOptions.setScriptingEnabled(false);
-        WebConversation wc = new WebConversation();
         if (session != null) {
             wc.addCookie("JSESSIONID", session);
 //            int pos = url.indexOf('?');
@@ -155,10 +157,21 @@ public class AllPagesTest extends TestCase {
         // La connexion doit être faite
         assertNotNull(session);
 
+        // Initialisation et contrôle de la base
+        url = urlBase + contexte + "/initPortail.srv";
+        respons = lectureURL(url);
+        session = respons.getNewCookieValue("JSESSIONID");
+        
+        // Choix de la base ?
+        WebForm form = respons.getFormWithName("base");
+        if (form != null) {
+        	respons = form.submit();
+        }
+        
         // Connexion
         url = urlBase + contexte + "/ident.srv?MOT_PASSE=MDP";
         respons = lectureURL(url);
-        
+
         // Interprete le menu
         WebResponse menu = respons.getSubframeContents("MenuFrame");
         WebLink[] links = menu.getLinks();

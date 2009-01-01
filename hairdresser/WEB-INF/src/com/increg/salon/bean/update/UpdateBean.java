@@ -20,6 +20,9 @@ package com.increg.salon.bean.update;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.increg.commun.DBSession;
 import com.increg.commun.exception.ReloadNeededException;
 
@@ -41,7 +44,9 @@ public class UpdateBean {
      */
     protected ResourceBundle messages;
     
-    /**
+   	protected Log log = LogFactory.getLog(this.getClass());
+
+   	/**
      * Constructor for UpdateBean.
      * @param dbConnect Connection à la base
      * @param rb Messages localisés

@@ -21,7 +21,7 @@
 <%@ page import="com.increg.salon.bean.SalonSession,
                 com.increg.salon.bean.DonneeRefBean,
 	        com.increg.salon.bean.MvtCaisseBean,
-	        com.increg.salon.bean.PaiementBean,
+	        com.increg.salon.bean.ReglementBean,
 	        com.increg.salon.bean.TypMcaBean" %>
 <%
     SalonSession mySalon = (SalonSession) session.getAttribute("SalonSession");
@@ -106,12 +106,13 @@ function Init() {
 	    <% String LIB_TYP_MCA = TypMcaBean.getTypMcaBean(mySalon.getMyDBSession(), 
 							       Integer.toString(aMvt.getCD_TYP_MCA())).toString(); %>
 	    <%= LIB_TYP_MCA %>
-            <% if ((aMvt.getCD_PAIEMENT() != 0) 
-                    && (PaiementBean.getPaiementBean(mySalon.getMyDBSession(), Long.toString(aMvt.getCD_PAIEMENT()), mySalon.getMessagesBundle()) 
-                        != null)) { %>
-                <a href="_FichePaiement.jsp?Action=Modification&CD_PAIEMENT=<%= aMvt.getCD_PAIEMENT() %>" target="ClientFrame" title="Fiche paiement">
-                <img src="images/fact.gif" border=0 align=top></a>
-            <% } %>
+            <% if (aMvt.getCD_REGLEMENT() != 0) {
+            	ReglementBean aReglement = ReglementBean.getReglementBean(mySalon.getMyDBSession(), Long.toString(aMvt.getCD_REGLEMENT()), mySalon.getMessagesBundle());
+				if (aReglement != null) { %>
+                	<a href="_FichePaiement.jsp?Action=Modification&CD_PAIEMENT=<%= aReglement.getCD_PAIEMENT() %>" target="ClientFrame" title="Fiche paiement">
+                	<img src="images/fact.gif" border=0 align=top></a>
+            <%  }
+			   }%>
 	    </td>
 	    <td class="tabDonnees">
 	    <% String LIB_MOD_REGL = DonneeRefBean.getDonneeRefBean(mySalon.getMyDBSession(), "MOD_REGL",

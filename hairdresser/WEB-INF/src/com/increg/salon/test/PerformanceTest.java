@@ -138,7 +138,7 @@ public class PerformanceTest extends TestCase {
      */
     public void testPerformance() {
         
-        System.out.println("Ne pas lancer en debug, à lancer 2 fois ? ");
+        System.out.println("testPerformance: Ne pas lancer en debug, à lancer 2 fois ? ");
         Calendar fin = Calendar.getInstance();
         long elapsed = fin.getTime().getTime() - debut.getTime().getTime();
         System.out.println("Etape intermédiaire 1 (s) : " + elapsed / RATION_MS_S);
@@ -150,7 +150,7 @@ public class PerformanceTest extends TestCase {
         WebResponse respons;
         
         // Initialisation et contrôle de la base
-        String url = urlBase + "/ListeCli.jsp";
+        String url = urlBase + "/rechCli.srv";
         respons = lectureURL(url);
         
         for (char c = 'B'; c <= 'Z'; c++) {

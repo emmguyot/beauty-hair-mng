@@ -74,9 +74,9 @@ public class MvtCaisseBean extends TimeStampBean {
     protected java.lang.String DEVISE;
 
     /**
-     * Paiement associé (si existe)
+     * Réglement associé (si existe)
      */
-    protected long CD_PAIEMENT;
+    protected long CD_REGLEMENT;
 
     /**
      * FactBean constructor comment.
@@ -101,7 +101,7 @@ public class MvtCaisseBean extends TimeStampBean {
             }
         }
         try {
-            CD_PAIEMENT = rs.getLong("CD_PAIEMENT");
+            CD_REGLEMENT = rs.getLong("CD_REGLEMENT");
         } catch (SQLException e) {
             if (e.getErrorCode() != 1) {
                 System.out.println("Erreur dans MvtCaisseBean (RS) : " + e.toString());
@@ -170,9 +170,9 @@ public class MvtCaisseBean extends TimeStampBean {
             valeur.append(",");
         }
 
-        if (CD_PAIEMENT != 0) {
-            colonne.append("CD_PAIEMENT,");
-            valeur.append(CD_PAIEMENT);
+        if (CD_REGLEMENT != 0) {
+            colonne.append("CD_REGLEMENT,");
+            valeur.append(CD_REGLEMENT);
             valeur.append(",");
         }
 
@@ -262,10 +262,10 @@ public class MvtCaisseBean extends TimeStampBean {
 
         StringBuffer req = new StringBuffer("delete from MVT_CAISSE ");
         StringBuffer where = new StringBuffer(" where CD_MOD_REGL=" + CD_MOD_REGL + " and DT_MVT=" + DBSession.quoteWith(formatDate.formatEG(DT_MVT.getTime()), '\''));
-        if (CD_PAIEMENT == 0) {
-            where.append(" and CD_PAIEMENT is null");
+        if (CD_REGLEMENT == 0) {
+            where.append(" and CD_REGLEMENT is null");
         } else {
-            where.append(" and CD_PAIEMENT=" + CD_PAIEMENT);
+            where.append(" and CD_REGLEMENT=" + CD_REGLEMENT);
         }
 
         // Constitue la requete finale
@@ -298,8 +298,8 @@ public class MvtCaisseBean extends TimeStampBean {
      * 
      * @return long
      */
-    public long getCD_PAIEMENT() {
-        return CD_PAIEMENT;
+    public long getCD_REGLEMENT() {
+        return CD_REGLEMENT;
     }
 
     /**
@@ -368,13 +368,13 @@ public class MvtCaisseBean extends TimeStampBean {
      * 
      * @param dbConnect com.increg.salon.bean.DBSession
      * @param CD_MOD_REGL java.lang.String
-     * @param CD_PAIEMENT Paiement associé
+     * @param CD_REGLEMENT Réglement associé
      * @param DT_MVT Date du mouvement
      * @param aLocale Configuration pour parser la date
      * @throws Exception Si le format est incorrect
      * @return Mouvement associé
      */
-    public static MvtCaisseBean getMvtCaisseBean(DBSession dbConnect, String CD_MOD_REGL, String DT_MVT, String CD_PAIEMENT, Locale aLocale) throws Exception {
+    public static MvtCaisseBean getMvtCaisseBean(DBSession dbConnect, String CD_MOD_REGL, String DT_MVT, String CD_REGLEMENT, Locale aLocale) throws Exception {
 
         java.text.DateFormat formatDate =
             java.text.DateFormat.getDateTimeInstance(
@@ -394,10 +394,10 @@ public class MvtCaisseBean extends TimeStampBean {
         DT_MVT = formatDateStd.format(dtMvt);
         
     	String reqSQL = "select * from MVT_CAISSE where CD_MOD_REGL=" + CD_MOD_REGL + " and DT_MVT='" + DT_MVT + "'";
-        if ((CD_PAIEMENT == null) || (CD_PAIEMENT.equals("")) || (CD_PAIEMENT.equals("0"))) {
-            reqSQL = reqSQL + " and CD_PAIEMENT is null";
+        if ((CD_REGLEMENT == null) || (CD_REGLEMENT.equals("")) || (CD_REGLEMENT.equals("0"))) {
+            reqSQL = reqSQL + " and CD_REGLEMENT is null";
         } else {
-            reqSQL = reqSQL + " and CD_PAIEMENT=" + CD_PAIEMENT;
+            reqSQL = reqSQL + " and CD_REGLEMENT=" + CD_REGLEMENT;
         }
         MvtCaisseBean res = null;
 
@@ -468,17 +468,17 @@ public class MvtCaisseBean extends TimeStampBean {
      * 
      * @param dbConnect
      *            com.increg.salon.bean.DBSession
-     * @param CD_PAIEMENT
-     *            Paiement associé
+     * @param CD_REGLEMENT
+     *            Réglement associé
      * @return Liste des Mouvements associés
      */
-    public static Vector getMvtCaisseBean(DBSession dbConnect, String CD_PAIEMENT) {
+    public static Vector getMvtCaisseBean(DBSession dbConnect, String CD_REGLEMENT) {
 
         String reqSQL = "select * from MVT_CAISSE where";
-        if ((CD_PAIEMENT == null) || (CD_PAIEMENT.equals("")) || (CD_PAIEMENT.equals("0"))) {
-            reqSQL = reqSQL + " CD_PAIEMENT is null";
+        if ((CD_REGLEMENT == null) || (CD_REGLEMENT.equals("")) || (CD_REGLEMENT.equals("0"))) {
+            reqSQL = reqSQL + " CD_REGLEMENT is null";
         } else {
-            reqSQL = reqSQL + " CD_PAIEMENT=" + CD_PAIEMENT;
+            reqSQL = reqSQL + " CD_REGLEMENT=" + CD_REGLEMENT;
         }
         Vector res = new Vector();
 
@@ -518,10 +518,10 @@ public class MvtCaisseBean extends TimeStampBean {
         StringBuffer colonne = new StringBuffer("");
         StringBuffer where = new StringBuffer(" where CD_MOD_REGL=" + Integer.toString(CD_MOD_REGL) + " and DT_MVT=" + DBSession.quoteWith(formatDate.formatEG(DT_MVT.getTime()), '\''));
 
-        if (CD_PAIEMENT == 0) {
-            where.append(" and CD_PAIEMENT is null");
+        if (CD_REGLEMENT == 0) {
+            where.append(" and CD_REGLEMENT is null");
         } else {
-            where.append(" and CD_PAIEMENT = " + Long.toString(CD_PAIEMENT));
+            where.append(" and CD_REGLEMENT = " + Long.toString(CD_REGLEMENT));
         }
 
         colonne.append("CD_TYP_MCA=");
@@ -646,28 +646,28 @@ public class MvtCaisseBean extends TimeStampBean {
     }
 
     /**
-     * Insert the method's description here. Creation date: (24/09/2001
-     * 15:57:21)
+     * Insert the method's description here. 
+     * Creation date: (24/09/2001 15:57:21)
      * 
-     * @param newCD_PAIEMENT
+     * @param newCD_REGLEMENT
      *            long
      */
-    public void setCD_PAIEMENT(long newCD_PAIEMENT) {
-        CD_PAIEMENT = newCD_PAIEMENT;
+    public void setCD_REGLEMENT(long newCD_REGLEMENT) {
+        CD_REGLEMENT = newCD_REGLEMENT;
     }
 
     /**
-     * Insert the method's description here. Creation date: (24/09/2001
-     * 15:57:21)
+     * Insert the method's description here.
+     * Creation date: (24/09/2001 15:57:21)
      * 
-     * @param newCD_PAIEMENT
+     * @param newCD_REGLEMENT
      *            String
      */
-    public void setCD_PAIEMENT(String newCD_PAIEMENT) {
-        if ((newCD_PAIEMENT != null) && (newCD_PAIEMENT.length() != 0)) {
-            CD_PAIEMENT = Long.parseLong(newCD_PAIEMENT);
+    public void setCD_PAIEMENT(String newCD_REGLEMENT) {
+        if ((newCD_REGLEMENT != null) && (newCD_REGLEMENT.length() != 0)) {
+            CD_REGLEMENT = Long.parseLong(newCD_REGLEMENT);
         } else {
-            CD_PAIEMENT = 0;
+            CD_REGLEMENT = 0;
         }
     }
 
@@ -915,13 +915,19 @@ public class MvtCaisseBean extends TimeStampBean {
             throw e;
         }
 
-        CaisseBean aCaisse = CaisseBean.getCaisseBean(dbConnect, CD_MOD_REGL);
-        if (aCaisse.getSOLDE().equals(solde)) {
-            return true;
-        } else {
-            aCaisse.setSOLDE(solde);
-            aCaisse.maj(dbConnect);
-            return false;
+        if (solde == null) {
+        	// Pas de mouvement pour la caisse : Rien à tester
+        	return true;
+        }
+        else {
+	        CaisseBean aCaisse = CaisseBean.getCaisseBean(dbConnect, CD_MOD_REGL);
+	        if (aCaisse.getSOLDE().equals(solde)) {
+	            return true;
+	        } else {
+	            aCaisse.setSOLDE(solde);
+	            aCaisse.maj(dbConnect);
+	            return false;
+	        }
         }
     }
 

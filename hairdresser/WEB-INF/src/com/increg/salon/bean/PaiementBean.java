@@ -21,7 +21,6 @@ package com.increg.salon.bean;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.MessageFormat;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -44,26 +43,6 @@ public class PaiementBean extends TimeStampBean {
      * Code du paiement
      */
     protected long CD_PAIEMENT;
-
-    /**
-     * Montant total du paiement
-     */
-    protected java.math.BigDecimal PRX_TOT_TTC;
-
-    /**
-     * Montant total avant modification
-     */
-    protected java.math.BigDecimal PRX_TOT_TTC_INIT;
-
-    /**
-     * Mode de règlement
-     */
-    protected int CD_MOD_REGL;
-
-    /**
-     * Mode de règlement avant changement
-     */
-    protected int CD_MOD_REGL_INIT;
 
     /**
      * Date du paiement
@@ -95,15 +74,6 @@ public class PaiementBean extends TimeStampBean {
             }
         }
         try {
-            CD_MOD_REGL = rs.getInt("CD_MOD_REGL");
-            CD_MOD_REGL_INIT = CD_MOD_REGL;
-        } catch (SQLException e) {
-            if (e.getErrorCode() != 1) {
-                System.out.println("Erreur dans PaiementBean (RS) : "
-                        + e.toString());
-            }
-        }
-        try {
             java.util.Date DtPaiement = rs.getDate("DT_PAIEMENT");
             if (DtPaiement != null) {
                 DT_PAIEMENT = Calendar.getInstance();
@@ -111,15 +81,6 @@ public class PaiementBean extends TimeStampBean {
             } else {
                 DT_PAIEMENT = null;
             }
-        } catch (SQLException e) {
-            if (e.getErrorCode() != 1) {
-                System.out.println("Erreur dans PaiementBean (RS) : "
-                        + e.toString());
-            }
-        }
-        try {
-            PRX_TOT_TTC = rs.getBigDecimal("PRX_TOT_TTC", 2);
-            PRX_TOT_TTC_INIT = PRX_TOT_TTC;
         } catch (SQLException e) {
             if (e.getErrorCode() != 1) {
                 System.out.println("Erreur dans PaiementBean (RS) : "
@@ -137,9 +98,9 @@ public class PaiementBean extends TimeStampBean {
      * @exception Exception
      *                En cas d'erreur de mise à jour
      */
-    public void calculTotaux(DBSession dbConnect) throws Exception {
+    public BigDecimal calculTotaux(DBSession dbConnect) {
 
-        PRX_TOT_TTC = null;
+        BigDecimal PRX_TOT_TTC = null;
 
         // Calcul en direct
         String reqSQL = "select sum(PRX_TOT_TTC) from FACT where CD_PAIEMENT="
@@ -167,15 +128,8 @@ public class PaiementBean extends TimeStampBean {
             PRX_TOT_TTC = new BigDecimal(0);
             PRX_TOT_TTC.setScale(2);
         }
-
-        try {
-            // Sauvegarde en base
-            maj(dbConnect);
-        } catch (Exception e) {
-            System.out.println("PaiementBean==>Erreur dans calculTotaux : "
-                    + e.toString());
-            throw (e);
-        }
+        
+        return PRX_TOT_TTC;
     }
 
     /**
@@ -211,22 +165,10 @@ public class PaiementBean extends TimeStampBean {
         valeur.append(CD_PAIEMENT);
         valeur.append(",");
 
-        if (CD_MOD_REGL != 0) {
-            colonne.append("CD_MOD_REGL,");
-            valeur.append(CD_MOD_REGL);
-            valeur.append(",");
-        }
-
         if (DT_PAIEMENT != null) {
             colonne.append("DT_PAIEMENT,");
             valeur.append(DBSession.quoteWith(formatDate.formatEG(DT_PAIEMENT
                     .getTime()), '\''));
-            valeur.append(",");
-        }
-
-        if (PRX_TOT_TTC != null) {
-            colonne.append("PRX_TOT_TTC,");
-            valeur.append(PRX_TOT_TTC.toString());
             valeur.append(",");
         }
 
@@ -288,8 +230,11 @@ public class PaiementBean extends TimeStampBean {
         // Debut de la transaction
         dbConnect.setDansTransactions(true);
 
-        // Fait les mouvements de stock
-        mouvemente(dbConnect, true);
+        Vector<ReglementBean> lstRegl = getReglement(dbConnect);
+        
+        for (ReglementBean reglementBean : lstRegl) {
+			reglementBean.delete(dbConnect);
+		}
 
         // Execute la création
         String[] reqs = new String[1];
@@ -316,9 +261,6 @@ public class PaiementBean extends TimeStampBean {
      */
     public void deletePur(DBSession dbConnect) throws SQLException {
 
-        com.increg.util.SimpleDateFormatEG formatDate = new SimpleDateFormatEG(
-                "dd/MM/yyyy HH:mm:ss");
-
         /**
          * Suppression effective
          */
@@ -332,17 +274,11 @@ public class PaiementBean extends TimeStampBean {
         // Debut de la transaction
         dbConnect.setDansTransactions(true);
 
-        // Suppression des mouvements de caisse
-        Vector listeMvtPaiement = MvtCaisseBean.getMvtCaisseBean(dbConnect,
-                Long.toString(CD_PAIEMENT));
-        Calendar dateMin = Calendar.getInstance();
-        for (int i = 0; i < listeMvtPaiement.size(); i++) {
-            MvtCaisseBean aMvt = (MvtCaisseBean) listeMvtPaiement.get(i);
-            if (aMvt.getDT_MVT().before(dateMin)) {
-                dateMin = aMvt.getDT_MVT();
-            }
-            aMvt.delete(dbConnect);
-        }
+        Vector<ReglementBean> lstRegl = getReglement(dbConnect);
+        
+        for (ReglementBean reglementBean : lstRegl) {
+			reglementBean.deletePur(dbConnect);
+		}
 
         // Execute la suppression
         String[] reqs = new String[1];
@@ -354,23 +290,6 @@ public class PaiementBean extends TimeStampBean {
             throw (new SQLException(BasicSession.TAG_I18N + "message.suppressionKo" + BasicSession.TAG_I18N));
         }
 
-        try {
-	        // Mise à jour des soldes de caisse à partir de la date min
-	        MvtCaisseBean aMvt = MvtCaisseBean.getLastMvtCaisseBean(dbConnect,
-	                Integer.toString(CD_MOD_REGL), formatDate.formatEG(dateMin
-	                        .getTime()), Locale.FRENCH);
-	        MvtCaisseBean.checkAndFix(dbConnect, Integer.toString(CD_MOD_REGL),
-	                formatDate.formatEG(aMvt.getDT_MVT().getTime()), Locale.FRENCH);
-        }
-        catch (SQLException e) {
-        	// Propage l'exception
-			throw e;
-		}
-        catch (Exception e) {
-			// Problème de conversion de la date
-        	System.out.println("Erreur de conversion de la date");
-        	e.printStackTrace();
-		}
         // Fin de la transaction
         dbConnect.endTransaction();
 
@@ -388,16 +307,6 @@ public class PaiementBean extends TimeStampBean {
 
     /**
      * Insert the method's description here. Creation date: (17/08/2001
-     * 21:27:33)
-     * 
-     * @return int
-     */
-    public int getCD_MOD_REGL() {
-        return CD_MOD_REGL;
-    }
-
-    /**
-     * Insert the method's description here. Creation date: (17/08/2001
      * 21:27:59)
      * 
      * @return java.util.Calendar
@@ -407,8 +316,8 @@ public class PaiementBean extends TimeStampBean {
     }
 
     /**
-     * Donne la valeur par défaut de la date de Paiement Creation date:
-     * (17/08/2001 21:27:59)
+     * Donne la valeur par défaut de la date de Paiement 
+     * Creation date: (17/08/2001 21:27:59)
      * 
      * @return java.util.Calendar
      */
@@ -449,31 +358,6 @@ public class PaiementBean extends TimeStampBean {
                     + e.toString());
         }
         return res;
-    }
-
-    /**
-     * Insert the method's description here. Creation date: (17/08/2001
-     * 21:26:51)
-     * 
-     * @return java.math.BigDecimal
-     */
-    public java.math.BigDecimal getPRX_TOT_TTC() {
-        return PRX_TOT_TTC;
-    }
-
-    /**
-     * Insert the method's description here. Creation date: (17/08/2001
-     * 21:26:51)
-     * 
-     * @return java.math.BigDecimal
-     */
-    public java.math.BigDecimal getPRX_TOT_TTC_Franc() {
-        if (PRX_TOT_TTC != null) {
-            return PRX_TOT_TTC.multiply(new BigDecimal(6.55957)).setScale(2,
-                    BigDecimal.ROUND_HALF_UP);
-        } else {
-            return null;
-        }
     }
 
     /**
@@ -520,26 +404,9 @@ public class PaiementBean extends TimeStampBean {
         StringBuffer where = new StringBuffer(" where CD_PAIEMENT="
                 + CD_PAIEMENT);
 
-        colonne.append("CD_MOD_REGL=");
-        if (CD_MOD_REGL != 0) {
-            colonne.append(CD_MOD_REGL);
-        } else {
-            colonne.append("NULL");
-        }
-        colonne.append(",");
-
         colonne.append("DT_PAIEMENT=");
         if (DT_PAIEMENT != null) {
-            colonne.append(DBSession.quoteWith(formatDate.formatEG(DT_PAIEMENT
-                    .getTime()), '\''));
-        } else {
-            colonne.append("NULL");
-        }
-        colonne.append(",");
-
-        colonne.append("PRX_TOT_TTC=");
-        if (PRX_TOT_TTC != null) {
-            colonne.append(PRX_TOT_TTC.toString());
+            colonne.append(DBSession.quoteWith(formatDate.formatEG(DT_PAIEMENT.getTime()), '\''));
         } else {
             colonne.append("NULL");
         }
@@ -547,8 +414,7 @@ public class PaiementBean extends TimeStampBean {
 
         colonne.append("DT_MODIF=");
         DT_MODIF = Calendar.getInstance();
-        colonne.append(DBSession.quoteWith(formatDate.formatEG(DT_MODIF
-                .getTime()), '\''));
+        colonne.append(DBSession.quoteWith(formatDate.formatEG(DT_MODIF.getTime()), '\''));
 
         // Constitue la requete finale
         req.append(colonne);
@@ -556,9 +422,6 @@ public class PaiementBean extends TimeStampBean {
 
         // Debut de la transaction
         dbConnect.setDansTransactions(true);
-
-        // Fait les mouvements de stock
-        mouvemente(dbConnect, false);
 
         // Execute la création
         String[] reqs = new String[1];
@@ -603,32 +466,6 @@ public class PaiementBean extends TimeStampBean {
     }
 
     /**
-     * Insert the method's description here. Creation date: (17/08/2001
-     * 21:27:33)
-     * 
-     * @param newCD_MOD_REGL
-     *            int
-     */
-    public void setCD_MOD_REGL(int newCD_MOD_REGL) {
-        CD_MOD_REGL = newCD_MOD_REGL;
-    }
-
-    /**
-     * Insert the method's description here. Creation date: (17/08/2001
-     * 21:27:33)
-     * 
-     * @param newCD_MOD_REGL
-     *            String
-     */
-    public void setCD_MOD_REGL(String newCD_MOD_REGL) {
-        if ((newCD_MOD_REGL != null) && (newCD_MOD_REGL.length() != 0)) {
-            CD_MOD_REGL = Integer.parseInt(newCD_MOD_REGL);
-        } else {
-            CD_MOD_REGL = 0;
-        }
-    }
-
-    /**
      * Insert the method's description here. 
      * Creation date: (17/08/2001 21:27:59)
      * 
@@ -667,33 +504,6 @@ public class PaiementBean extends TimeStampBean {
     }
 
     /**
-     * Insert the method's description here. Creation date: (17/08/2001
-     * 21:26:51)
-     * 
-     * @param newPRX_TOT_TTC
-     *            String
-     */
-    public void setPRX_TOT_TTC(String newPRX_TOT_TTC) {
-
-        if ((newPRX_TOT_TTC != null) && (newPRX_TOT_TTC.length() != 0)) {
-            PRX_TOT_TTC = new BigDecimal(newPRX_TOT_TTC);
-        } else {
-            PRX_TOT_TTC = null;
-        }
-    }
-
-    /**
-     * Insert the method's description here. Creation date: (17/08/2001
-     * 21:26:51)
-     * 
-     * @param newPRX_TOT_TTC
-     *            java.math.BigDecimal
-     */
-    public void setPRX_TOT_TTC(java.math.BigDecimal newPRX_TOT_TTC) {
-        PRX_TOT_TTC = newPRX_TOT_TTC;
-    }
-
-    /**
      * @see com.increg.salon.bean.TimeStampBean
      */
     public java.lang.String toString() {
@@ -725,6 +535,36 @@ public class PaiementBean extends TimeStampBean {
             aRS.close();
         } catch (Exception e) {
             System.out.println("Erreur dans getLignes : " + e.toString());
+        }
+
+        return lignes;
+    }
+
+    /**
+     * Donne les factures concernées par ce paiement Creation date: (18/08/2001
+     * 15:24:27)
+     * 
+     * @return java.util.Vector
+     * @param dbConnect
+     *            DBSession
+     */
+    public java.util.Vector<ReglementBean> getReglement(DBSession dbConnect) {
+
+        Vector<ReglementBean> lignes = new Vector<ReglementBean>();
+        /**
+         * Chargement des lignes de réglement
+         */
+        String reqSQL = "select * from REGLEMENT where CD_PAIEMENT=" + CD_PAIEMENT;
+
+        try {
+            ResultSet aRS = dbConnect.doRequest(reqSQL);
+
+            while (aRS.next()) {
+                lignes.add(new ReglementBean(aRS, message));
+            }
+            aRS.close();
+        } catch (Exception e) {
+            System.out.println("Erreur dans getReglement : " + e.toString());
         }
 
         return lignes;
@@ -771,112 +611,6 @@ public class PaiementBean extends TimeStampBean {
     }
 
     /**
-     * Effectue les mouvements de caisse correspondant à ce paiement Creation
-     * date: (24/09/2001 09:21:28)
-     * 
-     * @param dbConnect
-     *            com.increg.salon.bean.DBSession
-     * @param delete
-     *            Il s'agit d'une suppression de paiement
-     * @throws SQLException
-     *             Si erreur de programme
-     * @throws FctlException
-     *             Si erreur d'initialisation
-     */
-    protected void mouvemente(DBSession dbConnect, boolean delete)
-            throws SQLException, FctlException {
-
-        if (PRX_TOT_TTC == null) {
-            PRX_TOT_TTC = new BigDecimal(0);
-            PRX_TOT_TTC.setScale(2);
-        }
-        if (PRX_TOT_TTC_INIT == null) {
-            PRX_TOT_TTC_INIT = new BigDecimal(0);
-            PRX_TOT_TTC_INIT.setScale(2);
-        }
-
-        Vector lstFact = getFact(dbConnect);
-        boolean mvtCree = false;
-
-        if (delete || (PRX_TOT_TTC.compareTo(PRX_TOT_TTC_INIT) != 0)
-                || (CD_MOD_REGL_INIT != CD_MOD_REGL)) {
-            // Annulation du précédent
-            if (PRX_TOT_TTC_INIT.compareTo(new BigDecimal(0)) != 0) {
-                CaisseBean aCaisse = CaisseBean.getCaisseBean(dbConnect,
-                        Integer.toString(CD_MOD_REGL_INIT));
-                if (aCaisse == null) {
-                    throw new FctlException(BasicSession.TAG_I18N + "paiementBean.caissesKo" + BasicSession.TAG_I18N);
-                }
-                MvtCaisseBean aMvt = new MvtCaisseBean();
-
-                aMvt.setCD_MOD_REGL(CD_MOD_REGL_INIT);
-                aMvt.setCD_PAIEMENT(CD_PAIEMENT);
-                aMvt.setCD_TYP_MCA(TypMcaBean.ENCAISSEMENT);
-                String Comm = "Paiement annulé";
-                aMvt.setCOMM(Comm);
-                aMvt.setDT_MVT(Calendar.getInstance());
-                aMvt.setMONTANT(getMontantReel(CD_MOD_REGL_INIT,
-                        PRX_TOT_TTC_INIT).negate());
-                aMvt.setSOLDE_AVANT(aCaisse.getSOLDE());
-
-                aMvt.create(dbConnect);
-                mvtCree = true;
-            }
-        }
-        if (!delete) {
-            if (((PRX_TOT_TTC.compareTo(PRX_TOT_TTC_INIT) != 0) || (CD_MOD_REGL_INIT != CD_MOD_REGL))
-                    && (PRX_TOT_TTC.compareTo(new BigDecimal(0)) != 0)) {
-                CaisseBean aCaisse = CaisseBean.getCaisseBean(dbConnect,
-                        Integer.toString(CD_MOD_REGL));
-                if (aCaisse == null) {
-                    throw new FctlException(BasicSession.TAG_I18N + "paiementBean.caissesKo" + BasicSession.TAG_I18N);
-                }
-
-                if (mvtCree && (CD_MOD_REGL == CD_MOD_REGL_INIT)) {
-                    try {
-                        // Temporise pour éviter que le temps et le reste soient
-                        // identiques
-                        Thread.sleep(1000);
-                    } catch (InterruptedException ignored) {
-                        // Rien à faire
-                        ignored.printStackTrace();
-                    }
-                }
-                MvtCaisseBean aMvt = new MvtCaisseBean();
-
-                aMvt.setCD_MOD_REGL(CD_MOD_REGL);
-                aMvt.setCD_PAIEMENT(CD_PAIEMENT);
-                aMvt.setCD_TYP_MCA(TypMcaBean.ENCAISSEMENT);
-                String Comm = "";
-                for (int i = 0; i < lstFact.size(); i++) {
-                    if (i > 0) {
-                        Comm = Comm + "\n";
-                    }
-					String msg = MessageFormat.format(message.getString("paiementBean.factureDe"), 
-									new Object[] {
-										ClientBean.getClientBean(
-													dbConnect,
-													Long.toString(((FactBean) lstFact.get(i))
-															.getCD_CLI()), 
-													message).toString()
-									});
-                    Comm = Comm + msg;
-                }
-                aMvt.setCOMM(Comm);
-                aMvt.setDT_MVT(Calendar.getInstance());
-                aMvt.setMONTANT(getMontantReel(CD_MOD_REGL, PRX_TOT_TTC));
-                aMvt.setSOLDE_AVANT(aCaisse.getSOLDE());
-
-                aMvt.create(dbConnect);
-            }
-        }
-
-        // Reset pour ne pas faire deux fois les mouvements
-        CD_MOD_REGL_INIT = CD_MOD_REGL;
-        PRX_TOT_TTC_INIT = PRX_TOT_TTC;
-    }
-
-    /**
      * Purge des paiements
      * 
      * @param dbConnect
@@ -920,6 +654,35 @@ public class PaiementBean extends TimeStampBean {
         dbConnect.endTransaction();
 
         return nbEnreg;
+    }
+    /**
+     * Vérifie que les réglèments soldent bien la facture
+     * 
+     * @return boolean true si reglement valide
+     * @param dbConnect
+     *            DBSession
+     */
+    public boolean verifReglement(DBSession dbConnect) {
+
+        /**
+         * Chargement des lignes de réglement
+         */
+        String reqSQL = "select sum(MONTANT) from REGLEMENT where CD_PAIEMENT=" + CD_PAIEMENT;
+        BigDecimal totalReglement = new BigDecimal(0);
+        totalReglement.setScale(2);
+
+        try {
+            ResultSet aRS = dbConnect.doRequest(reqSQL);
+
+            while (aRS.next()) {
+            	totalReglement = aRS.getBigDecimal(1, 2);
+            }
+            aRS.close();
+        } catch (Exception e) {
+            System.out.println("Erreur dans getReglement : " + e.toString());
+        }
+
+        return totalReglement.equals(calculTotaux(dbConnect));
     }
 
 }

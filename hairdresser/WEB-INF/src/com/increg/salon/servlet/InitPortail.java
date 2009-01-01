@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -121,7 +122,7 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
             boolean badConfig = false;
             try {            
         		// Affectation du Bean Session
-        		mySalon = new SalonSessionImpl(fichConfig);
+        		mySalon = new SalonSessionImpl(fichConfig, StringUtils.isNotEmpty(request.getParameter("forceSequence")));
             }
             catch (ReloadNeededException e) {
                 request.setAttribute("Erreur", myBasicSession.internationaliseMessage(e.toString()));

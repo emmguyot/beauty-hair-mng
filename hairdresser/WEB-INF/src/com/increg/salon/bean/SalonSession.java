@@ -29,7 +29,7 @@ import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.exception.ReloadNeededException;
 import com.increg.salon.bean.update.UpdateBean;
-import com.increg.salon.bean.update.UpdateBeanV41;
+import com.increg.salon.bean.update.UpdateBeanV42;
 import com.increg.util.SimpleDateFormatEG;
 
 /**
@@ -134,10 +134,11 @@ public abstract class SalonSession extends BasicSession {
     /**
      * SalonSession constructor comment.
      * @param configName Nom du fichier de config à utiliser
+     * @param forceSequence Séquences à forcer ?
      * @throws Exception en cas de problème de création.
      *      Typiquement la licence n'est pas correcte
      */
-    public SalonSession(String configName) throws Exception {
+    public SalonSession(String configName, boolean forceSequence) throws Exception {
         super();
         ResourceBundle resconfig = null;
         try {
@@ -159,7 +160,7 @@ public abstract class SalonSession extends BasicSession {
                  * Mise à jour éventuelle de l'appli
                  * <b>A mettre à jour à chaque changement de version</b>
                  */
-                majBase = new UpdateBeanV41(myDBSession, messagesBundle);
+                majBase = new UpdateBeanV42(myDBSession, messagesBundle, forceSequence);
             } catch (Exception e) {
                 System.out.println("Mise à jour de la base en erreur :");
                 e.printStackTrace();

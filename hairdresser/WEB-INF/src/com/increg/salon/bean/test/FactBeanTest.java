@@ -31,6 +31,7 @@ import com.increg.salon.bean.FactBean;
 import com.increg.salon.bean.HistoPrestBean;
 import com.increg.salon.bean.PaiementBean;
 import com.increg.salon.bean.PrestBean;
+import com.increg.salon.bean.ReglementBean;
 import com.increg.salon.bean.TvaBean;
 import com.increg.salon.bean.TypVentBean;
 import com.increg.salon.request.TVA;
@@ -48,7 +49,7 @@ public class FactBeanTest extends TestCase {
     /**
       *  Connexion à la base de donnée  
       */
-    private DBSession aDBSession = new DBSession("config");
+    private DBSession aDBSession;
     /**
      * Messages localisés
      */
@@ -89,9 +90,12 @@ public class FactBeanTest extends TestCase {
      * @throws Exception .
      */
     public void testCalculTVARepartie1() throws Exception {
-        
+
+    	aDBSession.setDansTransactions(true);
+
         FactBean aFact = new FactBean(msg);
         PaiementBean aPaiement = new PaiementBean(msg);
+        ReglementBean aReglement = new ReglementBean(msg);
         try {
             DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
             Calendar dateJUnit = Calendar.getInstance();
@@ -155,13 +159,17 @@ public class FactBeanTest extends TestCase {
             lignes.add(aLigne);
             aLigne.create(aDBSession);
         
-            aPaiement.setCD_MOD_REGL(1);
             aPaiement.setDT_PAIEMENT(aFact.getDT_PREST());
 
             aPaiement.create(aDBSession);
             
             aFact.setCD_PAIEMENT(aPaiement.getCD_PAIEMENT());
             aFact.calculTotaux(aDBSession);
+            
+            aReglement.setCD_MOD_REGL(1);
+            aReglement.setMONTANT(aFact.getPRX_TOT_TTC());
+            aReglement.setCD_PAIEMENT(aPaiement.getCD_PAIEMENT());
+            aReglement.create(aDBSession);
 
             // Vérification par rapport au jour en cours
             /**
@@ -204,78 +212,7 @@ public class FactBeanTest extends TestCase {
                 assertTrue(almostEquals(ht.multiply(txTva.divide(new BigDecimal(100), 4, BigDecimal.ROUND_HALF_UP)), tva));
             }
         } finally {
-        	// Attente pour éviter les duplicate keys
-        	Thread.sleep(1000);
-            aFact.delete(aDBSession);
-            aPaiement.delete(aDBSession);
-        }
-    }
-
-    /**
-     * Vérification de la répartition de la TVA (globale)
-     * TODO : Modification afin de tenir compte de la répartition si plusieurs taux sont utilisés
-     * @throws Exception .
-     */
-    public void testCalculTVARepartie2() throws Exception {
-
-        Vector listeTVA = FactBean.calculTVARepartie(aDBSession, "", "");
-        
-        // Vérifications....
-        assertNotNull(listeTVA);
-        assertTrue(listeTVA.size() > 0);
-
-        boolean recalcul = false;
-        for (Iterator tvaIter = listeTVA.iterator(); tvaIter.hasNext();) {
-            TVA aTVA = (TVA) tvaIter.next();
-            recalcul |= (aTVA.getTotalHT() == null);
-            recalcul |= (aTVA.getTotal() == null);
-        }
-        
-        if (recalcul) {
-	    	// Recalcule les TVA (pour les vieilles bases)
-	        String sqlTVA = "select * from FACT where FACT_HISTO = 'N' and PRX_TOT_TTC <> 0";
-	        ResultSet rs = aDBSession.doRequest(sqlTVA);
-	        
-	        while (rs.next()) {
-	            FactBean aFact = new FactBean(rs, msg);
-	            
-	            aFact.calculTotaux(aDBSession);
-	        }
-	        rs.close();
-        }
-        
-        listeTVA = FactBean.calculTVARepartie(aDBSession, "", "");
-        
-        // Vérifications....
-        assertNotNull(listeTVA);
-        assertTrue(listeTVA.size() > 0);
-
-        // Vérification des chiffres
-        String sql = "select sum(TVA) as tva, sum(prx_tot_ht) as ht, sum(prx_tot_ttc) as ttc from FACT where CD_PAIEMENT is not null";
-        ResultSet rs = aDBSession.doRequest(sql);
-        assertTrue(rs.next());
-        BigDecimal totTva = rs.getBigDecimal("tva", 2);
-        BigDecimal totHt = rs.getBigDecimal("ht", 2);
-        BigDecimal totTtc = rs.getBigDecimal("ttc", 2);
-    
-        for (Iterator tvaIter = listeTVA.iterator(); tvaIter.hasNext();) {
-            TVA aTVA = (TVA) tvaIter.next();
-            totTva = totTva.subtract(aTVA.getTotal());
-            totHt = totHt.subtract(aTVA.getTotalHT());
-            totTtc = totTtc.subtract(aTVA.getTotalTTC());
-        }
-        assertTrue(almostEquals(new BigDecimal(0), totTva));
-        assertTrue(almostEquals(new BigDecimal(0), totTtc));
-        assertTrue(almostEquals(new BigDecimal(0), totHt));
-    
-        for (Iterator tvaIter = listeTVA.iterator(); tvaIter.hasNext();) {
-            TVA aTVA = (TVA) tvaIter.next();
-            BigDecimal tva = aTVA.getTotal();
-            BigDecimal ht = aTVA.getTotalHT();
-            BigDecimal ttc = aTVA.getTotalTTC();
-            assertTrue(almostEquals(ht.add(tva), ttc));
-            // Le test suivant n'est plus vrai : Du fait des arrondis, les écarts peuvent être importants
-            //assertTrue(almostEquals(ht.multiply(txTva.divide(new BigDecimal(100), 4, BigDecimal.ROUND_HALF_UP)), tva));
+        	aDBSession.cleanTransaction();
         }
     }
 
@@ -288,4 +225,13 @@ public class FactBeanTest extends TestCase {
     static boolean almostEquals(BigDecimal n1, BigDecimal n2) {
         return (n1.subtract(n2).setScale(1, BigDecimal.ROUND_HALF_UP).compareTo(new BigDecimal(0)) == 0);
     }
+
+	/**
+	 * @see junit.framework.TestCase#setUp()
+	 */
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		aDBSession = new DBSession("config");
+	}
 }

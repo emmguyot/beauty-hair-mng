@@ -17,13 +17,21 @@
  */
 package com.increg.salon.servlet;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -36,6 +44,7 @@ import com.increg.salon.bean.FactBean;
 import com.increg.salon.bean.HistoPrestBean;
 import com.increg.salon.bean.PaiementBean;
 import com.increg.salon.bean.ParamBean;
+import com.increg.salon.bean.ReglementBean;
 import com.increg.salon.bean.SalonSession;
 import com.increg.salon.request.EditionFacture;
 
@@ -70,7 +79,6 @@ public class FicFact extends ConnectedServlet {
         String TVA = request.getParameter("TVA");
 
         String CD_PAIEMENT = request.getParameter("CD_PAIEMENT");
-        String CD_MOD_REGL = request.getParameter("CD_MOD_REGL");
         String DT_PAIEMENT = request.getParameter("DT_PAIEMENT");
 
         String MOT_PASSE = request.getParameter("MOT_PASSE");
@@ -98,16 +106,12 @@ public class FicFact extends ConnectedServlet {
 
         // Boucle de chargement
         for (int i = 0; i < nbPrest; i++) {
-            tab_NUM_LIG_FACT[i] = request.getParameter("NUM_LIG_FACT"
-                    + Integer.toString(i));
-            tab_CD_COLLAB[i] = request.getParameter("CD_COLLAB"
-                    + Integer.toString(i));
+            tab_NUM_LIG_FACT[i] = request.getParameter("NUM_LIG_FACT" + Integer.toString(i));
+            tab_CD_COLLAB[i] = request.getParameter("CD_COLLAB" + Integer.toString(i));
             tab_QTE[i] = request.getParameter("QTE" + Integer.toString(i));
-            tab_PRX_UNIT_TTC[i] = request.getParameter("PRX_UNIT_TTC"
-                    + Integer.toString(i));
+            tab_PRX_UNIT_TTC[i] = request.getParameter("PRX_UNIT_TTC" + Integer.toString(i));
             tab_COMM[i] = request.getParameter("COMM" + Integer.toString(i));
-            tab_NIV_SATISF[i] = request.getParameter("NIV_SATISF"
-                    + Integer.toString(i));
+            tab_NIV_SATISF[i] = request.getParameter("NIV_SATISF" + Integer.toString(i));
         }
         // Ligne en cours de saisie
         tab_NUM_LIG_FACT[nbPrest] = request.getParameter("NUM_LIG_FACT" + Integer.toString(nbPrest));
@@ -121,6 +125,18 @@ public class FicFact extends ConnectedServlet {
         tab_COMM[nbPrest] = request.getParameter("COMM" + Integer.toString(nbPrest));
         tab_NIV_SATISF[nbPrest] = request.getParameter("NIV_SATISF" + Integer.toString(nbPrest));
 
+        // Données de règlement
+        TreeMap<String, String> REGLEMENT = new TreeMap<String, String>();
+        Enumeration paramEnum = request.getParameterNames();
+        while (paramEnum.hasMoreElements()) {
+			String paramName = (String) paramEnum.nextElement();
+			
+			if (paramName.startsWith("REGLEMENT") && StringUtils.isNotEmpty(request.getParameter(paramName))) {
+				REGLEMENT.put(paramName.substring("REGLEMENT".length()),
+							request.getParameter(paramName));
+			}
+		}
+        
         // Récupère la connexion
         HttpSession mySession = request.getSession(false);
         SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
@@ -129,6 +145,7 @@ public class FicFact extends ConnectedServlet {
         // Attributs à positionner en fin
         FactBean aFact = null;
         PaiementBean aPaiement = null;
+        Vector<ReglementBean> reglements = null;
         String totPrest = "0";
         String NbPrest = "0";
         List collabs = null;
@@ -148,6 +165,7 @@ public class FicFact extends ConnectedServlet {
                 aFact.setFACT_HISTO(FACT_HISTO);
 
                 aPaiement = new PaiementBean(mySalon.getMessagesBundle());
+                reglements = new Vector<ReglementBean>();
             }
             // *****************************************************************************************
             else if (Action.equals("Creation")) {
@@ -158,6 +176,7 @@ public class FicFact extends ConnectedServlet {
                  */
                 aFact = new FactBean(mySalon.getMessagesBundle());
                 aPaiement = new PaiementBean(mySalon.getMessagesBundle());
+                reglements = new Vector<ReglementBean>();
 
                 try {
                     aFact.setCD_CLI(CD_CLI);
@@ -171,7 +190,7 @@ public class FicFact extends ConnectedServlet {
                     aFact.setCD_PAIEMENT(CD_PAIEMENT);
 
                     // Déjà le mode de paiement ==> Pas normal. On refuse
-                    if ((CD_MOD_REGL != null) && (CD_MOD_REGL.length() > 0)) {
+                    if (REGLEMENT.size() > 0) {
                         mySalon.setMessage("Erreur",
                                 BasicSession.TAG_I18N + "ficFact.factureVide" + BasicSession.TAG_I18N);
                     }
@@ -209,8 +228,10 @@ public class FicFact extends ConnectedServlet {
                 if (aFact.getCD_PAIEMENT() > 0) {
                     aPaiement = PaiementBean.getPaiementBean(myDBSession, Long
                             .toString(aFact.getCD_PAIEMENT()), mySalon.getMessagesBundle());
+                    reglements = aPaiement.getReglement(myDBSession);
                 } else {
                     aPaiement = new PaiementBean(mySalon.getMessagesBundle());
+                    reglements = new Vector<ReglementBean>();
                 }
 
             }
@@ -236,8 +257,7 @@ public class FicFact extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                if ((CD_FACT == null) || (CD_FACT.length() == 0)
-                        || (CD_FACT.equals("0"))) {
+                if (StringUtils.isEmpty(CD_FACT) || (CD_FACT.equals("0"))) {
                     // On est en création : le Bean est créé de zero
                     aFact = new FactBean(mySalon.getMessagesBundle());
                 } else {
@@ -250,6 +270,7 @@ public class FicFact extends ConnectedServlet {
 
                 // Initialisation par défaut
                 aPaiement = new PaiementBean(mySalon.getMessagesBundle());
+                reglements = new Vector<ReglementBean>();
                 try {
                     myDBSession.setDansTransactions(true);
 
@@ -268,48 +289,71 @@ public class FicFact extends ConnectedServlet {
                      * nbre de modif de facture
                      */
 
-                    if ((CD_MOD_REGL != null) && (CD_MOD_REGL.length() > 0)) {
+                    if (REGLEMENT.size() > 0) {
 
-                        if ((CD_PAIEMENT != null) && (CD_PAIEMENT.length() > 0)
-                                && (!CD_PAIEMENT.equals("0"))) {
+                        if (StringUtils.isNotEmpty(CD_PAIEMENT) && (!CD_PAIEMENT.equals("0"))) {
                             aPaiement = PaiementBean.getPaiementBean(
                                     myDBSession, CD_PAIEMENT, mySalon.getMessagesBundle());
+                            reglements = aPaiement.getReglement(myDBSession);
                         } else {
                             // Nouveau Paiement
                             aPaiement = new PaiementBean(mySalon.getMessagesBundle());
+                            reglements = new Vector<ReglementBean>();
                         }
 
                         if ((nbPrest > 0) || (Action.equals("AjoutLigne"))) {
-                            aPaiement.setCD_MOD_REGL(CD_MOD_REGL);
                             aPaiement.setDT_PAIEMENT(DT_PAIEMENT, mySalon.getLangue());
 
-                            if ((CD_PAIEMENT != null)
-                                    && (CD_PAIEMENT.length() > 0)
-                                    && (!CD_PAIEMENT.equals("0"))) {
+                            if (StringUtils.isNotEmpty(CD_PAIEMENT) && (!CD_PAIEMENT.equals("0"))) {
                                 aPaiement.maj(myDBSession);
                             } else {
                                 aPaiement.create(myDBSession);
-                                aFact
-                                        .setCD_PAIEMENT(aPaiement
-                                                .getCD_PAIEMENT());
-                                // Paiement d'une facture : Suppression de la
-                                // liste des encours
-                                mySalon.removeClient(Long.toString(aFact
-                                        .getCD_FACT()));
+                                aFact.setCD_PAIEMENT(aPaiement.getCD_PAIEMENT());
                             }
+                            
+                            // Enregistrement nécessaire pour avoir la relation aux règlements
+                            if (StringUtils.isEmpty(CD_FACT) || (CD_FACT.equals("0"))) {
+                                aFact.create(myDBSession);
+                            }
+                            else {
+                            	aFact.maj(myDBSession);
+                            }
+                            
+                            // Gestion des réglements
+                            TreeMap<String, String> workReglement = (TreeMap<String, String>) REGLEMENT.clone();
+                        	for (ReglementBean aReglement : reglements) {
+                        		if (workReglement.containsKey(Integer.toString(aReglement.getCD_MOD_REGL()))) {
+                        			aReglement.setMONTANT(workReglement.get(Integer.toString(aReglement.getCD_MOD_REGL())));
+                        			workReglement.remove(Integer.toString(aReglement.getCD_MOD_REGL())); // Traité
+                        			aReglement.maj(myDBSession);
+                        		}
+                        		else {
+                        			// Paiement inutile
+                        			reglements.remove(aReglement);
+                        			aReglement.delete(myDBSession);
+                        		}
+							}
+                        	
+                        	// Faut-il en ajouter ?
+                        	for (Iterator iterRestant = workReglement.keySet().iterator(); iterRestant.hasNext();) {
+								String key = (String) iterRestant.next();
+								ReglementBean aReglement = new ReglementBean(mySalon.getMessagesBundle());
+								aReglement.setCD_MOD_REGL(key);
+								aReglement.setCD_PAIEMENT(aPaiement.getCD_PAIEMENT());
+								aReglement.setMONTANT(workReglement.get(key));
+								aReglement.create(myDBSession);
+                    			reglements.add(aReglement);
+							}
                         } else {
                             mySalon.setMessage("Erreur", BasicSession.TAG_I18N + "ficFact.factureVide" + BasicSession.TAG_I18N);
                         }
-                    } else if ((CD_PAIEMENT != null)
-                            && (CD_PAIEMENT.length() > 0)
-                            && (!CD_PAIEMENT.equals("0"))) {
+                    } else if (StringUtils.isNotEmpty(CD_PAIEMENT) && (!CD_PAIEMENT.equals("0"))) {
                         // Annulation du paiement
                         // AFAIRE : CTRL a INCLURE
                         aFact.setCD_PAIEMENT(0);
 
                         // Faut-il supprimer le paiement ?
-                        aPaiement = PaiementBean.getPaiementBean(myDBSession,
-                                CD_PAIEMENT, mySalon.getMessagesBundle());
+                        aPaiement = PaiementBean.getPaiementBean(myDBSession, CD_PAIEMENT, mySalon.getMessagesBundle());
                         Vector listeFact = aPaiement.getFact(myDBSession);
                         if (listeFact.size() == 1) {
                             paiementASuppr = true;
@@ -319,8 +363,7 @@ public class FicFact extends ConnectedServlet {
                     }
 
                     // Mise à jour de la facture avec le bon code paiement
-                    if ((CD_FACT == null) || (CD_FACT.length() == 0)
-                            || (CD_FACT.equals("0"))) {
+                    if (StringUtils.isEmpty(CD_FACT) || (CD_FACT.equals("0"))) {
                         aFact.create(myDBSession);
                     } else {
                         // Pas de mise à jour tout de suite : Attente du calcul
@@ -334,6 +377,7 @@ public class FicFact extends ConnectedServlet {
                     if (paiementASuppr) {
                         aPaiement.delete(myDBSession);
                         aPaiement = new PaiementBean(mySalon.getMessagesBundle());
+                        reglements = new Vector<ReglementBean>();
                     }
 
                     // Nouvelle facture ? Ajout au encours si ce n'est pas un
@@ -391,6 +435,16 @@ public class FicFact extends ConnectedServlet {
 
                     aFact.setLignes(lignes);
 
+                	if ((aPaiement.getCD_PAIEMENT() != 0) && !aPaiement.verifReglement(myDBSession)) {
+                		throw new FctlException(BasicSession.TAG_I18N + "ficFact.facturePartiellementPayee" + BasicSession.TAG_I18N);
+                	}
+
+                	if (aPaiement.getCD_PAIEMENT() != 0) {
+                        // Paiement d'une facture : Suppression de la
+                        // liste des encours
+                        mySalon.removeClient(Long.toString(aFact.getCD_FACT()));
+                	}
+                	
                     myDBSession.endTransaction();
 
                     // Informe de l'enregistrement
@@ -400,28 +454,24 @@ public class FicFact extends ConnectedServlet {
                 } catch (Exception e) {
                     mySalon.setMessage("Erreur", e.toString());
                     request.setAttribute("Action", Action);
-                    if ((CD_PAIEMENT == null) || (CD_PAIEMENT.length() == 0)
-                            || (CD_PAIEMENT.equals("0"))) {
+                    if (StringUtils.isEmpty(CD_PAIEMENT) || (CD_PAIEMENT.equals("0"))) {
                         // Reset du paiement au cas ou la création du paiement a
                         // déjà été faite
                         aFact.setCD_PAIEMENT(0);
                         aPaiement = new PaiementBean(mySalon.getMessagesBundle());
+                        reglements = new Vector<ReglementBean>();
                     }
-                    if ((CD_FACT == null) || (CD_FACT.length() == 0)
-                            || (CD_FACT.equals("0"))) {
+                    if (StringUtils.isEmpty(CD_FACT) || (CD_FACT.equals("0"))) {
                         aFact.setCD_FACT(0);
                     }
                 }
 
                 // Applique la modif sur la ligne de saisie
                 // TOUJOURS LE CAS
-                request.setAttribute("CD_TYP_VENT_SELECT",
-                        tab_CD_TYP_VENT[nbPrest]);
+                request.setAttribute("CD_TYP_VENT_SELECT", tab_CD_TYP_VENT[nbPrest]);
                 if (Action.equals("Rechargement+")) {
-                    request.setAttribute("CD_MARQUE_SELECT",
-                            tab_CD_MARQUE[nbPrest]);
-                    request.setAttribute("CD_CATEG_PREST_SELECT",
-                            tab_CD_CATEG_PREST[nbPrest]);
+                    request.setAttribute("CD_MARQUE_SELECT", tab_CD_MARQUE[nbPrest]);
+                    request.setAttribute("CD_CATEG_PREST_SELECT", tab_CD_CATEG_PREST[nbPrest]);
                     // Recherche la dernière prestation du client dans cette
                     // Marque / Catégorie
                     HistoPrestBean lastPrest = HistoPrestBean
@@ -452,6 +502,7 @@ public class FicFact extends ConnectedServlet {
 	                    // Crée le Bean spécifique pour l'édition
 	                    EditionFacture aEditFact = new EditionFacture();
 	                    aEditFact.setMyPaiement(aPaiement);
+	                    aEditFact.setReglements(reglements);
 	                    aEditFact.setMyFact(aFact);
 	                    Vector listeEdition = new Vector(1);
 	                    listeEdition.add(aEditFact);
@@ -489,6 +540,7 @@ public class FicFact extends ConnectedServlet {
 
                 // Initialisation par défaut
                 aPaiement = new PaiementBean(mySalon.getMessagesBundle());
+                reglements = new Vector<ReglementBean>();
 
                 try {
                     // Vérification si paiement regroupé ou mouvements de stock
@@ -513,6 +565,7 @@ public class FicFact extends ConnectedServlet {
                         // pas regroupé
                         aPaiement = PaiementBean.getPaiementBean(myDBSession,
                                 CD_PAIEMENT, mySalon.getMessagesBundle());
+                        reglements = aPaiement.getReglement(myDBSession);
                         if (supprimable
                                 && (aPaiement.getFact(myDBSession).size() == 1)
                                 && (mySalon.getMyIdent().getDroit("Facture", "Forçage"))) {
@@ -556,6 +609,7 @@ public class FicFact extends ConnectedServlet {
                         aFact.setFACT_HISTO("N");
 
                         aPaiement = new PaiementBean(mySalon.getMessagesBundle());
+                        reglements = new Vector<ReglementBean>();
 
                         request.setAttribute("Action", "Creation");
                     }
@@ -613,9 +667,15 @@ public class FicFact extends ConnectedServlet {
             log.error("Erreur générale : ", e);
         }
 
+        Map<Integer, ReglementBean> mapCD_MOD_REGL = new HashMap<Integer, ReglementBean>();
+        for (ReglementBean aReglement : reglements) {
+			mapCD_MOD_REGL.put(aReglement.getCD_MOD_REGL(), aReglement);
+		}
         // Positionne les attributs
         request.setAttribute("FactBean", aFact);
         request.setAttribute("PaiementBean", aPaiement);
+    	request.setAttribute("Reglements", reglements);
+    	request.setAttribute("mapCD_MOD_REGL", mapCD_MOD_REGL);
         request.setAttribute("collabs", collabs);
 
         if (aFact != null) {

@@ -53,7 +53,7 @@ public class ResultSetTest extends TestCase {
      * @throws SQLException en cas de pb
      */
     public void testGetBigDecimalint() throws SQLException, NoDatabaseException {
-        String sql = "select PRX_TOT_HT from FACT";
+        String sql = "select PRX_TOT_HT from FACT where PRX_TOT_HT is not null";
         
         DBSession dbConnect = new DBSession();
         ResultSet rs = dbConnect.doRequest(sql);

@@ -60,7 +60,7 @@
                             <table width="100%" border="0" cellpadding="0" cellspacing="0">
                                 <tr> 
                                     <td width="469" height="173" valign="top" bordercolor="#000000"> 
-                                        <form method="post" action="initPortail.srv" name="base">
+                                        <form method="post" name="base">
                                             <p class="obligatoire" align="center"><i18n:message key="label.choixBaseAUtiliser" /> :</p>
                                             <p class="obligatoire" align="center">
                                                 <salon:selection valeur="<%= 0 %>" valeurs="<%= aMCBean.base2Map() %>">

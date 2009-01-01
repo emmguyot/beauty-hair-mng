@@ -42,11 +42,12 @@ public class SalonSessionImpl extends SalonSession {
     /**
      * SalonSession constructor comment.
      * @param configName Nom du fichier de config à utiliser
+     * @param forceSequence Forcage des séquences ?
      * @throws Exception en cas de problème de création.
      * Typiquement la licence n'est pas correcte
      */
-    public SalonSessionImpl(String configName) throws Exception {
-        super(configName);
+    public SalonSessionImpl(String configName, boolean forceSequence) throws Exception {
+        super(configName, forceSequence);
         try {
             /**
              * Verification de la licence par rapport à la société

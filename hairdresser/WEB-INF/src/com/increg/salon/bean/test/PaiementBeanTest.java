@@ -26,6 +26,7 @@ import com.increg.commun.DBSession;
 import com.increg.salon.bean.FactBean;
 import com.increg.salon.bean.HistoPrestBean;
 import com.increg.salon.bean.PaiementBean;
+import com.increg.salon.bean.ReglementBean;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
@@ -43,7 +44,7 @@ public class PaiementBeanTest extends TestCase {
     /**
      * Connexion à la base de donnée  
      */
-    private DBSession aDBSession = new DBSession("config");
+    private DBSession aDBSession;
     /**
      * Messages localisés
      */
@@ -58,18 +59,31 @@ public class PaiementBeanTest extends TestCase {
     }
 
     /**
+	 * @see junit.framework.TestCase#setUp()
+	 */
+	@Override
+	protected void setUp() throws Exception {
+		// TODO Auto-generated method stub
+		super.setUp();
+		aDBSession = new DBSession("config");
+	}
+
+	/**
      * Vérification de la suppression exceptionnelle de paiement
      * Cas sans mouvement de caisse après
      * @throws Exception en cas d'erreur programme
      */
     public void testDeletePur1() throws Exception {
 
+    	aDBSession.setDansTransactions(true);
+    	
         long numFact = 999999;
         long numPaiement = 999998;
         FactBean aFact = null;
         HistoPrestBean aHisto1 = null; 
         HistoPrestBean aHisto2 = null; 
         PaiementBean aPaiement = null;
+        ReglementBean aReglement = null;
         
         try {        
             // Recherche un client au hazard
@@ -129,11 +143,16 @@ public class PaiementBeanTest extends TestCase {
             
             // Paiement
             aPaiement = new PaiementBean(msg);
-            aPaiement.setCD_MOD_REGL(1);
             aPaiement.setCD_PAIEMENT(numPaiement);
             aPaiement.setDT_PAIEMENT("08/07/2002", Locale.getDefault());
-            aPaiement.setPRX_TOT_TTC(aFact.getTotPrest());
             aPaiement.create(aDBSession);
+
+            // Reglement
+            aReglement = new ReglementBean(msg);
+            aReglement.setCD_MOD_REGL(1);
+            aReglement.setMONTANT(aFact.getTotPrest());
+            aReglement.setCD_PAIEMENT(aPaiement.getCD_PAIEMENT());
+            aReglement.create(aDBSession);
             
             // Effectue les mouvements
             aFact.setCD_PAIEMENT(numPaiement);
@@ -175,10 +194,7 @@ public class PaiementBeanTest extends TestCase {
             System.out.println("testDeletePur1 : " + e.toString());
             throw (e);
         } finally {
-            if (aHisto1 != null) { aHisto1.delete(aDBSession); }
-            if (aHisto2 != null) { aHisto2.delete(aDBSession); }
-            if (aFact != null) { aFact.delete(aDBSession); }
-            if (aPaiement != null) { aPaiement.delete(aDBSession); }
+        	aDBSession.cleanTransaction();
         }
         
         

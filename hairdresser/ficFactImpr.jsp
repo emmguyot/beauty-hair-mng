@@ -33,6 +33,7 @@
 	        com.increg.salon.bean.DeviseBean,
 	        com.increg.salon.request.EditionFacture,
 	        com.increg.salon.bean.CollabBean" %>
+<%@page import="com.increg.salon.bean.ReglementBean"%>
 <%
     SalonSession mySalon = (SalonSession) session.getAttribute("SalonSession");
     if (mySalon == null) {
@@ -42,6 +43,7 @@
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
 <%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
+<%@page import="com.increg.salon.bean.ReglementBean"%>
 <html>
 <head>
 <title><i18n:message key="ficFact.title" /></title>
@@ -59,6 +61,7 @@
       FactBean aFact = ((EditionFacture) listeEdition.get(iListe)).getMyFact();
       PaiementBean aPaiement = ((EditionFacture) listeEdition.get(iListe)).getMyPaiement();
       String totPrest = aFact.getTotPrest(mySalon.getMyDBSession()).toString();
+	  Vector<ReglementBean> reglements = (Vector<ReglementBean>) request.getAttribute("Reglements");
 %>
    <table class="ficheImpr" style="{ width: <%= mySalon.getLargeurFiche() %> }" width="400">
    <tr>
@@ -264,10 +267,13 @@
 	 </table>
 	 <table width="100%">
 	 <tr>
-	 <td><i18n:message key="label.modePaiement" /> : 
-		     <salon:valeur valeur='<%= DonneeRefBean.getDonneeRefBean(mySalon.getMyDBSession(), "MOD_REGL", Integer.toString(aPaiement.getCD_MOD_REGL())).toString() %>' valeurNulle="null">
-			%%
-		     </salon:valeur>
+	 <td><i18n:message key="label.modeReglement" /> : 
+	 <%  
+	 String sep = "";	
+	 for (ReglementBean aReglement : reglements) { 
+ 	     %><salon:valeur valeur='<%= sep + DonneeRefBean.getDonneeRefBean(mySalon.getMyDBSession(), "MOD_REGL", Integer.toString(aReglement.getCD_MOD_REGL())).toString() %>' valeurNulle="null">%%</salon:valeur><% 
+	 	sep = ", ";
+	 } %>
 	 </td>
 	 </tr>
 	 <tr>
