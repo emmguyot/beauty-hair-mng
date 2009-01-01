@@ -522,19 +522,21 @@ protected boolean recouvrementData(Vector lstJeuValeur) {
         }
 
 
-        // Compare ces bornes aux autres
-        for (int j = 0; (j < lstJeuValeur.size()) && !res; j++) {
-            if (i != j) {
-                TreeMap data2 = (TreeMap) lstJeuValeur.get(j);
-                
-                for (Iterator d = data2.keySet().iterator(); d.hasNext() && !res;) {
-                    Comparable anX = (Comparable) d.next();
-                    if ((anX.compareTo(maxX) <= 0) && (anX.compareTo(minX) >= 0)) {
-                        // La valeur est entre les bornes : Il y a recouvrement
-                        res = true;
-                    }
-                }
-            }
+        if ((maxX != null) && (minX != null)) {
+	        // Compare ces bornes aux autres
+	        for (int j = 0; (j < lstJeuValeur.size()) && !res; j++) {
+	            if (i != j) {
+	                TreeMap data2 = (TreeMap) lstJeuValeur.get(j);
+	                
+	                for (Iterator d = data2.keySet().iterator(); d.hasNext() && !res;) {
+	                    Comparable anX = (Comparable) d.next();
+	                    if ((anX.compareTo(maxX) <= 0) && (anX.compareTo(minX) >= 0)) {
+	                        // La valeur est entre les bornes : Il y a recouvrement
+	                        res = true;
+	                    }
+	                }
+	            }
+	        }
         }
                 
     }
