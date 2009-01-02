@@ -31,3 +31,6 @@
 <script src="include/PopupWindow.js" language="JavaScript"></script>
 <script src="include/date.js" language="JavaScript"></script>
 <script src="include/CalendarPopup.js" language="JavaScript"></script>
+<script language="JavaScript">
+    top.document.title = document.title;
+</script>
