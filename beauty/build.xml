@@ -57,6 +57,7 @@
 				<include name="WEB-INF/src/com/increg/commun/exception/BadPlatformException.java"/>
 				<include name="WEB-INF/src/com/increg/commun/exception/FctlException.java"/>
 				<include name="WEB-INF/src/com/increg/commun/exception/NoImplementationException.java"/>
+				<include name="WEB-INF/src/com/increg/commun/exception/NoDatabaseException.java"/>
 				<include name="WEB-INF/src/com/increg/commun/exception/ReloadNeededException.java"/>
 				<include name="WEB-INF/src/com/increg/commun/exception/UnauthorisedUserException.java"/>
 
@@ -83,6 +84,7 @@
 				<include name="WEB-INF/src/com/increg/salon/bean/PointageBean.java"/>
 				<include name="WEB-INF/src/com/increg/salon/bean/PrestBean.java"/>
 				<include name="WEB-INF/src/com/increg/salon/bean/RechercheBean.java"/>
+				<include name="WEB-INF/src/com/increg/salon/bean/ReglementBean.java"/>
 				<include name="WEB-INF/src/com/increg/salon/bean/RDVBean.java"/>
 				<include name="WEB-INF/src/com/increg/salon/bean/SalonSession.java"/>
 				<include name="WEB-INF/src/com/increg/salon/bean/SalonSessionImpl.java"/>

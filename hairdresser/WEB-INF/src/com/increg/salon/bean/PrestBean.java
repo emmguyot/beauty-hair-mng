@@ -1,6 +1,6 @@
 /*
  * Prestation à la vente au sens large (Services + Catalogue de produits en vente)
- * Copyright (C) 2001-2008 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
