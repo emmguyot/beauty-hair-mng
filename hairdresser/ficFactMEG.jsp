@@ -22,6 +22,7 @@
 <%@ page import="com.increg.salon.bean.SalonSession,
 	       com.increg.salon.bean.FactBean,
 	       com.increg.salon.bean.PaiementBean,
+	       com.increg.salon.bean.ReglementBean,
 	       com.increg.salon.bean.ClientBean,
 	       com.increg.salon.bean.DonneeRefBean,
 	       com.increg.salon.bean.DeviseBean" %>
@@ -50,6 +51,7 @@
    String NbPrest = (String) request.getAttribute("NbPrest");
    FactBean aFact = (FactBean) request.getAttribute("FactBean");
    PaiementBean aPaiement = (PaiementBean) request.getAttribute("PaiementBean");
+   Vector<ReglementBean> reglements = (Vector<ReglementBean>) request.getAttribute("Reglements");
    String totPrest = (String) request.getAttribute("totPrest");
    List collabs = (List) request.getAttribute("collabs");
 %>
@@ -123,14 +125,12 @@ function Init() {
 	       <input type="hidden" name="CD_PAIEMENT" value="%%" >
 	    </salon:valeur>
 	    <% long nbFact = aPaiement.getFact(mySalon.getMyDBSession()).size();
-	        %>
-                <salon:valeur valeur='<%= aPaiement.getCD_MOD_REGL() %>' valeurNulle="null">
-                    <input type="hidden" name="CD_MOD_REGL" value="%%">
-                </salon:valeur>
-                <salon:valeur valeur='<%= DonneeRefBean.getDonneeRefBean(mySalon.getMyDBSession(), "MOD_REGL", Integer.toString(aPaiement.getCD_MOD_REGL())).toString() %>' valeurNulle="null">
-                    <span class="readonly">%%</span>
-                </salon:valeur>
-            <% if (nbFact > 1) { %>
+	    	for (ReglementBean aReglement : reglements) { %>
+		    	<input type="hidden" name="REGLEMENT<%= aReglement.getCD_MOD_REGL() %>" value="<%= aReglement.getMONTANT() %>">
+		    	<span class="readonly"><%= DonneeRefBean.getDonneeRefBean(mySalon.getMyDBSession(), "MOD_REGL", Integer.toString(aReglement.getCD_MOD_REGL())).toString() %> (<%= aReglement.getMONTANT() %>)</span><br/>
+	    <%
+	    	}
+             if (nbFact > 1) { %>
                     <a href="_FichePaiement.jsp?Action=Modification&CD_PAIEMENT=<%= aPaiement.getCD_PAIEMENT() %>" target="ClientFrame">Paiements regroupés</a> 
             <% } %>
         </td>
