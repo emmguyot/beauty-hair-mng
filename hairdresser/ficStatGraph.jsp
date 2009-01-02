@@ -371,7 +371,7 @@ function Init() {
                     <salon:selection valeur='<%= (String) request.getAttribute("Couleur$" + i) %>' 
                             valeurs='<%= "0x950793|0xf600a2|0xee6ff9|0xbe8e8e|0xbb2603|0xf97f6f|0xffa200|0xfdd343|0xfaf982|0xbe9e08|0x25656c|0x079095|0x03c3c1|0xacd0c7|0x9db4bf|0x71b1f9|0x0792fd|0x4f70a1|0x796694|0x997cec|0x6e04f2" %>'
                             libelle="&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;|&nbsp;">
-                    <td><select name="Couleur$<%= i %>" class="important">
+                    <td><select name="Couleur$<%= i %>" class="important" onchange="changeCouleurUnitaire(this)">
                         %%
                     </select></td>
                     </salon:selection>
@@ -398,6 +398,16 @@ function changeCouleur(i) {
         cdCouleur = "#" + document.fiche.elements["Couleur$" + i].options[j].value.substring(2)
         document.fiche.elements["Couleur$" + i].options[j].style.color = cdCouleur;
         document.fiche.elements["Couleur$" + i].options[j].style.background = cdCouleur;
+    }
+    changeCouleurUnitaire(document.fiche.elements["Couleur$" + i]);
+}
+
+function changeCouleurUnitaire(combo) {
+    for (j=0; j < combo.length; j++) {
+        if (combo.options[j].selected) {
+            combo.style.color = "#" + combo.options[j].value.substring(2);
+            combo.style.background = "#" + combo.options[j].value.substring(2);
+        }
     }
 }
 
