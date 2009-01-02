@@ -163,6 +163,7 @@ function Init() {
 	 <th><span class="obligatoire"><i18n:message key="label.collaborateur" /></span></th>
 	 <th><span class="obligatoire"><i18n:message key="ficFact.tabQte" /></span></th>
 	 <th><span class="obligatoire"><i18n:message key="ficFact.tabPrxUnit" /></span></th>
+	 <th><span class="obligatoire"><i18n:message key="ficFact.tabPrxTotal" /></span></th>
 	 <th><span class="facultatif"><i18n:message key="ficFact.tabComment" /></span></th>
 	 <th><span class="facultatif"><i18n:message key="ficFact.satisfication" /></span></th>
 	 <th>&nbsp;</th>
@@ -252,11 +253,16 @@ function Init() {
 		  </salon:valeur>
 		  <% } %>
 		</td>
+	    <td class="tabDonnees">
+		  <salon:valeur valeurNulle="null" valeur="<%= aPrest.getPRX_UNIT_TTC().multiply(aPrest.getQTE()).setScale(2) %>" > 
+		     %%
+		  </salon:valeur>
+		</td>
 		<td class="tabDonnees">
 		  <salon:valeur valeurNulle="null" valeur="<%= aPrest.getCOMM() %>" > 
 		     <input type="hidden" name="COMM<%= i %>" value="%%">
 		  </salon:valeur>
-		  <a href="javascript:SaisieCommentaire(<%= i %>)"><img src=<%= (((Integer) request.getAttribute("Longueur")).intValue() > 0) ? "images/plein.gif" : "images/vide.gif"%> border="0" width="11" height="13" alt="<i18n:message key="label.commentaire" />"></a>
+		  <a href="javascript:SaisieCommentaire(<%= i %>)" title='<i18n:message key="label.commentaire" />'><img src=<%= (((Integer) request.getAttribute("Longueur")).intValue() > 0) ? "images/plein.gif" : "images/vide.gif"%> border="0" width="11" height="13" alt="<i18n:message key="label.commentaire" />"></a>
 		</td>
 		<td class="tabDonnees">
 		  <salon:selection valeur="<%= aPrest.getNIV_SATISF() %>" valeurs='<%= "|1|2|3|4|5" %>'>
@@ -267,7 +273,7 @@ function Init() {
 		</td>
 		<td class="tabDonnees">
 		  <% if (aFact.getCD_PAIEMENT() == 0) { %>
-		  <a href="javascript:SupprimerLigne(<%= i %>)"><img src=images/moins.gif width="15" height="15" border="0" alt="<i18n:message key="label.supprimerLigne" />"></a>
+		  <a href="javascript:SupprimerLigne(<%= i %>)" title='<i18n:message key="label.supprimerLigne" />'><img src=images/moins.gif width="15" height="15" border="0" alt="<i18n:message key="label.supprimerLigne" />"></a>
 		  <% } %>
 		</td>
 		</tr>
@@ -352,11 +358,12 @@ function Init() {
 		     <input class="nombre" type="text" name="PRX_UNIT_TTC<%= i %>" size="6" value="%%">
 		  </salon:valeur>
 		</td>
+		<td class="tabDonnees">&nbsp;</td>
 		<td class="tabDonnees">
 		  <salon:valeur valeurNulle="null" valeur="<%= COMM_SELECT %>" > 
 		     <input type="hidden" name="COMM<%= i %>" value="%%">
 		  </salon:valeur>
-		  <a href="javascript:SaisieCommentaire(<%= i %>)"><img src=<%= (((Integer) request.getAttribute("Longueur")).intValue() > 0) ? "images/plein.gif" : "images/vide.gif"%> border="0" width="11" height="13" alt="<i18n:message key="label.commentaire" />"></a>
+		  <a href="javascript:SaisieCommentaire(<%= i %>)" title='<i18n:message key="label.commentaire" />'><img src=<%= (((Integer) request.getAttribute("Longueur")).intValue() > 0) ? "images/plein.gif" : "images/vide.gif"%> border="0" width="11" height="13" alt="<i18n:message key="label.commentaire" />"></a>
 		</td>
 		<td class="tabDonnees">
 		  <salon:selection valeur="<%= 0 %>" valeurs='<%= "|1|2|3|4|5" %>'>
@@ -366,7 +373,7 @@ function Init() {
 		  </salon:selection>
 		</td>
 	       <td class="tabDonnees">
-		  <a href="javascript:AjouterLigne(<%= i %>)"><img src=images/plus.gif width="15" height="15" border="0" alt="<i18n:message key="label.ajouterLigne" />"></a>
+		  <a href="javascript:AjouterLigne(<%= i %>)" title='<i18n:message key="label.ajouterLigne" />'><img src=images/plus.gif width="15" height="15" border="0" alt="<i18n:message key="label.ajouterLigne" />"></a>
 	       </td>
 	       </tr>
 	       <% } %>

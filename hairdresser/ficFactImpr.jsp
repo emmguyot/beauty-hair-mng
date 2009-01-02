@@ -155,12 +155,21 @@
 			   %%
 		     </salon:valeur>
 		     </font>
+		     <% if (aPrest.getQTE().compareTo(new BigDecimal("1")) != 0) { %>
+		     <font size=-2>
+		     <salon:valeur valeurNulle="null" valeur="<%= aPrest.getPRX_UNIT_TTC().setScale(2) %>" > 
+			(%%
+		     </salon:valeur>
+		     <%= mySalon.getDevise().toString() %>)
+		     </font>
+		     <% } %>
 		  </td>
 		  <td class="Nombre" width="20%">
 		     <font size=-1>
 		     <salon:valeur valeurNulle="null" valeur="<%= aPrest.getPRX_UNIT_TTC().multiply(aPrest.getQTE()).setScale(2) %>" > 
 			%%
 		     </salon:valeur>
+			<%= mySalon.getDevise().toString() %>
 		     </font>
 		  </td>
 		  </tr>
