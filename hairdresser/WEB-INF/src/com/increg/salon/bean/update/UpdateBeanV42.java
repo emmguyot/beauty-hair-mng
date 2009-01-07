@@ -120,8 +120,19 @@ public class UpdateBeanV42 extends UpdateBeanV41 {
             for (int i = 0; i < tableFK.length; i++) {
                 String[] aSql = new String[1];
 
+                // Suppression des FK classiques
+                ResultSet rs = dbConnect.doRequest("select conname, table1.relname, table2.relname from pg_constraint, pg_class table1, pg_class table2 " +
+                		"where pg_constraint.conrelid=table1.oid and pg_constraint.confrelid=table2.oid " +
+                		"and (table1.relname='" + tableFK[i] + "' or table2.relname='" + tableFK[i] + "') " +
+                		"and contype='f'");
+        		while (rs.next()) {
+        			aSql[0] = "alter table " + rs.getString(2) + " drop constraint " + rs.getString(1);
+        			dbConnect.doExecuteSQL(aSql);
+        		}
+                rs.close();
+
                 // Suppression des FK via des triggers (issue des vieilles versions de PostgreSQL)
-                ResultSet rs = dbConnect.doRequest("select tgname, relname from pg_trigger, pg_class where pg_trigger.tgrelid=pg_class.oid and relname='" + tableFK[i] + "'");
+                rs = dbConnect.doRequest("select tgname, relname from pg_trigger, pg_class where pg_trigger.tgrelid=pg_class.oid and relname='" + tableFK[i] + "'");
         		while (rs.next()) {
         			aSql[0] = "drop trigger \"" + rs.getString(1) + "\" on " + rs.getString(2);
         			dbConnect.doExecuteSQL(aSql);
@@ -135,16 +146,6 @@ public class UpdateBeanV42 extends UpdateBeanV41 {
         		}
                 rs.close();
                 
-                // Suppression des FK classiques
-                rs = dbConnect.doRequest("select conname, table1.relname, table2.relname from pg_constraint, pg_class table1, pg_class table2 " +
-                		"where pg_constraint.conrelid=table1.oid and pg_constraint.confrelid=table2.oid " +
-                		"and (table1.relname='" + tableFK[i] + "' or table2.relname='" + tableFK[i] + "') " +
-                		"and contype='f'");
-        		while (rs.next()) {
-        			aSql[0] = "alter table " + rs.getString(2) + " drop constraint " + rs.getString(1);
-        			dbConnect.doExecuteSQL(aSql);
-        		}
-                rs.close();
             }
             for (int i = 0; i < reqStat.length; i++) {
                 String[] aSql = new String[1];
