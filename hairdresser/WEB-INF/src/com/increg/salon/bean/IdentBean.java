@@ -18,6 +18,7 @@
 package com.increg.salon.bean;
 
 import com.increg.commun.*;
+import com.increg.commun.exception.FctlException;
 import com.increg.util.*;
 import java.sql.*;
 import java.util.*;
@@ -311,16 +312,20 @@ public class IdentBean extends TimeStampBean {
 	}
     
 	/**
+	 * @throws FctlException 
 	 * @see com.increg.salon.bean.TimeStampBean
 	 */
-	public void delete(DBSession dbConnect) throws java.sql.SQLException {
+	public void delete(DBSession dbConnect) throws java.sql.SQLException, FctlException {
 	    StringBuffer req = new StringBuffer("delete from IDENT ");
 	    StringBuffer where = new StringBuffer(" where CD_IDENT=" + CD_IDENT);
 	    
 	    // Constitue la requete finale
 	    req.append(where);
 	
-	    // Execute la création
+        // Debut de la transaction
+        dbConnect.setDansTransactions(true);
+
+        // Execute la création
 	    String[] reqs = new String[1];
 	    reqs[0] = req.toString();
 	    int[] nb = new int[1];
@@ -329,6 +334,11 @@ public class IdentBean extends TimeStampBean {
 	    if (nb[0] != 1) {
 	        throw (new SQLException(BasicSession.TAG_I18N + "message.suppressionKo" + BasicSession.TAG_I18N));
 	    }   
+
+	    verificationSuper(dbConnect);
+	    
+	    // Fin de la transaction
+        dbConnect.endTransaction();
     }
 	/**
 	 * Insert the method's description here.
@@ -371,9 +381,10 @@ public class IdentBean extends TimeStampBean {
 		return MOT_PASSE;
 	}
 	/**
+	 * @throws FctlException 
 	 * @see com.increg.salon.bean.TimeStampBean
 	 */
-	public void maj(DBSession dbConnect) throws java.sql.SQLException {
+	public void maj(DBSession dbConnect) throws java.sql.SQLException, FctlException {
 	    com.increg.util.SimpleDateFormatEG formatDate  = new SimpleDateFormatEG("dd/MM/yyyy HH:mm:ss");
 	
 	    StringBuffer req = new StringBuffer("update IDENT set ");
@@ -424,6 +435,9 @@ public class IdentBean extends TimeStampBean {
 	    req.append(colonne);
 	    req.append(where);
 	
+        // Debut de la transaction
+        dbConnect.setDansTransactions(true);
+	    
 	    // Execute la création
 	    String[] reqs = new String[1];
 	    reqs[0] = req.toString();
@@ -433,7 +447,27 @@ public class IdentBean extends TimeStampBean {
 	    if (nb[0] != 1) {
 	        throw (new SQLException(BasicSession.TAG_I18N + "message.enregistrementKo" + BasicSession.TAG_I18N));
 	    }
-    }
+
+	    verificationSuper(dbConnect);
+
+	    // Fin de la transaction
+        dbConnect.endTransaction();
+	}
+
+	protected void verificationSuper(DBSession dbConnect) throws FctlException, SQLException {
+		// TODO Auto-generated method stub
+		ResultSet aRS = dbConnect.doRequest("select count(*) from IDENT where CD_PROFIL=" + IdentBean.PROFIL_SUPER);
+		int count = 0;
+        while (aRS.next()) {
+            count = aRS.getInt(1);
+        }
+        aRS.close();
+        
+        if (count == 0) {
+        	throw new FctlException(BasicSession.TAG_I18N + "identBean.superNecessaire" + BasicSession.TAG_I18N);
+        }
+		
+	}
 	/**
 	 * Sets the cD_IDENT.
 	 * @param cD_IDENT The cD_IDENT to set
