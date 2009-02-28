@@ -62,7 +62,7 @@
       <td height="27"></td>
       <td colspan="2" valign="top"><%= mySalon.getMySociete().getRAIS_SOC() %></td>
       <td></td>
-      <td colspan="2" rowspan="2" valign="top"><%= montant %></td>
+      <td colspan="2" rowspan="2" valign="top"><%= new Montant(montant).setScale(2) %></td>
    </tr>
    <tr> 
       <td height="12"></td>

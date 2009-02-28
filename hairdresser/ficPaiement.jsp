@@ -287,7 +287,7 @@ function clickPaiement(ctrl) {
 	  			total -= new Number(document.fiche.elements[i].value);
 	  		} 
 		}
-		document.fiche.elements["REGLEMENT"+cd_mod_regl].value = Math.round(total*100.0)/100;
+		document.fiche.elements["REGLEMENT"+cd_mod_regl].value = total.toFixed(2);
     }
     else {
     	MM_showHideLayers('modregl' + cd_mod_regl, '', 'hide');
