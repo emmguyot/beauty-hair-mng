@@ -82,7 +82,7 @@ function Init() {
 	 </p>
 	 <p>
 	       <span class="obligatoire"><i18n:message key="label.modeRegl" /> :</span> 
-	       <salon:DBselection valeur="<%= aMvt.getCD_MOD_REGL() %>" sql='<%= "select CD_MOD_REGL, LIB_MOD_REGL from MOD_REGL where CD_MOD_REGL not in (" + Integer.toString(ModReglBean.MOD_REGL_ESP_FRF) + "," + Integer.toString(ModReglBean.MOD_REGL_CHQ_FRF) + ") order by LIB_MOD_REGL"%>'>
+	       <salon:DBselection valeur="<%= aMvt.getCD_MOD_REGL() %>" sql='<%= "select CD_MOD_REGL, LIB_MOD_REGL from MOD_REGL where CD_MOD_REGL not in (" + Integer.toString(ModReglBean.MOD_REGL_ESP_FRF) + "," + Integer.toString(ModReglBean.MOD_REGL_CHQ_FRF) + ") order by LIB_MOD_REGL"%>' msgManquant="true">
 		     <select name="CD_MOD_REGL" onchange="ChangeMvt()">
 			%%
 		     </select>
@@ -93,7 +93,7 @@ function Init() {
 	 </p>
 	 <p>
 	       <span class="obligatoire"><i18n:message key="label.typeMouvement" /> :</span> 
-	       <salon:DBselection valeur="<%= aMvt.getCD_TYP_MCA() %>" sql="select CD_TYP_MCA, LIB_TYP_MCA || ' (' || SENS_MCA::varchar || ')' from TYP_MCA order by LIB_TYP_MCA">
+	       <salon:DBselection valeur="<%= aMvt.getCD_TYP_MCA() %>" sql="select CD_TYP_MCA, LIB_TYP_MCA || ' (' || SENS_MCA::varchar || ')' from TYP_MCA order by LIB_TYP_MCA" msgManquant="true">
 		     <select name="CD_TYP_MCA" onchange="ChangeMvt()">
 			%%
 		     </select>

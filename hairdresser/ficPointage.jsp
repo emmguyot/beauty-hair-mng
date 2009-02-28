@@ -113,7 +113,7 @@ function Init() {
         <salon:date type="text" name="HR_FIN" valeurDate="<%= aPointage.getDT_FIN() %>" valeurNulle="null" format="<%= formatHeure %>">%%</salon:date>
 	 </p>
 	 <p><span class="obligatoire"><i18n:message key="label.typePointage" /> :</span> 
-		<salon:DBselection valeur="<%= aPointage.getCD_TYP_POINTAGE() %>" sql="select CD_TYP_POINTAGE, LIB_TYP_POINTAGE from TYP_POINTAGE order by LIB_TYP_POINTAGE">
+		<salon:DBselection valeur="<%= aPointage.getCD_TYP_POINTAGE() %>" sql="select CD_TYP_POINTAGE, LIB_TYP_POINTAGE from TYP_POINTAGE order by LIB_TYP_POINTAGE" msgManquant="true">
 		  <select name="CD_TYP_POINTAGE">
 		     %%
 		  </select>

@@ -27,6 +27,7 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.BodyContent;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
+import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.SalonSession;
 
@@ -53,7 +54,10 @@ public class TagDBSelection extends BodyTagSupport {
      * Tableau des valeurs sélectionnées
      */
     protected java.lang.String[] tabValeur;
-    
+    /**
+     * Indicateur de message "données manquantes"
+     */
+    protected Boolean msgManquant = false;
     
     /**
      * Insert the method's description here.
@@ -62,6 +66,8 @@ public class TagDBSelection extends BodyTagSupport {
      */
     public int doAfterBody() {
 
+    	SalonSession mySalon = null;
+    	
         if (myDBSession == null) {
             // Récupére la connexion base de données
             javax.servlet.http.HttpSession mySession = pageContext.getSession();
@@ -70,7 +76,8 @@ public class TagDBSelection extends BodyTagSupport {
                 return SKIP_BODY;
             }
 
-            myDBSession = ((SalonSession) mySession.getAttribute("SalonSession")).getMyDBSession();
+            mySalon = (SalonSession) mySession.getAttribute("SalonSession");
+            myDBSession = mySalon.getMyDBSession();
         }
 
         BodyContent body = getBodyContent();
@@ -102,6 +109,10 @@ public class TagDBSelection extends BodyTagSupport {
                     }
 
                     aRS.close();
+                    
+                    if (premier && msgManquant) {
+                    	out.print("<script language=\"JavaScript\">alert(\"" + mySalon.internationaliseMessage(BasicSession.TAG_I18N + "message.donneesManquantes" + BasicSession.TAG_I18N) + "\");</script>");
+                    }
                 } catch (java.sql.SQLException sqlErr) {
                     System.out.println("Erreur SQL sur requète >" + sql + "< : " + sqlErr.toString());
                 }
@@ -272,5 +283,19 @@ public class TagDBSelection extends BodyTagSupport {
         tabValeur = null;
         return super.doEndTag();
     }
+
+	/**
+	 * @return the msgManquant
+	 */
+	public Boolean getMsgManquant() {
+		return msgManquant;
+	}
+
+	/**
+	 * @param msgManquant the msgManquant to set
+	 */
+	public void setMsgManquant(Boolean msgManquant) {
+		this.msgManquant = msgManquant;
+	}
 
 }

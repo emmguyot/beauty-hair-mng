@@ -76,7 +76,7 @@ function Init() {
     <input name="CD_CMD_FOURN" type="text" maxlength="10" size="10" value="%%">
 </salon:valeur>
 <i18n:message key="label.fournisseur" /> :
-<salon:DBselection valeur="<%= CD_FOURN %>" sql="select CD_FOURN, RAIS_SOC from FOURN order by RAIS_SOC">
+<salon:DBselection valeur="<%= CD_FOURN %>" sql="select CD_FOURN, RAIS_SOC from FOURN order by RAIS_SOC" msgManquant="true">
    <select name="CD_FOURN" onChange="Recharge(0)">
       %%
    </select>
@@ -91,7 +91,7 @@ CD_FOURN = ((CD_FOURN == null) || (CD_FOURN.length() == 0) || (CD_FOURN.equals("
 <input name="paramSup1" type="hidden" value="">
 <input name="paramSup2" type="hidden" value="">
 <i18n:message key="label.typeMouvement" /> :
-<salon:DBselection valeur="<%= CD_TYP_MVT %>" sql='<%= "select CD_TYP_MVT, LIB_TYP_MVT from TYP_MVT where SENS_MVT=\'" + TypMvtBean.SENS_ENTREE + "\' order by LIB_TYP_MVT" %>'>
+<salon:DBselection valeur="<%= CD_TYP_MVT %>" sql='<%= "select CD_TYP_MVT, LIB_TYP_MVT from TYP_MVT where SENS_MVT=\'" + TypMvtBean.SENS_ENTREE + "\' order by LIB_TYP_MVT" %>' msgManquant="true">
    <select name="CD_TYP_MVT">
       %%
    </select>

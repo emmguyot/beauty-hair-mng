@@ -77,7 +77,7 @@ function Init() {
 	        </salon:valeur>
 		<input type="hidden" name="Action" value="<%=Action%>">
 		<span class="obligatoire"><i18n:message key="label.typePrest" /> :</span> 
-		<salon:DBselection valeur="<%= aPrest.getCD_TYP_VENT() %>" sql="select CD_TYP_VENT, LIB_TYP_VENT from TYP_VENT order by LIB_TYP_VENT">
+		<salon:DBselection valeur="<%= aPrest.getCD_TYP_VENT() %>" sql="select CD_TYP_VENT, LIB_TYP_VENT from TYP_VENT order by LIB_TYP_VENT" msgManquant="true">
 		  <select name="CD_TYP_VENT" onChange="Recharge()">
 		     %%
 		  </select>
@@ -91,7 +91,7 @@ function Init() {
 	        %>
 		<span id="CATEGORIE" style="position:absolute; visibility:visible">
 		<span class="obligatoire"><i18n:message key="label.categorie" /> :</span> 
-		<salon:DBselection valeur="<%= aPrest.getCD_CATEG_PREST() %>" sql="select CD_CATEG_PREST, LIB_CATEG_PREST from CATEG_PREST order by LIB_CATEG_PREST">
+		<salon:DBselection valeur="<%= aPrest.getCD_CATEG_PREST() %>" sql="select CD_CATEG_PREST, LIB_CATEG_PREST from CATEG_PREST order by LIB_CATEG_PREST" msgManquant="true">
 		  <select name="CD_CATEG_PREST">
 		     <option value=""></option>
 		     %%

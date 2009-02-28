@@ -80,7 +80,7 @@ function Init() {
 </p>
 <hr>
 <i18n:message key="label.typeMouvement" /> :
-<salon:DBselection valeur="<%= CD_TYP_MVT %>" sql='<%= "select CD_TYP_MVT, LIB_TYP_MVT from TYP_MVT where SENS_MVT=\'" + TypMvtBean.SENS_INVENTAIRE + "\' order by LIB_TYP_MVT" %>'>
+<salon:DBselection valeur="<%= CD_TYP_MVT %>" sql='<%= "select CD_TYP_MVT, LIB_TYP_MVT from TYP_MVT where SENS_MVT=\'" + TypMvtBean.SENS_INVENTAIRE + "\' order by LIB_TYP_MVT" %>' msgManquant="true">
    <select name="CD_TYP_MVT">
       %%
    </select>
