@@ -454,9 +454,9 @@ public class IdentBean extends TimeStampBean {
         dbConnect.endTransaction();
 	}
 
-	protected void verificationSuper(DBSession dbConnect) throws FctlException, SQLException {
-		// TODO Auto-generated method stub
-		ResultSet aRS = dbConnect.doRequest("select count(*) from IDENT where CD_PROFIL=" + IdentBean.PROFIL_SUPER);
+	public static void verificationSuper(DBSession dbConnect) throws FctlException, SQLException {
+		ResultSet aRS = dbConnect.doRequest("select count(*) from IDENT where CD_PROFIL=" + IdentBean.PROFIL_SUPER 
+				+ " and ETAT_CPT=" + DBSession.quoteWith(IdentBean.ETAT_ACTIF, '\''));
 		int count = 0;
         while (aRS.next()) {
             count = aRS.getInt(1);
