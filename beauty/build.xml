@@ -534,6 +534,7 @@
 				<pathelement location="${java.home}/lib/rt.jar" />
 				<pathelement location="${tmpProdWar}/WEB-INF/classes" />
 				<pathelement location="${tmpProdWar}/WEB-INF/lib/taglibs-i18n.jar" />
+				<pathelement location="${tmpProdWar}/WEB-INF/lib/commons-lang-2.1.jar" />
 				<pathelement location="${java.class.path}" />
 			</classpath>
 		    <include name="**/*.java"/>
@@ -560,6 +561,7 @@
 		<!-- Création du War -->
 		<jar destfile="${dist}/${ant.project.name}.war" basedir="${tmpProdWar}">
 		</jar>
+		<copy file="${dist}/${ant.project.name}.war" todir="${tomcat}/../war/" overwrite="yes"/>
 	</target>
 	
 	<target description="Création du fichier des sources" name="zipSrc" depends="init">
