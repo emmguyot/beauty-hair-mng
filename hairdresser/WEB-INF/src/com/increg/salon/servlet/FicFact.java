@@ -429,11 +429,11 @@ public class FicFact extends ConnectedServlet {
                         lignes.add(aPrest);
                     }
 
+                    aFact.setLignes(lignes);
+
                     // Calcul du pied de facture + **Maj** de la facture +
                     // **Maj** du paiement si besoin
                     aFact.calculTotaux(myDBSession);
-
-                    aFact.setLignes(lignes);
 
                 	if ((aPaiement.getCD_PAIEMENT() != 0) && !aPaiement.verifReglement(myDBSession)) {
                 		throw new FctlException(BasicSession.TAG_I18N + "ficFact.facturePartiellementPayee" + BasicSession.TAG_I18N);
