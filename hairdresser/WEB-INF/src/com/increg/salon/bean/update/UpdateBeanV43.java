@@ -54,9 +54,61 @@ public class UpdateBeanV43 extends UpdateBeanV42 {
         		};
         	// Requète Avant / Après
             String[][] reqStat = {
+                {
+                    "select date_trunc('$PeriodeTemps$', DT_PAIEMENT), SUM(FACT.PRX_TOT_TTC) from FACT, PAIEMENT where FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT and DT_PAIEMENT between '$DateDebut$' and '$DateFin$' group by date_trunc('$PeriodeTemps$', DT_PAIEMENT)",
+                    "select extract($PeriodeTemps$ from DT_PAIEMENT), SUM(FACT.PRX_TOT_TTC) from FACT, PAIEMENT where FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT and DT_PAIEMENT between '$DateDebut$' and '$DateFin$' group by extract($PeriodeTemps$ from DT_PAIEMENT)"
+                },
+                {
+                	"select date_trunc('$PeriodeTemps$', DT_PAIEMENT), SUM(HISTO_PREST.PRX_UNIT_TTC*HISTO_PREST.QTE) from FACT, PAIEMENT, HISTO_PREST, PREST where FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT and HISTO_PREST.CD_FACT = FACT.CD_FACT and HISTO_PREST.CD_PREST = PREST.CD_PREST and PREST.CD_CATEG_PREST = $CD_CATEG_PREST$ and DT_PAIEMENT between '$DateDebut$' and '$DateFin$' group by date_trunc('$PeriodeTemps$', DT_PAIEMENT)",
+                	"select extract($PeriodeTemps$ from DT_PAIEMENT), SUM(HISTO_PREST.PRX_UNIT_TTC*HISTO_PREST.QTE) from FACT, PAIEMENT, HISTO_PREST, PREST where FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT and HISTO_PREST.CD_FACT = FACT.CD_FACT and HISTO_PREST.CD_PREST = PREST.CD_PREST and PREST.CD_CATEG_PREST = $CD_CATEG_PREST$ and DT_PAIEMENT between '$DateDebut$' and '$DateFin$' group by extract($PeriodeTemps$ from DT_PAIEMENT)"
+                },
+                {
+                	"select date_trunc('$PeriodeTemps$', DT_PAIEMENT), SUM(round(HISTO_PREST.PRX_UNIT_TTC*HISTO_PREST.QTE,2)) from FACT, PAIEMENT, HISTO_PREST, CLI where FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT and HISTO_PREST.CD_FACT = FACT.CD_FACT and HISTO_PREST.CD_CLI = CLI.CD_CLI and CLI.CD_CATEG_CLI = $CD_CATEG_CLI$ and DT_PAIEMENT between '$DateDebut$' and '$DateFin$' group by date_trunc('$PeriodeTemps$', DT_PAIEMENT)",
+                	"select extract($PeriodeTemps$ from DT_PAIEMENT), SUM(round(HISTO_PREST.PRX_UNIT_TTC*HISTO_PREST.QTE,2)) from FACT, PAIEMENT, HISTO_PREST, CLI where FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT and HISTO_PREST.CD_FACT = FACT.CD_FACT and HISTO_PREST.CD_CLI = CLI.CD_CLI and CLI.CD_CATEG_CLI = $CD_CATEG_CLI$ and DT_PAIEMENT between '$DateDebut$' and '$DateFin$' group by extract($PeriodeTemps$ from DT_PAIEMENT)"
+                },
+                {
+                	"select date_trunc('$PeriodeTemps$', DT_PAIEMENT), SUM(round(HISTO_PREST.PRX_UNIT_TTC*HISTO_PREST.QTE,2)) from FACT, PAIEMENT, HISTO_PREST where FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT and HISTO_PREST.CD_FACT = FACT.CD_FACT and HISTO_PREST.CD_COLLAB = $CD_COLLAB$ and DT_PAIEMENT between '$DateDebut$' and '$DateFin$' group by date_trunc('$PeriodeTemps$', DT_PAIEMENT)",
+                	"select extract($PeriodeTemps$ from DT_PAIEMENT), SUM(round(HISTO_PREST.PRX_UNIT_TTC*HISTO_PREST.QTE,2)) from FACT, PAIEMENT, HISTO_PREST where FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT and HISTO_PREST.CD_FACT = FACT.CD_FACT and HISTO_PREST.CD_COLLAB = $CD_COLLAB$ and DT_PAIEMENT between '$DateDebut$' and '$DateFin$' group by extract($PeriodeTemps$ from DT_PAIEMENT)"
+                },
+                {
+                	"select date_trunc('$PeriodeTemps$', DT_PAIEMENT), SUM(round(HISTO_PREST.PRX_UNIT_TTC*HISTO_PREST.QTE,2)) from FACT, PAIEMENT, HISTO_PREST, PREST where FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT and HISTO_PREST.CD_FACT = FACT.CD_FACT and HISTO_PREST.CD_PREST = PREST.CD_PREST and HISTO_PREST.CD_COLLAB = $CD_COLLAB$ and PREST.CD_CATEG_PREST = $CD_CATEG_PREST$ and FACT.DT_PREST between '$DateDebut$' and '$DateFin$' group by date_trunc('$PeriodeTemps$', DT_PAIEMENT)",
+                	"select extract($PeriodeTemps$ from DT_PAIEMENT), SUM(round(HISTO_PREST.PRX_UNIT_TTC*HISTO_PREST.QTE,2)) from FACT, PAIEMENT, HISTO_PREST, PREST where FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT and HISTO_PREST.CD_FACT = FACT.CD_FACT and HISTO_PREST.CD_PREST = PREST.CD_PREST and HISTO_PREST.CD_COLLAB = $CD_COLLAB$ and PREST.CD_CATEG_PREST = $CD_CATEG_PREST$ and FACT.DT_PREST between '$DateDebut$' and '$DateFin$' group by extract($PeriodeTemps$ from DT_PAIEMENT)"
+                },
+                {
+                	"select date_trunc('$PeriodeTemps$', DT_PAIEMENT), SUM(round(HISTO_PREST.PRX_UNIT_TTC*HISTO_PREST.QTE,2)) from FACT, PAIEMENT, HISTO_PREST, PREST where FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT and HISTO_PREST.CD_FACT = FACT.CD_FACT and HISTO_PREST.CD_PREST = PREST.CD_PREST and HISTO_PREST.CD_COLLAB = $CD_COLLAB$ and PREST.CD_TYP_VENT = $CD_TYP_VENT$ and DT_PAIEMENT between '$DateDebut$' and '$DateFin$' group by date_trunc('$PeriodeTemps$', DT_PAIEMENT)",
+                	"select extract($PeriodeTemps$ from DT_PAIEMENT), SUM(round(HISTO_PREST.PRX_UNIT_TTC*HISTO_PREST.QTE,2)) from FACT, PAIEMENT, HISTO_PREST, PREST where FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT and HISTO_PREST.CD_FACT = FACT.CD_FACT and HISTO_PREST.CD_PREST = PREST.CD_PREST and HISTO_PREST.CD_COLLAB = $CD_COLLAB$ and PREST.CD_TYP_VENT = $CD_TYP_VENT$ and DT_PAIEMENT between '$DateDebut$' and '$DateFin$' group by extract($PeriodeTemps$ from DT_PAIEMENT)"
+                },
+                {
+                	"select date_trunc('$PeriodeTemps$', DT_PAIEMENT), SUM(round(HISTO_PREST.PRX_UNIT_TTC*HISTO_PREST.QTE,2)) from FACT, PAIEMENT, HISTO_PREST, PREST where FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT and HISTO_PREST.CD_FACT = FACT.CD_FACT and HISTO_PREST.CD_PREST = PREST.CD_PREST and PREST.CD_TYP_VENT = $CD_TYP_VENT$ and DT_PAIEMENT between '$DateDebut$' and '$DateFin$' group by date_trunc('$PeriodeTemps$', DT_PAIEMENT)",
+                	"select extract($PeriodeTemps$ from DT_PAIEMENT), SUM(round(HISTO_PREST.PRX_UNIT_TTC*HISTO_PREST.QTE,2)) from FACT, PAIEMENT, HISTO_PREST, PREST where FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT and HISTO_PREST.CD_FACT = FACT.CD_FACT and HISTO_PREST.CD_PREST = PREST.CD_PREST and PREST.CD_TYP_VENT = $CD_TYP_VENT$ and DT_PAIEMENT between '$DateDebut$' and '$DateFin$' group by extract($PeriodeTemps$ from DT_PAIEMENT)"
+                },
+                {
+                	"select date_trunc('$PeriodeTemps$', FACT.DT_PREST), count(DISTINCT FACT.CD_CLI) from FACT, PAIEMENT where FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT and FACT.DT_PREST between '$DateDebut$' and '$DateFin$' group by date_trunc('$PeriodeTemps$', FACT.DT_PREST)",
+                	"select extract($PeriodeTemps$ from FACT.DT_PREST), count(DISTINCT FACT.CD_CLI) from FACT, PAIEMENT where FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT and FACT.DT_PREST between '$DateDebut$' and '$DateFin$' group by extract($PeriodeTemps$ from FACT.DT_PREST)"
+                },
+                {
+                	"select date_trunc('$PeriodeTemps$', FACT.DT_PREST), count(DISTINCT FACT.CD_CLI) from CLI, FACT, PAIEMENT where FACT.CD_CLI = CLI.CD_CLI and FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT and (('$Genre$' = 'M' and CIVILITE='M.') or ('$Genre$' = 'F' and CIVILITE in ('Mle', 'Mme'))) and FACT.DT_PREST between '$DateDebut$' and '$DateFin$' group by date_trunc('$PeriodeTemps$', FACT.DT_PREST)",
+                	"select extract($PeriodeTemps$ from FACT.DT_PREST), count(DISTINCT FACT.CD_CLI) from CLI, FACT, PAIEMENT where FACT.CD_CLI = CLI.CD_CLI and FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT and (('$Genre$' = 'M' and CIVILITE='M.') or ('$Genre$' = 'F' and CIVILITE in ('Mle', 'Mme'))) and FACT.DT_PREST between '$DateDebut$' and '$DateFin$' group by extract($PeriodeTemps$ from FACT.DT_PREST)"
+                },
+                {
+                	"select date_trunc('$PeriodeTemps$', DT_MVT), sum(MVT_STK.VAL_MVT_HT*MVT_STK.QTE) from MVT_STK, ART where MVT_STK.CD_ART = ART.CD_ART and MVT_STK.CD_TYP_MVT = $CD_TYP_MVT$ and ART.CD_CATEG_ART = $CD_CATEG_ART$ and MVT_STK.DT_MVT between '$DateDebut$' and '$DateFin$' group by date_trunc('$PeriodeTemps$', DT_MVT)",
+                	"select extract($PeriodeTemps$ from DT_MVT), sum(MVT_STK.VAL_MVT_HT*MVT_STK.QTE) from MVT_STK, ART where MVT_STK.CD_ART = ART.CD_ART and MVT_STK.CD_TYP_MVT = $CD_TYP_MVT$ and ART.CD_CATEG_ART = $CD_CATEG_ART$ and MVT_STK.DT_MVT between '$DateDebut$' and '$DateFin$' group by extract($PeriodeTemps$ from DT_MVT)"
+                },
+                {
+                	"select date_trunc('$PeriodeTemps$', CLI.DT_CREAT), count(DISTINCT CLI.CD_CLI) from CLI where CLI.CD_ORIG = $CD_ORIG$ and CLI.DT_CREAT between '$DateDebut$' and '$DateFin$' group by date_trunc('$PeriodeTemps$', CLI.DT_CREAT)",
+                	"select extract($PeriodeTemps$ from CLI.DT_CREAT), count(DISTINCT CLI.CD_CLI) from CLI where CLI.CD_ORIG = $CD_ORIG$ and CLI.DT_CREAT between '$DateDebut$' and '$DateFin$' group by extract($PeriodeTemps$ from CLI.DT_CREAT)"
+                },
+                {
+                	"select date_trunc('$PeriodeTemps$', FACT.DT_PREST), sum(HISTO_PREST.QTE) from FACT, PAIEMENT, HISTO_PREST, PREST where FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT and HISTO_PREST.CD_FACT = FACT.CD_FACT and HISTO_PREST.CD_PREST = PREST.CD_PREST and PREST.CD_CATEG_PREST = $CD_CATEG_PREST$ and FACT.DT_PREST between '$DateDebut$' and '$DateFin$' group by date_trunc('$PeriodeTemps$', FACT.DT_PREST)",
+                	"select extract($PeriodeTemps$ from FACT.DT_PREST), sum(HISTO_PREST.QTE) from FACT, PAIEMENT, HISTO_PREST, PREST where FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT and HISTO_PREST.CD_FACT = FACT.CD_FACT and HISTO_PREST.CD_PREST = PREST.CD_PREST and PREST.CD_CATEG_PREST = $CD_CATEG_PREST$ and FACT.DT_PREST between '$DateDebut$' and '$DateFin$' group by extract($PeriodeTemps$ from FACT.DT_PREST)"
+                },
+                {
+                	"select date_trunc('$PeriodeTemps$', DT_PAIEMENT), sum(HISTO_PREST.QTE) from FACT, PAIEMENT, HISTO_PREST, PREST, COLLAB where FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT and HISTO_PREST.CD_FACT = FACT.CD_FACT and HISTO_PREST.CD_PREST = PREST.CD_PREST and HISTO_PREST.CD_COLLAB = COLLAB.CD_COLLAB and COLLAB.CD_COLLAB = $CD_COLLAB$ and PREST.CD_CATEG_PREST = $CD_CATEG_PREST$ and FACT.DT_PREST between '$DateDebut$' and '$DateFin$' group by date_trunc('$PeriodeTemps$', DT_PAIEMENT)",
+                	"select extract($PeriodeTemps$ from DT_PAIEMENT), sum(HISTO_PREST.QTE) from FACT, PAIEMENT, HISTO_PREST, PREST, COLLAB where FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT and HISTO_PREST.CD_FACT = FACT.CD_FACT and HISTO_PREST.CD_PREST = PREST.CD_PREST and HISTO_PREST.CD_COLLAB = COLLAB.CD_COLLAB and COLLAB.CD_COLLAB = $CD_COLLAB$ and PREST.CD_CATEG_PREST = $CD_CATEG_PREST$ and FACT.DT_PREST between '$DateDebut$' and '$DateFin$' group by extract($PeriodeTemps$ from DT_PAIEMENT)"
+                }
                 };
             String[] sql = {
-            	};
+            	"update VERSION set VERSION='4.3'"};
             String[] sqlAvecRes = {
             	};
 
