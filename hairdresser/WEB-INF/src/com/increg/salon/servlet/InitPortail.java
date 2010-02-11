@@ -209,7 +209,7 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
                 }
                 else if (aIdent != null) {
                     // Tente une connexion automatique à partir du nom de l'utilisateur
-                    getServletConfig().getServletContext().getRequestDispatcher("/ident.srv?MOT_PASSE=" + URLEncoder.encode(aIdent.getMOT_PASSE(), "UTF-8")).forward(request, response);
+                    getServletConfig().getServletContext().getRequestDispatcher("/ident.srv?MOT_PASSE=" + URLEncoder.encode(aIdent.getMOT_PASSE(), "ISO-8859-1")).forward(request, response);
                 }
                 else {
                     // Affiche le portail

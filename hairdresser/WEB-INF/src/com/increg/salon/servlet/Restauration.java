@@ -334,7 +334,7 @@ public class Restauration extends ConnectedServlet {
                             if (!first) {
                                 dataOut.writeBytes("&");
                             }
-                            dataOut.writeBytes("NOM=" + URLEncoder.encode(paramName, "UTF-8"));
+                            dataOut.writeBytes("NOM=" + URLEncoder.encode(paramName, "ISO-8859-1"));
                             first = false;
                         }
 

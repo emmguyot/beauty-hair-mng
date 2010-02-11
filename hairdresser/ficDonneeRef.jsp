@@ -126,7 +126,7 @@ function Aide()
 
 function RetourListe()
 {
-   parent.location.href = "ListeDonneeRef.jsp?nomTable=<%= nomTable %>&chaineTable=<%= URLEncoder.encode(chaineTable) %>";
+   parent.location.href = "ListeDonneeRef.jsp?nomTable=<%= nomTable %>&chaineTable=<%= URLEncoder.encode(chaineTable, "ISO-8859-1") %>";
 }
 
 </script>

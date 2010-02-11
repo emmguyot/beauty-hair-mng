@@ -56,7 +56,7 @@
 	    DonneeRefBean aDonneeRef = (DonneeRefBean) lstLignes.get(i);
 	%>
 	<tr>
-		<td><a href="_FicheDonneeRef.jsp?nomTable=<%= nomTable %>&chaineTable=<%= URLEncoder.encode(chaineTable) %>&Action=Modification&CD=<%= aDonneeRef.getCD() %>" target="ClientFrame"><%= aDonneeRef.toString() %></a></td>
+		<td><a href="_FicheDonneeRef.jsp?nomTable=<%= nomTable %>&chaineTable=<%= URLEncoder.encode(chaineTable, "ISO-8859-1") %>&Action=Modification&CD=<%= aDonneeRef.getCD() %>" target="ClientFrame"><%= aDonneeRef.toString() %></a></td>
 	</tr>
 	<%
 	}
@@ -65,7 +65,7 @@
 <script language="JavaScript">
 function Nouveau()
 {
-   parent.location.href = "_FicheDonneeRef.jsp?nomTable=<%= nomTable %>&chaineTable=<%= URLEncoder.encode(chaineTable) %>";
+   parent.location.href = "_FicheDonneeRef.jsp?nomTable=<%= nomTable %>&chaineTable=<%= URLEncoder.encode(chaineTable, "ISO-8859-1") %>";
 }
 
 // Affichage de l'aide

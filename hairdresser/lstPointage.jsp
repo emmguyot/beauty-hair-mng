@@ -113,7 +113,7 @@
 	    PointageBean aPointage = (PointageBean) lstLignes.get(i);
 	%>
 	<tr>
-		<td><a href="_FichePointage.jsp?Action=Modification&CD_COLLAB=<%= aPointage.getCD_COLLAB() %>&DT_DEBUT=<%= URLEncoder.encode(SalonSession.dateToString(aPointage.getDT_DEBUT())) %>" target="ClientFrame"><%= CollabBean.getCollabBean(mySalon.getMyDBSession(), Integer.toString(aPointage.getCD_COLLAB())).toString() %></a></td>
+		<td><a href="_FichePointage.jsp?Action=Modification&CD_COLLAB=<%= aPointage.getCD_COLLAB() %>&DT_DEBUT=<%= URLEncoder.encode(SalonSession.dateToString(aPointage.getDT_DEBUT()), "ISO-8859-1") %>" target="ClientFrame"><%= CollabBean.getCollabBean(mySalon.getMyDBSession(), Integer.toString(aPointage.getCD_COLLAB())).toString() %></a></td>
 	<td>
 	    <salon:valeur valeur="<%= aPointage.getDT_DEBUT() %>" valeurNulle="null"> %% </salon:valeur>
 	</td>

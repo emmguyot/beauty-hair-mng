@@ -163,7 +163,7 @@ public class TagValeur extends BodyTagSupport {
                         aAfficher = valeur;
                     }
                     else if (url) {
-                    	aAfficher = URLEncoder.encode(valeur);
+                    	aAfficher = URLEncoder.encode(valeur, "ISO-8859-1");
                     }
                     else {
                         aAfficher = ServletUtil.htmlEncode(valeur);
