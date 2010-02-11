@@ -39,6 +39,7 @@ import com.increg.salon.bean.ParamBean;
 import com.increg.salon.bean.SalonSession;
 import com.increg.salon.bean.SalonSessionImpl;
 import com.increg.util.GZipper;
+import com.increg.util.PlatformUtil;
 /**
  * Servlet de sauvegarde de la base
  * Creation date: (05/10/2001 08:26:28)
@@ -85,7 +86,7 @@ public class Sauvegarde extends ConnectedServlet {
 
                     String nomFichierTmp = nomFichier + Fichier + ".tmp";
                     nomFichier = nomFichier + Fichier + ".gz";
-                    String cmd = System.getenv("PG_HOME") + "\\bin\\pg_dump.exe -d -c -F c -Z 9 -f " + nomFichierTmp + " " + myDBSession.getBaseName();
+                    String cmd = PlatformUtil.CmdSauvegarde(nomFichierTmp, myDBSession.getBaseName());
                     Executer dumpProc = new Executer(cmd);
                     if (dumpProc.runAndWait() != 0) {
                         mySalon.setMessage("Erreur", BasicSession.TAG_I18N + "sauvegarde.erreur" + BasicSession.TAG_I18N);

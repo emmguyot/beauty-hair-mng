@@ -28,6 +28,7 @@ import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.Executer;
 import com.increg.salon.bean.SalonSessionImpl;
+import com.increg.util.PlatformUtil;
 
 /**
  * Servlet de restauration automatique de la base : Pour les cas d'urgence
@@ -61,8 +62,6 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
 	
     HttpSession mySession = request.getSession(false);
     
-	Runtime aRuntime = Runtime.getRuntime();
-
 	// Liste des fichiers
     boolean error = false;
 	
@@ -96,7 +95,7 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
          * Partie 1 : Arrêt de la base
          */
         log.info("Arret de la base de donnees");
-        String cmd = System.getenv("PG_HOME") + "\\bin\\pg_ctl.exe stop -m immediate";
+        String cmd = PlatformUtil.CmdStopBase();
         log.info("Arret de la base de donnees : " + cmd);
         Executer dumpProc = new Executer(cmd);
         if (dumpProc.runAndWait() != 0) {
@@ -115,7 +114,7 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
          */
         if (!error) {
         	log.info("Suppression de la base");
-            cmd = "cmd /c \"rmdir /s/q " + System.getenv("PGDATA") + "\"";
+            cmd = PlatformUtil.CmdDelBase();
             dumpProc = new Executer(cmd);
             // Test sur le code retour 
             if (dumpProc.runAndWait() != 0) {

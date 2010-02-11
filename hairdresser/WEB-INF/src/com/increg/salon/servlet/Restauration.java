@@ -45,6 +45,7 @@ import com.increg.commun.Executer;
 import com.increg.salon.bean.ParamBean;
 import com.increg.salon.bean.SalonSessionImpl;
 import com.increg.util.GZipper;
+import com.increg.util.PlatformUtil;
 import com.increg.util.StringInverseComp;
 /**
  * Servlet de restauration de la base
@@ -171,7 +172,8 @@ public class Restauration extends ConnectedServlet {
 
                         while (!done && (++nbEssai <= 2)) {
                         	erreur = false;
-	                        Executer dropDB = new Executer(System.getenv("PG_HOME") + "\\bin\\dropdb.exe " + dbName);
+                        	String cmd = PlatformUtil.CmdDropDB(dbName);
+	                        Executer dropDB = new Executer(cmd);
 	                        if (dropDB.runAndWait() != 0) {
 	                            /**
 	                             * Messages dans les attributs car plus de bean session
@@ -202,10 +204,8 @@ public class Restauration extends ConnectedServlet {
                                     // Trace
                                     log.debug("Tentative de restauration N°" + nbEssai);
                                 }
-                                Executer resto =
-                                    new Executer(System.getenv("PG_HOME") +
-                                        "\\bin\\pg_restore.exe -v -F c -d " + dbName + 
-                                        " \"" + fichierUnzip.getAbsolutePath() + "\"");
+                                cmd = PlatformUtil.CmdRestaure(dbName, fichierUnzip);
+                                Executer resto = new Executer(cmd);
                                 int cr = resto.runAndWait(5l * 60l * 1000l, 2000);
                                 if (cr < 0) {
                                     request.setAttribute("Erreur", messages.getString("restauration.erreurRelance"));
@@ -495,4 +495,5 @@ public class Restauration extends ConnectedServlet {
         }
 
     }
+
 }
