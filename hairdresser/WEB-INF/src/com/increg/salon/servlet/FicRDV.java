@@ -76,7 +76,6 @@ public class FicRDV extends ConnectedServlet {
         SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
         DBSession myDBSession = mySalon.getMyDBSession();
         DateFormat formatDate = new SimpleDateFormat(mySalon.getMessagesBundle().getString("format.dateHeureSimpleSansSeconde"));
-        formatDate.setTimeZone(RDVBean.getTimeZone());
 
         RDVBean aRDV = null;
         Vector dispo = new Vector();
@@ -144,7 +143,7 @@ public class FicRDV extends ConnectedServlet {
 
                     aRDV.setCD_COLLAB(CD_COLLAB);
                     aRDV.setDUREE(DUREE);
-                    Calendar dtDebut = Calendar.getInstance(RDVBean.getTimeZone());
+                    Calendar dtDebut = Calendar.getInstance();
                     dtDebut.clear();
                     dtDebut.setTime(formatDate.parse(DT_DEBUT));
                     aRDV.setDT_DEBUT(dtDebut);
@@ -168,7 +167,7 @@ public class FicRDV extends ConnectedServlet {
                 // Affichage de la fiche en modification
                 request.setAttribute("Action", "Modification");
 
-                Calendar dtDebut = Calendar.getInstance(RDVBean.getTimeZone());
+                Calendar dtDebut = Calendar.getInstance();
                 dtDebut.clear();
                 dtDebut.setTime(formatDate.parse(DT_DEBUT));
                 aRDV = RDVBean.getRDVBean(myDBSession, CD_CLI, dtDebut.getTime());
@@ -183,7 +182,7 @@ public class FicRDV extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                Calendar dtDebut = Calendar.getInstance(RDVBean.getTimeZone());
+                Calendar dtDebut = Calendar.getInstance();
                 dtDebut.clear();
                 dtDebut.setTime(formatDate.parse(DT_DEBUT));
                 aRDV = RDVBean.getRDVBean(myDBSession, CD_CLI, dtDebut.getTime());
@@ -216,7 +215,7 @@ public class FicRDV extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                Calendar dtDebut = Calendar.getInstance(RDVBean.getTimeZone());
+                Calendar dtDebut = Calendar.getInstance();
                 dtDebut.clear();
                 dtDebut.setTime(formatDate.parse(DT_DEBUT));
                 RDVBean aRDVtoDelete = RDVBean.getRDVBean(myDBSession, CD_CLI, dtDebut.getTime());
@@ -249,7 +248,7 @@ public class FicRDV extends ConnectedServlet {
                  * Création du bean et enregistrement
                  */
                 boolean exist = false;
-                Calendar dtDebut = Calendar.getInstance(RDVBean.getTimeZone());
+                Calendar dtDebut = Calendar.getInstance();
                 dtDebut.clear();
                 dtDebut.setTime(formatDate.parse(DT_DEBUT));
                 aRDV = RDVBean.getRDVBean(myDBSession, CD_CLI, dtDebut.getTime());

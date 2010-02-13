@@ -1,6 +1,6 @@
 /*
  * Gestion d'un rendez-vous de client
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2010 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -33,6 +33,7 @@ import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.TimeStampBean;
 import com.increg.commun.exception.FctlException;
+import com.increg.util.SimpleDateFormatEG;
 
 /**
  * Rendez-vous
@@ -106,9 +107,7 @@ public class RDVBean extends TimeStampBean {
         }
         try {
             DT_DEBUT = Calendar.getInstance();
-            DT_DEBUT.setTime(rs.getTimestamp("DT_DEBUT"));
-            DT_DEBUT.setTimeZone(getTimeZone());
-            DT_DEBUT.setTime(DT_DEBUT.getTime());
+            DT_DEBUT.setTime(rs.getTimestamp("DT_DEBUT", DT_DEBUT));
         }
         catch (SQLException e) {
             if (e.getErrorCode() != 1) {
@@ -137,8 +136,7 @@ public class RDVBean extends TimeStampBean {
      */
     public void create(DBSession dbConnect) throws SQLException, com.increg.commun.exception.FctlException {
 
-        SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        formatDate.setTimeZone(getTimeZone());
+    	SimpleDateFormatEG formatDate = new SimpleDateFormatEG("dd/MM/yyyy HH:mm:ss");
 
         StringBuffer req = new StringBuffer("insert into RDV ");
         StringBuffer colonne = new StringBuffer("(");
@@ -159,7 +157,7 @@ public class RDVBean extends TimeStampBean {
         if (DT_DEBUT != null) {
             colonne.append("DT_DEBUT,");
             // Force à GMT
-            valeur.append(DBSession.quoteWith(formatDate.format(DT_DEBUT.getTime()) + "+0", '\''));
+            valeur.append(DBSession.quoteWith(formatDate.formatEG(DT_DEBUT.getTime()), '\''));
             valeur.append(",");
         }
 
@@ -175,13 +173,13 @@ public class RDVBean extends TimeStampBean {
 
         if (DT_CREAT != null) {
             colonne.append("DT_CREAT,");
-            valeur.append(DBSession.quoteWith(formatDate.format(DT_CREAT.getTime()), '\''));
+            valeur.append(DBSession.quoteWith(formatDate.formatEG(DT_CREAT.getTime()), '\''));
             valeur.append(",");
         }
 
         if (DT_MODIF != null) {
             colonne.append("DT_MODIF,");
-            valeur.append(DBSession.quoteWith(formatDate.format(DT_MODIF.getTime()), '\''));
+            valeur.append(DBSession.quoteWith(formatDate.formatEG(DT_MODIF.getTime()), '\''));
             valeur.append(",");
         }
 
@@ -217,13 +215,12 @@ public class RDVBean extends TimeStampBean {
      */
     public void maj(DBSession dbConnect) throws SQLException, FctlException {
 
-        SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        formatDate.setTimeZone(getTimeZone());
+    	SimpleDateFormatEG formatDate = new SimpleDateFormatEG("dd/MM/yyyy HH:mm:ss");
 
         StringBuffer req = new StringBuffer("update RDV set ");
         StringBuffer colonne = new StringBuffer("");
         StringBuffer where = new StringBuffer(" where CD_CLI=" + CD_CLI 
-            + " and DT_DEBUT=" + DBSession.quoteWith(formatDate.format(DT_DEBUT.getTime()) + "+0", '\''));
+            + " and DT_DEBUT=" + DBSession.quoteWith(formatDate.formatEG(DT_DEBUT.getTime()), '\''));
 
         colonne.append("CD_COLLAB=");
         colonne.append(CD_COLLAB);
@@ -245,7 +242,7 @@ public class RDVBean extends TimeStampBean {
         colonne.append("DT_MODIF=");
         DT_MODIF = Calendar.getInstance();
         colonne.append(
-            DBSession.quoteWith(formatDate.format(DT_MODIF.getTime()), '\''));
+            DBSession.quoteWith(formatDate.formatEG(DT_MODIF.getTime()), '\''));
 
         // Constitue la requete finale
         req.append(colonne);
@@ -267,11 +264,10 @@ public class RDVBean extends TimeStampBean {
      */
     public void delete(DBSession dbConnect) throws SQLException, FctlException {
 
-        SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        formatDate.setTimeZone(getTimeZone());
+    	SimpleDateFormatEG formatDate = new SimpleDateFormatEG("dd/MM/yyyy HH:mm:ss");
 
         StringBuffer req = new StringBuffer("delete from RDV ");
-        StringBuffer where = new StringBuffer(" where CD_CLI=" + CD_CLI + " and DT_DEBUT=" + DBSession.quoteWith(formatDate.format(DT_DEBUT.getTime()) + "+0", '\''));
+        StringBuffer where = new StringBuffer(" where CD_CLI=" + CD_CLI + " and DT_DEBUT=" + DBSession.quoteWith(formatDate.formatEG(DT_DEBUT.getTime()), '\''));
 
         // Constitue la requete finale
         req.append(where);
@@ -419,11 +415,10 @@ public class RDVBean extends TimeStampBean {
     public static RDVBean getRDVBean(DBSession dbConnect, String CD_CLI, Date DT_DEBUT) {
 
         // Passage en GMT +0
-        java.text.DateFormat formatDateStd = dbConnect.getFormatDateTimeSansTZ();
-        formatDateStd.setTimeZone(RDVBean.getTimeZone());
+        java.text.DateFormat formatDateStd = dbConnect.getFormatDateTimeSansTZ(2);
         String dtDebut = formatDateStd.format(DT_DEBUT);
         
-        String reqSQL = "select * from RDV where CD_CLI=" + CD_CLI + " and DT_DEBUT='" + dtDebut + "+0'";
+        String reqSQL = "select * from RDV where CD_CLI=" + CD_CLI + " and DT_DEBUT='" + dtDebut + "'";
         RDVBean res = null;
 
         // Interroge la Base
@@ -508,14 +503,10 @@ public class RDVBean extends TimeStampBean {
 
         if ((newDT_DEBUT != null) && (newDT_DEBUT.length() != 0)) {
             DT_DEBUT = Calendar.getInstance();
-            DT_DEBUT.setTimeZone(getTimeZone());
 
             DateFormat formatDate = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, aLocale);
-            formatDate.setTimeZone(getTimeZone());
             try {
                 DT_DEBUT.setTime(formatDate.parse(newDT_DEBUT));
-                DT_DEBUT.setTimeZone(getTimeZone());
-                DT_DEBUT.setTime(DT_DEBUT.getTime());
             }
             catch (Exception e) {
                 System.out.println("Erreur de conversion : " + e.toString());
@@ -570,11 +561,11 @@ public class RDVBean extends TimeStampBean {
         
         int nbEnreg = -1;
         
-        SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        SimpleDateFormatEG formatDate = new SimpleDateFormatEG("dd/MM/yyyy HH:mm:ss");
 
         String reqSQL[] = new String[1];
          
-        reqSQL[0] = "delete from RDV where DT_DEBUT < " + DBSession.quoteWith(formatDate.format(dateLimite) + "+0", '\'');
+        reqSQL[0] = "delete from RDV where DT_DEBUT < " + DBSession.quoteWith(formatDate.formatEG(dateLimite), '\'');
         
         dbConnect.setDansTransactions(true);
 
@@ -604,8 +595,7 @@ public class RDVBean extends TimeStampBean {
      */
     public boolean verifChevauchement(DBSession dbConnect, boolean exist) {
 
-        SimpleDateFormat formatDate2 = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-        formatDate2.setTimeZone(getTimeZone());
+    	SimpleDateFormatEG formatDate2 = new SimpleDateFormatEG("dd/MM/yyyy HH:mm");
         Calendar DT_FIN = (Calendar) DT_DEBUT.clone();
         DT_FIN.add(Calendar.MINUTE, DUREE);
 
@@ -613,25 +603,25 @@ public class RDVBean extends TimeStampBean {
             "select count(*) as nb from RDV where CD_COLLAB="
                 + CD_COLLAB
                 + " and ((DT_DEBUT < "
-                + DBSession.quoteWith(formatDate2.format(DT_DEBUT.getTime()) + "+0", '\'')
+                + DBSession.quoteWith(formatDate2.formatEG(DT_DEBUT.getTime()), '\'')
                 + " and "
-                + DBSession.quoteWith(formatDate2.format(DT_DEBUT.getTime()) + "+0", '\'')
+                + DBSession.quoteWith(formatDate2.formatEG(DT_DEBUT.getTime()), '\'')
                 + " < (DT_DEBUT + DUREE))";
         reqSQL = reqSQL
                 + " or (DT_DEBUT < "
-                + DBSession.quoteWith(formatDate2.format(DT_FIN.getTime()) + "+0", '\'')
+                + DBSession.quoteWith(formatDate2.formatEG(DT_FIN.getTime()), '\'')
                 + " and "
-                + DBSession.quoteWith(formatDate2.format(DT_FIN.getTime()) + "+0", '\'')
+                + DBSession.quoteWith(formatDate2.formatEG(DT_FIN.getTime()), '\'')
                 + " < (DT_DEBUT + DUREE))"
                 + " or (DT_DEBUT > "
-                + DBSession.quoteWith(formatDate2.format(DT_DEBUT.getTime()) + "+0", '\'')
+                + DBSession.quoteWith(formatDate2.formatEG(DT_DEBUT.getTime()), '\'')
                 + " and "
-                + DBSession.quoteWith(formatDate2.format(DT_FIN.getTime()) + "+0", '\'')
+                + DBSession.quoteWith(formatDate2.formatEG(DT_FIN.getTime()), '\'')
                 + " > DT_DEBUT)"
                 + " or (DT_DEBUT = "
-                + DBSession.quoteWith(formatDate2.format(DT_DEBUT.getTime()) + "+0", '\'')
+                + DBSession.quoteWith(formatDate2.formatEG(DT_DEBUT.getTime()), '\'')
                 + " and "
-                + DBSession.quoteWith(formatDate2.format(DT_FIN.getTime()) + "+0", '\'')
+                + DBSession.quoteWith(formatDate2.formatEG(DT_FIN.getTime()), '\'')
                 + " = (DT_DEBUT + DUREE)))";
 
         boolean ok = true;
