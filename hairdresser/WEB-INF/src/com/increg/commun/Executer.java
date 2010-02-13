@@ -1,6 +1,6 @@
 /*
  * Lanceur de programmes externes
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2010 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -25,6 +25,8 @@ import java.util.Calendar;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.increg.util.PlatformUtil;
+
 /**
  * @author Manu
  *
@@ -34,8 +36,8 @@ public class Executer {
 
    	protected Log log = LogFactory.getLog(this.getClass());
 
-	public static final String NOM_FICHIER_ERR = System.getenv("INCREG_a") + "\\Temp\\exec.err";
-	public static final String NOM_FICHIER_STD = System.getenv("INCREG_a") + "\\Temp\\exec.std";
+	public static final String NOM_FICHIER_ERR = PlatformUtil.CheminStdErr();
+	public static final String NOM_FICHIER_STD = PlatformUtil.CheminStdStd();
 
     /**
      * Commande à executer

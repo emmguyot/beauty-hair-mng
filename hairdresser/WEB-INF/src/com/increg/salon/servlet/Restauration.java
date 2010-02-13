@@ -1,6 +1,6 @@
 /*
  * Restauration d'une base préalablement sauvegardée
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2010 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -186,7 +186,7 @@ public class Restauration extends ConnectedServlet {
 	                            myDBSession.setBaseName("template1");
 	                            myDBSession.open();
 
-	                            String[] SQL = {"create database " + dbName + " with template=template0 encoding='LATIN1'"};
+	                            String[] SQL = {"create database " + dbName + " with template=template0"};
 	                            int[] cr = myDBSession.doExecuteSQL(SQL);
 	                            if (cr[0] != 0) {
 	                                /**
