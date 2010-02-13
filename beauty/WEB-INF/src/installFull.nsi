@@ -2,9 +2,9 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "InCrEG LibertyLook"
-!define PRODUCT_VERSION "4.3"
+!define PRODUCT_VERSION "4.4"
 !define PRODUCT_VERSION_FULL "${PRODUCT_VERSION}.0.1"
-!define PRODUCT_COPYRIGHT "2002-2009 Valérie Guyot, Alexandre Guyot, Emmanuel Guyot et Angel"
+!define PRODUCT_COPYRIGHT "2002-2010 Valérie Guyot, Alexandre Guyot, Emmanuel Guyot et Angel"
 !define PRODUCT_PUBLISHER "SourceForge"
 !define PRODUCT_WEB_SITE "http://beauty-hair-mng.sourceforge.net/"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
@@ -171,7 +171,8 @@ Function CheckWindowsVersion
              StrCmp $R1 '5.0' lbl_winnt_2000
              StrCmp $R1 '5.1' lbl_winnt_XP
              StrCmp $R1 '5.2' lbl_winnt_2003
-             StrCmp $R1 '6.0' lbl_winvista lbl_error
+             StrCmp $R1 '6.0' lbl_winvista
+             StrCmp $R1 '6.1' lbl_win7 lbl_error
 
    lbl_winnt_x:
                StrCpy $R0 "NT $R0" 6
@@ -191,6 +192,10 @@ Function CheckWindowsVersion
 
    lbl_winvista:
                   Strcpy $R0 'Vista'
+                  Goto lbl_done
+
+   lbl_win7:
+                  Strcpy $R0 'W7'
                   Goto lbl_done
 
    lbl_error:             Strcpy $R0 ''
