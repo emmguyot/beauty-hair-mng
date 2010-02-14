@@ -636,6 +636,7 @@ function Enregistrer()
    if (document.fiche.Action.value != "Creation") {
       document.fiche.Action.value = "Modification";
    }
+   MM_showHideLayers('ENREGISTRER?bottomFrame','','hide');
    document.fiche.submit();
 }
 
