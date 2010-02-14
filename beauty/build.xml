@@ -202,6 +202,7 @@
 
 				<include name="WEB-INF/src/com/increg/util/GZipper.java"/>
 				<include name="WEB-INF/src/com/increg/util/Montant.java"/>
+				<include name="WEB-INF/src/com/increg/util/PlatformUtil.java"/>
 				<include name="WEB-INF/src/com/increg/util/ServletUtil.java"/>
 				<include name="WEB-INF/src/com/increg/util/SimpleDateFormatEG.java"/>
 				<include name="WEB-INF/src/com/increg/util/StringInverseComp.java"/>
