@@ -637,6 +637,7 @@ function Enregistrer()
       document.fiche.Action.value = "Modification";
    }
    MM_showHideLayers('ENREGISTRER?bottomFrame','','hide');
+   MM_showHideLayers('IMPRIMER?bottomFrame','','hide');
    document.fiche.submit();
 }
 
@@ -665,6 +666,8 @@ function Imprimer()
       alert ("<i18n:message key="ficFact.reglementPourImp" />");
       return;
    }
+   MM_showHideLayers('ENREGISTRER?bottomFrame','','hide');
+   MM_showHideLayers('IMPRIMER?bottomFrame','','hide');
    document.fiche.Action.value = "Impression";
    document.fiche.target="_blank";
    document.fiche.submit();
