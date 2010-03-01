@@ -127,4 +127,15 @@ public class PlatformUtil {
 		}
 		return chemin;
 	}
+
+	public static String CmdCreeBase(String dbName) {
+		String cmd;
+		if (IsWindows()) {
+	    	cmd = "create database " + dbName + " with template=template0 encoding='LATIN1'";
+		}
+		else {
+	    	cmd = "create database " + dbName + " with template=template0 encoding='UTF8'";
+		}
+		return cmd;
+	}
 }

@@ -186,7 +186,7 @@ public class Restauration extends ConnectedServlet {
 	                            myDBSession.setBaseName("template1");
 	                            myDBSession.open();
 
-	                            String[] SQL = {"create database " + dbName + " with template=template0"};
+	                            String[] SQL = {PlatformUtil.CmdCreeBase(dbName)};
 	                            int[] cr = myDBSession.doExecuteSQL(SQL);
 	                            if (cr[0] != 0) {
 	                                /**
