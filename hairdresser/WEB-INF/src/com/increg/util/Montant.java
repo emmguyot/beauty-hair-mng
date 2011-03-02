@@ -17,9 +17,8 @@
  */
 package com.increg.util;
 
-import java.math.*;
-
-import com.increg.salon.bean.DeviseBean;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 
 public class Montant extends BigDecimal {
 
@@ -58,20 +57,20 @@ public class Montant extends BigDecimal {
 
 	/**
 	 * toLetters : Conversion du montant en lettre
-     * @param aDevise Devise du montant
+     * @param libelleDevise Devise du montant
 	 * @return String Chaine représentant le nombre en lettre
 	 */
-	public String toLetters(DeviseBean aDevise) {
-		return toLetters(this, aDevise);
+	public String toLetters(String libelleDevise) {
+		return toLetters(this, libelleDevise);
 	}
 
 	/**
 	 * toLetters : Conversion du montant en lettre
 	 * @param montant Montant à traduire
-     * @param aDevise Devise du montant
+     * @param libelleDevise Devise du montant
 	 * @return String Chaine représentant le nombre en lettre
 	 */
-	public static final String toLetters(BigDecimal montant, DeviseBean aDevise) {
+	public static final String toLetters(BigDecimal montant, String libelleDevise) {
 
         StringBuffer res = new StringBuffer();
 
@@ -82,7 +81,7 @@ public class Montant extends BigDecimal {
         if (res.charAt(res.length() - 1) != ' ') {
             res.append(" ");
         }
-        res.append(aDevise.getLIB_DEVISE());
+        res.append(libelleDevise);
 
         /**
          * Partie décimale

@@ -50,7 +50,7 @@
       <td width="7" height="36"></td>
       <td width="84"></td>
       <td width="368" valign="top"><%
-            String montantEnLettre = new Montant(montant).toLetters(mySalon.getDevise());
+            String montantEnLettre = new Montant(montant).toLetters(mySalon.getDevise().getLIB_DEVISE());
             // Premier lettre en majuscule
             montantEnLettre = montantEnLettre.substring(0,1).toUpperCase() + montantEnLettre.substring(1);
             %><%= montantEnLettre %></td>

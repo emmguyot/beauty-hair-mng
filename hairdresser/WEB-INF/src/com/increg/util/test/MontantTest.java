@@ -17,11 +17,10 @@
  */
 package com.increg.util.test;
 
-import com.increg.salon.bean.DeviseBean;
-import com.increg.util.Montant;
-
 import junit.framework.Assert;
-import junit.framework.TestCase; 
+import junit.framework.TestCase;
+
+import com.increg.util.Montant;
 
 public class MontantTest extends TestCase {
 
@@ -71,21 +70,19 @@ public class MontantTest extends TestCase {
      * Test la bonne conversion
      */
     public void testConversionLettre () {
-        DeviseBean aDevise = new DeviseBean();
-        aDevise.setLIB_DEVISE("euros");
-        Assert.assertEquals(m61.toLetters(aDevise), "soixante et un euros");
-        Assert.assertEquals(m71.toLetters(aDevise), "soixante et onze euros");
-        Assert.assertEquals(m81.toLetters(aDevise), "quatre-vingt un euros");
-        Assert.assertEquals(m80.toLetters(aDevise), "quatre-vingts euros");
-        Assert.assertEquals(m91.toLetters(aDevise), "quatre-vingt onze euros");
-        Assert.assertEquals(m100.toLetters(aDevise), "cent euros");
-        Assert.assertEquals(m200.toLetters(aDevise), "deux cents euros");
-        Assert.assertEquals(m201.toLetters(aDevise), "deux cent un euros");
-        Assert.assertEquals(m1000.toLetters(aDevise), "mille euros");
-        Assert.assertEquals(m1001.toLetters(aDevise), "mille un euros");
-        Assert.assertEquals(m2000.toLetters(aDevise), "deux mille euros");
-        Assert.assertEquals(m2001.toLetters(aDevise), "deux mille un euros");
-        Assert.assertEquals(m34_18.toLetters(aDevise), "trente quatre euros dix huit");
+        Assert.assertEquals(m61.toLetters("euros"), "soixante et un euros");
+        Assert.assertEquals(m71.toLetters("euros"), "soixante et onze euros");
+        Assert.assertEquals(m81.toLetters("euros"), "quatre-vingt un euros");
+        Assert.assertEquals(m80.toLetters("euros"), "quatre-vingts euros");
+        Assert.assertEquals(m91.toLetters("euros"), "quatre-vingt onze euros");
+        Assert.assertEquals(m100.toLetters("euros"), "cent euros");
+        Assert.assertEquals(m200.toLetters("euros"), "deux cents euros");
+        Assert.assertEquals(m201.toLetters("euros"), "deux cent un euros");
+        Assert.assertEquals(m1000.toLetters("euros"), "mille euros");
+        Assert.assertEquals(m1001.toLetters("euros"), "mille un euros");
+        Assert.assertEquals(m2000.toLetters("euros"), "deux mille euros");
+        Assert.assertEquals(m2001.toLetters("euros"), "deux mille un euros");
+        Assert.assertEquals(m34_18.toLetters("euros"), "trente quatre euros dix huit");
 
     }
     
@@ -93,10 +90,8 @@ public class MontantTest extends TestCase {
      * Affiche toutes les correspondances
      */
     public void listeConversionLettre() {
-        DeviseBean aDevise = new DeviseBean();
-        aDevise.setLIB_DEVISE("euros");
         for (int i = 1; i < 10000; i++) {
-            System.out.println(Integer.toString(i) + " = " + new Montant(Integer.toString(i)).toLetters(aDevise));
+            System.out.println(Integer.toString(i) + " = " + new Montant(Integer.toString(i)).toLetters("euros"));
         }
     }
             
