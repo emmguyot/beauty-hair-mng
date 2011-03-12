@@ -30,7 +30,11 @@ import java.util.Iterator;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.increg.commun.exception.NoDatabaseException;
+import com.increg.game.filter.DBSessionFilter;
 import com.increg.util.SimpleDateFormatEG;
 
 /**
@@ -45,6 +49,11 @@ import com.increg.util.SimpleDateFormatEG;
  */
 public class DBSession {
     
+	/**
+     * Commons Logging instance.
+     */
+    protected static Log log = LogFactory.getLog(DBSessionFilter.class);
+
     /**
      * Toutes les instances actives de connexion à la base de données
      * Les éléments de ce vecteur sont des SoftReference 
@@ -57,7 +66,7 @@ public class DBSession {
     /**
      * Connection à la base de données
      */
-	private Connection dbConnect;
+	protected Connection dbConnect;
     /**
      * Indicateur si une transaction est en cours
      */
@@ -105,7 +114,7 @@ public class DBSession {
             open();
     	}
     	catch (Exception e) {
-    		System.out.println("Pb à la connexion BD : " + e.toString());
+    		log.error("Pb à la connexion BD : ", e);
     		dbConnect = null;
     		throw new NoDatabaseException("Problème à la connexion à la base de données :" + e.toString());
     	}
@@ -361,6 +370,15 @@ public class DBSession {
         return user;
     }
 
+    /**
+     * 
+     * @param key
+     * @return
+     */
+    protected String getRessource(String key) {
+    	return resconfig.getString(key);
+    }
+    
     /**
      * Fermeture de la connexion base de données
      */
