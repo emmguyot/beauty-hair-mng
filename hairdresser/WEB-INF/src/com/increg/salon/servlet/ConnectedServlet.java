@@ -1,6 +1,6 @@
 /*
  * Servlet de base vérifiant la connexion
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2011 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -31,6 +31,11 @@ import com.increg.commun.DBSession;
 import com.increg.salon.bean.SalonSession;
 
 public abstract class ConnectedServlet extends javax.servlet.http.HttpServlet {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5508278263770389616L;
+
 	/**
 	 * RAZ des points pouvant bloquer (Transaction d'une session, ...)
 	 * Creation date: (20/09/2001 21:04:54)
@@ -112,18 +117,7 @@ public abstract class ConnectedServlet extends javax.servlet.http.HttpServlet {
 	
 		HttpSession mySession = request.getSession(false);
 		if ((mySession == null) || (mySession.getAttribute("SalonSession") == null) || (((SalonSession) mySession.getAttribute("SalonSession")).getMyIdent() == null)){
-			try {
-				forward (request, response, "/reconnect.html");
-			}
-			catch (Exception e) {
-				log("Erreur à la vérification de connexion : " + e.toString());
-				try {
-					response.sendError(500);
-				}
-				catch (Exception e2) {
-					log ("Erreur au sendError : " + e2.toString());
-				}
-			}
+			GoHome(request, response);
 			return false;
 		}
 		else {
@@ -158,5 +152,27 @@ public abstract class ConnectedServlet extends javax.servlet.http.HttpServlet {
 			}
 		}
 		return !condition;
+	}
+
+	public static SalonSession CheckOrGoHome(javax.servlet.http.HttpServletRequest request, HttpServletResponse response) {
+
+		HttpSession mySession = request.getSession(false);
+		SalonSession mySalon = null;
+		if ((mySession == null) 
+				|| ((mySalon = (SalonSession) mySession.getAttribute("SalonSession")) == null)) {
+			GoHome(request, response);
+	    }
+	    return mySalon;
+		
+	}
+	
+	protected static void GoHome(javax.servlet.http.HttpServletRequest request,
+			HttpServletResponse response) {
+		try {
+			response.sendRedirect(request.getContextPath() + "/reconnect.html");
+		} catch (IOException e) {
+			Log log = LogFactory.getLog(ConnectedServlet.class);
+			log.error("Erreur à la redirection", e);
+		}
 	}
 }

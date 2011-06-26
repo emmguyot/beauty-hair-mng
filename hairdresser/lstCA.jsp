@@ -1,7 +1,7 @@
 <%
 /*
  * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2011 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -22,10 +22,7 @@
 	       " %>
 <%@ page import="com.increg.salon.bean.SalonSession" %>
 <%
-    SalonSession mySalon = (SalonSession) session.getAttribute("SalonSession");
-    if (mySalon == null) {
-        getServletConfig().getServletContext().getRequestDispatcher("/reconnect.html").forward(request, response);
-    }
+SalonSession mySalon = com.increg.salon.servlet.ConnectedServlet.CheckOrGoHome(request, response);
 %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
 <%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
