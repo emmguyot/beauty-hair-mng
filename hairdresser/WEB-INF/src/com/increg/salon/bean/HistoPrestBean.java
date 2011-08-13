@@ -1,6 +1,6 @@
 /*
  * Gestion d'une ligne de facture
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2011 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -17,7 +17,6 @@
  */
 package com.increg.salon.bean;
 
-import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
@@ -27,6 +26,8 @@ import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.TimeStampBean;
 import com.increg.commun.exception.FctlException;
+import com.increg.util.Montant;
+import com.increg.util.NombreDecimal;
 import com.increg.util.SimpleDateFormatEG;
 
 /**
@@ -866,7 +867,7 @@ public class HistoPrestBean extends TimeStampBean {
     public void setPRX_UNIT_TTC(String newPRX_UNIT_TTC) {
 
         if ((newPRX_UNIT_TTC != null) && (newPRX_UNIT_TTC.length() != 0)) {
-            PRX_UNIT_TTC = new BigDecimal(newPRX_UNIT_TTC);
+            PRX_UNIT_TTC = new Montant(newPRX_UNIT_TTC);
         }
         else {
             PRX_UNIT_TTC = null;
@@ -887,7 +888,7 @@ public class HistoPrestBean extends TimeStampBean {
      */
     public void setQTE(String newQTE) {
         if ((newQTE != null) && (newQTE.length() != 0)) {
-            QTE = new BigDecimal(newQTE);
+            QTE = new NombreDecimal(newQTE);
         }
         else {
             QTE = null;

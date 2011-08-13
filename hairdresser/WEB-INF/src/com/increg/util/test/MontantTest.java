@@ -1,6 +1,6 @@
 /*
  * 
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2011 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -16,6 +16,8 @@
  * 
  */
 package com.increg.util.test;
+
+import java.math.BigDecimal;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
@@ -66,6 +68,15 @@ public class MontantTest extends TestCase {
         m34_18 = new Montant("34.18");
 	}
 
+    /**
+     * Test la bonne conversion
+     */
+    public void testVirgule () {
+    
+    	Montant m = new Montant("10,21");
+    	Assert.assertTrue("Constructeur avec virgule erroné", m.equals(new BigDecimal("10.21")));
+    }
+    
     /**
      * Test la bonne conversion
      */

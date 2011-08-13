@@ -1,6 +1,6 @@
 /*
  * Bean gérant un mouvement de caisse
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2011 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -30,6 +30,7 @@ import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.TimeStampBean;
 import com.increg.commun.exception.FctlException;
+import com.increg.util.Montant;
 import com.increg.util.SimpleDateFormatEG;
 
 /**
@@ -472,7 +473,7 @@ public class MvtCaisseBean extends TimeStampBean {
      *            Réglement associé
      * @return Liste des Mouvements associés
      */
-    public static Vector getMvtCaisseBean(DBSession dbConnect, String CD_REGLEMENT) {
+    public static Vector<MvtCaisseBean> getMvtCaisseBean(DBSession dbConnect, String CD_REGLEMENT) {
 
         String reqSQL = "select * from MVT_CAISSE where";
         if ((CD_REGLEMENT == null) || (CD_REGLEMENT.equals("")) || (CD_REGLEMENT.equals("0"))) {
@@ -480,7 +481,7 @@ public class MvtCaisseBean extends TimeStampBean {
         } else {
             reqSQL = reqSQL + " CD_REGLEMENT=" + CD_REGLEMENT;
         }
-        Vector res = new Vector();
+        Vector<MvtCaisseBean> res = new Vector<MvtCaisseBean>();
 
         // Interroge la Base
         try {
@@ -791,7 +792,7 @@ public class MvtCaisseBean extends TimeStampBean {
     public void setMONTANT(String newMONTANT) {
 
         if ((newMONTANT != null) && (newMONTANT.length() != 0)) {
-            MONTANT = new BigDecimal(newMONTANT);
+            MONTANT = new Montant(newMONTANT);
         } else {
             MONTANT = null;
         }
@@ -818,7 +819,7 @@ public class MvtCaisseBean extends TimeStampBean {
     public void setSOLDE_AVANT(String newSOLDE_AVANT) {
 
         if ((newSOLDE_AVANT != null) && (newSOLDE_AVANT.length() != 0)) {
-            SOLDE_AVANT = new BigDecimal(newSOLDE_AVANT);
+            SOLDE_AVANT = new Montant(newSOLDE_AVANT);
         } else {
             SOLDE_AVANT = null;
         }

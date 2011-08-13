@@ -1,6 +1,6 @@
 /*
  * Connexion base
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2011 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -34,7 +34,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.increg.commun.exception.NoDatabaseException;
-import com.increg.game.filter.DBSessionFilter;
 import com.increg.util.SimpleDateFormatEG;
 
 /**
@@ -52,13 +51,13 @@ public class DBSession {
 	/**
      * Commons Logging instance.
      */
-    protected static Log log = LogFactory.getLog(DBSessionFilter.class);
+    protected static Log log = LogFactory.getLog(DBSession.class);
 
     /**
      * Toutes les instances actives de connexion à la base de données
      * Les éléments de ce vecteur sont des SoftReference 
      */
-    private static Vector activeInstances = new Vector(); 
+    private static Vector<SoftReference<Connection>> activeInstances = new Vector<SoftReference<Connection>>(); 
     /**
      * Properties de config
      */
@@ -136,7 +135,7 @@ public class DBSession {
         
         synchronized (activeInstances) {
             // Ajoute la connexion à la liste des connexions actives
-            activeInstances.add(new SoftReference(dbConnect));
+            activeInstances.add(new SoftReference<Connection>(dbConnect));
         }
         
         String reqSQL[] = {""}; 
@@ -279,9 +278,9 @@ public class DBSession {
     private void removeRef() {
         synchronized (activeInstances) {            
             // Suppression de la liste des connexions actives
-            Iterator instanceIterator = activeInstances.iterator();
+            Iterator<SoftReference<Connection>> instanceIterator = activeInstances.iterator();
             while (instanceIterator.hasNext()) {
-                SoftReference dbConnectRef = (SoftReference) instanceIterator.next();
+                SoftReference<Connection> dbConnectRef = instanceIterator.next();
             
                 if ((dbConnectRef.get() == null) || (dbConnectRef.get() == dbConnect)) {
                     // Suppression de l'instance purgée
@@ -402,9 +401,9 @@ public class DBSession {
     public void closeAll() {
         synchronized (activeInstances) {            
             // Suppression de la liste des connexions actives
-            Iterator instanceIterator = activeInstances.iterator();
+            Iterator<SoftReference<Connection>> instanceIterator = activeInstances.iterator();
             while (instanceIterator.hasNext()) {
-                SoftReference dbConnectRef = (SoftReference) instanceIterator.next();
+                SoftReference<Connection> dbConnectRef = instanceIterator.next();
             
                 if (dbConnectRef.get() != null) {
                     Connection aDbConnect = (Connection) dbConnectRef.get();

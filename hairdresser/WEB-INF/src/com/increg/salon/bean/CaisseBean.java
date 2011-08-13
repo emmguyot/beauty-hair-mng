@@ -1,6 +1,6 @@
 /*
  * Bean de gestion d'une caisse (alias un mode de paiement et son solde)
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2011 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -25,6 +25,8 @@ import java.util.Calendar;
 import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.TimeStampBean;
+import com.increg.util.Montant;
+import com.increg.util.NombreDecimal;
 /**
  * Gestion d'une facture (entête et pied)
  * Creation date: (17/08/2001 20:08:57)
@@ -323,7 +325,7 @@ public class CaisseBean extends TimeStampBean {
 	public void setSOLDE_DEBUT(String newSOLDE_DEBUT) {
 	
 		if ((newSOLDE_DEBUT != null) && (newSOLDE_DEBUT.length() != 0)) {
-			SOLDE_DEBUT = new BigDecimal(newSOLDE_DEBUT);
+			SOLDE_DEBUT = new Montant(newSOLDE_DEBUT);
 		}
 		else {
 			SOLDE_DEBUT = null;
@@ -337,7 +339,7 @@ public class CaisseBean extends TimeStampBean {
 	public void setSOLDE(String newSOLDE) {
 		
 		if ((newSOLDE != null) && (newSOLDE.length() != 0)) {
-			SOLDE = new BigDecimal(newSOLDE);
+			SOLDE = new Montant(newSOLDE);
 		}
 		else {
 			SOLDE = null;

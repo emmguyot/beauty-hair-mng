@@ -1,6 +1,6 @@
 /*
  * Calcul le rendu d'espèces
- * Copyright (C) 2002-2008 Alexandre GUYOT <alexandre.guyot@laposte.net>
+ * Copyright (C) 2002-2011 Alexandre GUYOT <alexandre.guyot@laposte.net>
  * Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
@@ -20,6 +20,8 @@ package com.increg.salon.servlet;
 
 import com.increg.commun.BasicSession;
 import com.increg.salon.bean.*;
+import com.increg.util.Montant;
+
 import javax.servlet.http.*;
 
 import org.apache.commons.logging.Log;
@@ -30,6 +32,11 @@ import java.math.BigDecimal;
 public class FicRenduMonnaie extends ConnectedServlet {
 
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 3782294754248932354L;
+
+	/**
      * @see com.increg.salon.servlet.ConnectedServlet
      */
     public void performTask(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) {
@@ -46,7 +53,7 @@ public class FicRenduMonnaie extends ConnectedServlet {
 
         BigDecimal aRendre = new BigDecimal(0);
         try {
-            aRendre = new BigDecimal(montantRegle).subtract(new BigDecimal(montant));
+            aRendre = new Montant(montantRegle).subtract(new Montant(montant));
             if (aRendre.signum() < 0) { 
                 // Montant trop faible
                 mySalon.setMessage("Erreur", BasicSession.TAG_I18N + "ficRenduMonnaie.montantFaible" + BasicSession.TAG_I18N);

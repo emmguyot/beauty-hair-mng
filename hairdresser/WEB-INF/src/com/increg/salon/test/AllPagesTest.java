@@ -1,6 +1,6 @@
 /*
  * 
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2011 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -165,6 +165,7 @@ public class AllPagesTest extends TestCase {
         // Choix de la base ?
         WebForm form = respons.getFormWithName("base");
         if (form != null) {
+        	form.setParameter("numBase", "4");
         	respons = form.submit();
         }
         

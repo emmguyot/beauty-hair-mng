@@ -1,6 +1,6 @@
 /*
  * Bean assurant la gestion d'un collaborateur (Personne assurant les prestations)
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2011 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -34,6 +34,7 @@ import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.TimeStampBean;
 import com.increg.commun.exception.FctlException;
+import com.increg.util.NombreDecimal;
 import com.increg.util.SimpleDateFormatEG;
 
 /**
@@ -1082,9 +1083,9 @@ public class CollabBean extends TimeStampBean {
      * @param myDBSession La session utilisée pour récuperer les données de la base
      * @return tous les collaborateurs du salon.
      */
-    public static List getAllCollabsAsList(DBSession myDBSession) {
+    public static List<CollabBean> getAllCollabsAsList(DBSession myDBSession) {
 
-        List collabsList = new LinkedList();
+        List<CollabBean> collabsList = new LinkedList<CollabBean>();
         try {
             ResultSet rSet = getAllCollabs(myDBSession);
             while (rSet.next()) {
@@ -1249,7 +1250,7 @@ public class CollabBean extends TimeStampBean {
     public void setQUOTA_HEURE(String newQUOTA_HEURE) {
 
         if ((newQUOTA_HEURE != null) && (newQUOTA_HEURE.length() != 0)) {
-            QUOTA_HEURE = new BigDecimal(newQUOTA_HEURE);
+            QUOTA_HEURE = new NombreDecimal(newQUOTA_HEURE);
         }
         else {
             QUOTA_HEURE = null;
@@ -1320,7 +1321,7 @@ public class CollabBean extends TimeStampBean {
     /**
      * Ajoute le collab en évitant les doublons
      * @param aCollab : Collaborateur à ajouter
-     * @param collabs : Liste des collab dans laquelle il faut faire l'ajout
+     * @param collabs : Liste des collab dans laquelle il faut faire l'ajout (contient ID et Prénom !!)
      */
     public static void ajouteEtTrie(CollabBean aCollab, List collabs) {
         ListIterator iter = collabs.listIterator();
@@ -1370,8 +1371,8 @@ public class CollabBean extends TimeStampBean {
     public static List getListeCollab(DBSession myDBSession, boolean filtrePresent) {
         List collabs;
         collabs = new LinkedList();
-        List collabsList = CollabBean.getAllCollabsAsList(myDBSession);
-        Iterator collabIter = collabsList.iterator();
+        List<CollabBean> collabsList = CollabBean.getAllCollabsAsList(myDBSession);
+        Iterator<CollabBean> collabIter = collabsList.iterator();
         
         while (collabIter.hasNext()) {
             CollabBean aCollab = (CollabBean) collabIter.next();

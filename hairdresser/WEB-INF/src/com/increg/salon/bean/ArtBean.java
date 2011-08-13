@@ -1,6 +1,6 @@
 /*
  * Bean de gestion des articles
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2011 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -770,7 +770,7 @@ public class ArtBean extends TimeStampBean {
 	public void setVAL_STK_HT(String newVAL_STK_HT) {
 	
 		if ((newVAL_STK_HT != null) && (newVAL_STK_HT.length() != 0)) {
-			VAL_STK_HT = new BigDecimal(newVAL_STK_HT);
+			VAL_STK_HT = new Montant(newVAL_STK_HT);
 		}
 		else {
 			VAL_STK_HT = null;

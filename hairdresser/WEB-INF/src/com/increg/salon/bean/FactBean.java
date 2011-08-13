@@ -1,6 +1,6 @@
 /*
  * Bean gérant les factures des clients
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2011 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -33,6 +33,8 @@ import com.increg.commun.TimeStampBean;
 import com.increg.commun.exception.FctlException;
 import com.increg.salon.request.RecapVente;
 import com.increg.salon.request.TVA;
+import com.increg.util.Montant;
+import com.increg.util.NombreDecimal;
 import com.increg.util.SimpleDateFormatEG;
 
 /**
@@ -80,7 +82,7 @@ public class FactBean extends TimeStampBean {
     /**
      * Lignes de facture
      */
-    protected java.util.Vector lignes;
+    protected Vector<HistoPrestBean> lignes;
     /**
      * Prix total Hors Taxes
      */
@@ -109,7 +111,7 @@ public class FactBean extends TimeStampBean {
      * Répartition de la TVA entre les différents taux
      * Non stocké en base
      */
-    protected HashMap repartTVA;
+    protected HashMap<TvaBean, BigDecimal> repartTVA;
     
     /**
      * FactBean constructor comment.
@@ -127,7 +129,7 @@ public class FactBean extends TimeStampBean {
         DT_PREST.clear(Calendar.MILLISECOND);
 
         CD_PAIEMENT_INIT = CD_PAIEMENT;
-        repartTVA = new HashMap();
+        repartTVA = new HashMap<TvaBean, BigDecimal>();
     }
     /**
      * FactBean constructor comment.
@@ -229,7 +231,7 @@ public class FactBean extends TimeStampBean {
         }
 
         CD_PAIEMENT_INIT = CD_PAIEMENT;
-        repartTVA = new HashMap();
+        repartTVA = new HashMap<TvaBean, BigDecimal>();
 
     }
     /**
@@ -721,8 +723,8 @@ public class FactBean extends TimeStampBean {
         getLignes(dbConnect);
         
         // Calcul la somme par type de vente
-        HashMap sommeTypeVent = new HashMap();
-        Vector lstPrest = new Vector();
+        HashMap<Integer, BigDecimal> sommeTypeVent = new HashMap<Integer, BigDecimal>();
+        Vector<PrestBean> lstPrest = new Vector<PrestBean>();
         for (int i = 0; i < lignes.size(); i++) {
             HistoPrestBean aLigne = (HistoPrestBean) lignes.get(i);
             PrestBean aPrest = PrestBean.getPrestBean(dbConnect, Long.toString(aLigne.getCD_PREST()));
@@ -817,8 +819,8 @@ public class FactBean extends TimeStampBean {
         getLignes(dbConnect);
         
         // Calcul la somme par type de vente
-        HashMap sommeTypeVent = new HashMap();
-        Vector lstPrest = new Vector();
+        HashMap<Integer, BigDecimal> sommeTypeVent = new HashMap<Integer, BigDecimal>();
+        Vector<PrestBean> lstPrest = new Vector<PrestBean>();
         for (int i = 0; i < lignes.size(); i++) {
             HistoPrestBean aLigne = (HistoPrestBean) lignes.get(i);
             PrestBean aPrest = PrestBean.getPrestBean(dbConnect, Long.toString(aLigne.getCD_PREST()));
@@ -1010,7 +1012,7 @@ public class FactBean extends TimeStampBean {
      * Creation date: (18/08/2001 15:24:27)
      * @return java.util.Vector
      */
-    public java.util.Vector getLignes() {
+    public Vector<HistoPrestBean> getLignes() {
         return lignes;
     }
     
@@ -1020,7 +1022,7 @@ public class FactBean extends TimeStampBean {
      * @return java.util.Vector
      * @param dbConnect DBSession
      */
-    public java.util.Vector getLignes(DBSession dbConnect) {
+    public Vector<HistoPrestBean> getLignes(DBSession dbConnect) {
 
         if (lignes == null) {
             /**
@@ -1030,7 +1032,7 @@ public class FactBean extends TimeStampBean {
 
             try {
                 ResultSet aRS = dbConnect.doRequest(reqSQL);
-                lignes = new Vector();
+                lignes = new Vector<HistoPrestBean>();
 
                 while (aRS.next()) {
                     lignes.add(new HistoPrestBean(aRS));
@@ -1148,7 +1150,7 @@ public class FactBean extends TimeStampBean {
      * Obtention des taux de TVA utilisés par la facture
      * @return Ensemble des taux de TVA utilisés par la facture
      */
-    public Set getTxTVA() {
+    public Set<TvaBean> getTxTVA() {
         return repartTVA.keySet();
     }
 
@@ -1438,7 +1440,7 @@ public class FactBean extends TimeStampBean {
      * Creation date: (18/08/2001 15:24:27)
      * @param newLignes java.util.Vector
      */
-    public void setLignes(java.util.Vector newLignes) {
+    public void setLignes(Vector<HistoPrestBean> newLignes) {
         lignes = newLignes;
     }
     
@@ -1450,7 +1452,7 @@ public class FactBean extends TimeStampBean {
     public void setPRX_TOT_HT(String newPRX_TOT_HT) {
 
         if ((newPRX_TOT_HT != null) && (newPRX_TOT_HT.length() != 0)) {
-            PRX_TOT_HT = new BigDecimal(newPRX_TOT_HT);
+            PRX_TOT_HT = new Montant(newPRX_TOT_HT);
         } else {
             PRX_TOT_HT = null;
         }
@@ -1473,7 +1475,7 @@ public class FactBean extends TimeStampBean {
     public void setPRX_TOT_TTC(String newPRX_TOT_TTC) {
 
         if ((newPRX_TOT_TTC != null) && (newPRX_TOT_TTC.length() != 0)) {
-            PRX_TOT_TTC = new BigDecimal(newPRX_TOT_TTC);
+            PRX_TOT_TTC = new Montant(newPRX_TOT_TTC);
         } else {
             PRX_TOT_TTC = null;
         }
@@ -1496,7 +1498,7 @@ public class FactBean extends TimeStampBean {
     public void setREMISE_FIXE(String newREMISE_FIXE) {
 
         if ((newREMISE_FIXE != null) && (newREMISE_FIXE.length() != 0)) {
-            REMISE_FIXE = new BigDecimal(newREMISE_FIXE);
+            REMISE_FIXE = new Montant(newREMISE_FIXE);
         } else {
             REMISE_FIXE = null;
         }
@@ -1519,7 +1521,7 @@ public class FactBean extends TimeStampBean {
     public void setREMISE_PRC(String newREMISE_PRC) {
 
         if ((newREMISE_PRC != null) && (newREMISE_PRC.length() != 0)) {
-            REMISE_PRC = new BigDecimal(newREMISE_PRC);
+            REMISE_PRC = new NombreDecimal(newREMISE_PRC);
         } else {
             REMISE_PRC = null;
         }
@@ -1542,7 +1544,7 @@ public class FactBean extends TimeStampBean {
     public void setTVA(String newTVA) {
 
         if ((newTVA != null) && (newTVA.length() != 0)) {
-            TVA = new BigDecimal(newTVA);
+            TVA = new Montant(newTVA);
         } else {
             TVA = null;
         }
@@ -1572,9 +1574,9 @@ public class FactBean extends TimeStampBean {
      * @return Liste correspondante à chaque élément de répartition (Type de répartition)
      * @throws SQLException en cas de gros pb
      */
-    public static Vector calculTVARepartie(DBSession myDBSession, String DT_DEBUT, String DT_FIN) throws SQLException {
+    public static Vector<TVA> calculTVARepartie(DBSession myDBSession, String DT_DEBUT, String DT_FIN) throws SQLException {
 
-        Vector lstLignes = new Vector();
+        Vector<TVA> lstLignes = new Vector<TVA>();
     
         // Recherche le type de répatition
         String reqSQL = null;
@@ -1622,9 +1624,9 @@ public class FactBean extends TimeStampBean {
      * @return Liste correspondante à chaque élément de répartition (Type de répartition)
      * @throws SQLException en cas de gros pb
      */
-    public static Vector calculVente(DBSession myDBSession, String DT_DEBUT, String DT_FIN) throws SQLException {
+    public static Vector<RecapVente> calculVente(DBSession myDBSession, String DT_DEBUT, String DT_FIN) throws SQLException {
 
-        Vector lstLignes = new Vector();
+        Vector<RecapVente> lstLignes = new Vector<RecapVente>();
 
 
         String reqSQL = "select PREST.CD_PREST, sum(HISTO_PREST.QTE) as QTE, sum(HISTO_PREST.PRX_TOT_HT) as HT, sum(HISTO_PREST.PRX_TOT_TTC) as TTC, sum(HISTO_PREST.TVA) as TVA "

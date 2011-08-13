@@ -1,6 +1,6 @@
 /*
  * Bean gérant les devises
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2011 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -22,6 +22,7 @@ import java.sql.*;
 import java.util.Vector;
 
 import com.increg.commun.*;
+import com.increg.util.NombreDecimal;
 
 /**
  * Bean des devises
@@ -262,9 +263,9 @@ public class DeviseBean extends GenericBean {
      * @param dbConnect com.increg.salon.bean.DBSession
      * @return Liste des autres devises
      */
-    public static Vector getOtherDeviseBean(DBSession dbConnect) {
+    public static Vector<DeviseBean> getOtherDeviseBean(DBSession dbConnect) {
         String reqSQL = "select * from DEVISE where RATIO<>1";
-        Vector res = new Vector();
+        Vector<DeviseBean> res = new Vector<DeviseBean>();
 
         // Interroge la Base
         try {
@@ -392,7 +393,7 @@ public class DeviseBean extends GenericBean {
      */
     public void setRATIO(String newRATIO) {
         if ((newRATIO != null) && (newRATIO.length() != 0)) {
-            RATIO = new BigDecimal(newRATIO);
+            RATIO = new NombreDecimal(newRATIO);
         } else {
             RATIO = new BigDecimal(0);
         }

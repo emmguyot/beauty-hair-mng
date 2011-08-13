@@ -1,6 +1,6 @@
 /*
  * Bean de gestion des taux de TVA
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2011 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -24,6 +24,7 @@ import java.sql.SQLException;
 import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.GenericBean;
+import com.increg.util.NombreDecimal;
 
 /**
  * Bean de gestion des taux de TVA
@@ -286,7 +287,7 @@ public class TvaBean extends GenericBean {
      */
     public void setTX_TVA(String newTX_TVA) {
         if ((newTX_TVA != null) && (newTX_TVA.length() != 0)) {
-            TX_TVA = new BigDecimal(newTX_TVA);
+            TX_TVA = new NombreDecimal(newTX_TVA);
         } else {
             TX_TVA = null;
         }

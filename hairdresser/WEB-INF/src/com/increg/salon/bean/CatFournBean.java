@@ -1,6 +1,6 @@
 /*
  * Bean assurant la gestion du catalogue fournisseur (articles fournis par un fournisseur)
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2011 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -527,7 +527,7 @@ public class CatFournBean extends TimeStampBean {
 	public void setPRX_UNIT_HT(String newPRX_UNIT_HT) {
 	
 		if ((newPRX_UNIT_HT != null) && (newPRX_UNIT_HT.length() != 0)) {
-			PRX_UNIT_HT = new BigDecimal(newPRX_UNIT_HT);
+			PRX_UNIT_HT = new Montant(newPRX_UNIT_HT);
 		}
 		else {
 			PRX_UNIT_HT = null;

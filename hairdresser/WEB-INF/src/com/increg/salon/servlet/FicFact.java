@@ -1,6 +1,6 @@
 /*
  * Création/Modification/Suppression d'une Facture / Historique
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2011 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -17,8 +17,6 @@
  */
 package com.increg.salon.servlet;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -31,7 +29,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -56,6 +53,11 @@ import com.increg.salon.request.EditionFacture;
  */
 public class FicFact extends ConnectedServlet {
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 6652619362970012467L;
+
+	/**
      * @see com.increg.salon.servlet.ConnectedServlet
      */
     public void performTask(HttpServletRequest request,
@@ -148,7 +150,7 @@ public class FicFact extends ConnectedServlet {
         Vector<ReglementBean> reglements = null;
         String totPrest = "0";
         String NbPrest = "0";
-        List collabs = null;
+        List<CollabBean> collabs = null;
         //La liste des personnes, format CD_COLLAB puis prenom
         //Elle peut contenir les personnes presentes dans tous les cas
         //                 sauf si on crée une facture historique
@@ -335,8 +337,8 @@ public class FicFact extends ConnectedServlet {
 							}
                         	
                         	// Faut-il en ajouter ?
-                        	for (Iterator iterRestant = workReglement.keySet().iterator(); iterRestant.hasNext();) {
-								String key = (String) iterRestant.next();
+                        	for (Iterator<String> iterRestant = workReglement.keySet().iterator(); iterRestant.hasNext();) {
+								String key = iterRestant.next();
 								ReglementBean aReglement = new ReglementBean(mySalon.getMessagesBundle());
 								aReglement.setCD_MOD_REGL(key);
 								aReglement.setCD_PAIEMENT(aPaiement.getCD_PAIEMENT());

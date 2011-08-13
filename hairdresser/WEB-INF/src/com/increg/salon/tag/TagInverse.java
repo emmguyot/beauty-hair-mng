@@ -1,6 +1,6 @@
 /*
  * Tag Affichant un montant à l'envers
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2011 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -26,10 +26,15 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import com.increg.commun.BasicSession;
+import com.increg.util.Montant;
 
 public class TagInverse extends TagSupport {
     
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = -395426383704919460L;
+	/**
      * Montant à afficher
      */
     protected BigDecimal montant = null;
@@ -95,7 +100,7 @@ public class TagInverse extends TagSupport {
      * @param newMontant BigDecimal
      */
     public void setMontant(String newMontant) {
-        montant = new BigDecimal(newMontant);
+        montant = new Montant(newMontant);
     }
     
     /**

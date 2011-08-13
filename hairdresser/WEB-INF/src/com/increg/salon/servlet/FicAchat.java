@@ -1,6 +1,6 @@
 /*
  * Fiche de création des achats (séries de mouvements d'approvisionnements)
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2011 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -22,6 +22,8 @@ import java.util.*;
 import java.math.BigDecimal;
 import java.sql.*;
 import com.increg.salon.bean.*;
+import com.increg.util.Montant;
+import com.increg.util.NombreDecimal;
 import com.increg.util.SimpleDateFormatEG;
 
 import javax.servlet.http.*;
@@ -36,6 +38,10 @@ import com.increg.commun.*;
  * @author Emmanuel GUYOT <emmguyot@wanadoo.fr>
  */
 public class FicAchat extends ConnectedServlet {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -170581571382057934L;
 	protected Log log = LogFactory.getLog(this.getClass());
 
 /**
@@ -62,11 +68,11 @@ public void performTask(
     // Conversion des paramètres
     BigDecimal bdQTE = null;
     if ((QTE != null) && (QTE.length() > 0)) {
-        bdQTE = new BigDecimal(QTE);
+        bdQTE = new NombreDecimal(QTE);
     }
     BigDecimal bdVAL_MVT_HT = null;
     if ((VAL_MVT_HT != null) && (VAL_MVT_HT.length() > 0)) {
-        bdVAL_MVT_HT = new BigDecimal(VAL_MVT_HT);
+        bdVAL_MVT_HT = new Montant(VAL_MVT_HT);
     }
     
 	// Récupère la connexion
@@ -75,8 +81,8 @@ public void performTask(
 	DBSession myDBSession = mySalon.getMyDBSession();
     DateFormat formatDateTZ = new SimpleDateFormatEG(mySalon.getMessagesBundle().getString("format.dateDefaut"));
 
-    Vector lstLignes = new Vector(); // Mouvements de la commande
-    Vector lstMvt = new Vector(); // Mouvement historique d'achat
+    Vector<MvtStkBean> lstLignes = new Vector<MvtStkBean>(); // Mouvements de la commande
+    Vector<MvtStkBean> lstMvt = new Vector<MvtStkBean>(); // Mouvement historique d'achat
     BigDecimal bdQTE_STK = null;
     BigDecimal bdVAL_STK_HT = null;
     Calendar DT_MVT = null;

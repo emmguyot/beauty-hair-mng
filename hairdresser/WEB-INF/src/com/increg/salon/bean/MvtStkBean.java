@@ -1,6 +1,6 @@
 /*
  * Bean de gestion d'un mouvement de stock
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2011 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -29,6 +29,8 @@ import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.commun.TimeStampBean;
 import com.increg.commun.exception.FctlException;
+import com.increg.util.Montant;
+import com.increg.util.NombreDecimal;
 
 /**
  * Mouvement de stock
@@ -490,9 +492,9 @@ public class MvtStkBean extends TimeStampBean {
      * @param rb Messages localisés
      * @return liste des Mouvements correspondant à la commande
      */
-    public static Vector getMvtStkBeanFromCmd(DBSession dbConnect, String CD_CMD_FOURN, ResourceBundle rb) {
+    public static Vector<MvtStkBean> getMvtStkBeanFromCmd(DBSession dbConnect, String CD_CMD_FOURN, ResourceBundle rb) {
         String reqSQL = "select * from MVT_STK where CD_CMD_FOURN=" + CD_CMD_FOURN + " order by DT_MVT";
-        Vector lstMvt = new Vector();
+        Vector<MvtStkBean> lstMvt = new Vector<MvtStkBean>();
 
         // Interroge la Base
         try {
@@ -741,7 +743,7 @@ public class MvtStkBean extends TimeStampBean {
     public void setQTE(String newQTE) {
 
         if ((newQTE != null) && (newQTE.length() != 0)) {
-            QTE = new BigDecimal(newQTE);
+            QTE = new NombreDecimal(newQTE);
         }
         else {
             QTE = null;
@@ -763,7 +765,7 @@ public class MvtStkBean extends TimeStampBean {
     public void setSTK_AVANT(String newSTK_AVANT) {
 
         if ((newSTK_AVANT != null) && (newSTK_AVANT.length() != 0)) {
-            STK_AVANT = new BigDecimal(newSTK_AVANT);
+            STK_AVANT = new NombreDecimal(newSTK_AVANT);
         }
         else {
             STK_AVANT = null;
@@ -785,7 +787,7 @@ public class MvtStkBean extends TimeStampBean {
     public void setVAL_MVT_HT(String newVAL_MVT_HT) {
 
         if ((newVAL_MVT_HT != null) && (newVAL_MVT_HT.length() != 0)) {
-            VAL_MVT_HT = new BigDecimal(newVAL_MVT_HT);
+            VAL_MVT_HT = new Montant(newVAL_MVT_HT);
         }
         else {
             VAL_MVT_HT = null;
@@ -807,7 +809,7 @@ public class MvtStkBean extends TimeStampBean {
     public void setVAL_STK_AVANT(String newVAL_STK_AVANT) {
 
         if ((newVAL_STK_AVANT != null) && (newVAL_STK_AVANT.length() != 0)) {
-            VAL_STK_AVANT = new BigDecimal(newVAL_STK_AVANT);
+            VAL_STK_AVANT = new Montant(newVAL_STK_AVANT);
         }
         else {
             VAL_STK_AVANT = null;
