@@ -108,7 +108,9 @@ function Init() {
 	 <%
 	    ClientBean aCli = ClientBean.getClientBean(mySalon.getMyDBSession(), Long.toString(aFact.getCD_CLI()), mySalon.getMessagesBundle());
 	 %>
-	    <span class="readonly"><a href="_FicheCli.jsp?Action=Modification&CD_CLI=<%= aFact.getCD_CLI() %>" target="ClientFrame"><%= aCli.toString() %></a></span> 
+	    <span class="readonly"><a href="_FicheCli.jsp?Action=Modification&CD_CLI=<%= aFact.getCD_CLI() %>" target="ClientFrame"><%= aCli.toString() %></a>
+	    	<small><%= FactBean.getNbFactBeanByClientBean(mySalon.getMyDBSession(), Long.toString(aFact.getCD_CLI()), Long.toString(aFact.getCD_FACT())) %> <i18n:message key="ficFact.facturesExistantes" /></small>
+	    </span> 
 	 </td>
 	 <td class="label"><span class="facultatif"><i18n:message key="label.dtPrest" /></span> : </td>
 	 <td>

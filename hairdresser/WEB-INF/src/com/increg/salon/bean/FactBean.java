@@ -1006,7 +1006,32 @@ public class FactBean extends TimeStampBean {
         }
         return res;
     }
-    
+
+    /**
+     * Donne le nombre de facture du client
+     * @param dbConnect
+     * @param CD_CLI
+     * @param CD_FACT_EXCLUE Facture à exclure
+     * @return Nombre
+     */
+    public static Integer getNbFactBeanByClientBean(DBSession dbConnect, String CD_CLI, String CD_FACT_EXCLUE) {
+        String reqSQL = "select count(*) from FACT where CD_CLI=" + CD_CLI + " and CD_FACT <> " + CD_FACT_EXCLUE;
+        Integer res = 0;
+
+        // Interroge la Base
+        try {
+            ResultSet aRS = dbConnect.doRequest(reqSQL);
+
+            while (aRS.next()) {
+                res = aRS.getInt(1);
+            }
+            aRS.close();
+        } catch (Exception e) {
+            System.out.println("Erreur dans getNbFactBeanByClientBean : " + e.toString());
+        }
+        return res;
+    }
+
     /**
      * Insert the method's description here.
      * Creation date: (18/08/2001 15:24:27)
