@@ -1,6 +1,6 @@
 /*
  * Bean de gestion de client
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2011 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -44,7 +44,7 @@ import com.increg.commun.exception.FctlException;
  * Creation date: (18/07/2001 22:43:26)
  * @author Emmanuel GUYOT <emmguyot@wanadoo.fr>
  */
-public class ClientBean extends TimeStampBean implements Comparable {
+public class ClientBean extends TimeStampBean implements Comparable<ClientBean> {
     /**
      * Code client interne
      */
@@ -120,7 +120,7 @@ public class ClientBean extends TimeStampBean implements Comparable {
     /**
      * Abonnement du client
      */
-    protected HashMap abonnements;
+    protected HashMap<Long, Integer> abonnements;
     
     /**
      * ClientBean constructor comment.
@@ -129,7 +129,7 @@ public class ClientBean extends TimeStampBean implements Comparable {
     public ClientBean(ResourceBundle rb) {
         super(rb);
         INDIC_VALID = "O";
-        abonnements = new HashMap();
+        abonnements = new HashMap<Long, Integer>();
     }
     /**
      * ClientBean à partir d'un RecordSet.
@@ -290,7 +290,7 @@ public class ClientBean extends TimeStampBean implements Comparable {
             }
         }
         try {
-            abonnements = new HashMap();
+            abonnements = new HashMap<Long, Integer>();
             ResultSet rs2 = rs.getStatement().getConnection().createStatement().executeQuery("select * from ABO_CLI where CD_CLI=" + CD_CLI);
             while (rs2.next()) {
                 abonnements.put(new Long(rs2.getLong("CD_PREST")), new Integer(rs2.getInt("CPT")));
@@ -474,11 +474,11 @@ public class ClientBean extends TimeStampBean implements Comparable {
         reqs[i++] = "delete from ABO_CLI where CD_CLI=" + CD_CLI;
 
         // Abonnements
-        Set keys = abonnements.keySet();
-        Iterator keyIter = keys.iterator();
+        Set<Long> keys = abonnements.keySet();
+        Iterator<Long> keyIter = keys.iterator();
         while (keyIter.hasNext()) {
-            Long CD_PREST = (Long) keyIter.next();
-            Integer CPT = (Integer) abonnements.get(CD_PREST);
+            Long CD_PREST = keyIter.next();
+            Integer CPT = abonnements.get(CD_PREST);
             
             reqs[i++] = "insert into ABO_CLI (CD_CLI, CD_PREST, CPT) values ("
                         + CD_CLI + ", " + CD_PREST + ", " + CPT + ")"; 
@@ -920,11 +920,11 @@ public class ClientBean extends TimeStampBean implements Comparable {
         reqs[i++] = "delete from ABO_CLI where CD_CLI=" + CD_CLI;
 
         // Abonnements
-        Set keys = abonnements.keySet();
-        Iterator keyIter = keys.iterator();
+        Set<Long> keys = abonnements.keySet();
+        Iterator<Long> keyIter = keys.iterator();
         while (keyIter.hasNext()) {
-            Long CD_PREST = (Long) keyIter.next();
-            Integer CPT = (Integer) abonnements.get(CD_PREST);
+            Long CD_PREST = keyIter.next();
+            Integer CPT = abonnements.get(CD_PREST);
             
             reqs[i++] = "insert into ABO_CLI (CD_CLI, CD_PREST, CPT) values ("
                         + CD_CLI + ", " + CD_PREST + ", " + CPT + ")"; 
@@ -1010,7 +1010,7 @@ public class ClientBean extends TimeStampBean implements Comparable {
      * @param rb Ressource
      * @return Liste de clients correspondants
      */
-	public static List getDoubleClientBeans(DBSession myDBSession, ClientBean client, ResourceBundle rb) {
+	public static List<ClientBean> getDoubleClientBeans(DBSession myDBSession, ClientBean client, ResourceBundle rb) {
 
 		// TODO : Modifier quand socle mis à jour pour utiliser une recherche floue de postgreSQL
 		String reqSQL = "select * from CLI where CLI.NOM ilike " + DBSession.quoteWith("%" + client.getNOM() + "%", '\'');
@@ -1018,7 +1018,7 @@ public class ClientBean extends TimeStampBean implements Comparable {
 			reqSQL += " and CLI.PRENOM ilike " + DBSession.quoteWith("%" + client.getPRENOM() + "%", '\'');
 		}
 		reqSQL += " order by NOM, PRENOM, CD_CLI";
-        List res = new ArrayList();
+        List<ClientBean> res = new ArrayList<ClientBean>();
 
         // Interroge la Base
         try {
@@ -1350,8 +1350,8 @@ public class ClientBean extends TimeStampBean implements Comparable {
     /**
      * @see java.lang.Comparable#compareTo(java.lang.Object)
      */
-    public int compareTo(Object o) {
-        ClientBean client2 = (ClientBean) o;
+    public int compareTo(ClientBean o) {
+        ClientBean client2 = o;
         return (getNOM() + "#" + getPRENOM() + "#" + getCD_CLI()).compareTo(client2.getNOM() + "#" + client2.getPRENOM() + "#" + client2.getCD_CLI());
     }
 
@@ -1400,7 +1400,7 @@ public class ClientBean extends TimeStampBean implements Comparable {
      * 
      * @return Abonnements du client
      */
-    public HashMap getAbonnements() {
+    public HashMap<Long, Integer> getAbonnements() {
         return abonnements;
     }
     
@@ -1476,10 +1476,10 @@ public class ClientBean extends TimeStampBean implements Comparable {
 						&& (client.getDT_ANNIV() == null)) {
 					client.setDT_ANNIV(clientDoublon.getDT_ANNIV());
 				}
-				Iterator iterAbonnement = clientDoublon.getAbonnements().keySet().iterator();
+				Iterator<Long> iterAbonnement = clientDoublon.getAbonnements().keySet().iterator();
 				while (iterAbonnement.hasNext()) {
-		            Long CD_PREST = (Long) iterAbonnement.next();
-		            Integer CPT = (Integer) clientDoublon.getAbonnements().get(CD_PREST);
+		            Long CD_PREST = iterAbonnement.next();
+		            Integer CPT = clientDoublon.getAbonnements().get(CD_PREST);
 		            
 		            if (client.getAbonnements().get(CD_PREST) == null) {
 		            	client.getAbonnements().put(CD_PREST, CPT);

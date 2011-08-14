@@ -1,6 +1,6 @@
 /*
  * Bean Session incluant les données d'une session LibertyLook
- * Copyright (C) 2003-2009 Emmanuel Guyot <See emmguyot on SourceForge>
+ * Copyright (C) 2003-2011 Emmanuel Guyot <See emmguyot on SourceForge>
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -57,7 +57,7 @@ public abstract class SalonSession extends BasicSession {
     /**
      * listeFact Liste des factures en cours
      */
-    protected java.util.Vector listeFact;
+    protected Vector<FactBean> listeFact;
 
     /**
      * msgTicket Message à afficher sur le ticket
@@ -92,7 +92,7 @@ public abstract class SalonSession extends BasicSession {
     /**
      * Autres devises
      */
-    protected Vector lstAutresDevises;
+    protected Vector<DeviseBean> lstAutresDevises;
 
     /**
      * Largeur des fiches
@@ -119,8 +119,12 @@ public abstract class SalonSession extends BasicSession {
      */
 	protected boolean secureApache;
 
+	/**
+	 * Liste des clients
+	 */
+	protected Vector<ClientBean> listeClient = new Vector<ClientBean>();
 	
-    /**
+	/**
      * SalonSession constructor comment.
      * Constructeur utilisé en cas de perte de session
      * Le constructeur doit exister
@@ -152,7 +156,7 @@ public abstract class SalonSession extends BasicSession {
             throw e;
         }
         myDBSession = new DBSession(configName);
-        listeFact = new Vector();
+        listeFact = new Vector<FactBean>();
         try {
             try {
                 /**
@@ -429,13 +433,13 @@ public abstract class SalonSession extends BasicSession {
     public void setGoodCollab(FactBean aFact) throws Exception {
 
         //Recupere les collaborateurs presents
-        List collabsPresent = PointageBean.getPresentCollabs(myDBSession);
-        Iterator collabsIter = collabsPresent.iterator();
+        List<CollabBean> collabsPresent = PointageBean.getPresentCollabs(myDBSession);
+        Iterator<CollabBean> collabsIter = collabsPresent.iterator();
         int CD_COLLAB = aFact.getCD_COLLAB();
         int defaultCD_COLLAB = -1;
 
         while (collabsIter.hasNext()) {
-            CollabBean aCollab = (CollabBean) collabsIter.next();
+            CollabBean aCollab = collabsIter.next();
             defaultCD_COLLAB = aCollab.getCD_COLLAB();
             if (defaultCD_COLLAB == CD_COLLAB) {
                 //Le collaborateur est present, on s'arrete
@@ -525,7 +529,7 @@ public abstract class SalonSession extends BasicSession {
      * Creation date: (09/09/2001 21:20:15)
      * @return java.util.Vector
      */
-    public java.util.Vector getListeFact() {
+    public Vector<FactBean> getListeFact() {
         return listeFact;
     }
 
@@ -611,7 +615,7 @@ public abstract class SalonSession extends BasicSession {
      * Creation date: (09/09/2001 21:20:15)
      * @param newListeFact java.util.Vector
      */
-    public void setListeFact(java.util.Vector newListeFact) {
+    public void setListeFact(Vector<FactBean> newListeFact) {
         listeFact = newListeFact;
     }
 
@@ -704,7 +708,7 @@ public abstract class SalonSession extends BasicSession {
      * Returns the lstAutresDevises.
      * @return Vector
      */
-    public Vector getLstAutresDevises() {
+    public Vector<DeviseBean> getLstAutresDevises() {
         if (lstAutresDevises == null) {
             // Chargement depuis la base
             lstAutresDevises = DeviseBean.getOtherDeviseBean(myDBSession);
@@ -756,5 +760,21 @@ public abstract class SalonSession extends BasicSession {
 	 */
 	public void setSecureApache(boolean secureApache) {
 		this.secureApache = secureApache;
+	}
+
+	/**
+	 * Donne la liste des clients affichée dernièrement
+	 * @return
+	 */
+	public Vector<ClientBean> getListeClient() {
+		return listeClient;
+	}
+
+	/**
+	 * Mémorise la liste des clients affichée dernièrement
+	 * @param lstClient
+	 */
+	public void setListeClient(Vector<ClientBean> listeClient) {
+		this.listeClient = listeClient;
 	}
 }

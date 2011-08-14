@@ -1,6 +1,6 @@
 /*
  * Fiche de création / modification d'un client
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge>
+ * Copyright (C) 2001-2011 Emmanuel Guyot <See emmguyot on SourceForge>
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -43,6 +43,11 @@ import com.increg.salon.bean.SalonSession;
  */
 public class FicCli extends ConnectedServlet {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5399520320417324590L;
+	
 	protected Log log = LogFactory.getLog(this.getClass());
 	
 	/**
@@ -84,13 +89,14 @@ public class FicCli extends ConnectedServlet {
         HttpSession mySession = request.getSession(false);
         SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
         DBSession myDBSession = mySalon.getMyDBSession();
-
+        ClientBean aCli = null;
+        
         try {
             if (Action == null) {
                 // Première phase de création
                 request.setAttribute("Action", "Creation");
                 // Un bean vide
-                ClientBean aCli = new ClientBean(mySalon.getMessagesBundle());
+                aCli = new ClientBean(mySalon.getMessagesBundle());
                 request.setAttribute("ClientBean", aCli);
             } else if (Action.equals("Creation")) {
                 // Crée réellement le client
@@ -98,7 +104,7 @@ public class FicCli extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                ClientBean aCli = new ClientBean(mySalon.getMessagesBundle());
+                aCli = new ClientBean(mySalon.getMessagesBundle());
                 aCli.setCD_CLI(CD_CLI);
                 aCli.setCIVILITE(CIVILITE);
                 aCli.setNOM(NOM);
@@ -123,7 +129,7 @@ public class FicCli extends ConnectedServlet {
                     mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.creationOk" + BasicSession.TAG_I18N);
 
                     // Recherche existance doublons
-                    List lstClient = ClientBean.getDoubleClientBeans(myDBSession, aCli, mySalon.getMessagesBundle());
+                    List<ClientBean> lstClient = ClientBean.getDoubleClientBeans(myDBSession, aCli, mySalon.getMessagesBundle());
                     if (lstClient.size() > 1) {
                         mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.existanceDoublon" + BasicSession.TAG_I18N);
                     }
@@ -142,7 +148,7 @@ public class FicCli extends ConnectedServlet {
                 // Affichage de la fiche en modification
                 request.setAttribute("Action", "Modification");
 
-                ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI, mySalon.getMessagesBundle());
+                aCli = ClientBean.getClientBean(myDBSession, CD_CLI, mySalon.getMessagesBundle());
                 if (assertOrError((aCli != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
@@ -154,7 +160,7 @@ public class FicCli extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI, mySalon.getMessagesBundle());
+                aCli = ClientBean.getClientBean(myDBSession, CD_CLI, mySalon.getMessagesBundle());
                 if (assertOrError((aCli != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
@@ -194,7 +200,7 @@ public class FicCli extends ConnectedServlet {
                 /**
                  * Création du bean et enregistrement
                  */
-                ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI, mySalon.getMessagesBundle());
+                aCli = ClientBean.getClientBean(myDBSession, CD_CLI, mySalon.getMessagesBundle());
                 if (assertOrError((aCli != null), BasicSession.TAG_I18N + "message.notFound" + BasicSession.TAG_I18N, request, response)) {
                 	return;
                 }
@@ -215,7 +221,7 @@ public class FicCli extends ConnectedServlet {
                 // Affichage de la fiche en modification
                 request.setAttribute("Action", "Modification");
 
-                ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI, mySalon.getMessagesBundle());
+                aCli = ClientBean.getClientBean(myDBSession, CD_CLI, mySalon.getMessagesBundle());
                 request.setAttribute("ClientBean", aCli);
                 NbPrest = Long.toString(Long.MAX_VALUE);
             } else if (Action.equals("Commentaire")) {
@@ -240,7 +246,7 @@ public class FicCli extends ConnectedServlet {
 
                 request.setAttribute("Action", "Modification");
 
-                ClientBean aCli = ClientBean.getClientBean(myDBSession, CD_CLI, mySalon.getMessagesBundle());
+                aCli = ClientBean.getClientBean(myDBSession, CD_CLI, mySalon.getMessagesBundle());
                 request.setAttribute("ClientBean", aCli);
             } else {
                 log.error("Action non codée : " + Action);
@@ -258,7 +264,7 @@ public class FicCli extends ConnectedServlet {
         /**
          * Recherche les prestations associées au client
          */
-        Vector listePrest = new Vector();
+        Vector<HistoPrestBean> listePrest = new Vector<HistoPrestBean>();
         if ((CD_CLI != null) && (CD_CLI.length() > 0)) {
             String reqSQL = "select * from FACT where CD_CLI=" + CD_CLI + " order by DT_PREST desc";
             long nbPrest = Long.parseLong(NbPrest);
@@ -273,13 +279,13 @@ public class FicCli extends ConnectedServlet {
                      * Création du bean de consultation
                      */
                     FactBean aFact = new FactBean(aRS, mySalon.getMessagesBundle());
-                    Vector lignes = aFact.getLignes(myDBSession);
+                    Vector<HistoPrestBean> lignes = aFact.getLignes(myDBSession);
 
                     /**
                      * Boucle sur chaque ligne
                      */
                     for (int i = 0; (i < lignes.size()) && (compteur < nbPrest); i++) {
-                        HistoPrestBean aHistoPrest = (HistoPrestBean) lignes.get(i);
+                        HistoPrestBean aHistoPrest = lignes.get(i);
                         boolean ajout = false;
 
                         if ((CD_TYP_VENT != null) && (CD_TYP_VENT.length() > 0)) {
@@ -311,6 +317,8 @@ public class FicCli extends ConnectedServlet {
         }
 
         request.setAttribute("listePrest", listePrest);
+        request.setAttribute("suivant", suivantPossible(mySalon, aCli));
+        request.setAttribute("precedent", precedentPossible(mySalon, aCli));
 
         try {
             // Passe la main à la fiche de création
@@ -320,4 +328,65 @@ public class FicCli extends ConnectedServlet {
             log.error("Erreur à la redirection", e);
         }
     }
+
+    /**
+     * Recherche dans la précédente liste des clients le client actuel pour indiquer si il y a un précédent
+     * @param mySalon
+     * @param aCli
+     * @return CD_CLI du précédent ou Null
+     */
+	private Long precedentPossible(SalonSession mySalon, ClientBean aCli) {
+		
+		Long precedent = null;
+
+		Vector<ClientBean> lstClient = mySalon.getListeClient();
+		
+		if ((lstClient == null) || (aCli == null)) {
+			return precedent;
+		}
+		
+		for (ClientBean clientBean : lstClient) {
+			
+			if (clientBean.getCD_CLI() == aCli.getCD_CLI()) {
+				return precedent;
+			}
+			precedent = clientBean.getCD_CLI();
+		}
+		// Pas trouvé
+		mySalon.setListeClient(new Vector<ClientBean>());
+		return null;
+	}
+
+	/**
+	 * Recherche dans la précédente liste des clients le client actuel pour indiquer si il y a un suivant
+	 * @param mySalon
+	 * @param aCli
+	 * @return CD_CLI du suivant ou Null
+	 */
+	private Long suivantPossible(SalonSession mySalon, ClientBean aCli) {
+		Long suivant = null;
+
+		Vector<ClientBean> lstClient = mySalon.getListeClient();
+		
+		if ((lstClient == null) || (aCli == null)) {
+			return suivant;
+		}
+		
+		Boolean nextIsGood = false;
+		for (ClientBean clientBean : lstClient) {
+			
+			suivant = clientBean.getCD_CLI();
+			if (nextIsGood) {
+				return suivant;
+			}
+			if (clientBean.getCD_CLI() == aCli.getCD_CLI()) {
+				nextIsGood = true;
+			}
+		}
+		// Pas trouvé
+		if (!nextIsGood) {
+			mySalon.setListeClient(new Vector<ClientBean>());
+		}
+		return null;
+	}
 }

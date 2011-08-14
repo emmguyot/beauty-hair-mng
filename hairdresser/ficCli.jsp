@@ -44,6 +44,8 @@ SalonSession mySalon = com.increg.salon.servlet.ConnectedServlet.CheckOrGoHome(r
    String Action = (String) request.getAttribute("Action");
    String NbPrest = (String) request.getAttribute("NbPrest");
    ClientBean aCli = (ClientBean) request.getAttribute("ClientBean");
+   Long cliSuivant = (Long) request.getAttribute("suivant");
+   Long cliPrecedent = (Long) request.getAttribute("precedent");
    String CD_TYP_VENT = request.getParameter("CD_TYP_VENT");
    boolean peutCreerFacture = mySalon.peutCreerFacture();   
 %>
@@ -61,6 +63,16 @@ function Init() {
       // Pas de lien supprimer
       MM_showHideLayers('SUPPRIMER?bottomFrame','','hide');
       MM_showHideLayers('ENREGISTRER?bottomFrame','','show');
+   <%
+   } 
+   if (cliPrecedent != null) { %>
+	   // Lien Précédent affiché
+	   MM_showHideLayers('PRECEDENT?bottomFrame','','show');
+   <%
+   }
+   if (cliSuivant != null) { %>
+	   // Lien Suivant affciché
+	   MM_showHideLayers('SUIVANT?bottomFrame','','show');
    <%
    } %>
    MM_showHideLayers('NOUVEAU?bottomFrame','','show');
@@ -442,6 +454,26 @@ function Supprimer()
             document.fiche.submit();
         }
     }
+}
+
+function RetourListe()
+{
+   if (document.fiche.NOM.value != "") {
+      parent.location.href = "ListeCli.jsp?premLettre=" + document.fiche.NOM.value.charAt(0).toUpperCase();
+   }
+   else {
+      parent.location.href = "ListeCli.jsp?premLettre=A";
+   }
+}
+
+function Suivant()
+{
+   parent.location.href = "_FicheCli.jsp?Action=Modification&CD_CLI=<%= cliSuivant %>";
+}
+
+function Precedent()
+{
+   parent.location.href = "_FicheCli.jsp?Action=Modification&CD_CLI=<%= cliPrecedent %>";
 }
 
 function RetourListe()

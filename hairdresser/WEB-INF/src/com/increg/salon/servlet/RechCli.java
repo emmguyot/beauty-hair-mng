@@ -1,6 +1,6 @@
 /*
  * Recherche/Liste de clients
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2011 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -37,6 +37,11 @@ import com.increg.salon.bean.SalonSession;
 
 public class RechCli extends ConnectedServlet {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4258886047161980522L;
+	
 	protected Log log = LogFactory.getLog(this.getClass());
 
 	/**
@@ -49,7 +54,7 @@ public class RechCli extends ConnectedServlet {
         String action = request.getParameter("Action");
         boolean advancedQuery = ((type != null) && (type.equals("advanced")));
         
-        Vector lstLignes;
+        Vector<ClientBean> lstLignes;
         if (advancedQuery) {
         	lstLignes = getListQueryAdvanced(request);
         } else if (StringUtils.equals(action, "Groupe")) {
@@ -64,6 +69,11 @@ public class RechCli extends ConnectedServlet {
 
         // Stocke le Vector pour le JSP
         request.setAttribute("Liste", lstLignes);
+        // Mémorise la liste pour la pagination
+        HttpSession mySession = request.getSession(false);
+        SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
+        mySalon.setListeClient(lstLignes);
+        
 
         // Interroge la Base
         try {
@@ -104,7 +114,7 @@ public class RechCli extends ConnectedServlet {
      * @param request requete avec les paramétres 
      * @return résultat de la requete
      */
-    private Vector getListQuerySimple(HttpServletRequest request) {
+    private Vector<ClientBean> getListQuerySimple(HttpServletRequest request) {
         String premLettre = request.getParameter("premLettre");
         String INDIC_VALID = request.getParameter("INDIC_VALID");
         if (premLettre == null) {
@@ -129,7 +139,7 @@ public class RechCli extends ConnectedServlet {
      * @param request requete avec les paramétres 
      * @return résultat de la requete
      */
-    private Vector getListQueryAdvanced(HttpServletRequest request) {
+    private Vector<ClientBean> getListQueryAdvanced(HttpServletRequest request) {
         String nom = request.getParameter("NOM");
         String prenom = request.getParameter("PRENOM");
         String civilite = request.getParameter("CIVILITE");
@@ -249,7 +259,7 @@ public class RechCli extends ConnectedServlet {
      * @param request requete avec les paramétres 
      * @return résultat de la requete
      */
-    private Vector getListQueryDoublon(HttpServletRequest request) {
+    private Vector<ClientBean> getListQueryDoublon(HttpServletRequest request) {
         String CD_CLI = request.getParameter("CD_CLI");
         request.setAttribute("CD_CLI", CD_CLI);
         // Charge le client source
@@ -263,7 +273,7 @@ public class RechCli extends ConnectedServlet {
         }
         request.setAttribute("Action", "Doublon");
         // Rechercher les doublons
-        return new Vector(ClientBean.getDoubleClientBeans(myDBSession, client, mySalon.getMessagesBundle()));
+        return new Vector<ClientBean>(ClientBean.getDoubleClientBeans(myDBSession, client, mySalon.getMessagesBundle()));
     }
 
     /**
@@ -304,17 +314,17 @@ public class RechCli extends ConnectedServlet {
      * @param reqSQL requete SQL à passer
      * @return Liste des clients de la requete
      */
-    private Vector executeQuery(HttpServletRequest request, String reqSQL) {
+    private Vector<ClientBean> executeQuery(HttpServletRequest request, String reqSQL) {
         // Récupère la connexion
         HttpSession mySession = request.getSession(false);
         SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
         DBSession myDBSession = mySalon.getMyDBSession();
-        Vector lstLignes = null;
+        Vector<ClientBean> lstLignes = null;
 
         // Interroge la Base
         try {
             ResultSet aRS = myDBSession.doRequest(reqSQL);
-            lstLignes = new Vector();
+            lstLignes = new Vector<ClientBean>();
 
             while (aRS.next()) {
                 lstLignes.add(new ClientBean(aRS, mySalon.getMessagesBundle()));

@@ -1,6 +1,6 @@
 /*
  * Bean de gestion de collaborateur 
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2011 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -151,10 +151,10 @@ public class PointageBean extends TimeStampBean {
                 .format(DT_DEBUT.getTime())
                 .equals(formatDateSplit.format(DT_FIN.getTime())))) {
             // Pointage sur plusieurs jours : Il faut éclater
-            Vector listePointage = eclate(dbConnect);
+            Vector<PointageBean> listePointage = eclate(dbConnect);
 
             for (int i = 0; i < listePointage.size(); i++) {
-                PointageBean aPointage = (PointageBean) listePointage.get(i);
+                PointageBean aPointage = listePointage.get(i);
 
                 aPointage.create(dbConnect);
             }
@@ -287,10 +287,10 @@ public class PointageBean extends TimeStampBean {
                 .format(DT_DEBUT.getTime())
                 .equals(formatDateSplit.format(DT_FIN.getTime())))) {
             // Pointage sur plusieurs jours : Il faut éclater
-            Vector listePointage = eclate(dbConnect);
+            Vector<PointageBean> listePointage = eclate(dbConnect);
 
             for (int i = 0; i < listePointage.size(); i++) {
-                PointageBean aPointage = (PointageBean) listePointage.get(i);
+                PointageBean aPointage = listePointage.get(i);
 
                 if (i == 0) {
                     aPointage.maj(dbConnect);
@@ -500,9 +500,9 @@ public class PointageBean extends TimeStampBean {
      * @param dbConnect com.increg.salon.bean.DBSession
      * @exception java.sql.SQLException The exception description.
      */
-    protected Vector eclate(DBSession dbConnect) throws java.sql.SQLException {
+    protected Vector<PointageBean> eclate(DBSession dbConnect) throws java.sql.SQLException {
 
-        Vector res = new Vector();
+        Vector<PointageBean> res = new Vector<PointageBean>();
 
         // Recherche si le nombre d'heure du collab est défini
         CollabBean aCollab =
@@ -706,11 +706,11 @@ public class PointageBean extends TimeStampBean {
      * @param dbConnect la connection a la base
      * @return la liste des collaborateurs presents
      */
-    public static List getPresentCollabs(DBSession dbConnect) {
-        List presentCollabs = new LinkedList();
+    public static List<CollabBean> getPresentCollabs(DBSession dbConnect) {
+        List<CollabBean> presentCollabs = new LinkedList<CollabBean>();
         //Recupere tous les collaborateurs
-        List collabsList = CollabBean.getAllCollabsAsList(dbConnect);
-        Iterator collabIter = collabsList.iterator();
+        List<CollabBean> collabsList = CollabBean.getAllCollabsAsList(dbConnect);
+        Iterator<CollabBean> collabIter = collabsList.iterator();
 
         //Pour chaque collaborateur, on recupere le dernier pointage
         //Si le collaborateur est present, on l'ajoute a la liste

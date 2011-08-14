@@ -108,14 +108,28 @@ function Imprimer() {
                 img="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/supprimer.gif\" %>" 
                 alt="<%= paramBouton6 %>"/>
 </span>
-<span id="RETOUR_LISTE" style="position:absolute; left:535px; top:11px; width:146px; height:31px; z-index:1; visibility: hidden" > 
+<span id="PRECEDENT" style="position:absolute; left:535px; top:11px; width:146px; height:31px; z-index:1; visibility: hidden" > 
+   <i18n:message key="bouton.Precedent" id="paramBouton9" />
+   <salon:bouton url="javascript:parent.mainFrame.Precedent()" 
+                imgOn="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/precedent2.gif\" %>" 
+                img="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/precedent.gif\" %>" 
+                alt="<%= paramBouton9 %>"/>
+</span>
+<span id="RETOUR_LISTE" style="position:absolute; left:665px; top:11px; width:146px; height:31px; z-index:1; visibility: hidden" > 
    <i18n:message key="bouton.Liste" id="paramBouton7" />
    <salon:bouton url="javascript:parent.mainFrame.RetourListe()" 
                 imgOn="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/liste2.gif\" %>" 
                 img="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/liste.gif\" %>" 
                 alt="<%= paramBouton7 %>"/>
 </span>
-<span id="AIDE" style="position:absolute; width:146px; height:31px; z-index:1; top: 11px; left: 665px; visibility: visible">
+<span id="SUIVANT" style="position:absolute; left:795px; top:11px; width:146px; height:31px; z-index:1; visibility: hidden" > 
+   <i18n:message key="bouton.Suivant" id="paramBouton10" />
+   <salon:bouton url="javascript:parent.mainFrame.Suivant()" 
+                imgOn="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/suivant2.gif\" %>" 
+                img="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/suivant.gif\" %>" 
+                alt="<%= paramBouton10 %>"/>
+</span>
+<span id="AIDE" style="position:absolute; width:146px; height:31px; z-index:1; top: 11px; left: 925px; visibility: visible">
    <i18n:message key="bouton.Aide" id="paramBouton8" />
    <salon:bouton url="javascript:parent.mainFrame.Aide()" 
                 imgOn="<%= \"images/\" + mySalon.getLangue().getLanguage() + \"/aide2.gif\" %>" 
