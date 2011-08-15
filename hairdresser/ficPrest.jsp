@@ -98,7 +98,7 @@ function Init() {
 					     (String) request.getAttribute("Premier") : 
 					     CD_TYP_VENT;
 	        %>
-		<span id="CATEGORIE" style="position:absolute; visibility:visible">
+		<span id="CATEGORIE" style="position:absolute; visibility:hidden;">
 		<span class="obligatoire"><i18n:message key="label.categorie" /> :</span> 
 		<salon:DBselection valeur="<%= aPrest.getCD_CATEG_PREST() %>" sql="select CD_CATEG_PREST, LIB_CATEG_PREST from CATEG_PREST order by LIB_CATEG_PREST" msgManquant="true">
 		  <select name="CD_CATEG_PREST">
@@ -107,7 +107,7 @@ function Init() {
 		  </select>
 		</salon:DBselection>
 		</span>
-		<span id="MARQUE" style="position:absolute; visibility:visible">
+		<span id="MARQUE" style="position:absolute; visibility:hidden;">
 		<span class="obligatoire"><i18n:message key="label.marque" /> :</span> 
 		<salon:DBselection valeur="<%= aPrest.getCD_MARQUE() %>" sql="select CD_MARQUE, LIB_MARQUE from MARQUE order by LIB_MARQUE">
 		  <select name="CD_MARQUE">
@@ -141,7 +141,7 @@ function Init() {
 		<textarea name="COMM" cols="40" rows="2">%%</textarea>
 	    </salon:valeur>
 	</p>
-	<span id="TPS" style="position:absolute; visibility:visible">
+	<span id="TPS" style="position:absolute; visibility:hidden;">
 		<p>
 			<span class="facultatif"><i18n:message key="label.tpsMoyen" /> :</span> 
 			<salon:valeur valeurNulle="0" valeur="<%= aPrest.getTPS_PREST() %>" > 
@@ -160,7 +160,7 @@ function Init() {
                     </select>
                 </salon:selection>
 			</p>
-		    <p><span id="ABON" style="position:relative; visibility:visible">
+		    <p><span id="ABON" style="position:relative; visibility:hidden;">
 				<span class="facultatif"><i18n:message key="label.prestationElt" /> :</span> 
 				<salon:DBselection valeur="<%= aPrest.getCD_PREST_ABONNEMENT() %>" sql='<%= "select CD_PREST, LIB_PREST from PREST where INDIC_ABONNEMENT = \'O\' and CD_TYP_VENT=" + CD_TYP_VENT + " order by LIB_PREST" %>'>
 				  <select name="CD_PREST_ABONNEMENT">
@@ -183,7 +183,7 @@ function Init() {
 	     </blockquote>
 		</p>
 	</span>
-	<span id="ARTICLE" style="position:absolute; visibility:visible"><p>
+	<span id="ARTICLE" style="position:absolute; visibility:hidden;"><p>
 		<span class="obligatoire"><i18n:message key="label.articleStock" /> :</span>
 		<salon:DBselection valeur="<%= aPrest.getCD_ART() %>" sql="select CD_ART, LIB_ART from ART where CD_TYP_ART=1 order by LIB_ART">
 		  <select name="CD_ART">
