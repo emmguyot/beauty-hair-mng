@@ -1,6 +1,6 @@
 /*
  * Recherche/Liste d'articles
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2011 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -31,6 +31,11 @@ import com.increg.salon.bean.MvtStkBean;
 import com.increg.salon.bean.SalonSession;
 
 public class RechArt extends ConnectedServlet {
+/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3269295421020392100L;
+
 /**
  * @see com.increg.salon.servlet.ConnectedServlet
  */
@@ -81,8 +86,8 @@ public void performTask(javax.servlet.http.HttpServletRequest request, javax.ser
 	// Interroge la Base
 	try {
 		ResultSet aRS = myDBSession.doRequest(reqSQL);
-		Vector lstLignes = new Vector();
-		Vector lstMvt = new Vector();
+		Vector<ArtBean> lstLignes = new Vector<ArtBean>();
+		Vector<MvtStkBean> lstMvt = new Vector<MvtStkBean>();
 
 		while (aRS.next()) {
 			ArtBean aArt = new ArtBean(aRS, mySalon.getMessagesBundle());
@@ -103,6 +108,8 @@ public void performTask(javax.servlet.http.HttpServletRequest request, javax.ser
 		// Stocke le Vector pour le JSP
 		request.setAttribute("Liste", lstLignes);
 		request.setAttribute("ListeMvt", lstMvt);
+        // Mémorise la liste pour la pagination
+        mySalon.setListeArticle(lstLignes);
 		
 		// Passe la main
 		getServletConfig().getServletContext().getRequestDispatcher("/lstArt.jsp").forward(request, response);

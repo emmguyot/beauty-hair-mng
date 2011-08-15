@@ -41,6 +41,8 @@ SalonSession mySalon = com.increg.salon.servlet.ConnectedServlet.CheckOrGoHome(r
    // Récupération des paramètres
    String Action = (String) request.getAttribute("Action");
    PrestBean aPrest = (PrestBean) request.getAttribute("PrestBean");
+   Long prestSuivant = (Long) request.getAttribute("suivant");
+   Long prestPrecedent = (Long) request.getAttribute("precedent");
 %>
    var Action="<%=Action%>";
 
@@ -60,7 +62,17 @@ function Init() {
       MM_showHideLayers('ENREGISTRER?bottomFrame','','show');
       MM_showHideLayers('DUPLIQUER?bottomFrame','','show');
    <%
-   } %>
+   }
+   if (prestPrecedent != null) { %>
+	   // Lien Précédent affiché
+	   MM_showHideLayers('PRECEDENT?bottomFrame','','show');
+	<%
+	}
+	if (prestSuivant != null) { %>
+	   // Lien Suivant affciché
+	   MM_showHideLayers('SUIVANT?bottomFrame','','show');
+	<%
+	} %>
    MM_showHideLayers('RETOUR_LISTE?bottomFrame','','show');
 }
 //-->
@@ -290,6 +302,16 @@ function Dupliquer()
    }
    document.fiche.Action.value = "Duplication";
    document.fiche.submit();
+}
+
+function Suivant()
+{
+   parent.location.href = "_FichePrest.jsp?Action=Modification&CD_PREST=<%= prestSuivant %>";
+}
+
+function Precedent()
+{
+   parent.location.href = "_FichePrest.jsp?Action=Modification&CD_PREST=<%= prestPrecedent %>";
 }
 
 function RetourListe()

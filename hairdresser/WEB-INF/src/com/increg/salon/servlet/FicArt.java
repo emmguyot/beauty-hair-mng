@@ -1,6 +1,6 @@
 /*
  * Fiche de création / modification d'un article
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2011 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -20,6 +20,7 @@ package com.increg.salon.servlet;
 import java.util.*;
 import java.sql.*;
 import com.increg.salon.bean.*;
+
 import javax.servlet.http.*;
 
 import org.apache.commons.logging.Log;
@@ -33,6 +34,10 @@ import com.increg.commun.*;
  */
 public class FicArt extends ConnectedServlet {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8577460195289813998L;
 	protected Log log = LogFactory.getLog(this.getClass());
 	
 /**
@@ -94,7 +99,7 @@ public void performTask(
 
 	// Récupère la connexion
 	HttpSession mySession = request.getSession(false);
-	SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
+	final SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
 	DBSession myDBSession = mySalon.getMyDBSession();
 
 	ArtBean aArt = null;
@@ -352,7 +357,7 @@ public void performTask(
 	/**
 	 * Recherche les fournisseurs de cet article
 	 */
-	Vector listeFourn = new Vector();
+	Vector<CatFournBean> listeFourn = new Vector<CatFournBean>();
 	if ((CD_ART != null) && (CD_ART.length() > 0)) {
 		String reqSQL = "select CAT_FOURN.* from CAT_FOURN, FOURN where FOURN.CD_FOURN = CAT_FOURN.CD_FOURN and CD_ART=" + aArt.getCD_ART() + " order by FOURN_PRINC DESC, RAIS_SOC, QTE_CMD_MIN";
 
@@ -381,6 +386,14 @@ public void performTask(
 	}
 	request.setAttribute("listeFourn", listeFourn);
 	request.setAttribute("ArtBean", aArt);
+    ISalonListeReset resetter = new ISalonListeReset(){
+        public void reset ()
+        {
+            mySalon.setListeArticle(new Vector<ArtBean>());
+        }
+    };
+    request.setAttribute("suivant", (aArt != null) ? suivantPossible(mySalon.getListeArticle(), aArt.getCD_ART(), resetter) : null);
+    request.setAttribute("precedent", (aArt != null) ? precedentPossible(mySalon.getListeArticle(), aArt.getCD_ART(), resetter) : null);
 
 	try {
 		// Passe la main à la fiche de création

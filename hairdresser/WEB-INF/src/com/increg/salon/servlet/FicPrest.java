@@ -1,6 +1,6 @@
 /*
  * Création d'une prestation
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2011 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -17,6 +17,8 @@
  */
 package com.increg.salon.servlet;
 
+import java.util.Vector;
+
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.logging.Log;
@@ -24,11 +26,18 @@ import org.apache.commons.logging.LogFactory;
 
 import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
+import com.increg.salon.bean.ClientBean;
+import com.increg.salon.bean.ISalonListeReset;
 import com.increg.salon.bean.PrestBean;
 import com.increg.salon.bean.SalonSession;
 
 public class FicPrest extends ConnectedServlet {
     /**
+	 * 
+	 */
+	private static final long serialVersionUID = 4738913747948336617L;
+
+	/**
      * @see com.increg.salon.servlet.ConnectedServlet
      */
     public void performTask(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse response) {
@@ -54,7 +63,7 @@ public class FicPrest extends ConnectedServlet {
 
         // Récupère la connexion
         HttpSession mySession = request.getSession(false);
-        SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
+        final SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
         DBSession myDBSession = mySalon.getMyDBSession();
 
         PrestBean aPrest = null;
@@ -254,6 +263,16 @@ public class FicPrest extends ConnectedServlet {
             mySalon.setMessage("Erreur", e.toString());
             log.error("Erreur générale : ", e);
         }
+
+
+        ISalonListeReset resetter = new ISalonListeReset(){
+            public void reset ()
+            {
+                mySalon.setListePrestation(new Vector<PrestBean>());
+            }
+        };
+        request.setAttribute("suivant", (aPrest != null) ? suivantPossible(mySalon.getListePrestation(), aPrest.getCD_PREST(), resetter) : null);
+        request.setAttribute("precedent", (aPrest != null) ? precedentPossible(mySalon.getListePrestation(), aPrest.getCD_PREST(), resetter) : null);
 
         /**
          * Reset de la transaction pour la recherche des informations complémentaires

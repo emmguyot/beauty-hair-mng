@@ -33,6 +33,7 @@ import com.increg.commun.DBSession;
 import com.increg.salon.bean.ClientBean;
 import com.increg.salon.bean.FactBean;
 import com.increg.salon.bean.HistoPrestBean;
+import com.increg.salon.bean.ISalonListeReset;
 import com.increg.salon.bean.PrestBean;
 import com.increg.salon.bean.SalonSession;
 
@@ -87,7 +88,7 @@ public class FicCli extends ConnectedServlet {
 
         // Récupère la connexion
         HttpSession mySession = request.getSession(false);
-        SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
+        final SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
         DBSession myDBSession = mySalon.getMyDBSession();
         ClientBean aCli = null;
         
@@ -317,8 +318,14 @@ public class FicCli extends ConnectedServlet {
         }
 
         request.setAttribute("listePrest", listePrest);
-        request.setAttribute("suivant", suivantPossible(mySalon, aCli));
-        request.setAttribute("precedent", precedentPossible(mySalon, aCli));
+        ISalonListeReset resetter = new ISalonListeReset(){
+            public void reset ()
+            {
+                mySalon.setListeClient(new Vector<ClientBean>());
+            }
+        };
+        request.setAttribute("suivant", (aCli != null) ? suivantPossible(mySalon.getListeClient(), aCli.getCD_CLI(), resetter) : null);
+        request.setAttribute("precedent", (aCli != null) ? precedentPossible(mySalon.getListeClient(), aCli.getCD_CLI(), resetter) : null);
 
         try {
             // Passe la main à la fiche de création
@@ -328,65 +335,4 @@ public class FicCli extends ConnectedServlet {
             log.error("Erreur à la redirection", e);
         }
     }
-
-    /**
-     * Recherche dans la précédente liste des clients le client actuel pour indiquer si il y a un précédent
-     * @param mySalon
-     * @param aCli
-     * @return CD_CLI du précédent ou Null
-     */
-	private Long precedentPossible(SalonSession mySalon, ClientBean aCli) {
-		
-		Long precedent = null;
-
-		Vector<ClientBean> lstClient = mySalon.getListeClient();
-		
-		if ((lstClient == null) || (aCli == null)) {
-			return precedent;
-		}
-		
-		for (ClientBean clientBean : lstClient) {
-			
-			if (clientBean.getCD_CLI() == aCli.getCD_CLI()) {
-				return precedent;
-			}
-			precedent = clientBean.getCD_CLI();
-		}
-		// Pas trouvé
-		mySalon.setListeClient(new Vector<ClientBean>());
-		return null;
-	}
-
-	/**
-	 * Recherche dans la précédente liste des clients le client actuel pour indiquer si il y a un suivant
-	 * @param mySalon
-	 * @param aCli
-	 * @return CD_CLI du suivant ou Null
-	 */
-	private Long suivantPossible(SalonSession mySalon, ClientBean aCli) {
-		Long suivant = null;
-
-		Vector<ClientBean> lstClient = mySalon.getListeClient();
-		
-		if ((lstClient == null) || (aCli == null)) {
-			return suivant;
-		}
-		
-		Boolean nextIsGood = false;
-		for (ClientBean clientBean : lstClient) {
-			
-			suivant = clientBean.getCD_CLI();
-			if (nextIsGood) {
-				return suivant;
-			}
-			if (clientBean.getCD_CLI() == aCli.getCD_CLI()) {
-				nextIsGood = true;
-			}
-		}
-		// Pas trouvé
-		if (!nextIsGood) {
-			mySalon.setListeClient(new Vector<ClientBean>());
-		}
-		return null;
-	}
 }

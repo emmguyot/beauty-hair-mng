@@ -43,6 +43,8 @@ SalonSession mySalon = com.increg.salon.servlet.ConnectedServlet.CheckOrGoHome(r
    // Récupération des paramètres
    String Action = (String) request.getAttribute("Action");
    ArtBean aArt = (ArtBean) request.getAttribute("ArtBean");
+   Long artSuivant = (Long) request.getAttribute("suivant");
+   Long artPrecedent = (Long) request.getAttribute("precedent");
 %>
    var Action="<%=Action%>";
 
@@ -58,7 +60,17 @@ function Init() {
         // Pas de lien supprimer
         MM_showHideLayers('SUPPRIMER?bottomFrame','','hide');
     <%
-    } %>
+    } 
+    if (artPrecedent != null) { %>
+	   // Lien Précédent affiché
+	   MM_showHideLayers('PRECEDENT?bottomFrame','','show');
+	<%
+	}
+	if (artSuivant != null) { %>
+	   // Lien Suivant affciché
+	   MM_showHideLayers('SUIVANT?bottomFrame','','show');
+	<%
+	} %>
     MM_showHideLayers('ENREGISTRER?bottomFrame','','show');
     MM_showHideLayers('DUPLIQUER?bottomFrame','','show');
     MM_showHideLayers('RETOUR_LISTE?bottomFrame','','show');
@@ -267,6 +279,16 @@ function Dupliquer()
 {
    document.fiche.Action.value = "Duplication";
    document.fiche.submit();
+}
+
+function Suivant()
+{
+   parent.location.href = "_FicheArt.jsp?Action=Modification&CD_ART=<%= artSuivant %>";
+}
+
+function Precedent()
+{
+   parent.location.href = "_FicheArt.jsp?Action=Modification&CD_ART=<%= artPrecedent %>";
 }
 
 function RetourListe()

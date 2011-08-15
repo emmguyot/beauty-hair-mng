@@ -18,6 +18,7 @@
 package com.increg.salon.servlet;
 
 import java.io.IOException;
+import java.util.Vector;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +29,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.increg.commun.DBSession;
+import com.increg.salon.bean.ISalonListeReset;
 import com.increg.salon.bean.SalonSession;
 
 public abstract class ConnectedServlet extends javax.servlet.http.HttpServlet {
@@ -154,6 +156,64 @@ public abstract class ConnectedServlet extends javax.servlet.http.HttpServlet {
 		return !condition;
 	}
 
+	/**
+	 * Recherche dans la précédente liste d'une entité l'entité actuelle pour indiquer si il y a un précédent
+	 * @param lst
+	 * @param CD_ACTUEL
+	 * @param resetter
+	 * @return CD du précédent ou Null
+	 */
+	protected Long precedentPossible(Vector<Long> lst, Long CD_ACTUEL, ISalonListeReset resetter) {
+		
+		Long precedent = null;
+	
+		if ((lst == null)) {
+			return precedent;
+		}
+		
+		for (Long CD : lst) {
+			
+			if (CD.equals(CD_ACTUEL)) {
+				return precedent;
+			}
+			precedent = CD;
+		}
+		// Pas trouvé
+		resetter.reset();
+		return null;
+	}
+	/**
+	 * Recherche dans la précédente liste d'une entité l'entité actuelle pour indiquer si il y a un suivant
+	 * @param lst
+	 * @param CD_ACTUEL
+	 * @param resetter
+	 * @return CD du suivant ou Null
+	 */
+	protected Long suivantPossible(Vector<Long> lst, Long CD_ACTUEL, ISalonListeReset resetter) {
+		Long suivant = null;
+	
+		if ((lst == null)) {
+			return suivant;
+		}
+		
+		Boolean nextIsGood = false;
+		for (Long CD : lst) {
+			
+			suivant = CD;
+			if (nextIsGood) {
+				return suivant;
+			}
+			if (CD.equals(CD_ACTUEL)) {
+				nextIsGood = true;
+			}
+		}
+		// Pas trouvé
+		if (!nextIsGood) {
+			resetter.reset();
+		}
+		return null;
+	}
+	
 	public static SalonSession CheckOrGoHome(javax.servlet.http.HttpServletRequest request, HttpServletResponse response) {
 
 		HttpSession mySession = request.getSession(false);

@@ -1,6 +1,6 @@
 /*
  * Fiche article avec les mouvements de stock
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2011 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -31,6 +31,7 @@ import org.apache.commons.logging.LogFactory;
 import com.increg.commun.BasicSession;
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.ArtBean;
+import com.increg.salon.bean.ISalonListeReset;
 import com.increg.salon.bean.MvtStkBean;
 import com.increg.salon.bean.SalonSession;
 import com.increg.util.SimpleDateFormatEG;
@@ -41,6 +42,10 @@ import com.increg.util.SimpleDateFormatEG;
  */
 public class FicArt_Mvt extends ConnectedServlet {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8684715670595821965L;
 	protected Log log = LogFactory.getLog(this.getClass());
 	
 	/**
@@ -87,7 +92,7 @@ public class FicArt_Mvt extends ConnectedServlet {
 
         // Récupère la connexion
         HttpSession mySession = request.getSession(false);
-        SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
+        final SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
         DBSession myDBSession = mySalon.getMyDBSession();
         DateFormat formatDate = new SimpleDateFormat(mySalon.getMessagesBundle().getString("format.dateDefaut"));
         DateFormat formatDateTZ = new SimpleDateFormatEG(mySalon.getMessagesBundle().getString("format.dateDefaut"));
@@ -335,7 +340,7 @@ public class FicArt_Mvt extends ConnectedServlet {
         /**
          * Recherche les mouvements de cet article
          */
-        Vector listeMvt = new Vector();
+        Vector<MvtStkBean> listeMvt = new Vector<MvtStkBean>();
         if ((CD_ART != null) && (CD_ART.length() > 0)) {
             boolean vide = true;
 
@@ -385,6 +390,14 @@ public class FicArt_Mvt extends ConnectedServlet {
         request.setAttribute("NbMvt", new Integer(nbMvt));
         request.setAttribute("listeMvt", listeMvt);
         request.setAttribute("ArtBean", aArt);
+        ISalonListeReset resetter = new ISalonListeReset(){
+            public void reset ()
+            {
+                mySalon.setListeArticle(new Vector<ArtBean>());
+            }
+        };
+        request.setAttribute("suivant", (aArt != null) ? suivantPossible(mySalon.getListeArticle(), aArt.getCD_ART(), resetter) : null);
+        request.setAttribute("precedent", (aArt != null) ? precedentPossible(mySalon.getListeArticle(), aArt.getCD_ART(), resetter) : null);
 
         try {
             // Passe la main à la fiche de création

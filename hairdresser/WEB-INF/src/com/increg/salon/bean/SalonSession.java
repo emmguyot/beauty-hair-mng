@@ -122,7 +122,17 @@ public abstract class SalonSession extends BasicSession {
 	/**
 	 * Liste des clients
 	 */
-	protected Vector<ClientBean> listeClient = new Vector<ClientBean>();
+	protected Vector<Long> listeClient = new Vector<Long>();
+	
+	/**
+	 * Liste des Prestations
+	 */
+	protected Vector<Long> listePrestation = new Vector<Long>();
+	
+	/**
+	 * Liste des Articles
+	 */
+	protected Vector<Long> listeArticle = new Vector<Long>();
 	
 	/**
      * SalonSession constructor comment.
@@ -766,7 +776,7 @@ public abstract class SalonSession extends BasicSession {
 	 * Donne la liste des clients affichée dernièrement
 	 * @return
 	 */
-	public Vector<ClientBean> getListeClient() {
+	public Vector<Long> getListeClient() {
 		return listeClient;
 	}
 
@@ -775,6 +785,49 @@ public abstract class SalonSession extends BasicSession {
 	 * @param lstClient
 	 */
 	public void setListeClient(Vector<ClientBean> listeClient) {
-		this.listeClient = listeClient;
+		Vector<Long> lstClient = new Vector<Long>(listeClient.size());
+		for (ClientBean client : listeClient) {
+			lstClient.add(client.getCD_CLI());
+		}
+		this.listeClient = lstClient;
+	}
+
+	/**
+	 * Donne la liste des prestations affichée dernièrement
+	 * @return
+	 */
+	public Vector<Long> getListePrestation() {
+		return listePrestation;
+	}
+
+	/**
+	 * Mémorise la liste des prestations affichée dernièrement
+	 * @param lstPrestations
+	 */
+	public void setListePrestation(Vector<PrestBean> listePrestation) {
+		Vector<Long> lstPrest = new Vector<Long>(listePrestation.size());
+		for (PrestBean prest : listePrestation) {
+			lstPrest.add(prest.getCD_PREST());
+		}
+		this.listePrestation = lstPrest;
+	}
+	/**
+	 * Donne la liste des articles affichée dernièrement
+	 * @return
+	 */
+	public Vector<Long> getListeArticle() {
+		return listeArticle;
+	}
+
+	/**
+	 * Mémorise la liste des articles affichée dernièrement
+	 * @param lstArticle
+	 */
+	public void setListeArticle(Vector<ArtBean> listeArticle) {
+		Vector<Long> lstArticle = new Vector<Long>(listeArticle.size());
+		for (ArtBean article : listeArticle) {
+			lstArticle.add(article.getCD_ART());
+		}
+		this.listeArticle = lstArticle;
 	}
 }

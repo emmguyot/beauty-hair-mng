@@ -1,6 +1,6 @@
 /*
  * Recherche/Liste de prestation 
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2011 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -30,6 +30,11 @@ import com.increg.salon.bean.PrestBean;
 import com.increg.salon.bean.SalonSession;
 
 public class RechPrest extends ConnectedServlet {
+/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3772902617467403694L;
+
 /**
  * @see com.increg.salon.servlet.ConnectedServlet
  */
@@ -73,12 +78,13 @@ public void performTask(javax.servlet.http.HttpServletRequest request, javax.ser
 
 	// Récupère la connexion
 	HttpSession mySession = request.getSession(false);
-	DBSession myDBSession = ((SalonSession) mySession.getAttribute("SalonSession")).getMyDBSession();
+    SalonSession mySalon = (SalonSession) mySession.getAttribute("SalonSession");
+	DBSession myDBSession = mySalon.getMyDBSession();
 	
 	// Interroge la Base
 	try {
 		ResultSet aRS = myDBSession.doRequest(reqSQL);
-		Vector lstLignes = new Vector();
+		Vector<PrestBean> lstLignes = new Vector<PrestBean>();
 
 		while (aRS.next()) {
 			lstLignes.add(new PrestBean(aRS));
@@ -87,6 +93,8 @@ public void performTask(javax.servlet.http.HttpServletRequest request, javax.ser
 
 		// Stocke le Vector pour le JSP
 		request.setAttribute("Liste", lstLignes);
+        // Mémorise la liste pour la pagination
+        mySalon.setListePrestation(lstLignes);
 		
 		// Passe la main
 		getServletConfig().getServletContext().getRequestDispatcher("/lstPrest.jsp").forward(request, response);

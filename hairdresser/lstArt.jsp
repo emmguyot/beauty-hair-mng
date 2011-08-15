@@ -160,13 +160,13 @@ SalonSession mySalon = com.increg.salon.servlet.ConnectedServlet.CheckOrGoHome(r
 	}
 	%>
 	<tr>
-	    <td></td>
-	    <td></td>
-	    <td></td>
-	    <td></td>
-	    <td></td>
+	    <td>&nbsp;</td>
+	    <td>&nbsp;</td>
+	    <td>&nbsp;</td>
+	    <td>&nbsp;</td>
+	    <td>&nbsp;</td>
 	    <td class="Nombre"><salon:valeur valeurNulle="null" valeur="<%= valeurTotale %>">%%</salon:valeur></td>
-	    <td></td>
+	    <td>&nbsp;</td>
 	</tr>
 </table>
 <salon:madeBy />
