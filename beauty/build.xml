@@ -74,6 +74,7 @@
 				<include name="WEB-INF/src/com/increg/salon/bean/FournBean.java"/>
 				<include name="WEB-INF/src/com/increg/salon/bean/HistoPrestBean.java"/>
 				<include name="WEB-INF/src/com/increg/salon/bean/IdentBean.java"/>
+				<include name="WEB-INF/src/com/increg/salon/bean/ISalonListeReset.java"/>
 				<include name="WEB-INF/src/com/increg/salon/bean/LicenceBean.java"/>
 				<include name="WEB-INF/src/com/increg/salon/bean/ModReglBean.java"/>
 				<include name="WEB-INF/src/com/increg/salon/bean/MultiConfigBean.java"/>
@@ -202,6 +203,7 @@
 
 				<include name="WEB-INF/src/com/increg/util/GZipper.java"/>
 				<include name="WEB-INF/src/com/increg/util/Montant.java"/>
+				<include name="WEB-INF/src/com/increg/util/NombreDecimal.java"/>
 				<include name="WEB-INF/src/com/increg/util/PlatformUtil.java"/>
 				<include name="WEB-INF/src/com/increg/util/ServletUtil.java"/>
 				<include name="WEB-INF/src/com/increg/util/SimpleDateFormatEG.java"/>
@@ -390,7 +392,6 @@
 				<include name="afaire.html"/>
 				<include name="fr/*"/>
 				<include name="en/*"/>
-				<exclude name="*/histo.html"/>
 				<exclude name="*/glossaire.html"/>
 			</fileset>
 		</copy>
