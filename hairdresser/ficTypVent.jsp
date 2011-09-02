@@ -87,7 +87,7 @@ function Init() {
 	<p>
             <span class="obligatoire"><i18n:message key="label.civiliteAssocie" /> :</span> 
             <i18n:message key="valeur.civiliteObligatoire" id="valeurCivilite" />
-            <salon:checkbox valeurs="<%= valeurCivilite %>" libelle="<%= valeurCivilite %>" nom="CIVILITE" tabValeur='<%= aTypVent.getCIVILITE() %>'>
+            <salon:checkbox valeurs="|Mle|Mme|M. " libelle="<%= valeurCivilite %>" nom="CIVILITE" tabValeur='<%= aTypVent.getCIVILITE() %>'>
                 %%
             </salon:checkbox>
 	</p>
