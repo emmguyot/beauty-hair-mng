@@ -1,7 +1,7 @@
 <!--
 
  This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
- Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ Copyright (C) 2001-2011 Emmanuel Guyot <See emmguyot on SourceForge> 
  
  This program is free software; you can redistribute it and/or modify it under the terms 
  of the GNU General Public License as published by the Free Software Foundation; either 
@@ -25,7 +25,22 @@
 
 <body class="donnees" >
 <h1><img src="../images/en/titres/histo.gif"></h1>
-<p><a href="../initPortail.srv">Back to the login portal</a></p>
+<p><a href="../initPortail.srv" target="_top">Back to the login portal</a></p>
+<p>Release 4.5 (September 2nd, 2011)</p>
+<ul>
+    <li>Next and Previous buttons has been added on customers forms, catalog and stock items (Features #1892178 et #1577542).</li>
+	<li>The number of invoices for the customers is now displayed on the invoice form (features #1801101).</li>
+    <li>Various bug fixes.</li>
+</ul>
+<p>Release 4.4 (February 14th, 2010)</p>
+<ul>
+    <li>The profile "Super" is now created if it has been lost.</li>
+    <li>Statistics have been modified to handle the daylight saving time.</li>
+    <li>A few corrections have been made to improve the compatibility with Linux.</li>
+    <li>The installer has been corrected for Windows 7.</li>
+    <li>The timeshift in appointements has been corrected (Bug #2891202)</li>
+    <li>The security has been improved on the invoice form.</li>
+</ul>
 <p>Release 4.3 (February 28th, 2009)</p>
 <ul>
     <li>A control has been added to always keep a profile "Super".</li>
@@ -49,7 +64,7 @@
 </ul>
 <p>Release 4.1 (july 8th, 2008)</p>
 <ul>
-    <li>A bug on deletion of an stock item has been fixed (Bug #1896764 & 1896759).</li>
+    <li>A bug on deletion of an stock item has been fixed (Bug #1896764 &amp; 1896759).</li>
     <li>A bug on closing the popup in Internet Explorer 7 has been fixed (Bug #1888753).</li>
     <li>A bug on technical information for customers has been fixed. (This crash has been stated by the hairdresser Coiffure St Fiacre).</li>
 </ul>
@@ -64,12 +79,11 @@
 </ul>
 <p>Release 4.0 beta 2 (may 2nd, 2007)</p>
 <ul>
-    <li>Synchronization of release number with the LibertyLook Hairdresser.</li>
-    <li>Warning : Broken compatibility with previous platform. You need the new platform.</li>
+    <li>Warning : Broken compatbility with previous platform. You need the new platform.</li>
     <li>A bug with the emergency database restore has been fixed.</li>
     <li>A bug in the mailing has been fixed.</li>
 </ul>
-<p>Release 3.0 beta 1 (june 26th, 2006)</p>
+<p>Release 4.0 beta 1 (june 26th, 2006)</p>
 <ul>
     <li>A new parameter "secureApache" has been added in the technical parameters to allow a more flexible use in a network environment (Support request #1392241).</li>
     <li>A bug in the network verification has been corrected (Support request #1392241).</li>
@@ -78,12 +92,12 @@
     <li>A new parameter for the message on the ticket about taxes included has been added (Feature request #1474549)</li>
     <li>Bug fix and improvement in the internationalisation.</li>
 </ul>
-<p>Release 3.0 alpha 1 (March 11th, 2006)</p>
+<p>Release 4.0 alpha 1 (March 11th, 2006)</p>
 <ul>
     <li>Major refactor of the programs to enable the internationalisation (English till now).</li>
     <li>Added the date in the menu.</li>
 </ul>
-<p>Release 2.3 (april 2nd, 2005)</p>
+<p>Release 3.3 (april 2nd, 2005)</p>
 <ul>
     <li>Ajout de la recherche avancée de clients.</li>
     <li>Tri du menu administration.</li>
@@ -91,12 +105,15 @@
     <li>Ajout des types de TVA et affectation à un type de prestation, ce qui permet la gestion de plusieurs taux de TVA.</li>
     <li>Ajout des prestations abonnements sur la liste des abonnements d'un client.</li>
     <li>Ajout de 2 statistiques liées à l'origine du client.</li>
+    <li>Correction de la gestion des erreurs en suppression de factures.</li>
+    <li>Modification des mouvements de caisse générés lorsqu'un paiement est basculé d'un client à un autre.</li>
 </ul>
-<p>Release 2.2 (november 6th, 2004)</p>
+<p>Release 3.2 (november 5th, 2004)</p>
 <ul>
-    <li>Suppression des logos InCrEG et ajout du mode de licence GPL</li>
+    <li>Première version GPL</li>
+    <li>Suppression des logos InCrEG, ...</li>
 </ul>
-<p>Release 2.1 (october 25th, 2004)</p>
+<p>Release 3.1 (october 25th, 2004)</p>
 <ul>
     <li>Ajout du récap des ventes.</li>
     <li>Correction de l'état de TVA.</li>
@@ -108,7 +125,7 @@
     <li>Correction de l'affichage du menu.</li>
     <li>Diverses corrections techniques mineures.</li>
 </ul>
-<p>Release 2.0 (may 7th, 2004)</p>
+<p>Release 3.0 (may 7th, 2004)</p>
 <ul>
     <li>Ajout de la sélection des types de mouvements sur le Récap. des stocks.</li>
     <li>Ajout des colonnes HT et TTC sur l'affichage de la TVA encaissée.</li>
@@ -128,18 +145,18 @@
     <li>Modification de la connexion automatique.</li>
     <li>Ajout des informations InCrEG sur la page principale.</li>
 </ul>
-<p>Release 1.3 (november 15th, 2003)</p>
+<p>Release 2.11 (november 15th, 2003)</p>
 <ul>
     <li>Ajout de la gestion des sauvegardes. Ceci vous permet de limiter le nombre de sauvegardes sur votre disque dur ou sur notre serveur.</li>
     <li>Ajout des fonctions de publipostage pour envoyer des courriers ou emails à vos clients.</li>
 </ul>
-<p>Release 1.2 (october 15th, 2003)</p>
+<p>Release 2.10 (october 15th, 2003)</p>
 <ul>
-    <li>Ajout de la mise à jour des informations de l'institut.</li>
+    <li>Ajout de la mise à jour des informations du salon.</li>
     <li>Ajout de la connection automatique (cf. Paramétrage).</li>
     <li>Légère refonte pour la version Light.</li>
 </ul>
-<p>Release 1.1 (august 28th, 2003)</p>
+<p>Release 2.9 (august 25th, 2003)</p>
 <ul>
     <li>Ajout de la notion de collaborateurs valides permettant de gérer les mouvements de personnels.</li>
     <li>Ajout de la notion de clients valides permettant de filtrer la liste des clients.</li>
@@ -149,10 +166,163 @@
     <li>Ajout du paramètre largeur de fiche pour les imprimantes tickets de caisse.</li>
     <li>Diverses corrections mineures.</li>
 </ul>
-<p>Release 1.0 (february 15th, 2003)</p>
+<p>Release 2.8 (february 15th, 2003)</p>
 <ul>
-    <li>Release initiale.</li>
+    <li>Modification du Récap des stocks pour afficher la quantité et la valeur.</li>
+    <li>Ajout de la modification des types de prestations dans le menu Administration.</li>
+    <li>Modification du brouillard pour ne tenir compte que des encaissements.</li>
+    <li>Ajout de la notion d'articles et de prestations périmées, c'est à dire plus utilisables.</li>
+    <li>Modification de la restauration afin d'améliorer la fiabilité.</li>
+    <li>Ajout de la réinitialisation automatique d'une base de données de secours, en cas d'erreur de restauration.</li>
+    <li>Modification de quelques points techniques.</li>
+    <li>Enrichissement de l'aide en ligne.</li>
+    <li>Correction de l'affichage des fiches techniques.</li>
+    <li>Correction de l'affichage de la répartition du chiffre d'affaires.</li>
+    <li>Diverses corrections mineures.</li>
 </ul>
-<p><a href="../initPortail.srv">Back to the login portal</a></p>
+<p>Release 2.7 (november 15th, 2002)</p>
+<ul>
+    <li>Mise en place des statistiques comparatives.</li>
+    <li>Ajout et modification des statistiques.</li>
+    <li>Modification de la duplication d'une facture depuis la liste des clients.</li>
+    <li>Ajout de l'écran de saisie des achats.</li>
+    <li>Ajout de la dupliquation de n'importe quelle facture d'un client depuis sa fiche client.</li>
+    <li>Modifications mineures d'affichage.</li>
+</ul>
+<p>Release 2.6 (october 9th, 2002)</p>
+<ul>
+    <li>Augmentation du nombre d'identifications possibles.</li>
+    <li>Correction du message InCrEG en sauvegarde et restauration.</li>
+    <li>Modification de l'installation du logiciel.</li>
+    <li>Modification des titres des écrans.</li>
+    <li>Modification de la présentation de la fiche technique.</li>
+    <li>Modifications mineures d'affichage.</li>
+</ul>
+<p>Release 2.5 (september 15th, 2002)</p>
+<ul>
+    <li>Ajout de l'assistant sur la fiche facture pour le rendu de monnaie.</li>
+    <li>Ajout de l'attente sur la sauvegarde, restauration et la mise à jour.</li>
+    <li>Correction d'un cas particulier dans la saisie des pointages sur plusieurs jours.</li>
+    <li>Ajout du choix du mode répartition de la remise : Fixe ou Proportionnel.</li>
+    <li>Ajout de la fonction d'inventaire de stock.</li>
+    <li>Mise en oeuvre de la gestion de plusieurs salons.</li>
+    <li>Mise à jour de l'aide en ligne.</li>
+    <li>Diverses corrections mineures au niveau de l'affichage.</li>
+</ul>
+<p>Release 2.4 (august 3rd, 2002)</p>
+<ul>
+    <li>Double saisie des mots de passe pour éviter les erreurs de saisie.</li>
+    <li>Contrôle lors du paiement de factures vides.</li>
+    <li>Correction du calcul du brouillard et de la TVA.</li>
+    <li>Ajout de l'état de fin de journée.</li>
+    <li>Correction de la suppression des modes de règlement.</li>
+    <li>Ajout de totaux sur l'état de TVA et de Chiffre d'affaires.</li>
+    <li>Ajout de la duplication d'article sur le volet mouvement.</li>
+    <li>Modification de la liste des fournisseurs pour afficher tous les fournisseurs.</li>
+    <li>Ajout de la fermeture de la fenêtre sur l'accueil.</li>
+    <li>Diverses corrections mineures.</li>
+</ul>
+<p>Release 2.3 (july 24th, 2002)</p>
+<ul>
+    <li>Modification de la facturette : Déplacement des quantités en début de ligne et affichage du prix total par ligne.</li>
+    <li>Correction de la duplication d'article.</li>
+    <li>Modification de la gestion du menu pour revenir à la page principale.</li>
+    <li>Diverses corrections mineures.</li>
+</ul>
+<p>Release 2.2 (july 15th, 2002)</p>
+<ul>
+    <li>Ajout d'un zoom sur la facture ou le paiement à partir des mouvements de stock ou de caisse.</li>
+    <li>Paramétrage de l'affichage du prix en bas de l'écran de facture.</li>
+    <li>Gestion de l'opération exceptionnelle de suppression de factures réglées.</li>
+    <li>Blocage de la modification du sens des mouvements dès que le type de mouvement est utilisé.</li>
+    <li>Modification de la gestion des droits.</li>
+    <li>Ajout d'un total par ligne dans le r&eacute;capitulatif des stocks.</li>
+    <li>Ajout d'icône pour l'envoi d'email aux clients, fournisseurs et collaborateurs.</li>
+    <li>Refonte technique de la gestion de la licence.</li>
+</ul>
+<p>Release 2.1 (june 27th, 2002)</p>
+<ul>
+    <li>Gestion automatique des articles mixtes (Vente et utilisation).</li>
+    <li>Correction des statistiques pour l'arrondi à 2 chiffres.</li>
+    <li>Correction de la reprise du commentaire historisé sur la fiche facture.</li>
+    <li>Modification du dispositif de sécurité.</li>
+    <li>Correction de la mise à jour par Internet.</li>
+    <li>Ajout de la provenance en fin d'état.</li>
+    <li>Ajout du filtre des prestations sur la fiche client.</li>
+</ul>
+<p>Release 2.0 (june 17th, 2002)</p>
+<ul>
+   <li>Ajout de l'impression des chèques.</li>
+   <li>Ajout de la mise à jour du logiciel en ligne.</li>
+   <li>Ajout de la gestion des identifications et des droits associés.</li>
+   <li>Poursuite de la refonte du design de l'application.</li>
+   <li>Ajout de l'impossibilit&eacute; de recevoir un client si aucun collaborateur n'est 
+      pr&eacute;sent.</li>
+   <li>Ajout d'un filtre sur les collaborateurs pr&eacute;sents dans l'affichage 
+      de la facture.</li>
+   <li>Ajout de la possibilit&eacute; de s&eacute;l&eacute;ctionner les crit&egrave;res de 
+      la fiche technique via des cases à cocher.
+   <li>Mise en place de l'aide en ligne.</li>
+   <li>Diverses corrections mineures.</li>
+</ul>
+<p>Release 1.7 (april 20th, 2002)</p>
+<ul>
+	<li>Refonte technique de l'application.</li>
+	<li>Mise en place des éléments InCrEG.</li>
+
+</ul>
+<p>Release 1.6 (april 11th, 2002)</p>
+<ul>
+	<li>Correction de la date d'historique en cas de duplication de facture.</li>
+	<li>Ajout du total dans le r&eacute;cap des stocks.</li>
+	<li>Mise en place de la mise &agrave; jour en ligne.</li>
+	<li>Mise en place des statistiques.</li>
+	<li>Refonte partielle du design de l'application.</li>
+</ul>
+<p>Release 1.5 (february 23rd, 2002) :</p>
+<ul>
+	<li>R&eacute;organisation technique des classes utilitaires.</li>
+	<li>Ajout d'une information dans les modes de r&eacute;glement afin de pouvoir 
+		supprimer les modes de paiement en Francs.</li>
+</ul>
+<p>Release 1.4 (january 6th, 2002) :</p>
+<ul>
+	<li>Tri des fichiers de sauvegarde par ordre d&eacute;croissant permettant 
+		d'acc&eacute;der directement &agrave; la derni&egrave;re sauvegarde.</li>
+	<li>Am&eacute;lioration de la lisibilit&eacute; des tableaux en alternant avec 
+		une ligne une peu plus sombre.</li>
+	<li>Mise en place du R&eacute;cap valoris&eacute;.</li>
+	<li>Modification de la fiche article / volet mouvement : Le prix d'une sortie 
+		peut &ecirc;tre forc&eacute;.</li>
+	<li>Placement du prix sur la fiche facture et sur la fiche paiement en bas 
+		de la fen&ecirc;tre afin de favoriser la lecture par les clients.</li>
+	<li>Mise en place de cet historique.</li>
+	<li>Mise en place de la v&eacute;rification du format de la date de naissance 
+		d'un collaborateur.</li>
+	<li>Ajout des fonctions de param&eacute;trage (TVA, Message du ticket).</li>
+	<li>Ajout du nombre d'heures par jour sur la fiche collaborateur.</li>
+	<li>Eclatement automatique des pointages s'&eacute;talant sur plusieurs jours.</li>
+	<li>Modification de l'ordre de tri des pr&eacute;sences pour tenir compte de 
+		l'ann&eacute;e.</li>
+	<li>Correction d'un bug en saisie de pointage.</li>
+	<li>D&eacute;veloppement de la fiche tranche d'&acirc;ge et du calcul automatique 
+		&agrave; partir de la date d'anniversaire du client.</li>
+	<li>Modification du design de la fiche client.</li>
+	<li>D&eacute;veloppement de la fiche f&ecirc;te.</li>
+	<li>Affichage de la f&ecirc;te du jour sur la page d'accueil.</li>
+	<li>Correction du calcul de la TVA d'une facture.</li>
+	<li>D&eacute;veloppement de l'&eacute;tat de la TVA encaiss&eacute;e.</li>
+	<li>Suppression du lien &quot;Crit&egrave;res compl&eacute;mentaires&quot; 
+		sur les clients.</li>
+	<li>Param&eacute;trage de la connexion base de donn&eacute;es (niveau technique).</li>
+</ul>
+<p>Release 1.3 (november 5th, 2001) :</p>
+<ul>
+	<li>Ajout de la possibilit&eacute; d'annuler le dernier mouvement de stock.</li>
+	<li>Mise en place de la r&eacute;&eacute;dition de factures.</li>
+	<li>Mise en place de l'&eacute;tat R&eacute;cap.</li>
+	<li>Ajout de la valorisation du stock sur la liste des articles.</li>
+</ul>
+<p><a href="../initPortail.srv" target="_top">Back to the login portal</a></p>
 </body>
 </html>

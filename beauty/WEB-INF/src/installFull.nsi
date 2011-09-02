@@ -2,9 +2,9 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "InCrEG LibertyLook"
-!define PRODUCT_VERSION "4.4"
+!define PRODUCT_VERSION "4.5"
 !define PRODUCT_VERSION_FULL "${PRODUCT_VERSION}.1.1"
-!define PRODUCT_COPYRIGHT "2002-2010 Valérie Guyot, Alexandre Guyot, Emmanuel Guyot et Angel"
+!define PRODUCT_COPYRIGHT "2002-2011 Valérie Guyot, Alexandre Guyot, Emmanuel Guyot et Angel"
 !define PRODUCT_PUBLISHER "SourceForge"
 !define PRODUCT_WEB_SITE "http://beauty-hair-mng.sourceforge.net/"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
@@ -127,7 +127,7 @@ SectionEnd
 Section -Core
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
-  File /oname="Licence.txt" "${LICENCE_TXT}"
+  File /oname=Licence.txt "${LICENCE_TXT}"
 SectionEnd
 
 
