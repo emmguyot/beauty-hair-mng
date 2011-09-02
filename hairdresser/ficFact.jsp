@@ -129,7 +129,7 @@ function Init() {
 	 
 	 <td class="label"><span class="obligatoire"><i18n:message key="label.typePrest" /></span> : </td>
 	 <td>
-	    <salon:DBselection valeur="<%= aFact.getCD_TYP_VENT() %>" sql='<%= "select CD_TYP_VENT, LIB_TYP_VENT from TYP_VENT where CIVILITE like \'%" + aCli.getCIVILITE() + "%\' or CIVILITE is null order by LIB_TYP_VENT" %>' >
+	    <salon:DBselection valeur="<%= aFact.getCD_TYP_VENT() %>" sql='<%= "select CD_TYP_VENT, LIB_TYP_VENT from TYP_VENT where CIVILITE like \'%" + aCli.getCIVILITE() + "%\' or CIVILITE is null order by LIB_TYP_VENT" %>' msgManquant="true">
 	       <select name="CD_TYP_VENT">
 		  %%
 	       </select>
@@ -140,6 +140,10 @@ function Init() {
 	       // Tjs pas, on prend le premier de cette combo
 	       CD_TYP_VENT_SELECT = ((CD_TYP_VENT_SELECT.equals("0")) || (CD_TYP_VENT_SELECT.length() == 0)) ? 
 					     (String) request.getAttribute("Premier") : 
+					     CD_TYP_VENT_SELECT;
+	       // Tjs pas, on prend 0 (cas où type de vente non rempli)
+	       CD_TYP_VENT_SELECT = (CD_TYP_VENT_SELECT == null) ? 
+					     "0" : 
 					     CD_TYP_VENT_SELECT;
 	    %>
 	 </td>
