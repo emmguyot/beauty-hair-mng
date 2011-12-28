@@ -286,7 +286,7 @@ function Init() {
                 <th>
 <%		       
                 if (peutCreerFacture) { %>
-					<a href="addCli.srv?Vide=1&CD_CLI=<%=aCli.getCD_CLI()%>" title="<i18n:message key="label.accueilClient" />" target=MenuFrame><img src=images/plus2.gif border="0" width="15" height="15"></a>
+					<a href="#" onclick="addClient(<%=aCli.getCD_CLI()%>, null, true); return false;" title="<i18n:message key="label.accueilClient" />" target=MenuFrame><img src=images/plus2.gif border="0" width="15" height="15"></a>
 <%
                 }
                 else { %>
@@ -330,7 +330,7 @@ function Init() {
                 // On autorise la duplication de la facture uniquement si on a un collab
 		       
                 if (peutCreerFacture) { %>
-                    <a href="addCli.srv?CD_CLI=<%=aCli.getCD_CLI()%>&CD_FACT=<%= aPrest.getCD_FACT()%>" title="<i18n:message key="label.dupliquerFacture" />" target="MenuFrame"><img src="images/plus.gif" border="0" width="15" height="15"></a>		      
+                    <a href="#" onclick="addClient(<%=aCli.getCD_CLI()%>, <%= aPrest.getCD_FACT()%>, false); return false;" title="<i18n:message key="label.dupliquerFacture" />"><img src="images/plus.gif" border="0" width="15" height="15"></a>		      
 <%
                 }
                 else { %>

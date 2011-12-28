@@ -33,6 +33,7 @@ SalonSession mySalon = com.increg.salon.servlet.ConnectedServlet.CheckOrGoHome(r
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 </head>
 <body class="donnees">
+<%@ include file="include/commun.jsp" %>
 <%
     // Récupération des paramètres
     String premLettre = (String) request.getAttribute("premLettre");

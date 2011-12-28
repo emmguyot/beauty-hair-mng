@@ -276,9 +276,11 @@ public abstract class SalonSession extends BasicSession {
      * donnée, même si celle-ci n'a pas de prestation (vente...)
      * @param CD_CLI l'identifiant du client
      * @param CD_FACT le numéro de la facture à dupliquer
+     * @return true si le collaborateur a du être réaffecté
      */
-    public void addClientAvecFacture(String CD_CLI, String CD_FACT) {
-        boolean doublon = false;
+    public boolean addClientAvecFacture(String CD_CLI, String CD_FACT) {
+        boolean nouveauCollab = false;
+    	boolean doublon = false;
 
         // Vérification en cas de doublon
         for (int i = 0; i < listeFact.size(); i++) {
@@ -313,7 +315,7 @@ public abstract class SalonSession extends BasicSession {
 
                     //Verifie que le collaborateur est présent
                     //sinon, set un collab present sur la facture
-                    setGoodCollab(aFact);
+                    nouveauCollab = setGoodCollab(aFact);
 
                     // Stocke la facture dans la liste
                     listeFact.addElement(aFact);
@@ -331,6 +333,7 @@ public abstract class SalonSession extends BasicSession {
             }
         }
 
+        return nouveauCollab;
     }
 
     /**
@@ -339,9 +342,10 @@ public abstract class SalonSession extends BasicSession {
      * crée une facture vide.
      * Creation date: (09/09/2001 21:17:45)
      * @param CD_CLI String
+     * @return true si le collaborateur a du être réaffecté
      */
-    public void addClient(String CD_CLI) {
-
+    public boolean addClient(String CD_CLI) {
+        boolean nouveauCollab = false;
         boolean doublon = false;
 
         // Vérification en cas de doublon
@@ -378,7 +382,7 @@ public abstract class SalonSession extends BasicSession {
 
                     //Verifie que le collaborateur est présent
                     //sinon, set un collab present sur la facture
-                    setGoodCollab(aFact);
+                    nouveauCollab = setGoodCollab(aFact);
 
                     // Stocke la facture dans la liste
                     listeFact.addElement(aFact);
@@ -393,6 +397,7 @@ public abstract class SalonSession extends BasicSession {
                 System.out.println("Erreur dans constructeur sur clé : " + e.toString());
             }
         }
+        return nouveauCollab;
     }
 
     /**
@@ -439,9 +444,11 @@ public abstract class SalonSession extends BasicSession {
      * present, laisse la valeur actuelle dans la facture.
      * @param aFact la facture qui doit etre verifiee
      * @exception Exception jettee quand la maj de la facture ne peut pas se faire
+     * @return true si le collaborateur a été réaffecté
      */
-    public void setGoodCollab(FactBean aFact) throws Exception {
+    public Boolean setGoodCollab(FactBean aFact) throws Exception {
 
+    	Boolean res = true;
         //Recupere les collaborateurs presents
         List<CollabBean> collabsPresent = PointageBean.getPresentCollabs(myDBSession);
         Iterator<CollabBean> collabsIter = collabsPresent.iterator();
@@ -453,6 +460,7 @@ public abstract class SalonSession extends BasicSession {
             defaultCD_COLLAB = aCollab.getCD_COLLAB();
             if (defaultCD_COLLAB == CD_COLLAB) {
                 //Le collaborateur est present, on s'arrete
+                res = false;
                 break;
             }
             // Sinon On ne fait rien
@@ -465,6 +473,7 @@ public abstract class SalonSession extends BasicSession {
         }
         // Sinon Pas de mise a jour necessaire
 
+        return res;
     }
 
     /**

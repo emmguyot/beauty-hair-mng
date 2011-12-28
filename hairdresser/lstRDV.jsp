@@ -106,8 +106,8 @@ SalonSession mySalon = com.increg.salon.servlet.ConnectedServlet.CheckOrGoHome(r
                     }
                     else {
                         if (peutCreerFacture) { %>
-                            <a href="addCli.srv?CD_CLI=<%= aRDVFact.getClient().getCD_CLI() %>" title="<%= dupliquerFact %>" target=MenuFrame><img src=images/plus.gif border="0" width="15" height="15"></a>
-                            <a href="addCli.srv?Vide=1&CD_CLI=<%= aRDVFact.getClient().getCD_CLI() %>" title="<%= accueil %>" target=MenuFrame><img src=images/plus2.gif border="0" width="15" height="15"></a>
+                            <a href="#" onclick="addClient(<%=aRDVFact.getClient().getCD_CLI()%>, null, false); return false;" title="<%= dupliquerFact %>"><img src=images/plus.gif border="0" width="15" height="15"></a>
+                            <a href="#" onclick="addClient(<%=aRDVFact.getClient().getCD_CLI()%>, null, true); return false;" title="<%= accueil %>" ><img src=images/plus2.gif border="0" width="15" height="15"></a>
                     <%
                         } 
                         else { %>

@@ -171,10 +171,10 @@ public class TagSelection extends BodyTagSupport {
                 out.print(" selected=\"selected\"");
             }
             if (aLibelle == null) {
-                out.println(">" + aValeur + "</option>");
+                out.print(">" + aValeur + "</option>");
             }
             else {
-                out.println(">" + aLibelle + "</option>");
+                out.print(">" + aLibelle + "</option>");
             }
         }
 

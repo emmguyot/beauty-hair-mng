@@ -20,6 +20,7 @@ package com.increg.salon.servlet;
 import java.text.MessageFormat;
 
 import javax.servlet.http.*;
+import javax.servlet.jsp.jstl.core.Config;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -68,6 +69,7 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
     // Initialise une session light de traduction
     BasicSession myBasicSession = new BasicSession();
     myBasicSession.setLangue(request.getLocale());
+	Config.set(mySession,Config.FMT_LOCALE,myBasicSession.getLangue());
 
     try {
         /**

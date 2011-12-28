@@ -1,4 +1,3 @@
-<%@ page import="com.increg.salon.bean.SalonSession" %>
 <%
 /*
  * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
@@ -18,6 +17,8 @@
  * 
  */
 %>
+<%@ page contentType="text/javascript" %>
+<%@ page import="com.increg.salon.bean.SalonSession" %>
 <%
 SalonSession mySalon = com.increg.salon.servlet.ConnectedServlet.CheckOrGoHome(request, response);
 %>
@@ -187,4 +188,16 @@ function doEscape(sValue)
     }
 
     return sRet;
+}
+
+function addClient(cdCli, cdFact, vide) {
+	$.ajaxSetup({
+		cache: false
+	});
+	if (cdFact != null) {
+		$.getScript('addCli.srv?CD_CLI=' + cdCli + '&CD_FACT=' + cdFact);
+	}
+	else {
+		$.getScript('addCli.srv?CD_CLI=' + cdCli + (vide?'&Vide=1':''));
+	}
 }

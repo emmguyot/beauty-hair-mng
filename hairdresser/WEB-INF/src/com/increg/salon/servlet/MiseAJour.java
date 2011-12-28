@@ -29,6 +29,7 @@ import java.util.ResourceBundle;
 import java.util.TreeSet;
 
 import javax.servlet.http.HttpSession;
+import javax.servlet.jsp.jstl.core.Config;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -65,6 +66,7 @@ public class MiseAJour extends ConnectedServlet {
         SalonSessionImpl mySalon = (SalonSessionImpl) mySession.getAttribute("SalonSession");
         ResourceBundle messages = mySalon.getMessagesBundle();
         DBSession myDBSession = mySalon.getMyDBSession();
+    	Config.set(mySession,Config.FMT_LOCALE,myBasicSession.getLangue());
 
         // Récupère les paramètres
         String Action = request.getParameter("Action");

@@ -55,8 +55,8 @@
 	<tr><td width="80">
     <%
         if (peutCreerFacture) { %>
-	      <a href="addCli.srv?CD_CLI=<%= aCli.getCD_CLI() %>" title="<%= dupliquerFacture %>" target=MenuFrame><img src=images/plus.gif border="0" width="15" height="15"></a>
-	      <a href="addCli.srv?Vide=1&CD_CLI=<%= aCli.getCD_CLI() %>" title="<%= accueilClient %>" target=MenuFrame><img src=images/plus2.gif border="0" width="15" height="15"></a>
+	      <a href="#" onclick="addClient(<%=aCli.getCD_CLI()%>, null, false); return false;" title="<%= dupliquerFacture %>" ><img src=images/plus.gif border="0" width="15" height="15"></a>
+	      <a href="#" onclick="addClient(<%=aCli.getCD_CLI()%>, null, true); return false;" title="<%= accueilClient %>" ><img src=images/plus2.gif border="0" width="15" height="15"></a>
     <%
         } 
         else { %>

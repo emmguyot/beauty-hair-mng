@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.jsp.jstl.core.Config;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang.StringUtils;
@@ -99,6 +100,7 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
 		HttpSession mySession = request.getSession(true);
 		myBasicSession = new BasicSession();
 		myBasicSession.setLangue(request.getLocale());
+		Config.set(mySession,Config.FMT_LOCALE,myBasicSession.getLangue());
 
         String numBase = request.getParameter("numBase");
         

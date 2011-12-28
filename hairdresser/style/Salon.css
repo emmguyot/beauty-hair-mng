@@ -1,6 +1,6 @@
 /*
  * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2011 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -15,6 +15,9 @@
  * Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * 
  */
+@import url("jquery-ui-1.8.16.custom.css");
+
+body { font-family: Times,serif }
 a {  font-weight: bold; text-decoration: none}
 .facultatif {  font-style: italic; vertical-align: top}
 .obligatoire { font-style: normal; vertical-align: top}
@@ -67,3 +70,4 @@ a.cpOtherMonthDate, a:visited.cpOtherMonthDate { color:#B7D9D1; }
 .cpTodayTextDisabled { color:#D0D0D0; }
 .cpBorder { border:solid thin #2A5058 ; }
 .cpDayColumnHeader { font-weight: bold; color:#2A5058; }
+

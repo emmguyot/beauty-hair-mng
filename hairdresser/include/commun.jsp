@@ -18,6 +18,8 @@
  */
 %>
 <%@ page import="com.increg.salon.bean.SalonSession" %>
+<script src="include/jquery-1.7.1.min.js" language="JavaScript"></script>
+<script src="include/jquery-ui-1.8.16.custom.min.js" language="JavaScript"></script>
 <%
     SalonSession salonLocal = (SalonSession) session.getAttribute("SalonSession");
     if (salonLocal != null) {

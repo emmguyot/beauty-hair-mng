@@ -162,7 +162,7 @@ public class BasicSession {
      * @param locale Langue de l'utilisateur
      */
     public void setLangue(Locale locale) {
-		ResourceBundle res = ResourceBundle.getBundle("messages", locale);
+    	ResourceBundle res = ResourceBundle.getBundle("messages", locale);
 		
 		if (res != null) {
 			messagesBundle = res;
