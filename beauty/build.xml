@@ -211,8 +211,7 @@
 
 				<include name="WEB-INF/src/messages*.properties"/>
 
-				<include name="WEB-INF/salon-taglib.tld"/>
-				<include name="WEB-INF/taglibs-i18n.tld"/>
+				<include name="WEB-INF/*.tld"/>
 				<include name="WEB-INF/web.xml"/>
 				<include name="WEB-INF/webServer.xml"/>
 
@@ -377,6 +376,8 @@
 				<include name="lstTypVent.jsp"/>
 				<include name="lstVente.jsp"/>
 				<include name="reconnect.html"/>
+				<include name="refreshMenu.js"/>
+				<include name="selectCollab.jsp"/>
 
 				<include name="include/version.inc"/>
 				<include name="include/**/*.js"/>
