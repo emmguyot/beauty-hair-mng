@@ -41,10 +41,6 @@ import com.increg.util.SimpleDateFormatEG;
  * @author Emmanuel GUYOT <emmguyot@wanadoo.fr>
  */
 public class RDVBean extends TimeStampBean {
-    /**
-     * Attribut statique représentant la TimeZone à utiliser pour la manipulation des RDV
-     */    
-    protected static TimeZone theTimeZone = null;;
     /** 
      * Code du client venant
      */
@@ -641,16 +637,6 @@ public class RDVBean extends TimeStampBean {
         }
 
         return ok;
-    }
-
-    /**
-     * @return TimeZone à utiliser pour les RDV
-     */
-    public static TimeZone getTimeZone() {
-        if (theTimeZone == null) {
-            theTimeZone = new SimpleTimeZone(0, "GMT");
-        }
-        return theTimeZone;
     }
 
 } //Fin de la class RDVBean

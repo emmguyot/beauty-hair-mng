@@ -81,7 +81,7 @@ public class RDVFact implements Comparable {
 
         // Reconstitution de la date : Jour de DT_PREST, Heure de DT Début
         Calendar dateReconst = (Calendar) fact.getDT_PREST().clone();
-        dateReconst.setTimeZone(RDVBean.getTimeZone());
+        //dateReconst.setTimeZone(RDVBean.getTimeZone());
         dateReconst.set(Calendar.HOUR_OF_DAY, fact.getDT_MODIF().get(Calendar.HOUR_OF_DAY));
         dateReconst.set(Calendar.MINUTE, fact.getDT_MODIF().get(Calendar.MINUTE));
         dateReconst.set(Calendar.SECOND, fact.getDT_MODIF().get(Calendar.SECOND));
@@ -187,7 +187,7 @@ public class RDVFact implements Comparable {
                 dateArrondie.set(Calendar.MILLISECOND, 0);
                  
                 Calendar dateFact = fact.getDT_PREST();                  
-                dateFact.setTimeZone(RDVBean.getTimeZone());
+                //dateFact.setTimeZone(RDVBean.getTimeZone());
                 dateFact.setTime(dateFact.getTime());
 
                 if (dateArrondie.equals(dateFact)) {

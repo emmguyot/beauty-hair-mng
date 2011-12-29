@@ -1,6 +1,6 @@
 /*
  * Recherche/Liste des RDV 
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2011 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -65,16 +65,16 @@ public class RechRDV extends ConnectedServlet {
         DBSession myDBSession = mySalon.getMyDBSession();
         DateFormat formatDate = new SimpleDateFormat(mySalon.getMessagesBundle().getString("format.dateHeureSimpleSansSeconde"));
         DateFormat formatDateDB = myDBSession.getFormatDateTimeSansTZ();
-        formatDate.setTimeZone(RDVBean.getTimeZone());
-        formatDateDB.setTimeZone(RDVBean.getTimeZone());
+        //formatDate.setTimeZone(RDVBean.getTimeZone());
+        //formatDateDB.setTimeZone(RDVBean.getTimeZone());
 
         Calendar dtDebut = ServletUtil.interpreteDate(DT_DEBUT, formatDate, dtDebutDefaut());
         Calendar dtFin = ServletUtil.interpreteDate(DT_FIN, formatDate, dtFinDefault());
         if (dtFin.before(dtDebut)) {
             dtFin = dtDebut;
         }
-        dtDebut.setTimeZone(RDVBean.getTimeZone());
-        dtFin.setTimeZone(RDVBean.getTimeZone());
+        //dtDebut.setTimeZone(RDVBean.getTimeZone());
+        //dtFin.setTimeZone(RDVBean.getTimeZone());
         request.setAttribute("DT_DEBUT", dtDebut);
         request.setAttribute("DT_FIN", dtFin);
         DT_DEBUT = formatDateDB.format(dtDebut.getTime());
@@ -90,12 +90,12 @@ public class RechRDV extends ConnectedServlet {
             reqSQLreel = reqSQLreel + " and CD_COLLAB=" + CD_COLLAB;
         }
         if ((DT_DEBUT != null) && (DT_DEBUT.length() > 0)) {
-            reqSQL = reqSQL + " and DT_DEBUT >= " + DBSession.quoteWith(DT_DEBUT + "+0", '\'');
-            reqSQLreel = reqSQLreel + " and DT_PREST >= " + DBSession.quoteWith(DT_DEBUT + "+0", '\'');
+            reqSQL = reqSQL + " and DT_DEBUT >= " + DBSession.quoteWith(DT_DEBUT, '\'');
+            reqSQLreel = reqSQLreel + " and DT_PREST >= " + DBSession.quoteWith(DT_DEBUT, '\'');
         }
         if ((DT_FIN != null) && (DT_FIN.length() > 0)) {
-            reqSQL = reqSQL + " and DT_DEBUT <= " + DBSession.quoteWith(DT_FIN + "+0", '\'');
-            reqSQLreel = reqSQLreel + " and DT_PREST <= " + DBSession.quoteWith(DT_FIN + "+0", '\'');
+            reqSQL = reqSQL + " and DT_DEBUT <= " + DBSession.quoteWith(DT_FIN, '\'');
+            reqSQLreel = reqSQLreel + " and DT_PREST <= " + DBSession.quoteWith(DT_FIN, '\'');
         }
         reqSQL = reqSQL + " order by DT_DEBUT desc, CD_COLLAB";
         reqSQLreel = reqSQLreel + " order by DT_PREST desc, CD_COLLAB";
@@ -186,7 +186,6 @@ public class RechRDV extends ConnectedServlet {
         // J+1
         Calendar J = Calendar.getInstance();
         J.setTime(jour);
-        J.setTimeZone(RDVBean.getTimeZone());
         J.set(Calendar.HOUR_OF_DAY, 23);
         J.set(Calendar.MINUTE, 59);
         J.set(Calendar.SECOND, 59);
@@ -208,11 +207,9 @@ public class RechRDV extends ConnectedServlet {
      */
     protected Calendar dtDebutDefaut() {
         // J
-        Calendar J = Calendar.getInstance(RDVBean.getTimeZone());
+        Calendar J = Calendar.getInstance();
         J.set(Calendar.HOUR_OF_DAY, J.get(Calendar.HOUR_OF_DAY) - 1);
-        int offsetTZ = Calendar.getInstance().get(Calendar.ZONE_OFFSET)
-                        + Calendar.getInstance().get(Calendar.DST_OFFSET);
-        J.setTime(new Date(J.getTime().getTime() + offsetTZ));
+        J.getTime();
 //        J.set(Calendar.MINUTE, 0);
 //        J.set(Calendar.SECOND, 0);
 //        J.set(Calendar.MILLISECOND, 0);
