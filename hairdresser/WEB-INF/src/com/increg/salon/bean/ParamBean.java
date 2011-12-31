@@ -94,6 +94,10 @@ public class ParamBean extends GenericBean {
      * Code pour le message Taxes comprises du ticket
      */
     public static final int CD_MSG_TAXE_TICKET = 14;
+    /**
+     * Code pour l'affichage du SIRENT sur la facture
+     */
+    public static final int CD_AFF_SIREN = 15;
 
 
     /**

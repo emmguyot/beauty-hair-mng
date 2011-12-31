@@ -32,15 +32,15 @@
 	        com.increg.salon.bean.DonneeRefBean,
 	        com.increg.salon.bean.DeviseBean,
 	        com.increg.salon.request.EditionFacture,
-	        com.increg.salon.bean.CollabBean" %>
-<%@page import="com.increg.salon.bean.ReglementBean"%>
+	        com.increg.salon.bean.CollabBean,
+	        com.increg.salon.bean.ReglementBean,
+			com.increg.salon.bean.ParamBean"%>
 <%
 SalonSession mySalon = com.increg.salon.servlet.ConnectedServlet.CheckOrGoHome(request, response);
 %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
 <%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
 <i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
-<%@page import="com.increg.salon.bean.ReglementBean"%>
 <html>
 <head>
 <title><i18n:message key="ficFact.title" /></title>
@@ -59,6 +59,8 @@ SalonSession mySalon = com.increg.salon.servlet.ConnectedServlet.CheckOrGoHome(r
       PaiementBean aPaiement = ((EditionFacture) listeEdition.get(iListe)).getMyPaiement();
       String totPrest = aFact.getTotPrest(mySalon.getMyDBSession()).toString();
 	  Vector<ReglementBean> reglements = ((EditionFacture) listeEdition.get(iListe)).getReglements();
+      ParamBean paramSiren = ParamBean.getParamBean(mySalon.getMyDBSession(), Integer.toString(ParamBean.CD_AFF_SIREN));
+
 %>
    <table class="ficheImpr" style="{ width: <%= mySalon.getLargeurFiche() %> }" width="400">
    <tr>
@@ -80,6 +82,13 @@ SalonSession mySalon = com.increg.salon.servlet.ConnectedServlet.CheckOrGoHome(r
 		  <salon:valeur valeurNulle="null" valeur="<%= mySoc.getTEL() %>" >
 		     <i18n:message key="label.tel" /> : %%
 		  </salon:valeur>
+		  <% if (paramSiren.getVAL_PARAM().startsWith("O")) { %>
+		  <br><font size=-2>
+		  <salon:valeur valeurNulle="null" valeur="<%= mySoc.getCD_SIRET() %>" >
+		     <i18n:message key="label.siret" /> : %%
+		  </salon:valeur>
+		  </font>
+		  <% } %>
 	 </td>
 	 </tr>
 	 <tr>

@@ -18,13 +18,10 @@
 package com.increg.salon.bean.update;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import com.increg.commun.DBSession;
-import com.increg.commun.exception.FctlException;
-import com.increg.commun.exception.ReloadNeededException;
-import com.increg.salon.bean.IdentBean;
+import com.increg.salon.bean.ParamBean;
 
 /**
  * Passage à la version 4.6
@@ -59,8 +56,13 @@ public class UpdateBeanV46 extends UpdateBeanV43 {
                	"alter table rdv alter dt_debut TYPE timestamp without time zone",
             	"alter table pointage alter dt_debut TYPE timestamp without time zone",
             	"alter table pointage alter dt_fin TYPE timestamp without time zone",
-            	"update VERSION set VERSION='4.6'"};
+            	"update PARAM set val_param='http://libertylook.emmguyot.com/' where cd_param=" + ParamBean.CD_URL_INFO,
+            	"update PARAM set val_param='http://libertylook.emmguyot.com/download' where cd_param=" + ParamBean.CD_URL_MAJ,
+            	"insert into PARAM (cd_param, lib_param, val_param) values (15, 'Affichage du SIRET sur la facture', 'N')",
+            	"update VERSION set VERSION='4.6'"
+            	};
             String[] sqlAvecRes = {
+                "select setval('seq_param', max(CD_PARAM)::bigint, true) from PARAM"
             	};
 
             for (int i = 0; i < tableFK.length; i++) {
