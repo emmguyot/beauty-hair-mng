@@ -18,6 +18,9 @@
 package com.increg.salon.request;
 
 import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 public class Journal {
 	/**
@@ -38,12 +41,12 @@ public class Journal {
 	/**
 	 * Sens des types mouvements
 	 */
-	protected String[] SENS;
+	protected SortedMap<Integer, String> SENS;
 
 	/**
 	 * Total des sorties par type de mouvements
 	 */
-	protected java.math.BigDecimal[] SORTIE;
+	protected SortedMap<Integer, BigDecimal> SORTIE;
 
 	/**
 	 * Brouillard constructor comment.
@@ -51,8 +54,8 @@ public class Journal {
 	public Journal() {
 		super();
 
-		SORTIE = new BigDecimal[10];
-		SENS = new String[10];
+		SORTIE = new TreeMap<Integer, BigDecimal>();
+		SENS = new TreeMap<Integer, String>();
 		SOLDE_FINAL = new BigDecimal("0.00");
 		SOLDE_FINAL.setScale(2);
 		SOLDE_INIT = new BigDecimal("0.00");
@@ -69,12 +72,12 @@ public class Journal {
 		// Calcul le final
 		BigDecimal total = SOLDE_INIT;
 
-		for (int i = 0; i < SORTIE.length; i++) {
-			if (SORTIE[i] != null) {
-				if ((SENS[i] != null) && (SENS[i].equals("S"))) {
-					total = total.subtract(SORTIE[i]);
-				} else if ((SENS[i] != null) && (SENS[i].equals("E"))) {
-					total = total.add(SORTIE[i]);
+		for (Integer cd : SORTIE.keySet()) {
+			if (SORTIE.get(cd) != null) {
+				if ((SENS.get(cd) != null) && (SENS.get(cd).equals("S"))) {
+					total = total.subtract(SORTIE.get(cd));
+				} else if ((SENS.get(cd) != null) && (SENS.get(cd).equals("E"))) {
+					total = total.add(SORTIE.get(cd));
 				}
 			}
 		}
@@ -97,7 +100,7 @@ public class Journal {
 	 * 
 	 * @return java.math.BigDecimal[]
 	 */
-	public String[] getSENS() {
+	public SortedMap<Integer, String> getSENS() {
 		return SENS;
 	}
 
@@ -110,7 +113,7 @@ public class Journal {
 	 * @return java.math.BigDecimal
 	 */
 	public String getSENS(int ind) {
-		return SENS[ind];
+		return SENS.get(ind);
 	}
 
 	/**
@@ -139,8 +142,8 @@ public class Journal {
 	 * 
 	 * @return java.math.BigDecimal[]
 	 */
-	public java.math.BigDecimal[] getSORTIE() {
-		return SORTIE;
+	public Collection<BigDecimal> getSORTIE() {
+		return SORTIE.values();
 	}
 
 	/**
@@ -152,7 +155,7 @@ public class Journal {
 	 * @return java.math.BigDecimal
 	 */
 	public java.math.BigDecimal getSORTIE(int ind) {
-		return SORTIE[ind];
+		return SORTIE.get(ind);
 	}
 
 	/**
@@ -173,7 +176,7 @@ public class Journal {
 	 * @param newSENS
 	 *            java.math.BigDecimal[]
 	 */
-	public void setSENS(String[] newSENS) {
+	public void setSENS(SortedMap<Integer, String> newSENS) {
 		SENS = newSENS;
 	}
 
@@ -187,7 +190,7 @@ public class Journal {
 	 *            java.math.BigDecimal
 	 */
 	public void setSENS(int ind, String newSENS) {
-		SENS[ind] = newSENS;
+		SENS.put(ind, newSENS);
 	}
 
 	/**
@@ -219,7 +222,7 @@ public class Journal {
 	 * @param newSORTIE
 	 *            java.math.BigDecimal[]
 	 */
-	public void setSORTIE(java.math.BigDecimal[] newSORTIE) {
+	public void setSORTIE(SortedMap<Integer, BigDecimal> newSORTIE) {
 		SORTIE = newSORTIE;
 	}
 
@@ -233,7 +236,7 @@ public class Journal {
 	 *            java.math.BigDecimal
 	 */
 	public void setSORTIE(int ind, java.math.BigDecimal newSORTIE) {
-		SORTIE[ind] = newSORTIE;
+		SORTIE.put(ind, newSORTIE);
 	}
 
 	/**
@@ -246,10 +249,10 @@ public class Journal {
 	 *            java.math.BigDecimal
 	 */
 	public void addSORTIE(int ind, java.math.BigDecimal newSORTIE) {
-		if (SORTIE[ind] == null) {
-			SORTIE[ind] = newSORTIE;
+		if (!SORTIE.containsKey(ind)) {
+			SORTIE.put(ind, newSORTIE);
 		} else {
-			SORTIE[ind] = SORTIE[ind].add(newSORTIE);
+			SORTIE.put(ind, SORTIE.get(ind).add(newSORTIE));
 		}
 	}
 }

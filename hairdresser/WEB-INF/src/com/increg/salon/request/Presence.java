@@ -18,11 +18,13 @@
 package com.increg.salon.request;
 
 import java.math.BigDecimal;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 public class Presence {
 	protected java.lang.String PRENOM = "";
 
-	protected BigDecimal pointage[];
+	protected SortedMap<Integer, BigDecimal> pointage;
 
 	protected java.util.Date debut;
 
@@ -31,7 +33,7 @@ public class Presence {
 	 */
 	public Presence() {
 		super();
-		pointage = new BigDecimal[20];
+		pointage = new TreeMap<Integer, BigDecimal>();
 	}
 
 	/**
@@ -50,7 +52,7 @@ public class Presence {
 	 * 
 	 * @return java.util.Vector
 	 */
-	public BigDecimal[] getPointage() {
+	public SortedMap<Integer, BigDecimal> getPointage() {
 		return pointage;
 	}
 
@@ -61,7 +63,7 @@ public class Presence {
 	 * @return java.util.Vector
 	 */
 	public BigDecimal getPointage(int ind) {
-		return pointage[ind];
+		return pointage.get(ind);
 	}
 
 	/**
@@ -92,7 +94,7 @@ public class Presence {
 	 * @param newPointage
 	 *            java.util.Vector
 	 */
-	public void setPointage(BigDecimal[] newPointage) {
+	public void setPointage(SortedMap<Integer, BigDecimal> newPointage) {
 		pointage = newPointage;
 	}
 
@@ -104,7 +106,7 @@ public class Presence {
 	 *            java.util.Vector
 	 */
 	public void setPointage(int ind, BigDecimal newPointage) {
-		pointage[ind] = newPointage;
+		pointage.put(ind, newPointage);
 	}
 
 	/**
