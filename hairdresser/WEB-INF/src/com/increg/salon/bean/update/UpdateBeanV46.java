@@ -59,7 +59,9 @@ public class UpdateBeanV46 extends UpdateBeanV43 {
             	"update PARAM set val_param='http://libertylook.emmguyot.com/' where cd_param=" + ParamBean.CD_URL_INFO,
             	"update PARAM set val_param='http://libertylook.emmguyot.com/download' where cd_param=" + ParamBean.CD_URL_MAJ,
             	"insert into PARAM (cd_param, lib_param, val_param) values (15, 'Affichage du SIRET sur la facture', 'N')",
-            	"update VERSION set VERSION='4.6'"
+            	"update VERSION set VERSION='4.6'",
+            	"alter table fact alter cd_typ_vent type numeric(2)",
+            	"alter table typ_vent alter cd_typ_vent type numeric(2)"
             	};
             String[] sqlAvecRes = {
                 "select setval('seq_param', max(CD_PARAM)::bigint, true) from PARAM"
