@@ -55,6 +55,7 @@ public class FicTypVent extends ConnectedServlet {
 
         String MARQUE = request.getParameter("MARQUE");
         String CD_TVA = request.getParameter("CD_TVA");
+        String CD_TVA_SUPPL = request.getParameter("CD_TVA_SUPPL");
 
         // Récupère la connexion
         HttpSession mySession = request.getSession(false);
@@ -84,6 +85,7 @@ public class FicTypVent extends ConnectedServlet {
                     aTypVent.setCIVILITE(CIVILITE);
                     aTypVent.setMARQUE(MARQUE);
                     aTypVent.setCD_TVA(CD_TVA);
+                    aTypVent.setCD_TVA_SUPPL(CD_TVA_SUPPL);
 
                     aTypVent.create(myDBSession);
                     mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.creationOk" + BasicSession.TAG_I18N);
@@ -119,6 +121,7 @@ public class FicTypVent extends ConnectedServlet {
 
                 try {
                     aTypVent.setCD_TVA(CD_TVA);
+                    aTypVent.setCD_TVA_SUPPL(CD_TVA_SUPPL);
                     aTypVent.maj(myDBSession);
                     mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.enregistrementOk" + BasicSession.TAG_I18N);
                 } catch (Exception e) {
@@ -161,6 +164,7 @@ public class FicTypVent extends ConnectedServlet {
                     aTypVent.setCIVILITE(CIVILITE);
                     aTypVent.setMARQUE(MARQUE);
                     aTypVent.setCD_TVA(CD_TVA);
+                    aTypVent.setCD_TVA_SUPPL(CD_TVA_SUPPL);
 
                     aTypVent.create(myDBSession);
                     mySalon.setMessage("Info", BasicSession.TAG_I18N + "message.duplicationOk" + BasicSession.TAG_I18N);

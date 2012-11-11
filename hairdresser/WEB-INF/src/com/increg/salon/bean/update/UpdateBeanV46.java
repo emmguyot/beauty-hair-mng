@@ -60,8 +60,12 @@ public class UpdateBeanV46 extends UpdateBeanV43 {
             	"update PARAM set val_param='http://libertylook.emmguyot.com/download' where cd_param=" + ParamBean.CD_URL_MAJ,
             	"insert into PARAM (cd_param, lib_param, val_param) values (15, 'Affichage du SIRET sur la facture', 'N')",
             	"update VERSION set VERSION='4.6'",
-            	"alter table fact alter cd_typ_vent type numeric(2)",
-            	"alter table typ_vent alter cd_typ_vent type numeric(2)"
+            	"alter table FACT alter cd_typ_vent type numeric(2)",
+            	"alter table TYP_VENT alter cd_typ_vent type numeric(2)",
+            	"alter table TYP_VENT add CD_TVA_SUPPL numeric(2)",
+                "alter table TYP_VENT add constraint FK_APOUR_TVA_SUPPL foreign key (CD_TVA_SUPPL) references TVA (CD_TVA)",
+            	"alter table FACT add TVA_SUPPL decimal(8,2)",
+            	"alter table HISTO_PREST add TVA_SUPPL decimal(8,2)",
             	};
             String[] sqlAvecRes = {
                 "select setval('seq_param', max(CD_PARAM)::bigint, true) from PARAM"

@@ -58,6 +58,11 @@ public class TypVentBean extends GenericBean {
     protected int CD_TVA;
 
     /**
+     * Code TVA supplémentaire associé au type de vente (optionnel)
+     */
+    protected int CD_TVA_SUPPL;
+
+    /**
      * TypVentBean constructor comment.
      */
     public TypVentBean() {
@@ -107,6 +112,14 @@ public class TypVentBean extends GenericBean {
                 System.out.println("Erreur dans PrestBean (RS) : " + e.toString());
             }
         }
+        try {
+            CD_TVA_SUPPL = rs.getInt("CD_TVA_SUPPL");
+        } catch (SQLException e) {
+            if (e.getErrorCode() != 1) {
+                System.out.println("Erreur dans PrestBean (RS) : " + e.toString());
+            }
+        }
+
     }
 
     /**
@@ -160,6 +173,12 @@ public class TypVentBean extends GenericBean {
         if (CD_TVA != 0) {
             colonne.append("CD_TVA,");
             valeur.append(CD_TVA);
+            valeur.append(",");
+        }
+
+        if (CD_TVA_SUPPL != 0) {
+            colonne.append("CD_TVA_SUPPL,");
+            valeur.append(CD_TVA_SUPPL);
             valeur.append(",");
         }
 
@@ -243,6 +262,14 @@ public class TypVentBean extends GenericBean {
         colonne.append("CD_TVA=");
         if (CD_TVA != 0) {
             colonne.append(CD_TVA);
+        } else {
+            colonne.append("NULL");
+        }
+        colonne.append(",");
+
+        colonne.append("CD_TVA_SUPPL=");
+        if (CD_TVA_SUPPL != 0) {
+            colonne.append(CD_TVA_SUPPL);
         } else {
             colonne.append("NULL");
         }
@@ -418,7 +445,6 @@ public class TypVentBean extends GenericBean {
     public void setCD_TVA(int cd_tva) {
         CD_TVA = cd_tva;
     }
-
     /**
      * @param cd_tva The cD_TVA to set.
      */
@@ -427,6 +453,30 @@ public class TypVentBean extends GenericBean {
             CD_TVA = Integer.parseInt(cd_tva);
         } else {
             CD_TVA = 0;
+        }
+    }
+
+    /**
+     * @return Returns the CD_TVA_SUPPL.
+     */
+    public int getCD_TVA_SUPPL() {
+        return CD_TVA_SUPPL;
+    }
+    /**
+     * @param cd_tva The cD_TVA_SUPLL to set.
+     */
+    public void setCD_TVA_SUPPL(int cd_tva) {
+        CD_TVA_SUPPL = cd_tva;
+    }
+
+    /**
+     * @param cd_tva The CD_TVA_SUPPL to set.
+     */
+    public void setCD_TVA_SUPPL(String cd_tva) {
+        if ((cd_tva != null) && (cd_tva.length() != 0)) {
+            CD_TVA_SUPPL = Integer.parseInt(cd_tva);
+        } else {
+            CD_TVA_SUPPL = 0;
         }
     }
     

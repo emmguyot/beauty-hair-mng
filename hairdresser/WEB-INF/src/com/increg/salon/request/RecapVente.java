@@ -39,6 +39,11 @@ public class RecapVente {
     protected BigDecimal TVA;
 
     /**
+     * Total TVA Supplémentaire des ventes
+     */
+    protected BigDecimal TVA_SUPPL;
+
+    /**
      * Total TTC des ventes
      */
     protected BigDecimal TTC;
@@ -83,6 +88,13 @@ public class RecapVente {
     }
 
     /**
+     * @return TVA supplémentaire des ventes
+     */
+    public BigDecimal getTVA_SUPPL() {
+        return TVA_SUPPL;
+    }
+
+    /**
      * @param decimal HT des ventes
      */
     public void setHT(BigDecimal decimal) {
@@ -108,6 +120,13 @@ public class RecapVente {
      */
     public void setTVA(BigDecimal decimal) {
         TVA = decimal;
+    }
+
+    /**
+     * @param decimal TVA Supplémentaire des ventes
+     */
+    public void setTVA_SUPPL(BigDecimal decimal) {
+        TVA_SUPPL = decimal;
     }
 
     /**

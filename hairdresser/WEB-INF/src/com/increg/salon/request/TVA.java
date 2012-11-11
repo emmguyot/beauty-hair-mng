@@ -29,6 +29,10 @@ public class TVA {
      */
     protected BigDecimal total;
     /**
+     * Total de la TVA Supplémentaire
+     */
+    protected BigDecimal totalSuppl;
+    /**
      * Total du HT
      */
     protected BigDecimal totalHT;
@@ -43,6 +47,7 @@ public class TVA {
     public TVA() {
         super();
         total = new BigDecimal(0);
+        totalSuppl = new BigDecimal(0);
         totalHT = new BigDecimal(0);
         totalTTC = new BigDecimal(0);
     }
@@ -64,6 +69,14 @@ public class TVA {
     }
     /**
      * Insert the method's description here.
+     * Creation date: (28/12/2001 20:44:28)
+     * @return java.math.BigDecimal
+     */
+    public BigDecimal getTotalSuppl() {
+        return totalSuppl;
+    }
+    /**
+     * Insert the method's description here.
      * Creation date: (28/12/2001 20:43:48)
      * @param newCD_TYP_VENT int
      */
@@ -77,6 +90,14 @@ public class TVA {
      */
     public void setTotal(BigDecimal newTotal) {
         total = newTotal;
+    }
+    /**
+     * Insert the method's description here.
+     * Creation date: (28/12/2001 20:44:28)
+     * @param newTotal java.math.BigDecimal
+     */
+    public void setTotalSuppl(BigDecimal newTotal) {
+        totalSuppl = newTotal;
     }
     /**
      * @return Total du HT

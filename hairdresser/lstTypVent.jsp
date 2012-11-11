@@ -52,6 +52,7 @@ function Init() {
 		<th><i18n:message key="label.articleAssocie" /></th>
 		<th><i18n:message key="label.civiliteAssocie" /></th>
 		<th><i18n:message key="label.TVAapplicable" /></th>
+		<th><i18n:message key="label.TVAapplicableSuppl" /></th>
 	</tr>
 	<%
 	// Recupère la liste
@@ -77,6 +78,13 @@ function Init() {
         }
         %>
         <td><salon:valeur valeur="<%= tva %>" valeurNulle="null">%%</salon:valeur></td>
+        <%
+        tva = "";
+        if (aTypVent.getCD_TVA_SUPPL() != 0) {
+        	tva = TvaBean.getTvaBean(mySalon.getMyDBSession(), Integer.toString(aTypVent.getCD_TVA_SUPPL())).getLIB_TVA();
+        }
+        %>
+        <td><salon:valeur valeur="<%= tva %>" valeurNulle="null">%%</salon:valeur>&nbsp;</td>
 	</tr>
 	<%
 	}

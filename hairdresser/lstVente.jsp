@@ -33,6 +33,9 @@ SalonSession mySalon = com.increg.salon.servlet.ConnectedServlet.CheckOrGoHome(r
 <title><i18n:message key="label.recapVentes" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
+<style>
+.TVASuppl { display:none; }
+</style>
 </head>
 <body class="donnees" onLoad="document.fiche.DT_DEBUT.focus()">
 <%@ include file="include/commun.jsp" %>
@@ -68,18 +71,23 @@ function Init() {
 		<th><i18n:message key="label.qte" /></th>
 		<th><i18n:message key="label.HT" /></th>
 		<th><i18n:message key="label.TVA" /></th>
+		<th class="TVASuppl"><i18n:message key="label.TVASuppl" /></th>
 		<th><i18n:message key="label.TTC" /></th>
 	</tr>
 	<%
 	// Recupère la liste
 	Vector lstLignes = (Vector) request.getAttribute("Liste");
     BigDecimal fullTotal = new BigDecimal(0);
+    BigDecimal fullTotalSuppl = new BigDecimal(0);
     BigDecimal fullTotalHT = new BigDecimal(0);
     BigDecimal fullTotalTTC = new BigDecimal(0);
 	    
 	for (int i=0; i< lstLignes.size(); i++) {
 	    RecapVente aRecap = (RecapVente) lstLignes.get(i);
         fullTotal = fullTotal.add(aRecap.getTVA());
+        if (aRecap.getTVA_SUPPL() != null) {
+        	fullTotalSuppl = fullTotalSuppl.add(aRecap.getTVA_SUPPL());
+        }
         fullTotalHT = fullTotalHT.add(aRecap.getHT());
         fullTotalTTC = fullTotalTTC.add(aRecap.getTTC());
 	%>
@@ -93,6 +101,9 @@ function Init() {
 	</td>
 	<td class="Nombre">
 	    <salon:valeur valeur="<%= aRecap.getTVA() %>" valeurNulle="null"> %% </salon:valeur>
+	</td>
+	<td class="Nombre TVASuppl">
+	    <salon:valeur valeur="<%= aRecap.getTVA_SUPPL() %>" valeurNulle="null"> %% </salon:valeur>
 	</td>
 	<td class="Nombre">
 	    <salon:valeur valeur="<%= aRecap.getTTC() %>" valeurNulle="null"> %% </salon:valeur>
@@ -111,6 +122,9 @@ function Init() {
             <td class="Nombre">
                 <salon:valeur valeur="<%= fullTotal %>" valeurNulle="null"> %% </salon:valeur>
             </td>
+			<td class="Nombre TVASuppl">
+			    <salon:valeur valeur="<%= fullTotalSuppl %>" valeurNulle="null"> %% </salon:valeur>
+			</td>
             <td class="Nombre">
                 <salon:valeur valeur="<%= fullTotalTTC %>" valeurNulle="null"> %% </salon:valeur>
             </td>
@@ -121,6 +135,11 @@ function Init() {
 <salon:madeBy />
 <script language="JavaScript">
 <!--
+
+<% if (fullTotalSuppl.compareTo(BigDecimal.ZERO) != 0) { %>
+	$(".TVASuppl").show();
+<% } %>
+
 
 // Affichage de l'aide
 function Aide()

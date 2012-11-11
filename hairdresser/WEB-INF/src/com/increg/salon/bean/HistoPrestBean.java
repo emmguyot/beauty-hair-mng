@@ -81,6 +81,10 @@ public class HistoPrestBean extends TimeStampBean {
      */
     protected java.math.BigDecimal TVA;
     /**
+     * TVA Supplémentaire de la ligne
+     */
+    protected java.math.BigDecimal TVA_SUPPL;
+    /**
      * TTC de la ligne
      */
     protected java.math.BigDecimal PRX_TOT_TTC;
@@ -196,6 +200,14 @@ public class HistoPrestBean extends TimeStampBean {
             }
         }
         try {
+            TVA_SUPPL = rs.getBigDecimal("TVA_SUPPL", 2);
+        }
+        catch (SQLException e) {
+            if (e.getErrorCode() != 1) {
+                System.out.println("Erreur dans HistoPrestBean (RS) : " + e.toString());
+            }
+        }
+        try {
             PRX_TOT_TTC = rs.getBigDecimal("PRX_TOT_TTC", 2);
         }
         catch (SQLException e) {
@@ -302,6 +314,12 @@ public class HistoPrestBean extends TimeStampBean {
         if (TVA != null) {
             colonne.append("TVA,");
             valeur.append(TVA.toString());
+            valeur.append(",");
+        }
+
+        if (TVA_SUPPL != null) {
+            colonne.append("TVA_SUPPL,");
+            valeur.append(TVA_SUPPL.toString());
             valeur.append(",");
         }
 
@@ -490,6 +508,15 @@ public class HistoPrestBean extends TimeStampBean {
         colonne.append("TVA=");
         if (TVA != null) {
             colonne.append(TVA.toString());
+        }
+        else {
+            colonne.append("NULL");
+        }
+        colonne.append(",");
+
+        colonne.append("TVA_SUPPL=");
+        if (TVA_SUPPL != null) {
+            colonne.append(TVA_SUPPL.toString());
         }
         else {
             colonne.append("NULL");
@@ -933,6 +960,20 @@ public class HistoPrestBean extends TimeStampBean {
      */
     public void setTVA(java.math.BigDecimal decimal) {
         TVA = decimal;
+    }
+
+    /**
+     * @return TVA Supplémentaire de la ligne
+     */
+    public java.math.BigDecimal getTVA_SUPPL() {
+        return TVA_SUPPL;
+    }
+
+    /**
+     * @param decimal TVA supplémentaire de la ligne
+     */
+    public void setTVA_SUPPL(java.math.BigDecimal decimal) {
+        TVA_SUPPL = decimal;
     }
 
     /**

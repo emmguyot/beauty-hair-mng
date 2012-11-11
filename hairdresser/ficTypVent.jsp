@@ -99,6 +99,15 @@ function Init() {
 		  </select>
 		</salon:DBselection>
 	</p>
+	<p>
+		<span class="obligatoire"><i18n:message key="label.TVAapplicableSuppl" /> :</span> 
+		<salon:DBselection valeur="<%= aTypVent.getCD_TVA_SUPPL() %>" sql="select CD_TVA, LIB_TVA from TVA order by LIB_TVA">
+		  <select name="CD_TVA_SUPPL">
+             <option value=""></option>
+		     %%
+		  </select>
+		</salon:DBselection>
+	</p>
 </form>
 <script language="JavaScript">
 // Fonctions d'action

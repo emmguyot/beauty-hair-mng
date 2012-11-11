@@ -1,3 +1,4 @@
+<%@page import="java.math.BigDecimal"%>
 <%
 /*
  * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
@@ -441,6 +442,11 @@ function Init() {
 	    <salon:valeur valeurNulle="null" valeur="<%= aFact.getTVA() %>" > 
 	       <span class="readonly">%% <%= mySalon.getDevise().toString() %></span>
 	    </salon:valeur>
+	    <% if ((aFact.getTVA_SUPPL() != null) && (aFact.getTVA_SUPPL().compareTo(BigDecimal.ZERO) > 0)) { %>
+	    	<salon:valeur valeurNulle="null" valeur="<%= aFact.getTVA_SUPPL() %>" > 
+		       &amp; <span class="readonly">%% <%= mySalon.getDevise().toString() %></span>
+	    	</salon:valeur>
+		<% } %>	    	
         </td>
 	</tr>
 	</table>

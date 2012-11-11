@@ -104,6 +104,10 @@ public class FactBean extends TimeStampBean {
      */
     protected java.math.BigDecimal TVA;
     /**
+     * Montant de la TVA complémentaire
+     */
+    protected java.math.BigDecimal TVA_SUPPL;
+    /**
      * Type de répartition de la remise
      */
     protected String repartRemise = null;
@@ -229,6 +233,13 @@ public class FactBean extends TimeStampBean {
                 System.out.println("Erreur dans FactBean (RS) : " + e.toString());
             }
         }
+        try {
+            TVA_SUPPL = rs.getBigDecimal("TVA_SUPPL", 2);
+        } catch (SQLException e) {
+            if (e.getErrorCode() != 1) {
+                System.out.println("Erreur dans FactBean (RS) : " + e.toString());
+            }
+        }
 
         CD_PAIEMENT_INIT = CD_PAIEMENT;
         repartTVA = new HashMap<TvaBean, BigDecimal>();
@@ -329,6 +340,12 @@ public class FactBean extends TimeStampBean {
         if (TVA != null) {
             colonne.append("TVA,");
             valeur.append(TVA.toString());
+            valeur.append(",");
+        }
+
+        if (TVA_SUPPL != null) {
+            colonne.append("TVA_SUPPL,");
+            valeur.append(TVA_SUPPL.toString());
             valeur.append(",");
         }
 
@@ -562,6 +579,14 @@ public class FactBean extends TimeStampBean {
         colonne.append("TVA=");
         if (TVA != null) {
             colonne.append(TVA.toString());
+        } else {
+            colonne.append("NULL");
+        }
+        colonne.append(",");
+
+        colonne.append("TVA_SUPPL=");
+        if (TVA_SUPPL != null) {
+            colonne.append(TVA_SUPPL.toString());
         } else {
             colonne.append("NULL");
         }
@@ -837,13 +862,16 @@ public class FactBean extends TimeStampBean {
         }
         
         TVA = new BigDecimal("0.00");
+        TVA_SUPPL = new BigDecimal("0.00");
         for (int i = 0; i < lignes.size(); i++) {
             HistoPrestBean aLigne = (HistoPrestBean) lignes.get(i);
             PrestBean aPrest = (PrestBean) lstPrest.get(i);
             TypVentBean aTypVent = TypVentBean.getTypVentBean(dbConnect, Integer.toString(aPrest.getCD_TYP_VENT()));
             TvaBean aTva = TvaBean.getTvaBean(dbConnect, Integer.toString(aTypVent.getCD_TVA()));
-            
-            BigDecimal coef = aTva.getTX_TVA().setScale(5, BigDecimal.ROUND_HALF_UP).divide(new BigDecimal(100).add(aTva.getTX_TVA()), BigDecimal.ROUND_HALF_UP);
+            TvaBean aTvaSuppl = null;
+            if (aTypVent.getCD_TVA() != 0) {
+            	aTvaSuppl = TvaBean.getTvaBean(dbConnect, Integer.toString(aTypVent.getCD_TVA_SUPPL()));
+            }
             
             BigDecimal TTC = aLigne.getQTE().multiply(aLigne.getPRX_UNIT_TTC());
             
@@ -858,9 +886,22 @@ public class FactBean extends TimeStampBean {
                     TTC = TTC.subtract(remiseTot.multiply(TTC).divide(somme, BigDecimal.ROUND_HALF_UP));
                 }
             }
-            aLigne.setTVA(TTC.multiply(coef).setScale(2, BigDecimal.ROUND_HALF_UP));
+            // Calcul de HT d'abord
+            BigDecimal HT = TTC.multiply(new BigDecimal(100))
+            					.divide(new BigDecimal(100).add(aTva.getTX_TVA()), BigDecimal.ROUND_HALF_UP);
+            if (aTvaSuppl != null) {
+            	HT = HT.multiply(new BigDecimal(100))
+    					.divide(new BigDecimal(100).add(aTvaSuppl.getTX_TVA()), BigDecimal.ROUND_HALF_UP);
+            }
+            aLigne.setPRX_TOT_HT(HT.setScale(2, BigDecimal.ROUND_HALF_UP));
+            aLigne.setTVA(HT.multiply(aTva.getTX_TVA().divide(new BigDecimal(100))).setScale(2, BigDecimal.ROUND_HALF_UP));
+            if (aTvaSuppl != null) {
+            	aLigne.setTVA_SUPPL(HT.add(aLigne.getTVA()).multiply(aTvaSuppl.getTX_TVA().divide(new BigDecimal(100))).setScale(2, BigDecimal.ROUND_HALF_UP));
+            }
+            else {
+            	aLigne.setTVA_SUPPL(null);
+            }
             aLigne.setPRX_TOT_TTC(TTC.setScale(2, BigDecimal.ROUND_HALF_UP));
-            aLigne.setPRX_TOT_HT(TTC.subtract(aLigne.getTVA()));
             
             // Sauvegarde en base
             aLigne.maj(dbConnect);
@@ -874,13 +915,30 @@ public class FactBean extends TimeStampBean {
                 TVApartielle = TVApartielle.add(aLigne.getTVA());
             }
             repartTVA.put(aTva, TVApartielle);
-            
+
+            if (aTvaSuppl != null) {
+	            // Ajoute la TVA Supplémetaire à la facture
+	            TVA_SUPPL = TVA_SUPPL.add(aLigne.getTVA_SUPPL());
+	            TVApartielle = (BigDecimal) repartTVA.get(aTvaSuppl);
+	            if (TVApartielle == null) {
+	                TVApartielle = aLigne.getTVA_SUPPL();
+	            } else {
+	                TVApartielle = TVApartielle.add(aLigne.getTVA_SUPPL());
+	            }
+	            repartTVA.put(aTvaSuppl, TVApartielle);
+            }
         }
         
         TVA = TVA.setScale(2, BigDecimal.ROUND_HALF_UP);
+        if (TVA_SUPPL != null) {
+        	TVA_SUPPL = TVA_SUPPL.setScale(2, BigDecimal.ROUND_HALF_UP);
+        }
 
         // Calcul du HT
         PRX_TOT_HT = PRX_TOT_TTC.subtract(TVA);
+        if (TVA_SUPPL != null) {
+        	PRX_TOT_HT = PRX_TOT_TTC.subtract(TVA_SUPPL);
+        }
 
         try {
             // Sauvegarde en base
@@ -1163,6 +1221,15 @@ public class FactBean extends TimeStampBean {
     }
     
     /**
+     * Insert the method's description here.
+     * Creation date: (17/08/2001 21:27:16)
+     * @return java.math.BigDecimal
+     */
+    public java.math.BigDecimal getTVA_SUPPL() {
+        return TVA_SUPPL;
+    }
+    
+    /**
      * Obtention de la TVA de la facture pour un certain taux
      * @param aTva Taux demandé
      * @return java.math.BigDecimal
@@ -1244,6 +1311,13 @@ public class FactBean extends TimeStampBean {
                         TVA = new BigDecimal(0);
                     }
                     TVA = TVA.add(res.getTVA());
+                }
+
+                if (res.getTVA_SUPPL() != null) {
+                    if (TVA_SUPPL == null) {
+                        TVA_SUPPL = new BigDecimal(0);
+                    }
+                    TVA_SUPPL = TVA_SUPPL.add(res.getTVA_SUPPL());
                 }
             }
             aRS.close();
@@ -1585,6 +1659,29 @@ public class FactBean extends TimeStampBean {
     }
     
     /**
+     * Insert the method's description here.
+     * Creation date: (17/08/2001 21:27:16)
+     * @param newTVA String
+     */
+    public void setTVA_SUPPL(String newTVA) {
+
+        if ((newTVA != null) && (newTVA.length() != 0)) {
+            TVA_SUPPL = new Montant(newTVA);
+        } else {
+            TVA_SUPPL = null;
+        }
+    }
+    
+    /**
+     * Insert the method's description here.
+     * Creation date: (17/08/2001 21:27:16)
+     * @param newTVA java.math.BigDecimal
+     */
+    public void setTVA_SUPPL(java.math.BigDecimal newTVA) {
+        TVA_SUPPL = newTVA;
+    }
+    
+    /**
      * @see com.increg.salon.bean.TimeStampBean
      */
     public java.lang.String toString() {
@@ -1606,7 +1703,7 @@ public class FactBean extends TimeStampBean {
         // Recherche le type de répatition
         String reqSQL = null;
     
-        reqSQL = "select PREST.CD_TYP_VENT, sum(HISTO_PREST.PRX_TOT_HT) as HT, sum(HISTO_PREST.PRX_TOT_TTC) as TTC, sum(HISTO_PREST.TVA) as TVA "
+        reqSQL = "select PREST.CD_TYP_VENT, sum(HISTO_PREST.PRX_TOT_HT) as HT, sum(HISTO_PREST.PRX_TOT_TTC) as TTC, sum(HISTO_PREST.TVA) as TVA, sum(HISTO_PREST.TVA_SUPPL) as TVA_SUPPL "
                 + "from HISTO_PREST, PREST, FACT, PAIEMENT "
                 + "where FACT.CD_PAIEMENT = PAIEMENT.CD_PAIEMENT "
                 + "and FACT.CD_FACT = HISTO_PREST.CD_FACT "
@@ -1632,6 +1729,7 @@ public class FactBean extends TimeStampBean {
             aTVA.setTotal(aRS.getBigDecimal("TVA", 2));
             aTVA.setTotalHT(aRS.getBigDecimal("HT", 2));
             aTVA.setTotalTTC(aRS.getBigDecimal("TTC", 2));
+            aTVA.setTotalSuppl(aRS.getBigDecimal("TVA_SUPPL", 2));
 
             lstLignes.add(aTVA);
         }
@@ -1654,7 +1752,7 @@ public class FactBean extends TimeStampBean {
         Vector<RecapVente> lstLignes = new Vector<RecapVente>();
 
 
-        String reqSQL = "select PREST.CD_PREST, sum(HISTO_PREST.QTE) as QTE, sum(HISTO_PREST.PRX_TOT_HT) as HT, sum(HISTO_PREST.PRX_TOT_TTC) as TTC, sum(HISTO_PREST.TVA) as TVA "
+        String reqSQL = "select PREST.CD_PREST, sum(HISTO_PREST.QTE) as QTE, sum(HISTO_PREST.PRX_TOT_HT) as HT, sum(HISTO_PREST.PRX_TOT_TTC) as TTC, sum(HISTO_PREST.TVA) as TVA, sum(HISTO_PREST.TVA_SUPPL) as TVA_SUPPL  "
                 + "from PREST, HISTO_PREST, TYP_VENT, FACT, PAIEMENT "
                 + "where PREST.CD_PREST=HISTO_PREST.CD_PREST "
                 + "and PREST.CD_TYP_VENT=TYP_VENT.CD_TYP_VENT "
@@ -1682,6 +1780,7 @@ public class FactBean extends TimeStampBean {
 
             aRecap.setPrest(PrestBean.getPrestBean(myDBSession, aRS.getString("CD_PREST")));
             aRecap.setTVA(aRS.getBigDecimal("TVA", 2));
+            aRecap.setTVA_SUPPL(aRS.getBigDecimal("TVA_SUPPL", 2));
             aRecap.setHT(aRS.getBigDecimal("HT", 2));
             aRecap.setTTC(aRS.getBigDecimal("TTC", 2));
             aRecap.setQte(aRS.getBigDecimal("QTE", 2));
