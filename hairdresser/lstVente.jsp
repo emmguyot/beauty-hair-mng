@@ -1,7 +1,7 @@
 <%
 /*
  * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
- * Copyright (C) 2001-2011 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2012 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -33,6 +33,7 @@ SalonSession mySalon = com.increg.salon.servlet.ConnectedServlet.CheckOrGoHome(r
 <title><i18n:message key="label.recapVentes" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
+<link rel="stylesheet" href="style/jquery-ui-1.8.16.custom.css" type="text/css">
 <style>
 .TVASuppl { display:none; }
 </style>
