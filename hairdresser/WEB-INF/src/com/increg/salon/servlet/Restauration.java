@@ -206,7 +206,7 @@ public class Restauration extends ConnectedServlet {
                                 }
                                 cmd = PlatformUtil.CmdRestaure(dbName, fichierUnzip);
                                 Executer resto = new Executer(cmd);
-                                int cr = resto.runAndWait(5l * 60l * 1000l, 2000);
+                                int cr = resto.runAndWait(10l * 60l * 1000l, 2000);
                                 if (cr < 0) {
                                     request.setAttribute("Erreur", messages.getString("restauration.erreurRelance"));
                                     // Kill le process au cas où il traine
