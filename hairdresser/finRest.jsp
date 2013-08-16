@@ -1,7 +1,7 @@
 <%
 /*
  * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
- * Copyright (C) 2001-2012 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2013 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -18,7 +18,14 @@
  */
 %>
 <%@ page import="java.util.Vector" %>
+<%@ page import="com.increg.salon.bean.SalonSession
+	       " %>
+<%
+SalonSession mySalon = com.increg.salon.servlet.ConnectedServlet.CheckOrGoHome(request, response);
+%>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
+<%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
+<i18n:bundle baseName="messages" locale="<%= mySalon.getLangue() %>"/>
 <html>
 <head>
 <%
@@ -27,7 +34,7 @@
    String Erreur = (String) request.getAttribute("Erreur");
    String Info = (String) request.getAttribute("Info");
 %>
-<title>Restauration</title>
+<title><i18n:message key="ficRest.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 <link rel="stylesheet" href="style/jquery-ui-1.8.16.custom.css" type="text/css">
@@ -39,7 +46,7 @@
 
 //-->
 </script>
-<h1>Restauration des données</h1>
+<h1><img src="images/<%= mySalon.getLangue().getLanguage() %>/titres/ficRest.gif"></h1>
 <% if (Erreur != null) { %>
    <p class="Erreur"><%= Erreur %></p>
 <% } 
@@ -48,7 +55,7 @@
 <% } %>
 
 <p>
-Vous devez vous <a href="index.html" target="_top">reconnecter maintenant</a>.
+	<i18n:message key="ficRest.messageFin" />
 </p>
 
 </script>

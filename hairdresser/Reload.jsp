@@ -1,7 +1,7 @@
 <%
 /*
  * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
- * Copyright (C) 2001-2012 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2013 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -17,12 +17,17 @@
  * 
  */
 %>
+<%@ page import="com.increg.salon.bean.SalonSession
+	       " %>
+<%
+SalonSession mySalon = com.increg.salon.servlet.ConnectedServlet.CheckOrGoHome(request, response);
+%>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
 <%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
 <i18n:bundle baseName="messages" locale="<%= request.getLocale() %>"/>
 <html>
 <head>
-<title>Rechargement de secours de la base</title>
+<title><i18n:message key="reload.title" /></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
 <link rel="stylesheet" href="style/jquery-ui-1.8.16.custom.css" type="text/css">
@@ -30,12 +35,13 @@
 </head>
 
 <body class="donnees">
-<h1>Rechargement de secours de la base</h1>
+<h1><i18n:message key="reload.title" /></h1>
 <p class="erreur"><%= request.getAttribute("Erreur") %></p>
-<p><span class="warning">Attention : La base de données n'est plus cohérente.</span> Ceci peut provenir d'un problème durant la dernière restauration de la base. Afin de rétablir la situation, la base va être automatiquement réinitialisée. <span class="important">Ne jamais interrompre cette procédure. Cette procédure n'est pas compatible avec une configuration multi-salons, si c'est votre cas, contactez-nous.</span></p>
-<p>Une fois cette réinitialisation effectuée, vous pourrez restaurer depuis Internet ou depuis votre disque pour récupérer vos données.</p>
-<p class="important">Si vous n'êtes pas familier avec cette procédure, <a href="<%= request.getLocale().getLanguage() %>/contact.html" target="_blank">contactez-nous en indiquant le message ci-dessus et le contenu de la fenêtre feu vert.</a></p>
-<p>Si l'erreur porte sur une erreur de séquence, une réparation automatique peut-être tentée : <a href="initPortail.srv?forceSequence=1">Lancer la réparation automatique des séquences</a>. <span class="important">Pensez à vérifier vos autres données car une telle erreur peut en cacher d'autres.</span></p>
-<salon:bouton url="restaurationAuto.srv" imgOn="<%= \"images/\" + request.getLocale().getLanguage() + \"/valider2.gif\" %>" img="<%=  \"images/\" + request.getLocale().getLanguage() + \"/valider.gif\" %>" alt="Valider la restauration automatique"/>
+<p><span class="warning"><i18n:message key="reload.messageWarning" /></span> <i18n:message key="reload.messageWarning_P2" /><span class="important"><i18n:message key="reload.messageWarning_P3" /></span></p>
+<p><i18n:message key="reload.messageWarning_P4" /></p>
+<p class="important"><i18n:message key="reload.messageWarning_P5" /><a href="<%= request.getLocale().getLanguage() %>/contact.html" target="_blank"><i18n:message key="reload.messageWarning_P6" /></a></p>
+<p><i18n:message key="reload.messageWarning_P7" /><a href="initPortail.srv?forceSequence=1"><i18n:message key="reload.messageWarning_P8" /></a>. <span class="important"><i18n:message key="reload.messageWarning_P9" /></span></p>
+<i18n:message key="reload.boutonValider" id="paramBouton" />
+<salon:bouton url="restaurationAuto.srv" imgOn="<%= \"images/\" + request.getLocale().getLanguage() + \"/valider2.gif\" %>" img="<%=  \"images/\" + request.getLocale().getLanguage() + \"/valider.gif\" %>" alt="<%= paramBouton %>"/>
 </body>
 </html>
