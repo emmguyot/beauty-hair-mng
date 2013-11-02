@@ -72,7 +72,7 @@ function Init() {
 		  <input type="hidden" name="CD_TYP_MVT" value="%%" >
 	        </salon:valeur>
 		<input type="hidden" name="Action" value="<%=Action%>">
-		<span class="obligatoire"<i18n:message key="label.libelle" />> :</span> 
+		<span class="obligatoire"><i18n:message key="label.libelle" /> :</span> 
 		<salon:valeur valeurNulle="null" valeur="<%= aTypMvt.getLIB_TYP_MVT() %>" >
 		  <input type="text" name="LIB_TYP_MVT" value="%%" size=40>
 	        </salon:valeur>
