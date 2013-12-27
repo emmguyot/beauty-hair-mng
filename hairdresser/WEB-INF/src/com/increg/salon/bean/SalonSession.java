@@ -173,7 +173,7 @@ public abstract class SalonSession extends BasicSession {
                  * Mise à jour éventuelle de l'appli
                  * <b>A mettre à jour à chaque changement de version</b>
                  */
-                majBase = new UpdateBeanV46(myDBSession, messagesBundle, forceSequence);
+                majBase = new UpdateBeanV47(myDBSession, messagesBundle, forceSequence);
             } catch (Exception e) {
                 System.out.println("Mise à jour de la base en erreur :");
                 e.printStackTrace();
