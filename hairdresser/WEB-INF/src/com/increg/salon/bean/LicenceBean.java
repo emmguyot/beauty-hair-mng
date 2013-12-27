@@ -89,18 +89,6 @@ public class LicenceBean extends Authenticator {
     }
 
     /**
-     * Vérifie si le code correspond à la raison sociale
-     * @param aRAIS_SOC Raison sociale
-     * @param code Code déclaré
-     * @param use Utilisation
-     * @return résultat de la comparaison : True si c'est bon 
-     *          Passage au GPL : Cette méthode retourne toujours <b>true</b>
-     */
-    protected static boolean isCodeCorrect(String aRAIS_SOC, String code, String use) {
-        return true;
-    }
-    
-    /**
      * LicenceBean constructor comment.
      * @param aRAIS_SOC Raison sociale du salon
      * @param configName Nom du fichier de config à utiliser
@@ -118,24 +106,10 @@ public class LicenceBean extends Authenticator {
 
             // Chargement du fichier de config
             resconfig = java.util.ResourceBundle.getBundle(configName);
-
-            try {
-                code = resconfig.getString("licence"); //$NON-NLS-1$
-
-                if (!isCodeCorrect(RAIS_SOC, code, "")) {
-                    // Pas bon
-                    throw (new UnauthorisedUserException());
-                }
-            }
-            catch (MissingResourceException e) {
-                // Pas de licence => Version Light ?
-                throw (new UnauthorisedUserException(BasicSession.TAG_I18N + "licenceBean.licenceKo" + BasicSession.TAG_I18N));
-            }
-
         }
         catch (Exception e) {
             System.out.println("LicenceBean :" + e.toString());
-            throw (new UnauthorisedUserException(BasicSession.TAG_I18N + "licenceBean.licenceIllegale" + BasicSession.TAG_I18N +  "(" + e.toString() + ")"));
+            throw (new UnauthorisedUserException(BasicSession.TAG_I18N + "salonSession.noBundle" + BasicSession.TAG_I18N +  "(" + e.toString() + ")"));
         }
     }
     
