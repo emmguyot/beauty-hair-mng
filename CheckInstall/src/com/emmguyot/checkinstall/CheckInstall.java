@@ -19,6 +19,8 @@ package com.emmguyot.checkinstall;
 
 import java.awt.BorderLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -33,11 +35,13 @@ import java.util.Scanner;
 
 import javax.swing.*;
 
-public class CheckInstall extends JPanel {
+public class CheckInstall extends JPanel implements ActionListener {
 
     private JTextArea taskOutput;
     protected JLabel textIntro;
-    	
+	protected boolean rebootRequired = false;
+	protected JButton btnReboot;
+	    	
     public CheckInstall() {
         super(new BorderLayout());
  
@@ -47,12 +51,17 @@ public class CheckInstall extends JPanel {
         taskOutput = new JTextArea(5, 20);
         taskOutput.setMargin(new Insets(5,5,5,5));
         taskOutput.setEditable(false);
+        
+        btnReboot = new JButton("Redémarrer");
+        btnReboot.setVisible(false);
+        btnReboot.addActionListener(this);
  
         JPanel panel = new JPanel();
         panel.add(textIntro);
  
         add(panel, BorderLayout.PAGE_START);
         add(new JScrollPane(taskOutput), BorderLayout.CENTER);
+        add(btnReboot, BorderLayout.SOUTH);
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
  
         new TaskCheckInstall().execute();
@@ -76,8 +85,23 @@ public class CheckInstall extends JPanel {
         frame.pack();
         frame.setBounds(10, 10, 600, 200);
         frame.setVisible(true);
+        frame.setLocationRelativeTo(null);
     }
  
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getSource() == btnReboot) {
+			String shutdownCmd = "shutdown -r";
+			try {
+				Process child = Runtime.getRuntime().exec(shutdownCmd);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			System.exit(0);
+		}
+		
+	}
+
 	/**
 	 * @param args
 	 */
@@ -109,6 +133,10 @@ public class CheckInstall extends JPanel {
 		protected void done() {
 			super.done();
 			textIntro.setText("Vérification terminée");
+			
+			if (rebootRequired) {
+				btnReboot.setVisible(true);
+			}
 		}
 
 		protected boolean checkPort(int numPort) {
@@ -154,6 +182,7 @@ public class CheckInstall extends JPanel {
 							);	
 
 						substitution = true;
+						rebootRequired = true;
 						break;
 					}
 				}
@@ -236,6 +265,5 @@ public class CheckInstall extends JPanel {
 			}
 		}
 	}
-
 
 }
