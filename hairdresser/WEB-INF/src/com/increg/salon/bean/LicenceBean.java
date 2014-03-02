@@ -40,10 +40,6 @@ public class LicenceBean extends Authenticator {
      */
     private java.util.ResourceBundle resconfig;
     /**
-     * Code de la licence
-     */
-    protected String code;
-    /**
      * Raison sociale du salon
      */
     protected String RAIS_SOC;
@@ -82,7 +78,7 @@ public class LicenceBean extends Authenticator {
      */
     public PasswordAuthentication getPasswordAuthentication() {
 
-        char[] pwd = code.toCharArray();
+        char[] pwd = new char[] { 'a' };
         String user = getUser(RAIS_SOC);
 
         return new PasswordAuthentication(user, pwd);

@@ -53,7 +53,8 @@ public class UpdateBeanV47 extends UpdateBeanV46 {
             String[][] reqStat = {
                 };
             String[] sql = {
-            	"alter table PREST alter cd_typ_vent type numeric(2)"
+            	"alter table PREST alter cd_typ_vent type numeric(2)",
+            	"update VERSION set VERSION='4.7'"
             	};
             String[] sqlAvecRes = {
             	};

@@ -184,7 +184,7 @@ SalonSession mySalon = com.increg.salon.servlet.ConnectedServlet.CheckOrGoHome(r
 <p class="tabDonnees">
 <font size=-1>
 <a href="<%= mySalon.getLangue().getLanguage() %>/histo.html" target="ClientFrame"><%@ include file="include/version.inc" %></a><br/>
-<a href="<%= mySalon.getLangue().getLanguage() %>/contact.html" target="ClientFrame">&copy; 2002-2012</a></font></p>
+<a href="<%= mySalon.getLangue().getLanguage() %>/contact.html" target="ClientFrame">&copy; 2002-2014</a></font></p>
 
 <script language="JavaScript">
 <!--
