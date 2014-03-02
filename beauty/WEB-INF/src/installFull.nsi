@@ -2,11 +2,11 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "InCrEG LibertyLook"
-!define PRODUCT_VERSION "4.6"
-!define PRODUCT_VERSION_FULL "${PRODUCT_VERSION}.1.2"
-!define PRODUCT_COPYRIGHT "2002-2012 Valérie Guyot, Alexandre Guyot, Emmanuel Guyot et Angel"
+!define PRODUCT_VERSION "4.7"
+!define PRODUCT_VERSION_FULL "${PRODUCT_VERSION}.1.1"
+!define PRODUCT_COPYRIGHT "2002-2014 Valérie Guyot, Alexandre Guyot, Emmanuel Guyot et Angel"
 !define PRODUCT_PUBLISHER "SourceForge"
-!define PRODUCT_WEB_SITE "http://beauty-hair-mng.sourceforge.net/"
+!define PRODUCT_WEB_SITE "http://libertylook.emmguyot.com/"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
 !define PRODUCT_STARTMENU_REGVAL "NSIS:StartMenuDir"
@@ -42,8 +42,11 @@ var ICONS_GROUP
 ; Instfiles page
 !insertmacro MUI_PAGE_INSTFILES
 ; Finish page
-!define MUI_FINISHPAGE_SHOWREADME "$INSTDIR\doc\Manuel utilisateur.pdf"
+!define MUI_FINISHPAGE_SHOWREADME "$INSTDIR\Manuel.url"
 !define MUI_FINISHPAGE_SHOWREADME_TEXT "Afficher le manuel utilisateur"
+!define MUI_FINISHPAGE_RUN_TEXT "Exécuter l'outil de vérification de l'environnement"
+!define MUI_FINISHPAGE_RUN
+!define MUI_FINISHPAGE_RUN_FUNCTION "LaunchVerif"
 !insertmacro MUI_PAGE_FINISH
 
 ; Uninstaller pages
@@ -72,18 +75,20 @@ VIAddVersionKey FileDescription "${PRODUCT_NAME}"
 VIAddVersionKey LegalCopyright "${PRODUCT_COPYRIGHT}"
 VIProductVersion "${PRODUCT_VERSION_FULL}"
 
-Section -AdditionalIcons
-  WriteIniStr "$INSTDIR\${PRODUCT_PUBLISHER}.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}"
-  CreateDirectory "$SMPROGRAMS\$ICONS_GROUP"
-  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Site Internet.lnk" "$INSTDIR\${PRODUCT_PUBLISHER}.url"
-  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Désinstaller.lnk" "$INSTDIR\uninst.exe"
-SectionEnd
-
 Section "Fichiers principaux" SEC00
+  ; Néttoyage avant
+  RMDir /r "$SMPROGRAMS\$ICONS_GROUP"
+  Delete "$INSTDIR\*.*"
+  RMDir /r "$INSTDIR\install"
+  RMDir /r "$INSTDIR\jdk"
+  RMDir /r "$INSTDIR\pgsql"
+  RMDir /r "$INSTDIR\tomcat"
+  RMDir /r "$INSTDIR\war"
+  RMDir /r "$INSTDIR\Temp"
+  ; Ajout des fichiers
   SetOutPath "$INSTDIR"
   SetOverwrite ifnewer
   File "${ORIG_DIR}\*.*"
-  File /r "${ORIG_DIR}\Doc"
   File /r "${ORIG_DIR}\install"
   File /r "${ORIG_DIR}\jdk"
   File /r "${ORIG_DIR}\perso"
@@ -107,9 +112,9 @@ Section "Fichiers principaux" SEC00
   CreateDirectory "$INSTDIR\tomcat\webapps"
   CreateDirectory "$INSTDIR\tomcat\work"
   
-  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\1 - Démarrage ${PRODUCT_NAME}.lnk" "$INSTDIR\LaunchWeb.bat" "" "$INSTDIR\LaunchWeb.ico" 0 SW_SHOWMINIMIZED
-  CreateShortCut "$DESKTOP\1 - Démarrage ${PRODUCT_NAME}.lnk" "$INSTDIR\LaunchWeb.bat" "" "$INSTDIR\LaunchWeb.ico" 0 SW_SHOWMINIMIZED
-  CreateShortCut "$SMSTARTUP\1 - Démarrage ${PRODUCT_NAME}.lnk" "$INSTDIR\LaunchWeb.bat" "" "$INSTDIR\LaunchWeb.ico" 0 SW_SHOWMINIMIZED
+  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\1 - Démarrage ${PRODUCT_NAME}.lnk" "$INSTDIR\DropMyRights.exe" "$INSTDIR\LaunchWeb.bat" "$INSTDIR\LaunchWeb.ico" 0 SW_SHOWMINIMIZED
+  CreateShortCut "$DESKTOP\1 - Démarrage ${PRODUCT_NAME}.lnk" "$INSTDIR\DropMyRights.exe" "$INSTDIR\LaunchWeb.bat" "$INSTDIR\LaunchWeb.ico" 0 SW_SHOWMINIMIZED
+  CreateShortCut "$SMSTARTUP\1 - Démarrage ${PRODUCT_NAME}.lnk" "$INSTDIR\DropMyRights.exe" "$INSTDIR\LaunchWeb.bat" "$INSTDIR\LaunchWeb.ico" 0 SW_SHOWMINIMIZED
   ;
   WriteIniStr "$INSTDIR\${PRODUCT_NAME}.url" "InternetShortcut" "URL" "http://localhost/institut/"
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\2 - ${PRODUCT_NAME}.lnk" "$INSTDIR\${PRODUCT_NAME}.url" "" "$INSTDIR\favicon.ico"
@@ -118,7 +123,8 @@ Section "Fichiers principaux" SEC00
   CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\3 - Arrêt ${PRODUCT_NAME}.lnk" "$INSTDIR\StopWeb.bat" "" "$INSTDIR\StopWeb.ico" 0 SW_SHOWMINIMIZED
   CreateShortCut "$DESKTOP\3 - Arrêt ${PRODUCT_NAME}.lnk" "$INSTDIR\StopWeb.bat" "" "$INSTDIR\StopWeb.ico" 0 SW_SHOWMINIMIZED
   ;
-  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Manuel Utilisateur.lnk" "$INSTDIR\Doc\Manuel Utilisateur.pdf"
+  WriteIniStr "$INSTDIR\Manuel.url" "InternetShortcut" "URL" "${PRODUCT_WEB_SITE}Guide-utilisation-logiciel-salon-de-coiffure.193.0.html"
+  CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Manuel Utilisateur.lnk" "$INSTDIR\Manuel.url"
 
   WriteRegStr HKEY_CLASSES_ROOT "InternetShortcut\shell\open\command" "" "iexplore -k %l"
   
@@ -173,7 +179,8 @@ Function CheckWindowsVersion
              StrCmp $R1 '5.2' lbl_winnt_2003
              StrCmp $R1 '6.0' lbl_winvista
              StrCmp $R1 '6.1' lbl_win7
-             StrCmp $R1 '6.2' lbl_win8 lbl_error
+             StrCmp $R1 '6.2' lbl_win8
+             StrCmp $R1 '6.3' lbl_win8 lbl_error
 
    lbl_winnt_x:
                StrCpy $R0 "NT $R0" 6
@@ -203,7 +210,8 @@ Function CheckWindowsVersion
                   Strcpy $R0 'W8'
                   Goto lbl_done
 
-   lbl_error:             Strcpy $R0 ''
+   lbl_error:
+                  Strcpy $R0 ''
    lbl_done:
 
             Pop $R1
@@ -227,7 +235,6 @@ Section Uninstall
 
   RMDir /r "$SMPROGRAMS\$ICONS_GROUP"
   Delete "$INSTDIR\*.*"
-  RMDir /r "$INSTDIR\Doc"
   RMDir /r "$INSTDIR\install"
   RMDir /r "$INSTDIR\jdk"
   RMDir /r "$INSTDIR\perso"
@@ -245,3 +252,7 @@ Section Uninstall
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
   SetAutoClose true
 SectionEnd
+
+Function LaunchVerif
+   Exec '"$INSTDIR\jdk\jre\bin\javaw.exe" -cp $INSTDIR\install com.emmguyot.checkinstall.CheckInstall'
+FunctionEnd
