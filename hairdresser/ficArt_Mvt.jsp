@@ -185,13 +185,13 @@ function Init() {
 	    </td>
 	    <td class="tabDonnees">
 	       <% if ((i==0) && (DebMvt > 0)) { %>
-		     <a href="javascript:Precedent()"><img src="images/haut.gif" width="17" height="9" border="0" ></a>
+		     <a href="javascript:PagePrecedent()"><img src="images/haut.gif" width="17" height="9" border="0" ></a>
 	       <% }
 	          else if ((i == 0)  && (DebMvt == 0)) { %>
 		     <a href="javascript:SupprimerLigne()"><img src="images/moins.gif" width="15" height="15" border="0" alt="<i18n:message key="label.supprimerMouvement" />"></a>
 	       <% } 
 	          else if ((i+1) == listeMvt.size()) { %>
-		     <a href="javascript:Suivant()"><img src="images/bas.gif" border="0" width="17" height="9" ></a>
+		     <a href="javascript:PageSuivant()"><img src="images/bas.gif" border="0" width="17" height="9" ></a>
 	       <% } 
 	          else {%>
 		      &nbsp;
@@ -309,13 +309,13 @@ function Dupliquer()
    document.fiche.submit();
 }
 
-function Suivant()
+function PageSuivant()
 {
    document.fiche.Action.value = "Suivant";
    document.fiche.submit();
 }
 
-function Precedent()
+function PagePrecedent()
 {
    document.fiche.Action.value = "Precedent";
    document.fiche.submit();
