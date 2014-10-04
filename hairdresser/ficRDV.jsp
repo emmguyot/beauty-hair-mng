@@ -126,9 +126,9 @@ function Init() {
                 RDVBean dispoRDV = (RDVBean) dispo.get(i);
         %>
                 <tr><td>
-                    <salon:date type="readonly" name="HR_DEBUT" valeurNulle="null" valeurDate="<%= dispoRDV.getDT_DEBUT() %>" format="<%= paramHeure %>">%%</salon:date>
+                    <salon:date type="readonly" valeurNulle="null" valeurDate="<%= dispoRDV.getDT_DEBUT() %>" format="<%= paramHeure %>">%%</salon:date>
                     ...
-                    <salon:date type="readonly" name="HR_DEBUT" valeurNulle="null" valeurDate="<%= dispoRDV.getDT_FIN() %>" format="<%= paramHeure %>">%%</salon:date>
+                    <salon:date type="readonly" valeurNulle="null" valeurDate="<%= dispoRDV.getDT_FIN() %>" format="<%= paramHeure %>">%%</salon:date>
                 
                 </td></tr>
         <%
