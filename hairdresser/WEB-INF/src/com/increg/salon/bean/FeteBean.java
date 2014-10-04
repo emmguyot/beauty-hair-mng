@@ -1,6 +1,6 @@
 /*
  * Bean gérant les différentes fêtes des prénoms
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2014 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -342,10 +342,9 @@ public class FeteBean extends GenericBean {
 
         Vector res = new Vector();
 
-        SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM");
-
         // Par défaut : recherche sur le prénom
-        String reqSQL = "select * from FETE where DT_FETE='" + formatDate.format(new java.util.Date()) + "/2004'";
+        String reqSQL = "select * from FETE where date_part('month', dt_fete) = " + (Calendar.getInstance().get(Calendar.MONTH)+1)
+        		+ " and date_part('day', dt_fete) = " + (Calendar.getInstance().get(Calendar.DAY_OF_MONTH)); 
 
         // Interroge la Base
         try {

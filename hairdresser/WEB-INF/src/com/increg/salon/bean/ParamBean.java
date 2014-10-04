@@ -1,6 +1,6 @@
 /*
  * Bean de gestion des paramètres de l'application
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2014 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -95,9 +95,17 @@ public class ParamBean extends GenericBean {
      */
     public static final int CD_MSG_TAXE_TICKET = 14;
     /**
-     * Code pour l'affichage du SIRENT sur la facture
+     * Code pour l'affichage du SIREN sur la facture
      */
     public static final int CD_AFF_SIREN = 15;
+    /**
+     * Code pour l'affichage des fetes en page d'accueil
+     */
+    public static final int CD_AFF_FETE = 16;
+    /**
+     * Code pour l'affichage des anniversaires en page d'accueil
+     */
+    public static final int CD_AFF_ANNIVERSAIRE = 17;
 
 
     /**

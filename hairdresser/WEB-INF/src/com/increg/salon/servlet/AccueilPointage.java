@@ -1,6 +1,6 @@
 /*
  * Page d'accueil permettant le pointage
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2014 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -17,9 +17,11 @@
  */
 package com.increg.salon.servlet;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,8 +32,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.increg.commun.DBSession;
+import com.increg.salon.bean.ClientBean;
 import com.increg.salon.bean.CollabBean;
 import com.increg.salon.bean.FeteBean;
+import com.increg.salon.bean.ParamBean;
 import com.increg.salon.bean.PointageBean;
 import com.increg.salon.bean.SalonSession;
 
@@ -69,7 +73,16 @@ public class AccueilPointage extends ConnectedServlet {
         Vector lstCollab = new Vector();
         Vector lstPointage = new Vector();
         // Recherche la fête du jour
-        Vector lstFete = FeteBean.getFeteBean(myDBSession);
+        Vector lstFete = new Vector();
+        ParamBean affFete = ParamBean.getParamBean(myDBSession, Integer.toString(ParamBean.CD_AFF_FETE));
+        if (affFete.getVAL_PARAM().equals("O")) {
+        	lstFete = FeteBean.getFeteBean(myDBSession);
+        }
+        List<ClientBean> lstAnniv = new ArrayList<ClientBean>();
+        ParamBean affAnniv = ParamBean.getParamBean(myDBSession, Integer.toString(ParamBean.CD_AFF_ANNIVERSAIRE));
+        if (affAnniv.getVAL_PARAM().equals("O")) {
+        	lstAnniv = ClientBean.getClientByAnniversaire(myDBSession, mySalon.getMessagesBundle());
+        }
 
         try {
             // Consitue la liste des collab et de leur dernier pointage
@@ -150,6 +163,7 @@ public class AccueilPointage extends ConnectedServlet {
         request.setAttribute("lstCollab", lstCollab);
         request.setAttribute("lstPointage", lstPointage);
         request.setAttribute("lstFete", lstFete);
+        request.setAttribute("lstAnniv", lstAnniv);
 
         try {
             // Passe la main à la fiche de création

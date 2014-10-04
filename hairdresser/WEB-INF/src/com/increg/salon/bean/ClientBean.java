@@ -1,6 +1,6 @@
 /*
  * Bean de gestion de client
- * Copyright (C) 2001-2011 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2014 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -1037,6 +1037,36 @@ public class ClientBean extends TimeStampBean implements Comparable<ClientBean> 
         return res;
 	}
 
+    /**
+     * Recherche la liste des clients dont l'anniversaire est aujourd'hui.
+     * @param myDBSession Connexion base à utiliser
+     * @param rb Ressource
+     * @return Liste de clients correspondants
+     */
+	public static List<ClientBean> getClientByAnniversaire(DBSession myDBSession, ResourceBundle rb) {
+
+		String reqSQL = "select * from CLI where date_part('month', dt_anniv) = " + (Calendar.getInstance().get(Calendar.MONTH)+1)
+        		+ " and date_part('day', dt_anniv) = " + (Calendar.getInstance().get(Calendar.DAY_OF_MONTH))
+        		+ " and INDIC_VALID='O'";
+		reqSQL += " order by NOM, PRENOM, CD_CLI";
+        List<ClientBean> res = new ArrayList<ClientBean>();
+
+        // Interroge la Base
+        try {
+            ResultSet aRS = myDBSession.doRequest(reqSQL);
+
+            while (aRS.next()) {
+                ClientBean cli2 = new ClientBean(aRS, rb);
+                res.add(cli2);
+            }
+            aRS.close();
+        }
+        catch (Exception e) {
+            System.out.println(
+                "Erreur dans constructeur sur clé : " + e.toString());
+        }
+        return res;
+	}
 
     /**
      * Purge des clients à partir des périmés seulement

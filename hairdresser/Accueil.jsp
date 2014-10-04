@@ -1,7 +1,7 @@
 <%
 /*
  * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
- * Copyright (C) 2001-2012 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2014 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -18,10 +18,12 @@
  */
 %>
 <%@ page import="java.util.Vector,
+          java.util.List,
 		  com.increg.salon.bean.SalonSession,
 		  com.increg.salon.bean.CollabBean,
 		  com.increg.salon.bean.FeteBean,
-		  com.increg.salon.bean.PointageBean" %>
+		  com.increg.salon.bean.PointageBean,
+		  com.increg.salon.bean.ClientBean" %>
 <%
 SalonSession mySalon = com.increg.salon.servlet.ConnectedServlet.CheckOrGoHome(request, response);
 %>
@@ -49,6 +51,7 @@ SalonSession mySalon = com.increg.salon.servlet.ConnectedServlet.CheckOrGoHome(r
    Vector lstCollab = (Vector) request.getAttribute("lstCollab");
    Vector lstPointage = (Vector) request.getAttribute("lstPointage");
    Vector lstFete = (Vector) request.getAttribute("lstFete");
+   List<ClientBean> lstAnniv = (List<ClientBean>) request.getAttribute("lstAnniv");
 
    for (int i=0; i < lstCollab.size(); i++) {
       CollabBean aCollab = (CollabBean) lstCollab.get(i);
@@ -75,11 +78,20 @@ SalonSession mySalon = com.increg.salon.servlet.ConnectedServlet.CheckOrGoHome(r
 </p>
 </form>
 <% if (lstFete.size() > 0) { %>
-<p><i18n:message key="accueil.feteJour" />
+<p class="listItem"><i18n:message key="accueil.feteJour" /><ul class="listItem">
 <%   for (int i=0; i < lstFete.size(); i++) { 
-      FeteBean aFete = (FeteBean) lstFete.get(i); %>
-      <b><%= aFete.getPRENOM() %></b><% if (i != (lstFete.size()-1)) { %>,<% }
-     } %>
+      FeteBean aFete = (FeteBean) lstFete.get(i); 
+      %><li><b><%= aFete.getPRENOM() %></b></li><%
+   	} %>
+     </ul>
+</p>
+<% } %>
+<% if (lstAnniv.size() > 0) { %>
+<p class="listItem"><i18n:message key="accueil.annivJour" /><ul class="listItem">
+<%   for (ClientBean cli : lstAnniv) { 
+		%><li><b><a href="_FicheCli.jsp?Action=Modification&CD_CLI=<%= cli.getCD_CLI() %>" target="ClientFrame"><%= cli.toString() %></a></b></li><%
+	} %>
+	</ul>
 </p>
 <% } %>
 <p>

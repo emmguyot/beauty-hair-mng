@@ -32,6 +32,7 @@ a:hover {  color: #FF9933; background-color: #99CCCC; text-decoration: underline
 .info { color: #009900; font-weight: bold ; text-align: center}
 .readonly {  font-weight: bold; vertical-align: top}
 .label {  text-align: right; vertical-align: top}
+td.label+td { vertical-align:top; }
 .labelBas {  text-align: right; vertical-align: bottom}
 .nombre {  text-align: right}
 .total {  text-align: right; font-weight: bold}
@@ -54,6 +55,9 @@ a:hover.nohover { color: #FF9933 ; background-color: transparent }
 .ssTitre { text-align: center ; font-size: large; font-weight: normal}
 img { border: 0 }
 p { vertical-align: top}
+ul.listItem { margin: 0; padding: 0; list-style-type: none; display: inline; }
+p.listItem, ul.listItem li { display: inline; }
+ul.listItem li+li:before { content: ', '; }
 
 .cpYearNavigation,.cpMonthNavigation { background-image: url(../../perso/fd_vert.jpg); text-align:center; vertical-align:middle; text-decoration:none; color:#2A5058; font-weight:bold; }
 td.cpDayColumnHeader { padding: 2px; padding-top: 5px; text-align:center; border:solid thin #B7D9D1;border-width:0 0 1 0; }
