@@ -56,6 +56,18 @@ public class DeviseBean extends GenericBean {
     }
 
     /**
+     * Constructeur comment.
+     */
+    public DeviseBean(Boolean fake) {
+    	if (fake) {
+    		CD_DEVISE = 0;
+    		LIB_COURT_DEVISE = "?";
+    		LIB_DEVISE = "Non définie";
+    		RATIO = new BigDecimal(1);
+    	}
+    }
+    
+    /**
      * Constructeur à partie de la base
      * @param rs java.sql.ResultSet
      */

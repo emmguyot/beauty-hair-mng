@@ -705,6 +705,11 @@ public abstract class SalonSession extends BasicSession {
         if (devise == null) {
             // Recharge à partir de la base
             devise = DeviseBean.getMainDeviseBean(myDBSession);
+            
+            if (devise == null) {
+                System.out.println("Pas de devise principale de définie");
+                devise = new DeviseBean(true);
+            }
         }
         return devise;
     }
