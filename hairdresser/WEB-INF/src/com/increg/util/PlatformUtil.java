@@ -54,7 +54,7 @@ public class PlatformUtil {
 			cmd = System.getenv("PG_HOME") + "\\bin\\pg_restore.exe -v -F c -d " + dbName + " \"" + fichierUnzip.getAbsolutePath() + "\"";
 		}
 		else {
-			cmd = System.getenv("PG_HOME") + "/bin/pg_restore -v -F c -d " + dbName + " " + fichierUnzip.getAbsolutePath();
+			cmd = System.getenv("PG_HOME") + "/bin/pg_restore -v -F c -d " + dbName + " \"" + fichierUnzip.getAbsolutePath() + "\"";
 		}
 		return cmd;
 	}
@@ -68,10 +68,10 @@ public class PlatformUtil {
 	public static String CmdSauvegarde(String nomFichierTmp, String baseName) {
 		String cmd;
 		if (IsWindows()) {
-			cmd = System.getenv("PG_HOME") + "\\bin\\pg_dump.exe --inserts -c -F c -Z 9 -f " + nomFichierTmp + " " + baseName;
+			cmd = System.getenv("PG_HOME") + "\\bin\\pg_dump.exe --inserts -c -F c -Z 9 -f \"" + nomFichierTmp + "\" " + baseName;
 		}
 		else {
-			cmd = System.getenv("PG_HOME") + "/bin/pg_dump --inserts -c -F c -Z 9 -f " + nomFichierTmp + " " + baseName;
+			cmd = System.getenv("PG_HOME") + "/bin/pg_dump --inserts -c -F c -Z 9 -f \"" + nomFichierTmp + "\" " + baseName;
 		}
 		return cmd;
 	}

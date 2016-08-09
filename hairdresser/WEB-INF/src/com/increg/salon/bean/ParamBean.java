@@ -29,15 +29,15 @@ public class ParamBean extends GenericBean {
     /**
      * Code du paramètre
      */
-    protected int CD_PARAM;
+    protected int cdParam;
     /**
      * Libellé du paramètre
      */
-    protected java.lang.String LIB_PARAM;
+    protected java.lang.String libParam;
     /**
      * Valeur du paramètre
      */
-    protected java.lang.String VAL_PARAM;
+    protected java.lang.String valParam;
     /**
      * Code pour le mot de passe des opérations exceptionnelles
      */
@@ -121,21 +121,21 @@ public class ParamBean extends GenericBean {
     public ParamBean(ResultSet rs) {
         super(rs);
         try {
-            CD_PARAM = rs.getInt("CD_PARAM");
+            cdParam = rs.getInt("CD_PARAM");
         } catch (SQLException e) {
             if (e.getErrorCode() != 1) {
                 System.out.println("Erreur dans ParamBean (RS) : " + e.toString());
             }
         }
         try {
-            LIB_PARAM = rs.getString("LIB_PARAM");
+            libParam = rs.getString("LIB_PARAM");
         } catch (SQLException e) {
             if (e.getErrorCode() != 1) {
                 System.out.println("Erreur dans ParamBean (RS) : " + e.toString());
             }
         }
         try {
-            VAL_PARAM = rs.getString("VAL_PARAM");
+            valParam = rs.getString("VAL_PARAM");
         } catch (SQLException e) {
             if (e.getErrorCode() != 1) {
                 System.out.println("Erreur dans ParamBean (RS) : " + e.toString());
@@ -152,17 +152,17 @@ public class ParamBean extends GenericBean {
         StringBuffer colonne = new StringBuffer(" (");
         StringBuffer valeur = new StringBuffer(" values ( ");
 
-        if (CD_PARAM == 0) {
+        if (cdParam == 0) {
             /**
              * Numérotation automatique des prestations
              */
             String reqMax = "select nextval('SEQ_PARAM')";
             try {
                 ResultSet aRS = dbConnect.doRequest(reqMax);
-                CD_PARAM = 1; // Par défaut
+                cdParam = 1; // Par défaut
 
                 while (aRS.next()) {
-                    CD_PARAM = aRS.getInt(1);
+                    cdParam = aRS.getInt(1);
                 }
                 aRS.close();
             } catch (Exception e) {
@@ -170,18 +170,18 @@ public class ParamBean extends GenericBean {
             }
         }
         colonne.append("CD_PARAM,");
-        valeur.append(CD_PARAM);
+        valeur.append(cdParam);
         valeur.append(",");
 
-        if ((LIB_PARAM != null) && (LIB_PARAM.length() != 0)) {
+        if ((libParam != null) && (libParam.length() != 0)) {
             colonne.append("LIB_PARAM,");
-            valeur.append(DBSession.quoteWith(LIB_PARAM, '\''));
+            valeur.append(DBSession.quoteWith(libParam, '\''));
             valeur.append(",");
         }
 
-        if ((VAL_PARAM != null) && (VAL_PARAM.length() != 0)) {
+        if ((valParam != null) && (valParam.length() != 0)) {
             colonne.append("VAL_PARAM,");
-            valeur.append(DBSession.quoteWith(VAL_PARAM, '\''));
+            valeur.append(DBSession.quoteWith(valParam, '\''));
             valeur.append(",");
         }
 
@@ -212,7 +212,7 @@ public class ParamBean extends GenericBean {
     public void delete(DBSession dbConnect) throws SQLException {
 
         StringBuffer req = new StringBuffer("delete from PARAM");
-        StringBuffer where = new StringBuffer(" where CD_PARAM =" + CD_PARAM);
+        StringBuffer where = new StringBuffer(" where CD_PARAM =" + cdParam);
 
         // Constitue la requete finale
         req.append(where);
@@ -233,7 +233,7 @@ public class ParamBean extends GenericBean {
      * @return int
      */
     public int getCD_PARAM() {
-        return CD_PARAM;
+        return cdParam;
     }
     /**
      * Création d'un Bean Type de Vente à partir de sa clé
@@ -265,7 +265,7 @@ public class ParamBean extends GenericBean {
      * @return java.lang.String
      */
     public java.lang.String getLIB_PARAM() {
-        return LIB_PARAM;
+        return libParam;
     }
     /**
      * Insert the method's description here.
@@ -273,7 +273,7 @@ public class ParamBean extends GenericBean {
      * @return java.lang.String
      */
     public java.lang.String getVAL_PARAM() {
-        return VAL_PARAM;
+        return valParam;
     }
     /**
      * @see com.increg.salon.bean.TimeStampBean
@@ -282,34 +282,34 @@ public class ParamBean extends GenericBean {
 
         StringBuffer req = new StringBuffer("update PARAM set ");
         StringBuffer colonne = new StringBuffer("");
-        StringBuffer where = new StringBuffer(" where CD_PARAM=" + CD_PARAM);
+        StringBuffer where = new StringBuffer(" where CD_PARAM=?");
 
-        colonne.append("LIB_PARAM=");
-        if ((LIB_PARAM != null) && (LIB_PARAM.length() != 0)) {
-            colonne.append(DBSession.quoteWith(LIB_PARAM, '\''));
-        } else {
-            colonne.append("NULL");
-        }
+        colonne.append("LIB_PARAM=?");
         colonne.append(",");
 
-        colonne.append("VAL_PARAM=");
-        if ((VAL_PARAM != null) && (VAL_PARAM.length() != 0)) {
-            colonne.append(DBSession.quoteWith(VAL_PARAM, '\''));
-        } else {
-            colonne.append("NULL");
-        }
+        colonne.append("VAL_PARAM=?");
 
         // Constitue la requete finale
         req.append(colonne);
         req.append(where);
 
-        // Execute la création
-        String[] reqs = new String[1];
-        reqs[0] = req.toString();
-        int[] nb = new int[1];
-        nb = dbConnect.doExecuteSQL(reqs);
+    	PreparedStatement stmt = dbConnect.getStatement(req.toString());
+        if ((libParam != null) && (libParam.length() != 0)) {
+            stmt.setString(1, libParam);
+        } else {
+            stmt.setNull(1, Types.VARCHAR);
+        }
+        if ((valParam != null) && (valParam.length() != 0)) {
+        	stmt.setString(2, valParam);
+        } else {
+            stmt.setNull(2, Types.VARCHAR);
+        }
+    	stmt.setInt(3, cdParam);
 
-        if (nb[0] != 1) {
+        // Execute la création
+        int nb = dbConnect.doExecuteSQL(stmt);
+
+        if (nb != 1) {
             throw (new SQLException(BasicSession.TAG_I18N + "message.enregistrementKo" + BasicSession.TAG_I18N));
         }
 
@@ -320,7 +320,7 @@ public class ParamBean extends GenericBean {
      * @param newCD_PARAM int
      */
     public void setCD_PARAM(int newCD_PARAM) {
-        CD_PARAM = newCD_PARAM;
+        cdParam = newCD_PARAM;
     }
     /**
      * Insert the method's description here.
@@ -329,9 +329,9 @@ public class ParamBean extends GenericBean {
      */
     public void setCD_PARAM(String newCD_PARAM) {
         if ((newCD_PARAM != null) && (newCD_PARAM.length() != 0)) {
-            CD_PARAM = Integer.parseInt(newCD_PARAM);
+            cdParam = Integer.parseInt(newCD_PARAM);
         } else {
-            CD_PARAM = 0;
+            cdParam = 0;
         }
     }
     /**
@@ -340,7 +340,7 @@ public class ParamBean extends GenericBean {
      * @param newLIB_PARAM java.lang.String
      */
     public void setLIB_PARAM(java.lang.String newLIB_PARAM) {
-        LIB_PARAM = newLIB_PARAM;
+        libParam = newLIB_PARAM;
     }
     /**
      * Insert the method's description here.
@@ -348,7 +348,7 @@ public class ParamBean extends GenericBean {
      * @param newVAL_PARAM java.lang.String
      */
     public void setVAL_PARAM(java.lang.String newVAL_PARAM) {
-        VAL_PARAM = newVAL_PARAM;
+        valParam = newVAL_PARAM;
     }
     /**
      * @see com.increg.salon.bean.TimeStampBean

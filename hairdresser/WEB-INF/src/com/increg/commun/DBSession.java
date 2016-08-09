@@ -20,6 +20,7 @@ package com.increg.commun;
 import java.lang.ref.SoftReference;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -216,6 +217,32 @@ public class DBSession {
     	return res;
     }
     
+    /**
+     * Execute une requete SQL d'un seul tenant
+     * Creation date: (07/07/2001 18:52:34)
+     * @return int[] Nombre de lignes mise à jour
+     * @param queries java.lang.String[] différentes requêtes SQL dans l'ordre d'exécution
+     * @exception java.sql.SQLException The exception description.
+     */
+    public synchronized int doExecuteSQL(PreparedStatement stmt) throws java.sql.SQLException {
+    
+    	int res = 0;
+    	
+    	// Mode transaction
+    	if (dansTransactions && !transactionStarted) {
+    		dbConnect.setAutoCommit(false);
+    	}
+    	try {
+    		// Chaque requête : une par une
+		    res = stmt.executeUpdate();
+    	}
+    	catch (SQLException e) {
+    		throw (e);
+    	}
+    	
+    	return res;
+    }
+
     /**
      * Effectue une requête de type select : C'est à dire retournant des lignes
      * Creation date: (07/07/2001 19:46:26)
@@ -460,4 +487,21 @@ public class DBSession {
     public DateFormat getFormatDate() {
 		return new SimpleDateFormat("dd/MM/yyyy");
 	}    
+    
+    /**
+     * Prépare une requête (avec une gestion propre des paramètres)
+     * @param sql
+     * @return statement à alimenter et exécuter
+     */
+    public PreparedStatement getStatement(String sql) {
+    	PreparedStatement s = null;
+    	try {
+			s = dbConnect.prepareStatement(sql);
+		} catch (SQLException e) {
+            e.printStackTrace();
+            System.out.println("Erreur SQL sur : " + sql);
+		}
+
+    	return s;
+    }
 }
