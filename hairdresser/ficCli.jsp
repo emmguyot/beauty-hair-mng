@@ -1,7 +1,7 @@
 <%
 /*
  * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
- * Copyright (C) 2001-2012 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2017 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -121,7 +121,7 @@ function Init() {
                     </p>
                     <p><span class="facultatif"><i18n:message key="label.cdPostal" /> :</span> 
                         <salon:valeur valeurNulle="null" valeur="<%= aCli.getCD_POSTAL() %>" >
-                            <input type="text" name="CD_POSTAL" size="6" maxlength="5" value="%%">
+                            <input type="text" name="CD_POSTAL" size="7" maxlength="6" value="%%">
                         </salon:valeur>
                         <span class="facultatif"><i18n:message key="label.ville" /> :</span> 
                         <salon:valeur valeurNulle="null" valeur="<%= aCli.getVILLE() %>" >

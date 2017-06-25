@@ -1,6 +1,6 @@
 /*
  * Mise à jour de la base de données
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2017 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -65,6 +65,14 @@ public class UpdateBean {
     }
 
     /**
+     * Mise à jour éventuelle de l'appli
+     */
+	public static UpdateBean getDerniereVersion(DBSession myDBSession, ResourceBundle messagesBundle, boolean forceSequence) throws Exception {
+		// A mettre à jour à chaque changement de version
+		return new UpdateBeanV49(myDBSession, messagesBundle, forceSequence);
+	}
+
+	/**
      * Gets the version.
      * @return Returns a String
      */

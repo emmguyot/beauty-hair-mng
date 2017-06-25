@@ -1,6 +1,6 @@
 /*
  * Bean Session incluant les données d'une session LibertyLook
- * Copyright (C) 2003-2014 Emmanuel Guyot <See emmguyot on SourceForge>
+ * Copyright (C) 2003-2017 Emmanuel Guyot <See emmguyot on SourceForge>
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -171,9 +171,8 @@ public abstract class SalonSession extends BasicSession {
             try {
                 /**
                  * Mise à jour éventuelle de l'appli
-                 * <b>A mettre à jour à chaque changement de version</b>
                  */
-                majBase = new UpdateBeanV48(myDBSession, messagesBundle, forceSequence);
+                majBase = UpdateBean.getDerniereVersion(myDBSession, messagesBundle, forceSequence);
             } catch (Exception e) {
                 System.out.println("Mise à jour de la base en erreur :");
                 e.printStackTrace();
