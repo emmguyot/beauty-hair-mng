@@ -30,12 +30,19 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.TagSupport;
 
+import org.apache.commons.lang.CharSet;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.increg.commun.DBSession;
 import com.increg.salon.bean.ParamBean;
 import com.increg.salon.bean.SalonSessionImpl;
 
 public class TagInclude extends TagSupport {
 
+	// Logger par défaut
+	protected Log log = LogFactory.getLog(this.getClass());
+	
     /**
      * Cache des fichiers à charger 
      */
@@ -84,6 +91,7 @@ public class TagInclude extends TagSupport {
             
             StringBuffer pageBuf = new StringBuffer();
 
+            log.info("chargement de :" + curURL.toString());
             // Vérification du cache
             Calendar dateLimite = Calendar.getInstance();
             dateLimite.add(Calendar.HOUR, -5);
@@ -106,7 +114,7 @@ public class TagInclude extends TagSupport {
 	
 	                // Stocke dans la chaine
 	                if (byteRead != -1) {
-	                    pageBuf.append(new String(dataBytes, 0, byteRead));
+	                    pageBuf.append(new String(dataBytes, 0, byteRead, "ISO8859_15"));
 	                }
 	            }
 	            
@@ -119,6 +127,7 @@ public class TagInclude extends TagSupport {
             // Ignore cette exception
             // C'est le rôle de ce tag
         } catch (IOException e) {
+        	log.error("Erreur dans TagInclude", e);
             System.out.println("TagInclude : " + e.toString());
         }
         return SKIP_BODY;
