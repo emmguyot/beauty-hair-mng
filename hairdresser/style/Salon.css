@@ -32,6 +32,7 @@ a:hover {  color: #FF9933; background-color: #99CCCC; text-decoration: underline
 .info { color: #009900; font-weight: bold ; text-align: center}
 .readonly {  font-weight: bold; vertical-align: top}
 .label {  text-align: right; vertical-align: top}
+.espace { padding-left: 30px}
 td.label+td { vertical-align:top; }
 .labelBas {  text-align: right; vertical-align: bottom}
 .nombre {  text-align: right}

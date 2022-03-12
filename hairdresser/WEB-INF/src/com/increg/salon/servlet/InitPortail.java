@@ -140,6 +140,7 @@ public void performTask(HttpServletRequest request, HttpServletResponse response
             }
             catch (Throwable e) {
                 // Pas prévu
+                log.error("Erreur initPortail ", e);
                 try {
                     response.sendError(500);
                 } 

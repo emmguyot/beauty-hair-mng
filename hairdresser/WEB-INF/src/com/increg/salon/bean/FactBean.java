@@ -869,7 +869,7 @@ public class FactBean extends TimeStampBean {
             TypVentBean aTypVent = TypVentBean.getTypVentBean(dbConnect, Integer.toString(aPrest.getCD_TYP_VENT()));
             TvaBean aTva = TvaBean.getTvaBean(dbConnect, Integer.toString(aTypVent.getCD_TVA()));
             TvaBean aTvaSuppl = null;
-            if (aTypVent.getCD_TVA() != 0) {
+            if (aTypVent.getCD_TVA_SUPPL() != 0) {
             	aTvaSuppl = TvaBean.getTvaBean(dbConnect, Integer.toString(aTypVent.getCD_TVA_SUPPL()));
             }
             
@@ -890,13 +890,24 @@ public class FactBean extends TimeStampBean {
             BigDecimal HT = TTC.multiply(new BigDecimal(100))
             					.divide(new BigDecimal(100).add(aTva.getTX_TVA()), BigDecimal.ROUND_HALF_UP);
             if (aTvaSuppl != null) {
-            	HT = HT.multiply(new BigDecimal(100))
-    					.divide(new BigDecimal(100).add(aTvaSuppl.getTX_TVA()), BigDecimal.ROUND_HALF_UP);
+            	if (aTypVent.isTVA_SUPPL_SUR_HT()) {
+                	HT = TTC.multiply(new BigDecimal(100))
+        					.divide(new BigDecimal(100).add(aTva.getTX_TVA()).add(aTvaSuppl.getTX_TVA()), BigDecimal.ROUND_HALF_UP);
+            	}
+            	else {
+                	HT = HT.multiply(new BigDecimal(100))
+        					.divide(new BigDecimal(100).add(aTvaSuppl.getTX_TVA()), BigDecimal.ROUND_HALF_UP);
+            	}
             }
             aLigne.setPRX_TOT_HT(HT.setScale(2, BigDecimal.ROUND_HALF_UP));
             aLigne.setTVA(HT.multiply(aTva.getTX_TVA().divide(new BigDecimal(100))).setScale(2, BigDecimal.ROUND_HALF_UP));
             if (aTvaSuppl != null) {
-            	aLigne.setTVA_SUPPL(HT.add(aLigne.getTVA()).multiply(aTvaSuppl.getTX_TVA().divide(new BigDecimal(100))).setScale(2, BigDecimal.ROUND_HALF_UP));
+            	if (aTypVent.isTVA_SUPPL_SUR_HT()) {
+            		aLigne.setTVA_SUPPL(HT.multiply(aTvaSuppl.getTX_TVA().divide(new BigDecimal(100))).setScale(2, BigDecimal.ROUND_HALF_UP));
+            	}
+            	else {
+                	aLigne.setTVA_SUPPL(HT.add(aLigne.getTVA()).multiply(aTvaSuppl.getTX_TVA().divide(new BigDecimal(100))).setScale(2, BigDecimal.ROUND_HALF_UP));
+            	}
             }
             else {
             	aLigne.setTVA_SUPPL(null);
@@ -917,7 +928,7 @@ public class FactBean extends TimeStampBean {
             repartTVA.put(aTva, TVApartielle);
 
             if (aTvaSuppl != null) {
-	            // Ajoute la TVA Supplémetaire à la facture
+	            // Ajoute la TVA Supplémentaire à la facture
 	            TVA_SUPPL = TVA_SUPPL.add(aLigne.getTVA_SUPPL());
 	            TVApartielle = (BigDecimal) repartTVA.get(aTvaSuppl);
 	            if (TVApartielle == null) {

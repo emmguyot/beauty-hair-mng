@@ -108,6 +108,13 @@ function Init() {
 		     %%
 		  </select>
 		</salon:DBselection>
+		<span class="obligatoire espace"><i18n:message key="label.TVASupplSurHT" /> :</span> 
+        <i18n:message key="valeur.nonOui" id="libelleNonOui" />
+        <salon:selection valeur='<%= aTypVent.getTVA_SUPPL_SUR_HT() %>' valeurs='<%= "N|O" %>' libelle="<%= libelleNonOui %>">
+            <select name="TVA_SUPPL_SUR_HT">
+                %%
+            </select>
+        </salon:selection>
 	</p>
 </form>
 <script language="JavaScript">

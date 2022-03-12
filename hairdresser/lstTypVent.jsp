@@ -54,6 +54,7 @@ function Init() {
 		<th><i18n:message key="label.civiliteAssocie" /></th>
 		<th><i18n:message key="label.TVAapplicable" /></th>
 		<th><i18n:message key="label.TVAapplicableSuppl" /></th>
+		<th><i18n:message key="label.TVASupplSurHT" /></th>
 	</tr>
 	<%
 	// Recupère la liste
@@ -86,6 +87,7 @@ function Init() {
         }
         %>
         <td><salon:valeur valeur="<%= tva %>" valeurNulle="null">%%</salon:valeur>&nbsp;</td>
+        <td><salon:valeur valeur="<%= aTypVent.getTVA_SUPPL_SUR_HT() %>" valeurNulle="null">%%</salon:valeur></td>
 	</tr>
 	<%
 	}

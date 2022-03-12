@@ -61,6 +61,11 @@ public class TypVentBean extends GenericBean {
      * Code TVA supplémentaire associé au type de vente (optionnel)
      */
     protected int CD_TVA_SUPPL;
+    
+    /**
+     * Indicateur si la TVA supplémentaire s'applique sur le montant HT (ou sur le montant après application de la première TVA) 
+     */
+    protected java.lang.String TVA_SUPPL_SUR_HT;
 
     /**
      * TypVentBean constructor comment.
@@ -114,6 +119,13 @@ public class TypVentBean extends GenericBean {
         }
         try {
             CD_TVA_SUPPL = rs.getInt("CD_TVA_SUPPL");
+        } catch (SQLException e) {
+            if (e.getErrorCode() != 1) {
+                System.out.println("Erreur dans PrestBean (RS) : " + e.toString());
+            }
+        }
+        try {
+            TVA_SUPPL_SUR_HT = rs.getString("TVA_SUPPL_SUR_HT");
         } catch (SQLException e) {
             if (e.getErrorCode() != 1) {
                 System.out.println("Erreur dans PrestBean (RS) : " + e.toString());
@@ -179,6 +191,12 @@ public class TypVentBean extends GenericBean {
         if (CD_TVA_SUPPL != 0) {
             colonne.append("CD_TVA_SUPPL,");
             valeur.append(CD_TVA_SUPPL);
+            valeur.append(",");
+        }
+
+        if ((TVA_SUPPL_SUR_HT != null) && (TVA_SUPPL_SUR_HT.length() != 0)) {
+            colonne.append("TVA_SUPPL_SUR_HT,");
+            valeur.append(DBSession.quoteWith(TVA_SUPPL_SUR_HT, '\''));
             valeur.append(",");
         }
 
@@ -273,6 +291,14 @@ public class TypVentBean extends GenericBean {
         } else {
             colonne.append("NULL");
         }
+        colonne.append(",");
+
+        colonne.append("TVA_SUPPL_SUR_HT=");
+        if ((TVA_SUPPL_SUR_HT != null) && (TVA_SUPPL_SUR_HT.length() != 0)) {
+            colonne.append(DBSession.quoteWith(TVA_SUPPL_SUR_HT, '\''));
+        } else {
+            colonne.append("NULL");
+        }
 
         // Constitue la requete finale
         req.append(colonne);
@@ -326,6 +352,20 @@ public class TypVentBean extends GenericBean {
         return MARQUE;
     }
     
+	/**
+	 * @return the tVA_SUPPL_SUR_HT
+	 */
+	public java.lang.String getTVA_SUPPL_SUR_HT() {
+		return TVA_SUPPL_SUR_HT;
+	}
+
+	/**
+	 * @return whether tVA_SUPPL_SUR_HT
+	 */
+	public boolean isTVA_SUPPL_SUR_HT() {
+		return (TVA_SUPPL_SUR_HT != null) && TVA_SUPPL_SUR_HT.equals("O");
+	}
+
     /**
      * Création d'un Bean Type de Vente à partir de sa clé
      * Creation date: (19/08/2001 21:14:20)
@@ -479,5 +519,12 @@ public class TypVentBean extends GenericBean {
             CD_TVA_SUPPL = 0;
         }
     }
+
+	/**
+	 * @param tva_suppl_sur_ht the tVA_SUPPL_SUR_HT to set
+	 */
+	public void setTVA_SUPPL_SUR_HT(java.lang.String tva_suppl_sur_ht) {
+		TVA_SUPPL_SUR_HT = tva_suppl_sur_ht;
+	}
     
 }

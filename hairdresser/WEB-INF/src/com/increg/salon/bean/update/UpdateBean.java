@@ -60,6 +60,7 @@ public class UpdateBean {
         deduitVersion(dbConnect);
 
         System.out.println("Version base detectee : " + version);
+        log.info("Version base detectee : " + version);
         
         majVersion(dbConnect);
     }
@@ -69,7 +70,7 @@ public class UpdateBean {
      */
 	public static UpdateBean getDerniereVersion(DBSession myDBSession, ResourceBundle messagesBundle, boolean forceSequence) throws Exception {
 		// A mettre à jour à chaque changement de version
-		return new UpdateBeanV49(myDBSession, messagesBundle, forceSequence);
+		return new UpdateBeanV410(myDBSession, messagesBundle, forceSequence);
 	}
 
 	/**
