@@ -1,6 +1,6 @@
 /*
  * Tag Affichant les infos de date d'un Objet Bean
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2022 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -91,7 +91,6 @@ public class TagInclude extends TagSupport {
             
             StringBuffer pageBuf = new StringBuffer();
 
-            log.info("chargement de :" + curURL.toString());
             // Vérification du cache
             Calendar dateLimite = Calendar.getInstance();
             dateLimite.add(Calendar.HOUR, -5);

@@ -1,16 +1,17 @@
 <project name="salon" default="clean" basedir=".">
 	<description description="Gestion de Salon de Coiffure"></description>
 
-	<property name="tomcat" value="C:/InCrEG.salon/tomcat" />
+	<property name="tomcat" value="/home/emmguyot/Projets/LibertyLook/InCrEG_socles/InCrEG.salon/tomcat/" />
     <property name="src" value='.' />
     <property name="work" value='./work' />
-    <property name="build" value="c:/build/${ant.project.name}" />
+    <property name="build" value="/tmp/build/${ant.project.name}" />
     <property name="tmpProd" value="${build}/salon" />
     <property name="tmpProdLight" value="${build}/salonLight" />
     <property name="tmpProdWar" value="${build}/war" />
     <property name="demo" value="${tomcat}/webapps/${ant.project.name}" />
     <property name="demoWork" value="${tomcat}/work/DEFAULT/${ant.project.name}" />
-    <property name="dist" value="C:/build/dist" />
+    <property name="dist" value="/tmp/build/dist" />
+	<property name="jdk16-home" value="/opt/jdk1.6.0_45/jre" />
 
     <target name="init">
         <mkdir dir="${build}"/>
@@ -128,7 +129,7 @@
 
 		<taskdef classname="org.apache.jasper.JspC" name="jasper2" > 
 	      <classpath id="jspc.classpath"> 
-	        <pathelement location="${java.home}/../lib/tools.jar"/> 
+	        <pathelement location="${jdk16-home}/../lib/tools.jar"/> 
 	        <fileset dir="${tomcat}/bin"> 
 	          <include name="*.jar"/> 
 	        </fileset> 
@@ -170,7 +171,7 @@
 				<pathelement location="${tomcat}/common/lib/servlet-api.jar" />
 				<pathelement location="${tomcat}/common/lib/jsp-api.jar" />
 				<pathelement location="${tomcat}/common/lib/jasper-runtime.jar" />
-				<pathelement location="${java.home}/lib/rt.jar" />
+				<pathelement location="${jdk16-home}/lib/rt.jar" />
 				<pathelement location="${tmpProdWar}/WEB-INF/classes" />
 				<pathelement location="${tmpProdWar}/WEB-INF/lib/taglibs-i18n.jar" />
 				<pathelement location="${tmpProdWar}/WEB-INF/lib/commons-lang-2.1.jar" />
