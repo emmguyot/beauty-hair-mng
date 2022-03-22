@@ -1,7 +1,7 @@
 <%
 /*
  * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
- * Copyright (C) 2001-2014 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2022 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -58,7 +58,7 @@ SalonSession mySalon = com.increg.salon.servlet.ConnectedServlet.CheckOrGoHome(r
       PointageBean aPointage = (PointageBean) lstPointage.get(i);
 
       %>
-      <input type="checkbox" name="CD_COLLAB<%= aCollab.getCD_COLLAB() %>" onClick="document.fiche.submit()" 
+      <input type="checkbox" name="CD_COLLAB<%= aCollab.getCD_COLLAB() %>" id="CD_COLLAB<%= aCollab.getCD_COLLAB() %>" onClick="document.fiche.submit()" 
       <% if ((aPointage != null) 
 	       && (aPointage.getDT_DEBUT() != null) 
 	       &&(aPointage.getDT_FIN() == null) 
@@ -71,7 +71,7 @@ SalonSession mySalon = com.increg.salon.servlet.ConnectedServlet.CheckOrGoHome(r
 	 disabled
       <% } %>
       >
-      <%= aCollab.toString() %>&nbsp;&nbsp;
+      <label for="CD_COLLAB<%= aCollab.getCD_COLLAB() %>"><%= aCollab.toString() %></label>&nbsp;&nbsp;
       <%
    }
 %>

@@ -1,6 +1,6 @@
 /*
  * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
- * Copyright (C) 2001-2012 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2022 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -32,6 +32,8 @@ a:hover {  color: #D36413; background-color: #96BFE6; text-decoration: underline
 .info { color: #009900; font-weight: bold ; text-align: center}
 .readonly {  font-weight: bold; vertical-align: top}
 .label {  text-align: right; vertical-align: top}
+.espace { padding-left: 30px}
+td.label+td { vertical-align:top; }
 .labelBas {  text-align: right; vertical-align: bottom}
 .nombre {  text-align: right}
 .total {  text-align: right; font-weight: bold}
@@ -54,6 +56,9 @@ a:hover.nohover { color: #FF9933 ; background-color: transparent }
 .ssTitre { text-align: center ; font-size: large; font-weight: normal}
 img { border: 0 }
 p { vertical-align: top}
+ul.listItem { margin: 0; padding: 0; list-style-type: none; display: inline; }
+p.listItem, ul.listItem li { display: inline; }
+ul.listItem li+li:before { content: ', '; }
 
 .cpYearNavigation,.cpMonthNavigation { background-image: url(../../perso/fd_menu.jpg); text-align:center; vertical-align:middle; text-decoration:none; color:#164B81; font-weight:bold; }
 td.cpDayColumnHeader { padding: 2px; padding-top: 5px; text-align:center; border:solid thin #88B9E0;border-width:0 0 1 0; }

@@ -1,7 +1,7 @@
 <%
 /*
  * This program is part of InCrEG LibertyLook software http://beauty-hair-mng.sourceforge.net
- * Copyright (C) 2001-2009 Emmanuel Guyot <See emmguyot on SourceForge> 
+ * Copyright (C) 2001-2022 Emmanuel Guyot <See emmguyot on SourceForge> 
  * 
  * This program is free software; you can redistribute it and/or modify it under the terms 
  * of the GNU General Public License as published by the Free Software Foundation; either 
@@ -18,15 +18,14 @@
  */
 %>
 <%@ page import="java.util.Vector,
+          java.util.List,
 		  com.increg.salon.bean.SalonSession,
 		  com.increg.salon.bean.CollabBean,
 		  com.increg.salon.bean.FeteBean,
-		  com.increg.salon.bean.PointageBean" %>
+		  com.increg.salon.bean.PointageBean,
+		  com.increg.salon.bean.ClientBean" %>
 <%
-    SalonSession mySalon = (SalonSession) session.getAttribute("SalonSession");
-    if (mySalon == null) {
-        getServletConfig().getServletContext().getRequestDispatcher("/reconnect.html").forward(request, response);
-    }
+SalonSession mySalon = com.increg.salon.servlet.ConnectedServlet.CheckOrGoHome(request, response);
 %>
 <%@ taglib uri="WEB-INF/salon-taglib.tld" prefix="salon" %>
 <%@ taglib uri="WEB-INF/taglibs-i18n.tld" prefix="i18n" %>
@@ -36,6 +35,7 @@
 <title><%=mySalon.getMySociete().getRAIS_SOC()%></title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="style/Salon.css" type="text/css">
+<link rel="stylesheet" href="style/jquery-ui-1.8.16.custom.css" type="text/css">
 </head>
 <%@ include file="include/commun.jsp" %>
 <body class="donnees">
@@ -51,13 +51,14 @@
    Vector lstCollab = (Vector) request.getAttribute("lstCollab");
    Vector lstPointage = (Vector) request.getAttribute("lstPointage");
    Vector lstFete = (Vector) request.getAttribute("lstFete");
+   List<ClientBean> lstAnniv = (List<ClientBean>) request.getAttribute("lstAnniv");
 
    for (int i=0; i < lstCollab.size(); i++) {
       CollabBean aCollab = (CollabBean) lstCollab.get(i);
       PointageBean aPointage = (PointageBean) lstPointage.get(i);
 
       %>
-      <input type="checkbox" name="CD_COLLAB<%= aCollab.getCD_COLLAB() %>" onClick="document.fiche.submit()" 
+      <input type="checkbox" name="CD_COLLAB<%= aCollab.getCD_COLLAB() %>" id="CD_COLLAB<%= aCollab.getCD_COLLAB() %>" onClick="document.fiche.submit()" 
       <% if ((aPointage != null) 
 	       && (aPointage.getDT_DEBUT() != null) 
 	       &&(aPointage.getDT_FIN() == null) 
@@ -70,18 +71,27 @@
 	 disabled
       <% } %>
       >
-      <%= aCollab.toString() %>&nbsp;&nbsp;
+      <label for="CD_COLLAB<%= aCollab.getCD_COLLAB() %>"><%= aCollab.toString() %></label>&nbsp;&nbsp;
       <%
    }
 %>
 </p>
 </form>
 <% if (lstFete.size() > 0) { %>
-<p><i18n:message key="accueil.feteJour" />
+<p class="listItem"><i18n:message key="accueil.feteJour" /><ul class="listItem">
 <%   for (int i=0; i < lstFete.size(); i++) { 
-      FeteBean aFete = (FeteBean) lstFete.get(i); %>
-      <b><%= aFete.getPRENOM() %></b><% if (i != (lstFete.size()-1)) { %>,<% }
-     } %>
+      FeteBean aFete = (FeteBean) lstFete.get(i); 
+      %><li><b><%= aFete.getPRENOM() %></b></li><%
+   	} %>
+     </ul>
+</p>
+<% } %>
+<% if (lstAnniv.size() > 0) { %>
+<p class="listItem"><i18n:message key="accueil.annivJour" /><ul class="listItem">
+<%   for (ClientBean cli : lstAnniv) { 
+		%><li><b><a href="_FicheCli.jsp?Action=Modification&CD_CLI=<%= cli.getCD_CLI() %>" target="ClientFrame"><%= cli.toString() %></a></b></li><%
+	} %>
+	</ul>
 </p>
 <% } %>
 <p>
