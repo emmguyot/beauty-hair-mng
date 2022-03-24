@@ -165,7 +165,7 @@
 				<pathelement location="${java.class.path}" />
 			</classpath>
 		</jspc>
--->		<javac srcdir="${tmpProdWar}/WEB-INF/classes" destdir="${tmpProdWar}/WEB-INF/classes" encoding="UTF-8" deprecation="on">
+-->		<javac srcdir="${tmpProdWar}/WEB-INF/classes" destdir="${tmpProdWar}/WEB-INF/classes" encoding="UTF-8" deprecation="on" source="1.6" target="1.6">
 			<classpath>
 				<pathelement location="${tomcat}/common/lib/jasper-compiler.jar" />
 				<pathelement location="${tomcat}/common/lib/servlet-api.jar" />
@@ -185,7 +185,7 @@
 		</javac>
 		<delete>
 			<fileset dir="${tmpProdWar}/WEB-INF/classes">
-				<include name="*.java" />
+				<include name="**/*.java" />
 			</fileset>
 		</delete>
 		<!-- Remplace le fichier web.xml par celui contenant les JSP 
@@ -195,7 +195,7 @@
 		<!-- Suppression des JSP et du repertoire classes -->		
 		<delete>
 			<fileset dir="${tmpProdWar}">
-				<include name="*.jsp" />
+				<include name="**/*.jsp" />
 			</fileset>
 			<fileset dir="${tmpProdWar}/WEB-INF/classes">
 			</fileset>
